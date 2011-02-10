@@ -18,7 +18,43 @@
 	-moz-border-radius: 15px;
 	-webkit-box-shadow: 4px 4px 10px #888888;
 	-moz-box-shadow: 4px 4px 10px #888888;
-
+	
 	text-align: center;
-      
+	
 }
+
+
+.login {
+
+	float: right;
+	color: #37A6EB;
+	font-family: Verdana;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	width: 50px;
+	border: 0px solid #FF0000;
+	margin-left: 5px;
+	
+}
+
+.login:hover {
+	
+	color: green;
+	cursor: pointer;
+	
+}
+
+
+.pass {
+	
+	width: 150px;
+	margin-left: 10px;
+	}
+	
+
+.user {
+	
+	width: 150px;
+	
+	}

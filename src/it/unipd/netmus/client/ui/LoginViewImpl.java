@@ -6,16 +6,16 @@ package it.unipd.netmus.client.ui;
 import it.unipd.netmus.client.place.ProfilePlace;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+
 
 /**
  * @author smile
@@ -33,7 +33,11 @@ public class LoginViewImpl extends Composite implements LoginView {
    private String name;
 
    
-   @UiField Button button;
+   @UiField Label login;
+   @UiField TextBox user;
+   @UiField TextBox password;
+   @UiField RadioButton check_google;
+   @UiField RadioButton check_netmus;
 
    
    public LoginViewImpl()
@@ -52,9 +56,8 @@ public class LoginViewImpl extends Composite implements LoginView {
    }
    
    
-   @UiHandler("button")
+   @UiHandler("login")
    void handleClick(ClickEvent e) {
-     Window.alert("Hello, AJAX");
      listener.goTo( new ProfilePlace("test"));
    }
 
