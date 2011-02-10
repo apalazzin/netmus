@@ -1,0 +1,24 @@
+.main {
+
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	padding-top: 20px;
+	margin: auto;      	
+	
+	width: 500px;
+	height: 300px;      	
+
+	border: 2px solid #AAAAAA;
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+
+	text-align: center;
+      
+}
