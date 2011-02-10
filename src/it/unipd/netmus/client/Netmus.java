@@ -43,7 +43,9 @@ public class Netmus implements EntryPoint {
       PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
       historyHandler.register(placeController, eventBus, defaultPlace);
 
+      RootPanel.get().setStyleName( "gwt-root" );
       RootPanel.get().add(appWidget);
+     
       // Goes to place represented on URL or default place
       historyHandler.handleCurrentHistory();
    }
