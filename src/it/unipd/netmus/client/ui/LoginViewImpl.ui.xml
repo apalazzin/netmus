@@ -10,6 +10,7 @@
    		<div style="position: relative; width: 100%; height: 100%">
    		
    			<div style="margin-left: 60px; text-align: left; width: 390px; height: 200px; border: 0px solid #FF0000;">
+   				<g:Label ui:field="account" styleName="{style.account}">Account Google</g:Label>
    				<div style="float: left; width: 170px;">Username:</div><div style="">Password:</div>
    			
    				<g:TextBox ui:field="user"  styleName="{style.user}">	</g:TextBox>

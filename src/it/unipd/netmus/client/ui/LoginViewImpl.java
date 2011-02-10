@@ -34,6 +34,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 
    
    @UiField Label login;
+   @UiField Label account;
    @UiField TextBox user;
    @UiField TextBox password;
    @UiField RadioButton check_google;
@@ -43,6 +44,8 @@ public class LoginViewImpl extends Composite implements LoginView {
    public LoginViewImpl()
    {
       initWidget(uiBinder.createAndBindUi(this));
+      
+      check_google.setValue(true);
    }
    
    @Override
@@ -61,4 +64,31 @@ public class LoginViewImpl extends Composite implements LoginView {
      listener.goTo( new ProfilePlace("test"));
    }
 
+   @UiHandler("check_google")
+   void handleClickGoogle(ClickEvent e) {
+
+	   account.setText("Account Google");
+	   
+	   if(check_netmus.getValue()) {
+		   
+		   check_netmus.setValue(false);
+		   
+	   }
+     
+   }
+   
+   @UiHandler("check_netmus")
+   void handleClickNetmus(ClickEvent e) {
+	   
+	   account.setText("Account Netmus");
+	   
+	   if(check_google.getValue()) {
+		   
+		   check_google.setValue(false);
+		   
+	   }
+     
+   }
+
+   
 }

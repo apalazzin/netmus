@@ -6,7 +6,9 @@
 .gwt-root {
 	
 	background-color: #DDDDDD;
-	
+	background-image: url('images/tribale.png');
+	background-repeat: no-repeat;
+	background-position: right top;
 	}
 	
 	
