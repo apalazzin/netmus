@@ -25,22 +25,22 @@ public class SongSummaryDTO implements GenericDTO {
 		this.album = album;
 	}
 	
-	public String getauthor() {
+	public String getAuthor() {
 		return author;
 	}
-	public void setauthor(String author) {
+	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public String gettitle() {
+	public String getTitle() {
 		return title;
 	}
-	public void settitle(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getalbum() {
+	public String getAlbum() {
 		return album;
 	}
-	public void setalbum(String album) {
+	public void setAlbum(String album) {
 		this.album = album;
 	}
 }
