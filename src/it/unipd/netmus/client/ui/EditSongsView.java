@@ -20,5 +20,8 @@ public interface EditSongsView extends IsWidget {
    public interface Presenter
    {
       void goTo(Place place);
+      public enum LoginType{
+   	   NETMUSLOGIN, NETMUSREGISTRATION
+      }
    }
 }

@@ -6,6 +6,9 @@
 
 package it.unipd.netmus.client.place;
 
+
+import it.unipd.netmus.client.ui.EditSongsView.Presenter.LoginType;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
@@ -18,18 +21,38 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  */
 public class LoginPlace extends Place {
    
-   private String loginName;
+   private String user;
+   private String password;
+   private String error;
+   private LoginType loginType;
+   
+   
    
    public LoginPlace(String token)
    {
-      this.loginName = token;
+      this.user = token;
    }
 
    public String getLoginName()
    {
-      return loginName;
+      return user;
+   }
+   
+   public String getPassword()
+   {
+	   return password;
+   }
+   
+   public String getError()
+   {
+	   return error;
    }
 
+   public LoginType getLoginType()
+   {
+	   return loginType;
+   }
+   
    public static class Tokenizer implements PlaceTokenizer<LoginPlace>
    {
       @Override
