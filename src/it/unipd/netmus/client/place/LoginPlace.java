@@ -6,7 +6,6 @@
 
 package it.unipd.netmus.client.place;
 
-
 import it.unipd.netmus.client.ui.EditSongsView.Presenter.LoginType;
 
 import com.google.gwt.place.shared.Place;
@@ -20,52 +19,52 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * @author ValterTexasGroup
  */
 public class LoginPlace extends Place {
-   
-   private String user;
-   private String password;
-   private String error;
-   private LoginType loginType;
-   
-   
-   
-   public LoginPlace(String token)
-   {
-      this.user = token;
-   }
+	   
+	   private String user;
+	   private String password;
+	   private String error;
+	   private LoginType loginType;
+	   
+	   
+	   
+	   public LoginPlace(String token)
+	   {
+	      this.user = token;
+	   }
 
-   public String getLoginName()
-   {
-      return user;
-   }
-   
-   public String getPassword()
-   {
-	   return password;
-   }
-   
-   public String getError()
-   {
-	   return error;
-   }
+	   public String getLoginName()
+	   {
+	      return user;
+	   }
+	   
+	   public String getPassword()
+	   {
+		   return password;
+	   }
+	   
+	   public String getError()
+	   {
+		   return error;
+	   }
 
-   public LoginType getLoginType()
-   {
-	   return loginType;
-   }
-   
-   public static class Tokenizer implements PlaceTokenizer<LoginPlace>
-   {
-      @Override
-      public String getToken(LoginPlace place)
-      {
-         return place.getLoginName();
-      }
+	   public LoginType getLoginType()
+	   {
+		   return loginType;
+	   }
+	   
+	   public static class Tokenizer implements PlaceTokenizer<LoginPlace>
+	   {
+	      @Override
+	      public String getToken(LoginPlace place)
+	      {
+	         return place.getLoginName();
+	      }
 
-      @Override
-      public LoginPlace getPlace(String token)
-      {
-         return new LoginPlace(token);
-      }
-   }
+	      @Override
+	      public LoginPlace getPlace(String token)
+	      {
+	         return new LoginPlace(token);
+	      }
+	   }
 
-}
+	}

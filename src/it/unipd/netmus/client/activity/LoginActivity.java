@@ -3,8 +3,8 @@ package it.unipd.netmus.client.activity;
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.service.LoginService;
-import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.EditSongsView.Presenter.LoginType;
+import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -13,7 +13,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class LoginActivity extends AbstractActivity implements
-		LoginView.Presenter {
+	LoginView.Presenter {
 	// Used to obtain views, eventBus, placeController
 	// Alternatively, could be injected via GIN
 	private ClientFactory clientFactory;
@@ -23,7 +23,7 @@ public class LoginActivity extends AbstractActivity implements
 	private String error;
 	private LoginType loginType;
 	private LoginService loginService;
-	
+
 
 	public LoginActivity(LoginPlace place, ClientFactory clientFactory)/*, LoginService service)*/ {
 		this.user = place.getLoginName();
@@ -35,8 +35,8 @@ public class LoginActivity extends AbstractActivity implements
 	}
 
 	/**
-	 * Invoked by the ActivityManager to start a new Activity
-	 */
+	* Invoked by the ActivityManager to start a new Activity
+	*/
 	@Override
 	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
 		LoginView loginView = clientFactory.getLoginView();
@@ -44,10 +44,10 @@ public class LoginActivity extends AbstractActivity implements
 		loginView.setPresenter(this);
 		containerWidget.setWidget(loginView.asWidget());
 	}
-
+	
 	/**
-	 * Navigate to a new Place in the browser
-	 */
+	* Navigate to a new Place in the browser
+	*/
 	public void goTo(Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
@@ -62,3 +62,4 @@ public class LoginActivity extends AbstractActivity implements
 		return true;
 	}
 }
+
