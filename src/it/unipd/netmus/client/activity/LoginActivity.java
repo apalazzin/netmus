@@ -2,8 +2,7 @@ package it.unipd.netmus.client.activity;
 
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
-import it.unipd.netmus.client.service.LoginService;
-import it.unipd.netmus.client.ui.EditSongsView.Presenter.LoginType;
+import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
 
@@ -17,20 +16,16 @@ public class LoginActivity extends AbstractActivity implements
 	// Used to obtain views, eventBus, placeController
 	// Alternatively, could be injected via GIN
 	private ClientFactory clientFactory;
-	// Name that will be appended to "Hello,"
 	private String user;
 	private String password;
 	private String error;
 	private LoginType loginType;
-	private LoginService loginService;
 
-
-	public LoginActivity(LoginPlace place, ClientFactory clientFactory)/*, LoginService service)*/ {
+	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
 		this.user = place.getLoginName();
 		this.password = place.getPassword();
 		this.error = place.getError();
 		this.loginType = place.getLoginType();
-		//this.loginService = service;
 		this.clientFactory = clientFactory;
 	}
 
@@ -40,7 +35,10 @@ public class LoginActivity extends AbstractActivity implements
 	@Override
 	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
 		LoginView loginView = clientFactory.getLoginView();
-		loginView.setName(user);
+		loginView.setError(error);
+		loginView.setLoginType(loginType);
+		loginView.setPassword(password);
+		loginView.setUser(user);
 		loginView.setPresenter(this);
 		containerWidget.setWidget(loginView.asWidget());
 	}
@@ -54,6 +52,10 @@ public class LoginActivity extends AbstractActivity implements
 	
 	public boolean sendLogin(LoginDTO login)
 	{//implementation
+		if (login.getUser().startsWith("lol"))
+			goTo( new ProfilePlace("test"));
+		else
+			goTo( new LoginPlace(login.getUser(),login.getPassword(),"login sbagliato",LoginType.NETMUSLOGIN));
 		return true;
 	}
 	
