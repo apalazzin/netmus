@@ -13,36 +13,45 @@ public class SongDTO extends SongSummaryDTO {
 	private String composer;
 	private String genre;
 	private String trackNumber;
-	private String id;
 	private String file;
+
 	
-	//default constructor
+	//costruttore di default
 	public SongDTO(){
-		this(new String(), new String(), new String(), new String(), new String(), new String(), new String(), new String(), new String());
+		super();
+		year = "undefined_year";
+		composer = "undefined_composer";
+		genre = "undefined_genre";
+		trackNumber = "undefined_trackNumber";
+		file = "undefined_file";		
 	}
 	
+	// costruttore con parametri summary
 	public SongDTO(String author, String title, String album){
-		this(new String(), author, title, album, new String(), new String(), new String(), new String(), new String());
-	}
-	
-	public SongDTO(String year, String composer, String genre, String trackNumber, String file){
-		this(new String(), new String(), new String(), new String(), year, composer, genre, trackNumber, file);
-	}
-	
-	public SongDTO(String author, String title, String album, String year, String composer,
-			String genre, String trackNumber, String file){
-		this(new String(), author, title, album, year, composer, genre, trackNumber, file);
-	}
-	
-	public SongDTO(String id, String author, String title, String album, String year, String composer,
-			String genre, String trackNumber, String file){
 		super(author,title,album);
-		this.id = id;
-		this.year = year;
-		this.composer = composer;
-		this.genre = genre;
-		this.trackNumber = trackNumber;
-		this.file = file;
+		year = "undefined_year";
+		composer = "undefined_composer";
+		genre = "undefined_genre";
+		trackNumber = "undefined_trackNumber";
+		file = "undefined_file";
+	}
+	// costruttore senza parametri summary	
+	public SongDTO(String y, String c, String g, String t, String f){
+		super();
+		year = y;
+		composer = c;
+		genre = g;
+		trackNumber = t;
+		file = f;
+	}
+	// costruttore completo
+	public SongDTO(String author, String title, String album, String y, String c,String g, String t, String f){
+		super(author,title,album);
+		year = y;
+		composer = c;
+		genre = g;
+		trackNumber = t;
+		file = f;
 	}
 	
 	public String getYear() {
@@ -69,12 +78,7 @@ public class SongDTO extends SongSummaryDTO {
 	public void setTrackNumber(String trackNumber) {
 		this.trackNumber = trackNumber;
 	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
+
 	public String getFile() {
 		return file;
 	}
