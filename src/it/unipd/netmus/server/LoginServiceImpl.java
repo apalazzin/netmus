@@ -36,7 +36,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public boolean verifyLogin(LoginDTO login) {
-		UserAccount userAccount = new UserAccount().findUser(login.getUser());
+		UserAccount userAccount = UserAccount.findUser(login.getUser());
 		if (userAccount.equals(null)) {return false;}
 		else {
 			if (login.getPassword().equals(userAccount.getPassword())) {
@@ -48,7 +48,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void startLogin(LoginDTO login) {
-		UserAccount userAccount = new UserAccount().findUser(login.getUser());
+		UserAccount userAccount = UserAccount.findUser(login.getUser());
 		HttpSession session = getThreadLocalRequest().getSession();
 		LoginHelper.loginStarts(session, userAccount);
 	}
