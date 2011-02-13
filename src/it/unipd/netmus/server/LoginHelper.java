@@ -3,6 +3,8 @@
  */
 package it.unipd.netmus.server;
 
+import java.util.logging.Logger;
+
 import it.unipd.netmus.server.persistent.UserAccount;
 
 import javax.jdo.JDOCanRetryException;
@@ -11,8 +13,8 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * @author ValterTexasGroup
  *
@@ -20,8 +22,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginHelper extends RemoteServiceServlet {
 	
+	private static Logger logger = Logger.getLogger(LoginHelper.class.getName());
 	private static final int NUM_RETRIES = 5;
-
+	
 	static public UserAccount getLoggedInUser(HttpSession session, PersistenceManager pm) {
 
 	    if (session == null)
@@ -57,7 +60,7 @@ public class LoginHelper extends RemoteServiceServlet {
 	    }
 	  }
 
-	  public UserAccount loginStarts(HttpSession session, UserAccount user) {
+	  static public UserAccount loginStarts(HttpSession session, UserAccount user) {
 
 	    // update user info under transactional control
 	    try {
