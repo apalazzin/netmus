@@ -1,5 +1,8 @@
 package it.unipd.netmus.client.activity;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
@@ -24,6 +27,8 @@ public class LoginActivity extends AbstractActivity implements
 	private String password;
 	private String error;
 	private LoginType loginType;
+	
+	private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
 
@@ -73,7 +78,8 @@ public class LoginActivity extends AbstractActivity implements
 
 	      @Override
 	      public void onSuccess(Boolean result) {
-	    	  if (result)
+	    	  logger.log(Level.INFO, "RPC effettiata con successo");
+	    	  if (result.booleanValue() == true)
 	    		  goTo( new ProfilePlace("test"));
 	    	  else
 	    		  goTo( new LoginPlace(username,password,"login sbagliato",LoginType.NETMUSLOGIN));
