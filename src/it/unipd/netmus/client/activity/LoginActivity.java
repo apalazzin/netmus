@@ -3,12 +3,16 @@ package it.unipd.netmus.client.activity;
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
+import it.unipd.netmus.client.service.LoginService;
+import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class LoginActivity extends AbstractActivity implements
@@ -20,6 +24,8 @@ public class LoginActivity extends AbstractActivity implements
 	private String password;
 	private String error;
 	private LoginType loginType;
+	
+	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
 
 	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
 		this.user = place.getLoginName();
@@ -51,11 +57,31 @@ public class LoginActivity extends AbstractActivity implements
 	}
 	
 	public boolean sendLogin(LoginDTO login)
-	{//implementation
-		if (login.getUser().startsWith("lol"))
-			goTo( new ProfilePlace("test"));
-		else
-			goTo( new LoginPlace(login.getUser(),login.getPassword(),"login sbagliato",LoginType.NETMUSLOGIN));
+	{
+		final String username = login.getUser();
+		final String password = login.getPassword();
+		
+	    // Initialize the service proxy.
+	    if (loginServiceSvc == null) {
+	    	loginServiceSvc = GWT.create(LoginService.class);
+	    }
+
+	    // Set up the callback object.
+	    AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+	      public void onFailure(Throwable caught) {
+	      }
+
+	      @Override
+	      public void onSuccess(Boolean result) {
+	    	  if (result)
+	    		  goTo( new ProfilePlace("test"));
+	    	  else
+	    		  goTo( new LoginPlace(username,password,"login sbagliato",LoginType.NETMUSLOGIN));
+	      }
+	    };
+
+	    // Make the call to the stock price service.
+	    loginServiceSvc.startLogin(login, callback);
 		return true;
 	}
 	
