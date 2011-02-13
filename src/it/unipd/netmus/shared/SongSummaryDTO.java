@@ -14,9 +14,10 @@ public class SongSummaryDTO implements GenericDTO {
 	private String title;
 	private String album;
 	
-	//default constructor
 	public SongSummaryDTO(){
-		this(new String(), new String(), new String());
+		author = "undefined_author";
+		title = "undefined_title";
+		album = "undefined_album";
 	}
 	
 	public SongSummaryDTO(String author, String title, String album){
