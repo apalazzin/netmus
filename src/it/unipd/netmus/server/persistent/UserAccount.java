@@ -6,8 +6,6 @@ package it.unipd.netmus.server.persistent;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.ObjectDatastore;

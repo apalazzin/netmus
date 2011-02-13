@@ -18,10 +18,10 @@ public interface LoginServiceAsync {
 
 	void verifyLogin(LoginDTO login, AsyncCallback<Boolean> callback);
 
-	void startLogin(LoginDTO login, AsyncCallback<Void> callback);
-
 	void getLoggedInUserDTO(AsyncCallback<UserSummaryDTO> callback);
 
 	void logout(AsyncCallback<Void> callback);
+
+	void startLogin(LoginDTO login, AsyncCallback<Boolean> callback);
 
 }

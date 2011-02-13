@@ -6,6 +6,15 @@
 <web-app>
   
   <!-- Servlets -->
+  <servlet>
+    <servlet-name>LoginServiceImpl</servlet-name>
+    <servlet-class>it.unipd.netmus.server.LoginServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LoginServiceImpl</servlet-name>
+    <url-pattern>/netmus/loginService</url-pattern>
+  </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
@@ -13,6 +22,7 @@
   </welcome-file-list>
   
   <!-- Filters -->
+  <!--  
   <filter>
     <filter-name>loginfilter</filter-name>
     <filter-class>it.unipd.netmus.server.servlet.LoginFilter</filter-class>
@@ -22,5 +32,6 @@
     <filter-name>loginfilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  -->
 
 </web-app>

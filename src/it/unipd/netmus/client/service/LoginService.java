@@ -20,7 +20,7 @@ public interface LoginService extends RemoteService {
 	
 	boolean verifyLogin(LoginDTO login);
 	
-	void startLogin(LoginDTO login);
+	boolean startLogin(LoginDTO login);
 	
 	UserSummaryDTO getLoggedInUserDTO();
 	
