@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("loginService")
 public interface LoginService extends RemoteService {
    
-	boolean insertRegistration(LoginDTO login);
+	void insertRegistration(LoginDTO login) throws IllegalStateException;
 	
 	boolean verifyLogin(LoginDTO login);
 	
