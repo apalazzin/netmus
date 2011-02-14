@@ -3,6 +3,8 @@
  */
 package it.unipd.netmus.client.service;
 
+import java.util.ArrayList;
+
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
@@ -23,5 +25,7 @@ public interface LoginServiceAsync {
 	void logout(AsyncCallback<Void> callback);
 
 	void startLogin(LoginDTO login, AsyncCallback<Boolean> callback);
+
+	void getAllUsers(AsyncCallback<ArrayList<UserSummaryDTO>> callback);
 
 }

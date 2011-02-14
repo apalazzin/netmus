@@ -1,5 +1,6 @@
 package it.unipd.netmus.client.activity;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
+import it.unipd.netmus.shared.UserSummaryDTO;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -79,15 +81,38 @@ public class LoginActivity extends AbstractActivity implements
 	      @Override
 	      public void onSuccess(Boolean result) {
 	    	  logger.log(Level.INFO, "RPC effettiata con successo");
-	    	  if (result.booleanValue() == true)
+	    	  if (result.booleanValue() == true) { 
+	    		  logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
 	    		  goTo( new ProfilePlace("test"));
-	    	  else
+	    	  }
+	    	  else {
+	    		  logger.log(Level.INFO, "l'utente: "+ username+" è già presente nel database");
 	    		  goTo( new LoginPlace(username,password,"login sbagliato",LoginType.NETMUSLOGIN));
+	    	  }
 	      }
 	    };
 
 	    // Make the call to the stock price service.
-	    loginServiceSvc.startLogin(login, callback);
+	    loginServiceSvc.insertRegistration(login, callback);
+	    
+	    // Set up the callback object.
+	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
+	      public void onFailure(Throwable caught) {
+	      }
+
+	      @Override
+	      public void onSuccess(ArrayList<UserSummaryDTO> result) {
+	    	  logger.log(Level.INFO, "RPC effettiata con successo");
+	    	  for (UserSummaryDTO tmp:result)
+	    		  logger.log(Level.INFO, tmp.getNickName());
+	      }
+	    };
+
+	    // Make the call to the stock price service.
+	    loginServiceSvc.getAllUsers(callback2);
+	    
+	    
+	    
 		return true;
 	}
 	
