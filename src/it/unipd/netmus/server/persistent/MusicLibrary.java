@@ -6,8 +6,8 @@ package it.unipd.netmus.server.persistent;
 import it.unipd.netmus.server.PMF;
 import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -34,14 +34,11 @@ public class MusicLibrary {
 	
 	   // STATICO
 	   public static MusicLibrary findLibrary(String owner) {
-		  /* DA RIFARE CON TWIG 1.0.4
-	      List<MusicLibrary> found = PMF.get().find().type(MusicLibrary.class).addFilter("owner", FilterOperator.EQUAL, owner).returnAll().now();
-	      if(found.size()>0)
-	    	  return found.get(0);
-	      return null;
-	      */
-		   return null;
-	   }
+	      Iterator<MusicLibrary> found = PMF.get().find().type(MusicLibrary.class).addFilter("owner", FilterOperator.EQUAL, owner).returnResultsNow();
+	      if (found.hasNext())
+	    	  return found.next();
+	      else return null;
+	     }
 	
 	
 	public MusicLibraryDTO toDTO(){
