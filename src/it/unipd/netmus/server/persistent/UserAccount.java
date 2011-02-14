@@ -63,7 +63,7 @@ public class UserAccount {
       return found;
    }
    
-   public boolean isGoogleUSer() {
+   public boolean isGoogleUser() {
       return isGoogleUser;
    }
    
@@ -159,10 +159,6 @@ public class UserAccount {
 
    public void setNumSongs(int numSongs) {
       this.numSongs = numSongs;
-   }
-
-   public boolean isGoogleUser() {
-      return isGoogleUser;
    }
 
    public void setGoogleUser(boolean isGoogleUser) {

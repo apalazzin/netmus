@@ -16,16 +16,24 @@ public class UserDTO extends UserSummaryDTO {
 	
 	//default constructor
 	public UserDTO(){
-		this(new String(), new String(), new String(),new String(), new String(), new String(),new String());
+		super();
+		firstName = "";
+		lastName = "";
+		birth = "";
 	}
 	
 	public UserDTO(String nick,String mail,String sexType,String city){
-		this(nick,mail,sexType,city,new String(), new String(), new String());
-		
+		super(nick,mail,sexType,city);
+		firstName = "";
+		lastName = "";
+		birth = "";		
 	}
 	
 	public UserDTO(String name,String surname,String birthDate){
-		this(new String(), new String(), new String(),new String(), name,surname,birthDate);
+		super();
+		firstName = name;
+		lastName = surname;
+		birth = birthDate;		
 	}
 	
 	public UserDTO(String nick,String mail,String sexType,String city,String name,String surname,String birthDate){

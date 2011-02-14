@@ -15,9 +15,9 @@ public class SongSummaryDTO implements GenericDTO {
 	private String album;
 	
 	public SongSummaryDTO(){
-		author = "undefined_author";
-		title = "undefined_title";
-		album = "undefined_album";
+		author = "";
+		title = "";
+		album = "";
 	}
 	
 	public SongSummaryDTO(String author, String title, String album){

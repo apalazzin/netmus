@@ -19,21 +19,21 @@ public class SongDTO extends SongSummaryDTO {
 	//costruttore di default
 	public SongDTO(){
 		super();
-		year = "undefined_year";
-		composer = "undefined_composer";
-		genre = "undefined_genre";
-		trackNumber = "undefined_trackNumber";
-		file = "undefined_file";		
+		year = "";
+		composer = "";
+		genre = "";
+		trackNumber = "";
+		file = "";		
 	}
 	
 	// costruttore con parametri summary
 	public SongDTO(String author, String title, String album){
 		super(author,title,album);
-		year = "undefined_year";
-		composer = "undefined_composer";
-		genre = "undefined_genre";
-		trackNumber = "undefined_trackNumber";
-		file = "undefined_file";
+		year = "";
+		composer = "";
+		genre = "";
+		trackNumber = "";
+		file = "";
 	}
 	// costruttore senza parametri summary	
 	public SongDTO(String y, String c, String g, String t, String f){
