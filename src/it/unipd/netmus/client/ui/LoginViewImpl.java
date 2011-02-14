@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
@@ -42,7 +43,9 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiField Label account;
    @UiField Label register;
    @UiField Label error;
-
+   
+   @UiField HTMLPanel container;
+   
    @UiField TextBox user;
    @UiField TextBox password;
    @UiField TextBox c_password;
@@ -58,6 +61,14 @@ public class LoginViewImpl extends Composite implements LoginView {
       register.setText(myConstants.registerSwitchLabel());
       account.setText(myConstants.accountGoogle());
       check_google.setValue(true);
+      
+      Timer timerMain = new Timer() {
+		  public void run() {
+		      container.getElement().getStyle().setProperty("opacity", "1");
+		  }
+	  };
+	  timerMain.schedule(200);
+      
    }
 
    @Override
