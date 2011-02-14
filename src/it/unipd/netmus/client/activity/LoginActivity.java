@@ -10,6 +10,8 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
+import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -76,8 +78,8 @@ public class LoginActivity extends AbstractActivity implements
 	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
 	      public void onFailure(Throwable caught) {
-	    	  logger.log(Level.INFO, "I dati utente inseriti non sono corretti");
-	    	  goTo( new LoginPlace(username,password,"ERRORE: login sbagliato",LoginType.NETMUSLOGIN));
+	    	  logger.log(Level.INFO, ((WrongLoginException)caught).getMoreInfo());
+	    	  goTo( new LoginPlace(username,password,"Username/password non corretti",LoginType.NETMUSLOGIN));
 	      }
 
 	      @Override
@@ -90,43 +92,46 @@ public class LoginActivity extends AbstractActivity implements
 	    // Make the call to send login info.
 	    try {
 			loginServiceSvc.verifyLogin(login, callback);
-		} catch (WrongLoginException e) {
-			e.printStackTrace();
-		}
+		} catch (LoginException e) {}
 	}
 	
-	public void sendRegistration(LoginDTO login)
+	public void sendRegistration(LoginDTO login, String confirmPassword)
 	{
 		final String username = login.getUser();
 		final String password = login.getPassword();
 		
-	    // Initialize the service proxy.
-	    if (loginServiceSvc == null) {
-	    	loginServiceSvc = GWT.create(LoginService.class);
-	    }
+		if (password.equals(confirmPassword)) {
+		
+			// Initialize the service proxy.
+			if (loginServiceSvc == null) {
+				loginServiceSvc = GWT.create(LoginService.class);
+			}
 
-	    // Set up the callback object.
-	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+			// Set up the callback object.
+			AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
-	      public void onFailure(Throwable caught) {
-	    	  logger.log(Level.INFO, "Utente "+username+" già presente in database");
-	    	  goTo( new LoginPlace(username,password,"ERRORE: login sbagliato",LoginType.NETMUSREGISTRATION));
-	      }
+				public void onFailure(Throwable caught) {
+					logger.log(Level.INFO, "Utente "+username+" già presente in database");
+					goTo( new LoginPlace(username,password,"Username già in uso",LoginType.NETMUSREGISTRATION));
+				}
 
-	      @Override
-	      public void onSuccess(Void result) {
-	    	  logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
-	    	  goTo( new ProfilePlace("test"));
-	      }
-	    };
+				@Override
+				public void onSuccess(Void result) {
+					logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
+					goTo( new ProfilePlace("test"));
+				}
+			};
 
-	    // Make the call to send login info.
-	    try {
-	    	loginServiceSvc.insertRegistration(login, callback);
-		} catch (IllegalStateException e) {
-			//exception alredy cought in method onFailure
-			e.printStackTrace();
+			// Make the call to send login info.
+			try {
+				loginServiceSvc.insertRegistration(login, callback);
+			} catch (RegistrationException e) {
+				//exception alredy cought in method onFailure
+				e.printStackTrace();
+			}
 		}
+		else
+			goTo( new LoginPlace(username,password,"Le password inserite non coincidono",LoginType.NETMUSREGISTRATION));
 	}
 }
 

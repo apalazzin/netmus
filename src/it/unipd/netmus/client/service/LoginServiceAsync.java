@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
-import it.unipd.netmus.shared.exception.WrongLoginException;
+import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -17,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface LoginServiceAsync {
 
-	void insertRegistration(LoginDTO login, AsyncCallback<Void> callback) throws IllegalStateException;
+	void insertRegistration(LoginDTO login, AsyncCallback<Void> callback) throws RegistrationException;
 
-	void verifyLogin(LoginDTO login, AsyncCallback<Void> callback) throws WrongLoginException;
+	void verifyLogin(LoginDTO login, AsyncCallback<Void> callback) throws LoginException;
 
 	void getLoggedInUserDTO(AsyncCallback<UserSummaryDTO> callback);
 

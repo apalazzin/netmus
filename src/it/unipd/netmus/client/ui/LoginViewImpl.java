@@ -3,14 +3,12 @@
  */
 package it.unipd.netmus.client.ui;
 
-import it.unipd.netmus.client.place.LoginPlace;
-import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -42,13 +40,13 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiField Label login;
    @UiField Label account;
    @UiField Label register;
+   @UiField Label error;
 
    @UiField TextBox user;
    @UiField TextBox password;
+   @UiField TextBox c_password;
    @UiField RadioButton check_google;
    @UiField RadioButton check_netmus;
-
-   private boolean register_flag;
    
    public LoginViewImpl()
    {
@@ -66,20 +64,24 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("login")
    void handleClickLogin(ClickEvent e) {
 	 try {
-		 listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
-	} catch (LoginException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
+		 if(type != LoginType.NETMUSREGISTRATION)
+			 listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
+		 else
+			 listener.sendRegistration(new LoginDTO(user.getText(),password.getText()),c_password.getText());
+	 } catch (LoginException e1) {
+		 e1.printStackTrace();
+	 } catch (RegistrationException e2) {
+		 e2.printStackTrace();
+	 }
    }
 
 
    @UiHandler("register")
    void handleClickRegister(ClickEvent e) {
 	   
-	  if(!register_flag) {
+	  if(type != LoginType.NETMUSREGISTRATION) {
 		  
-		  register_flag = true;
+		  type = LoginType.NETMUSREGISTRATION;
 		  
 		  DOM.getElementById("registrazione").getStyle().setProperty("opacity", "1");
 		  DOM.getElementById("registrazione").getStyle().setProperty("height", "40px");
@@ -112,7 +114,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 
 	  } else {
 		  
-		  register_flag = false;
+		  type = LoginType.NETMUSLOGIN;
 		  
 		  DOM.getElementById("registrazione").getStyle().setProperty("opacity", "0");
 		  DOM.getElementById("registrazione").getStyle().setProperty("height", "0");
@@ -137,6 +139,8 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  };
 		  timerLoginLabel.schedule(200);
 		  
+		  check_google.setValue(false);
+		  check_netmus.setValue(true);
 		  check_google.setEnabled(true);
 
 	  }
@@ -147,6 +151,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    void handleClickGoogle(ClickEvent e) {
 
 	   account.setText("Account Google");
+	   type = LoginType.GOOGLELOGIN;
 	   
 	   if(check_netmus.getValue()) {
 		   
@@ -160,6 +165,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    void handleClickNetmus(ClickEvent e) {
 	   
 	   account.setText("Account Netmus");
+	   type = LoginType.NETMUSLOGIN;
 	   
 	   if(check_google.getValue()) {
 		   
@@ -181,20 +187,12 @@ public void setPassword(String password) {
 
 @Override
 public void setError(String error) {
-	// TODO Auto-generated method stub
-	
+	this.error.setText(error);	
 }
 
 @Override
 public void setLoginType(LoginType loginType) {
 	this.type = loginType;
 }
-
-@Override
-public void goRegisterView() {
-	// TODO Auto-generated method stub
-	
-}
-
    
 }
