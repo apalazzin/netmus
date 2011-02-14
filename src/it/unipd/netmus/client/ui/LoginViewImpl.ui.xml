@@ -17,13 +17,22 @@
    				<g:TextBox ui:field="password" styleName="{style.pass}">	</g:TextBox>
    				<g:Label ui:field="login" styleName="{style.login}">Login</g:Label>
    				
-   				<div style="margin-top: 15px; border: 0px solid #FF0000; position: relative;">
-   				<div style="float: left; margin-top: 6px; margin-right: 3px;"><g:RadioButton ui:field="check_google" name="check_g"/></div>
-   				<img src="images/google_logo.png" style="width: 100px; float: left;" />
-   				<div style="float: left; margin-top: 6px; margin-right: 3px; margin-left: 45px;"><g:RadioButton ui:field="check_netmus" name="check_n"/></div>
-   				<img src="images/netmus_scritta.png" style="width: 120px; float: left;" />
+   				<div id="registrazione" class="{style.registrazione}">
+	   				<div style="float: left; width: 170px;">&nbsp;</div><div style="">Conferma Password:</div>
+   					<div style="float: left; width: 160px;">&nbsp;</div><g:TextBox ui:field="c_password" styleName="{style.pass}">	</g:TextBox>
    				</div>
    				
+   				<div style="margin-top: 15px; border: 0px solid #FF00FF; position: relative; height: 50px;">
+   					<div style="float: left; margin-top: 6px; margin-right: 3px;"><g:RadioButton ui:field="check_google" name="check_g"/></div>
+   					<img src="images/google_logo.png" style="width: 100px; float: left;" />
+   					<div style="float: left; margin-top: 6px; margin-right: 3px; margin-left: 45px;"><g:RadioButton ui:field="check_netmus" name="check_n"/></div>
+   					<img src="images/netmus_scritta.png" style="width: 120px; float: left;" />
+   				</div>
+
+   				<div>
+   				
+   				</div>
+
  			</div>
    			
    		
@@ -31,8 +40,8 @@
    		</div>
 
    		<img src="images/netmus.png" style="position: absolute; bottom: 10px; left: 20px; width: 300px;"/>
-   		<div style="position: absolute; bottom: 20px; right: 30px; color: #999999; font-size: 12px; font-family: Verdana; text-decoration: underline;">Policy</div>
-   		<div style="position: absolute; bottom: 20px; right: 80px; color: #999999; font-size: 12px; font-family: Verdana; text-decoration: underline;">Terms</div>
+   		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
+   		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}">Label "error" per segnalazione di errori.</g:Label></div>
    	</div>
    </g:HTMLPanel>
    
