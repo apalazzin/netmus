@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -20,7 +21,7 @@ public interface LoginService extends RemoteService {
    
 	void insertRegistration(LoginDTO login) throws IllegalStateException;
 	
-	boolean verifyLogin(LoginDTO login);
+	void verifyLogin(LoginDTO login) throws WrongLoginException;
 	
 	boolean startLogin(LoginDTO login);
 	

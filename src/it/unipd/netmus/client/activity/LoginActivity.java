@@ -1,6 +1,5 @@
 package it.unipd.netmus.client.activity;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,7 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -77,8 +76,41 @@ public class LoginActivity extends AbstractActivity implements
 	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
 	      public void onFailure(Throwable caught) {
-	    	  logger.log(Level.INFO, "Utente "+username+" già presente in database");
+	    	  logger.log(Level.INFO, "I dati utente inseriti non sono corretti");
 	    	  goTo( new LoginPlace(username,password,"ERRORE: login sbagliato",LoginType.NETMUSLOGIN));
+	      }
+
+	      @Override
+	      public void onSuccess(Void result) {
+	    	  logger.log(Level.INFO, "L'utente "+ username+" è loggato con successo");
+	    	  goTo( new ProfilePlace("test"));
+	      }
+	    };
+
+	    // Make the call to send login info.
+	    try {
+			loginServiceSvc.verifyLogin(login, callback);
+		} catch (WrongLoginException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendRegistration(LoginDTO login)
+	{
+		final String username = login.getUser();
+		final String password = login.getPassword();
+		
+	    // Initialize the service proxy.
+	    if (loginServiceSvc == null) {
+	    	loginServiceSvc = GWT.create(LoginService.class);
+	    }
+
+	    // Set up the callback object.
+	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+	    	
+	      public void onFailure(Throwable caught) {
+	    	  logger.log(Level.INFO, "Utente "+username+" già presente in database");
+	    	  goTo( new LoginPlace(username,password,"ERRORE: login sbagliato",LoginType.NETMUSREGISTRATION));
 	      }
 
 	      @Override
@@ -88,38 +120,34 @@ public class LoginActivity extends AbstractActivity implements
 	      }
 	    };
 
-	    // Make the call to the stock price service.
+	    // Make the call to send login info.
 	    try {
 	    	loginServiceSvc.insertRegistration(login, callback);
 		} catch (IllegalStateException e) {
 			//exception alredy cought in method onFailure
 			e.printStackTrace();
 		}
-	    
-	    
-	    /*---------------METODO USATO PER TESTING---------------------*/
-	    
-	    // Set up the callback object.
-	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
-	      public void onFailure(Throwable caught) {
-	      }
-
-	      @Override
-	      public void onSuccess(ArrayList<UserSummaryDTO> result) {
-	    	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
-	    	  for (UserSummaryDTO tmp:result)
-	    		  logger.log(Level.INFO, tmp.getNickName());
-	      }
-	    };
-
-	    // Make the call to the stock price service.
-	    loginServiceSvc.getAllUsers(callback2);
-	    /*-------------------------------------------------------*/
-
-	}
-	
-	public void sendRegistration(LoginDTO login)
-	{//implementation
 	}
 }
 
+
+
+
+/*
+BUONO PER TESTARE...
+// Set up the callback object.
+AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
+  public void onFailure(Throwable caught) {
+  }
+
+  @Override
+  public void onSuccess(ArrayList<UserSummaryDTO> result) {
+	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
+	  for (UserSummaryDTO tmp:result)
+		  logger.log(Level.INFO, tmp.getNickName());
+  }
+};
+
+// Make the call to the stock price service.
+loginServiceSvc.getAllUsers(callback2);
+*/

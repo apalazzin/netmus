@@ -12,6 +12,7 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -32,22 +33,21 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	
 	@Override
-	public boolean verifyLogin(LoginDTO login) {
+	public void verifyLogin(LoginDTO login) throws WrongLoginException {
 		
 		//find user in the database
-		UserAccount userAccount = UserAccount.findUser(login.getUser());
+		UserAccount userAccount = PMF.get().load(UserAccount.class, login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
-			return false;
+			throw new WrongLoginException();
 		}
 		else {
 			if (login.getPassword() == userAccount.getPassword()) {
 				//correct password
-				return true;
+				return;
 			}
-			//incorrect password
-			else return false;
+			else throw new WrongLoginException();
 		}
 	}
 
