@@ -16,7 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface LoginServiceAsync {
 
-	void insertRegistration(LoginDTO login, AsyncCallback<Boolean> callback);
+	void insertRegistration(LoginDTO login, AsyncCallback<Void> callback) throws IllegalStateException;
 
 	void verifyLogin(LoginDTO login, AsyncCallback<Boolean> callback);
 

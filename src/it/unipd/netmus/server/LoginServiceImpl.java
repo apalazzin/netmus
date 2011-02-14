@@ -24,18 +24,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
 	@Override
-	public boolean insertRegistration(LoginDTO login) {
-		
-		//find user in the database
-		UserAccount userAccount = UserAccount.findUser(login.getUser());
-		
-		if (userAccount == null) {
-			//create new user in the database
-			userAccount = new UserAccount(login.getUser(),login.getPassword());
-			PMF.get().store(userAccount);
-			return true;
-		}
-		else return false;
+	public void insertRegistration(LoginDTO login) throws IllegalStateException {
+		//create new user in the database
+		UserAccount userAccount = new UserAccount(login.getUser(),login.getPassword());
+		PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
 	}
 
 	

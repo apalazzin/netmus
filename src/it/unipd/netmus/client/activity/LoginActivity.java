@@ -74,29 +74,30 @@ public class LoginActivity extends AbstractActivity implements
 	    }
 
 	    // Set up the callback object.
-	    AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+	    	
 	      public void onFailure(Throwable caught) {
+	    	  logger.log(Level.INFO, "Utente "+username+" gi� presente in database");
+	    	  goTo( new LoginPlace(username,password,"ERRORE: login sbagliato",LoginType.NETMUSLOGIN));
 	      }
 
 	      @Override
-	      public void onSuccess(Boolean result) {
-	    	  logger.log(Level.INFO, "RPC effettiata con successo");
-	    	  if (result.booleanValue() == true) { 
-	    		  logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
-	    		  goTo( new ProfilePlace("test"));
-	    	  }
-	    	  else {
-	    		  logger.log(Level.INFO, "l'utente: "+ username+" è già presente nel database");
-	    		  goTo( new LoginPlace(username,password,"login sbagliato",LoginType.NETMUSLOGIN));
-	    	  }
+	      public void onSuccess(Void result) {
+	    	  logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
+	    	  goTo( new ProfilePlace("test"));
 	      }
 	    };
 
 	    // Make the call to the stock price service.
-	    loginServiceSvc.insertRegistration(login, callback);
+	    try {
+	    	loginServiceSvc.insertRegistration(login, callback);
+		} catch (IllegalStateException e) {
+			//exception alredy cought in method onFailure
+			e.printStackTrace();
+		}
 	    
 	    
-	    /*---------------METODO USATO PER TESTING---------------------
+	    /*---------------METODO USATO PER TESTING---------------------*/
 	    
 	    // Set up the callback object.
 	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
@@ -105,7 +106,7 @@ public class LoginActivity extends AbstractActivity implements
 
 	      @Override
 	      public void onSuccess(ArrayList<UserSummaryDTO> result) {
-	    	  logger.log(Level.INFO, "RPC effettiata con successo");
+	    	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
 	    	  for (UserSummaryDTO tmp:result)
 	    		  logger.log(Level.INFO, tmp.getNickName());
 	      }
