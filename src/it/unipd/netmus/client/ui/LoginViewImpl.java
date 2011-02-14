@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class LoginViewImpl extends Composite implements LoginView {
 
    private static LoginViewImplUiBinder uiBinder = GWT.create(LoginViewImplUiBinder.class);
+   MyConstants myConstants = GWT.create(MyConstants.class);
    
    interface LoginViewImplUiBinder extends UiBinder<Widget, LoginViewImpl>
    {
@@ -52,6 +53,10 @@ public class LoginViewImpl extends Composite implements LoginView {
    {
       initWidget(uiBinder.createAndBindUi(this));
       
+      //localizzazione
+      login.setText(myConstants.loginLabel());
+      register.setText(myConstants.registerSwitchLabel());
+      account.setText(myConstants.accountGoogle());
       check_google.setValue(true);
    }
 
@@ -83,6 +88,9 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  
 		  type = LoginType.NETMUSREGISTRATION;
 		  
+	      DOM.getElementById("password_check").setInnerHTML(myConstants.passwordCheck());
+
+		  
 		  DOM.getElementById("registrazione").getStyle().setProperty("opacity", "1");
 		  DOM.getElementById("registrazione").getStyle().setProperty("height", "40px");
 	
@@ -90,7 +98,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  register.getElement().getStyle().setProperty("opacity", "0");
 		  Timer timerRegisterLabel = new Timer() {
 			  public void run() {
-				  register.setText("Entra in Netmus");
+				  register.setText(myConstants.loginSwitchLabel());
 				  register.getElement().getStyle().setProperty("opacity", "1");
 			  }
 		  };
@@ -100,13 +108,13 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  login.getElement().getStyle().setProperty("opacity", "0");
 		  Timer timerLoginLabel = new Timer() {
 			  public void run() {
-				  login.setText("Registra");
+				  login.setText(myConstants.registerLabel());
 				  login.getElement().getStyle().setProperty("opacity", "1");
 			  }
 		  };
 		  timerLoginLabel.schedule(200);
 		  
-		   account.setText("Account Netmus");
+		   account.setText(myConstants.accountNetmus());
 		   check_google.setValue(false);
 		   check_netmus.setValue(true);
 		   check_google.setEnabled(false);
@@ -123,7 +131,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  register.getElement().getStyle().setProperty("opacity", "0");
 		  Timer timerRegisterLabel = new Timer() {
 			  public void run() {
-				  register.setText("Registrati su Netmus");
+				  register.setText(myConstants.registerSwitchLabel());
 				  register.getElement().getStyle().setProperty("opacity", "1");
 			  }
 		  };
@@ -133,7 +141,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  login.getElement().getStyle().setProperty("opacity", "0");
 		  Timer timerLoginLabel = new Timer() {
 			  public void run() {
-				  login.setText("Login");
+				  login.setText(myConstants.loginLabel());
 				  login.getElement().getStyle().setProperty("opacity", "1");
 			  }
 		  };
@@ -150,7 +158,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("check_google")
    void handleClickGoogle(ClickEvent e) {
 
-	   account.setText("Account Google");
+	   account.setText(myConstants.accountGoogle());
 	   type = LoginType.GOOGLELOGIN;
 	   
 	   if(check_netmus.getValue()) {
@@ -164,7 +172,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("check_netmus")
    void handleClickNetmus(ClickEvent e) {
 	   
-	   account.setText("Account Netmus");
+	   account.setText(myConstants.accountNetmus());
 	   type = LoginType.NETMUSLOGIN;
 	   
 	   if(check_google.getValue()) {
