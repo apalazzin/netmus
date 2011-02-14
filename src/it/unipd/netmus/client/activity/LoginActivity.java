@@ -9,6 +9,7 @@ import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
+import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
@@ -34,7 +35,8 @@ public class LoginActivity extends AbstractActivity implements
 	private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-
+	MyConstants myConstants = GWT.create(MyConstants.class);
+	
 	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
 		this.user = place.getLoginName();
 		this.password = place.getPassword();
@@ -79,12 +81,12 @@ public class LoginActivity extends AbstractActivity implements
 	    	
 	      public void onFailure(Throwable caught) {
 	    	  logger.log(Level.INFO, ((WrongLoginException)caught).getMoreInfo());
-	    	  goTo( new LoginPlace(username,password,"Username/password non corretti",LoginType.NETMUSLOGIN));
+	    	  goTo( new LoginPlace(username,password, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
 	      }
 
 	      @Override
 	      public void onSuccess(Void result) {
-	    	  logger.log(Level.INFO, "L'utente "+ username+" è loggato con successo");
+	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
 	    	  goTo( new ProfilePlace("test"));
 	      }
 	    };
@@ -111,13 +113,13 @@ public class LoginActivity extends AbstractActivity implements
 			AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
 				public void onFailure(Throwable caught) {
-					logger.log(Level.INFO, "Utente "+username+" già presente in database");
-					goTo( new LoginPlace(username,password,"Username già in uso",LoginType.NETMUSREGISTRATION));
+					logger.log(Level.INFO, username + " " + myConstants.infoUserAlreadyDb());
+					goTo( new LoginPlace(username,password, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
 				}
 
 				@Override
 				public void onSuccess(Void result) {
-					logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
+					logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
 					goTo( new ProfilePlace("test"));
 				}
 			};
@@ -131,7 +133,7 @@ public class LoginActivity extends AbstractActivity implements
 			}
 		}
 		else
-			goTo( new LoginPlace(username,password,"Le password inserite non coincidono",LoginType.NETMUSREGISTRATION));
+			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
 	}
 }
 

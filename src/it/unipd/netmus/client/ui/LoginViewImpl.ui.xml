@@ -18,7 +18,7 @@
    				<g:Label ui:field="login" styleName="{style.login}">Login</g:Label>
    				
    				<div id="registrazione" class="{style.registrazione}">
-	   				<div style="float: left; width: 170px;">&nbsp;</div><div style="">Conferma Password:</div>
+	   				<div style="float: left; width: 170px;">&nbsp;</div><div id="password_check">&nbsp;</div>
    					<div style="float: left; width: 160px;">&nbsp;</div><g:TextBox ui:field="c_password" styleName="{style.pass}">	</g:TextBox>
    				</div>
    				

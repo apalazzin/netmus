@@ -26,5 +26,8 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
+  
+  <!-- Italian -->
+  <extend-property name="locale" values="it"/>
 
 </module>
