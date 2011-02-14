@@ -13,11 +13,11 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class MusicLibraryDTO implements GenericDTO {
-	private UserDTO owner;
+	private UserSummaryDTO owner;
 	private List<SongSummaryDTO> songs;
 	
 	public MusicLibraryDTO(UserAccount user, List<Song> s){
-		owner = user.toDTO();
+		owner = user.toUserDTO();
 		if(!s.isEmpty()){
 			for(int i =0; i<s.size(); i++){
 				songs.add(s.get(i).toSummaryDTO());
@@ -25,6 +25,6 @@ public class MusicLibraryDTO implements GenericDTO {
 		}
 	}
 	
-	public UserDTO getOwner(){return owner;}
+	public UserSummaryDTO getOwner(){return owner;}
 	public List <SongSummaryDTO> getSongs(){return songs;}
 }

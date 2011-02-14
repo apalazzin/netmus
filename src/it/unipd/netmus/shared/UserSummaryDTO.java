@@ -16,8 +16,11 @@ public class UserSummaryDTO implements GenericDTO {
 	
 	//default constructor
 	public UserSummaryDTO(){
-		this(new String(), new String(), new String(), new String());
-	}
+		nickName = "";
+		email = "";
+		sex = "";
+		location = "";
+		}
 	
 	public UserSummaryDTO(String nick,String mail,String sexType,String city){
 		this.nickName = nick;
