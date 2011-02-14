@@ -3,6 +3,11 @@
  */
 package it.unipd.netmus.client.service;
 
+import java.util.ArrayList;
+
+import it.unipd.netmus.shared.LoginDTO;
+import it.unipd.netmus.shared.UserSummaryDTO;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -13,7 +18,16 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("loginService")
 public interface LoginService extends RemoteService {
    
-//   UserDTO getLoggedInUserDTO();
-//   void logout() throws NotLoggedInException;
+	boolean insertRegistration(LoginDTO login);
+	
+	boolean verifyLogin(LoginDTO login);
+	
+	boolean startLogin(LoginDTO login);
+	
+	UserSummaryDTO getLoggedInUserDTO();
+	
+	void logout();
+	
+	ArrayList<UserSummaryDTO> getAllUsers();
 
 }

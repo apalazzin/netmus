@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class Netmus implements EntryPoint {
 
-   private Place defaultPlace = new LoginPlace("Netmus!");
+   private Place defaultPlace = new LoginPlace("");
    private SimplePanel appWidget = new SimplePanel();
    
    @Override

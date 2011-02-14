@@ -3,15 +3,13 @@
  */
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.server.PMF;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.code.twig.ObjectDatastore;
-import com.google.code.twig.annotation.AnnotationObjectDatastore;
 
 /**
  * @author ValterTexasGroup
@@ -52,15 +50,11 @@ public class UserAccount {
    
    // STATICO
    public static UserAccount findUser(String user) {
-      
-      ObjectDatastore datastore = new AnnotationObjectDatastore();
-      
-      UserAccount found = datastore.find()
-         .type(UserAccount.class)
-         .addFilter("user", FilterOperator.EQUAL, user)
-         .returnUnique().now();
-      
-      return found;
+      List<UserAccount> found = PMF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnAll().now();
+      if (found.size()>0)
+    	  return found.get(0);
+      else
+    	  return null;
    }
    
    public boolean isGoogleUser() {
@@ -68,8 +62,7 @@ public class UserAccount {
    }
    
    public UserSummaryDTO toUserSummaryDTO() {
-      
-      return null;
+      return new UserSummaryDTO(this.user,"email","sex","city");
    }
    
    public UserSummaryDTO toUserDTO() {
