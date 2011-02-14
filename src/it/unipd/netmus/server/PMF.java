@@ -3,8 +3,8 @@
  */
 package it.unipd.netmus.server;
 
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManagerFactory;
+import com.google.code.twig.ObjectDatastore;
+import com.google.code.twig.annotation.AnnotationObjectDatastore;
 
 /**
  * @author ValterTexasGroup
@@ -12,13 +12,12 @@ import javax.jdo.PersistenceManagerFactory;
  */
 public final class PMF {
    
-  private static final PersistenceManagerFactory pmfInstance =
-      JDOHelper.getPersistenceManagerFactory("transactions-optional");
+	private static final ObjectDatastore datastoreIstance = new AnnotationObjectDatastore(false);
 
-  private PMF() {
-  }
+	private PMF() {
+	}
 
-  public static PersistenceManagerFactory get() {
-      return pmfInstance;
-  }
+	public static ObjectDatastore get() {
+		return datastoreIstance;
+	}
 }

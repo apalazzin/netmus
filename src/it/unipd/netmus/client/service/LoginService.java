@@ -3,6 +3,8 @@
  */
 package it.unipd.netmus.client.service;
 
+import java.util.ArrayList;
+
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
@@ -25,5 +27,7 @@ public interface LoginService extends RemoteService {
 	UserSummaryDTO getLoggedInUserDTO();
 	
 	void logout();
+	
+	ArrayList<UserSummaryDTO> getAllUsers();
 
 }

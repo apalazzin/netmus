@@ -3,8 +3,7 @@
  */
 package it.unipd.netmus.server;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,8 +12,6 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
-import com.google.code.twig.ObjectDatastore;
-import com.google.code.twig.annotation.AnnotationObjectDatastore;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -24,19 +21,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
-
-	private static Logger logger = Logger.getLogger(LoginHelper.class.getName());
 	
 	@Override
 	public boolean insertRegistration(LoginDTO login) {
 		
-		ObjectDatastore datastore = new AnnotationObjectDatastore(false);
-		
 		UserAccount userAccount = UserAccount.findUser(login.getUser());
-		if (userAccount.equals(null)) {
-			logger.info("Inserimento nel database del nuovo utente: " + login.getUser());
+		if (userAccount == null) {
 			userAccount = new UserAccount(login.getUser(),login.getPassword());
-			datastore.store(userAccount);
+			PMF.get().store(userAccount);
 			return true;
 		}
 		else return false;
@@ -45,10 +37,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public boolean verifyLogin(LoginDTO login) {
 		UserAccount userAccount = UserAccount.findUser(login.getUser());
-		if (userAccount.equals(null)) {return false;}
+
+		if (userAccount == null) {return false;}
 		else {
-			if (login.getPassword().equals(userAccount.getPassword())) {
-				logger.info("Account verificata con successo: " + login.getUser());
+			if (login.getPassword() == userAccount.getPassword()) {
 				return true;
 			}
 			else return false;
@@ -57,17 +49,13 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public boolean startLogin(LoginDTO login) {
-		/*if (verifyLogin(login)) {
+		if (verifyLogin(login)) {
 			UserAccount userAccount = UserAccount.findUser(login.getUser());
 			HttpSession session = getThreadLocalRequest().getSession();
-			logger.info("Inizio sessione: " + login.getUser());
 			LoginHelper.loginStarts(session, userAccount);
 			return true;
 		}
-		logger.info("Account non presente nel database: " + login.getUser());*/
-		if (login.getUser().equals("lol"))
-			return true;
-		else return false;
+		return false;
 	}
 
 	@Override
@@ -85,6 +73,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public void logout() {
 	    getThreadLocalRequest().getSession().invalidate();
+	}
+
+	@Override
+	public ArrayList<UserSummaryDTO> getAllUsers() {
+		ArrayList<UserAccount> allUsers = (ArrayList<UserAccount>) PMF.get().find().type(UserAccount.class).returnAll().now();
+		ArrayList<UserSummaryDTO> allUsersDTO = new ArrayList<UserSummaryDTO>();
+		for (UserAccount tmp:allUsers)
+			allUsersDTO.add(tmp.toUserSummaryDTO());
+		return allUsersDTO;
 	}
 
 }
