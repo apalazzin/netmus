@@ -96,7 +96,7 @@ public class LoginActivity extends AbstractActivity implements
 	    loginServiceSvc.insertRegistration(login, callback);
 	    
 	    
-	    /*---------------METODO USATO PER TESTING---------------------*/
+	    /*---------------METODO USATO PER TESTING---------------------
 	    
 	    // Set up the callback object.
 	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
