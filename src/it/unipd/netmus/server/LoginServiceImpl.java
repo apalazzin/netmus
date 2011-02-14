@@ -12,6 +12,8 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -25,29 +27,35 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
 	@Override
-	public void insertRegistration(LoginDTO login) throws IllegalStateException {
+	public void insertRegistration(LoginDTO login) throws RegistrationException {
 		//create new user in the database
 		UserAccount userAccount = new UserAccount(login.getUser(),login.getPassword());
-		PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+		
+		//persist the new user
+		try {
+			PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+		} catch (IllegalStateException e) {
+			throw new RegistrationException();
+		}
 	}
 
 	
 	@Override
-	public void verifyLogin(LoginDTO login) throws WrongLoginException {
+	public void verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
 		UserAccount userAccount = PMF.get().load(UserAccount.class, login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
-			throw new WrongLoginException();
+			throw new WrongLoginException("L'utente non esiste");
 		}
 		else {
-			if (login.getPassword() == userAccount.getPassword()) {
+			if (login.getPassword().contentEquals(userAccount.getPassword())) {
 				//correct password
 				return;
 			}
-			else throw new WrongLoginException();
+			else throw new WrongLoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
 		}
 	}
 

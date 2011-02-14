@@ -24,14 +24,12 @@ public interface LoginView extends IsWidget {
    void setPassword(String password);
    void setError(String error);
    void setLoginType(LoginType loginType);
-   void goRegisterView();
-
 
    public interface Presenter
    {
       void goTo(Place place);
       void sendLogin(LoginDTO login) throws LoginException;
-      void sendRegistration(LoginDTO login) throws RegistrationException;
-      enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION};
+      void sendRegistration(LoginDTO login, String confirmPassword) throws RegistrationException;
+      enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION, GOOGLELOGIN};
    }
 }

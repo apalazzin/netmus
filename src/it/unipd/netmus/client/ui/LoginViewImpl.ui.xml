@@ -41,7 +41,7 @@
 
    		<img src="images/netmus.png" style="position: absolute; bottom: 10px; left: 20px; width: 300px;"/>
    		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
-   		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}">Label "error" per segnalazione di errori.</g:Label></div>
+   		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}"></g:Label></div>
    	</div>
    </g:HTMLPanel>
    
