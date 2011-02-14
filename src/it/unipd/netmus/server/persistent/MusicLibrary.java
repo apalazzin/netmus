@@ -34,10 +34,13 @@ public class MusicLibrary {
 	
 	   // STATICO
 	   public static MusicLibrary findLibrary(String owner) {
+		  /* DA RIFARE CON TWIG 1.0.4
 	      List<MusicLibrary> found = PMF.get().find().type(MusicLibrary.class).addFilter("owner", FilterOperator.EQUAL, owner).returnAll().now();
 	      if(found.size()>0)
 	    	  return found.get(0);
 	      return null;
+	      */
+		   return null;
 	   }
 	
 	
