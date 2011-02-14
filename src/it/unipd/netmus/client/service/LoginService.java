@@ -28,6 +28,7 @@ public interface LoginService extends RemoteService {
 	
 	void logout();
 	
+	/*METODO USATO PER TESTING*/
 	ArrayList<UserSummaryDTO> getAllUsers();
 
 }

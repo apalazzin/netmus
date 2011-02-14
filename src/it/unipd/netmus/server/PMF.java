@@ -3,8 +3,8 @@
  */
 package it.unipd.netmus.server;
 
-import com.google.code.twig.ObjectDatastore;
-import com.google.code.twig.annotation.AnnotationObjectDatastore;
+import com.vercer.engine.persist.ObjectDatastore;
+import com.vercer.engine.persist.annotation.AnnotationObjectDatastore;
 
 /**
  * @author ValterTexasGroup

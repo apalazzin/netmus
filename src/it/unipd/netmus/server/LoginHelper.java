@@ -11,9 +11,6 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
-import com.google.code.twig.ObjectDatastore;
-import com.google.code.twig.annotation.AnnotationObjectDatastore;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * @author ValterTexasGroup
@@ -37,8 +34,8 @@ public class LoginHelper extends RemoteServiceServlet {
 	    	return null; // user not logged in
 	    }
 
-	    UserAccount user = UserAccount.findUser(userId);
-	    return user;
+	    //UserAccount user = UserAccount.findUser(userId);
+	    return null;
 	  }
 
 	  static public boolean isLoggedIn(HttpServletRequest req) {
@@ -67,12 +64,9 @@ public class LoginHelper extends RemoteServiceServlet {
 	  }
 
 	  static public UserAccount loginStarts(HttpSession session, UserAccount user) {
-		  
-		  ObjectDatastore datastore = new AnnotationObjectDatastore(false);
-		  
-		  datastore.associate(user);
+		  PMF.get().associate(user);
 		  user.setLastLogin(new Date());
-		  datastore.update(user);
+		  PMF.get().update(user);
 		  
 		  session.setAttribute("userId", "");
 		  session.setAttribute("loggedin", true);

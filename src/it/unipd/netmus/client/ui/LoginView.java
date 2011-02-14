@@ -30,8 +30,8 @@ public interface LoginView extends IsWidget {
    public interface Presenter
    {
       void goTo(Place place);
-      public boolean sendLogin(LoginDTO login) throws LoginException;
-      public boolean sendRegistration(LoginDTO login) throws RegistrationException;
-      public enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION};
+      void sendLogin(LoginDTO login) throws LoginException;
+      void sendRegistration(LoginDTO login) throws RegistrationException;
+      enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION};
    }
 }

@@ -7,9 +7,11 @@ import it.unipd.netmus.server.PMF;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Iterator;
 
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.vercer.engine.persist.annotation.Index;
+import com.vercer.engine.persist.annotation.Key;
 
 /**
  * @author ValterTexasGroup
@@ -17,7 +19,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
  */
 public class UserAccount {
    
-   private String user;
+   @Key private String user;
    
    private String password; // da criptare e decriptare con algoritmi DES o AES
    
@@ -25,7 +27,7 @@ public class UserAccount {
    
    private String lastName;
    
-   private String emailAddress;
+   @Index private String emailAddress;
    
    private Date birthDate;
    
@@ -50,11 +52,10 @@ public class UserAccount {
    
    // STATICO
    public static UserAccount findUser(String user) {
-      List<UserAccount> found = PMF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnAll().now();
-      if (found.size()>0)
-    	  return found.get(0);
-      else
-    	  return null;
+      Iterator<UserAccount> found = PMF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnResultsNow();
+      if (found.hasNext())
+    	  return found.next();
+      else return null;
    }
    
    public boolean isGoogleUser() {

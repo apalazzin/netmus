@@ -4,6 +4,7 @@
 package it.unipd.netmus.server;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,8 +26,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public boolean insertRegistration(LoginDTO login) {
 		
+		//find user in the database
 		UserAccount userAccount = UserAccount.findUser(login.getUser());
+		
 		if (userAccount == null) {
+			//create new user in the database
 			userAccount = new UserAccount(login.getUser(),login.getPassword());
 			PMF.get().store(userAccount);
 			return true;
@@ -34,28 +38,37 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		else return false;
 	}
 
+	
 	@Override
 	public boolean verifyLogin(LoginDTO login) {
+		
+		//find user in the database
 		UserAccount userAccount = UserAccount.findUser(login.getUser());
 
-		if (userAccount == null) {return false;}
+		if (userAccount == null) {
+			//user not found in the database
+			return false;
+		}
 		else {
 			if (login.getPassword() == userAccount.getPassword()) {
+				//correct password
 				return true;
 			}
+			//incorrect password
 			else return false;
 		}
 	}
 
 	@Override
 	public boolean startLogin(LoginDTO login) {
-		if (verifyLogin(login)) {
+	/*	if (verifyLogin(login)) {
 			UserAccount userAccount = UserAccount.findUser(login.getUser());
 			HttpSession session = getThreadLocalRequest().getSession();
 			LoginHelper.loginStarts(session, userAccount);
 			return true;
 		}
-		return false;
+		return false;*/
+		return true;
 	}
 
 	@Override
@@ -75,11 +88,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    getThreadLocalRequest().getSession().invalidate();
 	}
 
+	/*METODO USATO PER TESTING*/
 	@Override
 	public ArrayList<UserSummaryDTO> getAllUsers() {
-		ArrayList<UserAccount> allUsers = (ArrayList<UserAccount>) PMF.get().find().type(UserAccount.class).returnAll().now();
+		Iterator<UserAccount> allUsers = PMF.get().find().type(UserAccount.class).returnResultsNow();
+		ArrayList<UserAccount> allUsersList = new ArrayList<UserAccount>();
+		while (allUsers.hasNext() == true)
+			allUsersList.add(allUsers.next());
 		ArrayList<UserSummaryDTO> allUsersDTO = new ArrayList<UserSummaryDTO>();
-		for (UserAccount tmp:allUsers)
+		for (UserAccount tmp:allUsersList)
 			allUsersDTO.add(tmp.toUserSummaryDTO());
 		return allUsersDTO;
 	}

@@ -63,7 +63,7 @@ public class LoginActivity extends AbstractActivity implements
 		clientFactory.getPlaceController().goTo(place);
 	}
 	
-	public boolean sendLogin(LoginDTO login)
+	public void sendLogin(LoginDTO login)
 	{
 		final String username = login.getUser();
 		final String password = login.getPassword();
@@ -95,6 +95,9 @@ public class LoginActivity extends AbstractActivity implements
 	    // Make the call to the stock price service.
 	    loginServiceSvc.insertRegistration(login, callback);
 	    
+	    
+	    /*---------------METODO USATO PER TESTING---------------------*/
+	    
 	    // Set up the callback object.
 	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
 	      public void onFailure(Throwable caught) {
@@ -110,15 +113,12 @@ public class LoginActivity extends AbstractActivity implements
 
 	    // Make the call to the stock price service.
 	    loginServiceSvc.getAllUsers(callback2);
-	    
-	    
-	    
-		return true;
+	    /*-------------------------------------------------------*/
+
 	}
 	
-	public boolean sendRegistration(LoginDTO login)
+	public void sendRegistration(LoginDTO login)
 	{//implementation
-		return true;
 	}
 }
 
