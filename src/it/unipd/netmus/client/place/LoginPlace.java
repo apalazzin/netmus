@@ -6,7 +6,7 @@
 
 package it.unipd.netmus.client.place;
 
-import it.unipd.netmus.client.ui.EditSongsView.Presenter.LoginType;
+import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
@@ -25,13 +25,19 @@ public class LoginPlace extends Place {
 	   private String error;
 	   private LoginType loginType;
 	   
-	   
-	   
 	   public LoginPlace(String token)
 	   {
 	      this.user = token;
 	   }
 
+	   public LoginPlace(String user, String password, String error, LoginType loginType)
+	   {
+	      this.user = user;
+	      this.password = password;
+	      this.error = error;
+	      this.loginType = loginType;
+	   }
+	   
 	   public String getLoginName()
 	   {
 	      return user;
@@ -61,9 +67,9 @@ public class LoginPlace extends Place {
 	      }
 
 	      @Override
-	      public LoginPlace getPlace(String token)
+	      public LoginPlace getPlace(String loginName)
 	      {
-	         return new LoginPlace(token);
+	         return new LoginPlace(loginName);
 	      }
 	   }
 

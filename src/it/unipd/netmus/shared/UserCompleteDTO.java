@@ -9,6 +9,7 @@ package it.unipd.netmus.shared;
  */
 @SuppressWarnings("serial")
 public class UserCompleteDTO extends UserDTO {
+
 	private String password;
 	private int nSongs;
 	

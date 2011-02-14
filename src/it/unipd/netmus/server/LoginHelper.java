@@ -3,16 +3,18 @@
  */
 package it.unipd.netmus.server;
 
+import java.util.Date;
+import java.util.logging.Logger;
+
 import it.unipd.netmus.server.persistent.UserAccount;
 
-import javax.jdo.JDOCanRetryException;
-import javax.jdo.JDOException;
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import com.google.code.twig.ObjectDatastore;
+import com.google.code.twig.annotation.AnnotationObjectDatastore;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * @author ValterTexasGroup
  *
@@ -20,20 +22,23 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginHelper extends RemoteServiceServlet {
 	
-	private static final int NUM_RETRIES = 5;
+	private static Logger logger = Logger.getLogger(LoginHelper.class.getName());
+	
+	static public UserAccount getLoggedInUser(HttpSession session) {
 
-	static public UserAccount getLoggedInUser(HttpSession session, PersistenceManager pm) {
-
-	    if (session == null)
-	      return null; // user not logged in
+	    if (session == null) {
+	    	logger.info("L'utente non è loggato");
+	      	return null; // user not logged in
+	    }
 
 	    String userId = (String) session.getAttribute("userId");
-	    if (userId == null)
-	      return null; // user not logged in
+	    if (userId == null) {
+	    	logger.info("L'utente non è loggato");
+	    	return null; // user not logged in
+	    }
 
-	    //cercare nel database l'userID e ritornare il corrispondente UserAccount
-	    
-	    return null;
+	    UserAccount user = UserAccount.findUser(userId);
+	    return user;
 	  }
 
 	  static public boolean isLoggedIn(HttpServletRequest req) {
@@ -43,47 +48,34 @@ public class LoginHelper extends RemoteServiceServlet {
 	    else {
 	      HttpSession session = req.getSession();
 	      if (session == null) {
-	        return false;
+	    	  logger.info("Nessuna sessione aperta al momento");
+	    	  return false;
 	      } else {
 	        Boolean isLoggedIn = (Boolean) session.getAttribute("loggedin");
 	        if(isLoggedIn == null){
-	          return false;
+	        	logger.info("Non si sa se l'utente sia loggato");
+	        	return false;
 	        } else if (isLoggedIn){
-	          return true;
+	        	logger.info("L'utente è loggato");
+	        	return true;
 	        } else {
-	          return false;
+	        	logger.info("L'utente non è loggato");
+	        	return false;
 	        }
 	      }
 	    }
 	  }
 
-	  public UserAccount loginStarts(HttpSession session, UserAccount user) {
-
-	    // update user info under transactional control
-	    try {
-	      for (int i = 0; i < NUM_RETRIES; i++) {
-	        try {
-	          // update session if successful
-	          session.setAttribute("userId", "");
-	          session.setAttribute("loggedin", true);
-	          break;
-	        }
-	        catch (JDOCanRetryException e1) {
-	          if (i == (NUM_RETRIES - 1)) { 
-	            throw e1;
-	          }
-	        }
-	      } // end for
-	    } 
-	    catch (JDOException e) {
-	      e.printStackTrace();
-	      return null;
-	    } 
-	    finally {
-	      //if transaction alredy active... rollback
-	      //close PM
-	    }
-
-	    return null;
+	  static public UserAccount loginStarts(HttpSession session, UserAccount user) {
+		  
+		  ObjectDatastore datastore = new AnnotationObjectDatastore(false);
+		  
+		  datastore.associate(user);
+		  user.setLastLogin(new Date());
+		  datastore.update(user);
+		  
+		  session.setAttribute("userId", "");
+		  session.setAttribute("loggedin", true);
+		  return null;
 	  }
 }

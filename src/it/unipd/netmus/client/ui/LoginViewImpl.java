@@ -3,7 +3,11 @@
  */
 package it.unipd.netmus.client.ui;
 
+import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
+import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
+import it.unipd.netmus.shared.LoginDTO;
+import it.unipd.netmus.shared.exception.LoginException;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,8 +34,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    }
    
    private Presenter listener;
-   private String name;
-
+   private LoginType type;
    
    @UiField Label login;
    @UiField Label account;
@@ -47,11 +50,6 @@ public class LoginViewImpl extends Composite implements LoginView {
       
       check_google.setValue(true);
    }
-   
-   @Override
-   public void setName(String loginName) {
-      this.name = loginName;
-   }
 
    @Override
    public void setPresenter(Presenter listener) {
@@ -61,7 +59,12 @@ public class LoginViewImpl extends Composite implements LoginView {
    
    @UiHandler("login")
    void handleClick(ClickEvent e) {
-     listener.goTo( new ProfilePlace("test"));
+	 try {
+		 listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
+	} catch (LoginException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
    }
 
    @UiHandler("check_google")
@@ -89,6 +92,33 @@ public class LoginViewImpl extends Composite implements LoginView {
 	   }
      
    }
+
+@Override
+public void setUser(String user) {
+	this.user.setText(user);
+}
+
+@Override
+public void setPassword(String password) {
+	this.password.setText(password);
+}
+
+@Override
+public void setError(String error) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void setLoginType(LoginType loginType) {
+	this.type = loginType;
+}
+
+@Override
+public void goRegisterView() {
+	// TODO Auto-generated method stub
+	
+}
 
    
 }
