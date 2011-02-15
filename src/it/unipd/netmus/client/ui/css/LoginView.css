@@ -11,7 +11,7 @@
 	
 	width: 500px;
 	height: 300px;      	
-
+	
 	border: 2px solid #AAAAAA;
 	
 	background-color: #FFFFFF;
@@ -21,8 +21,21 @@
 	-webkit-box-shadow: 4px 4px 10px #888888;
 	-moz-box-shadow: 4px 4px 10px #888888;
 	
+	
 	text-align: center;
 	
+}
+
+.container {
+	
+	
+	opacity: 0;
+	
+	-webkit-transition: opacity 1.0s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: opacity 1.0s ease;  height 1s ease-in-out;
+	-o-transition: opacity 1.0s ease-in-out;  height 1s ease-in-out;
+	transition: opacity 1.0s ease-in-out;  height 1s ease-in-out;
+		
 }
 
 .account {
