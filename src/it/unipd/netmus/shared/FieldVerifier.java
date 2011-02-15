@@ -1,8 +1,5 @@
 package it.unipd.netmus.shared;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.
@@ -58,10 +55,6 @@ public class FieldVerifier {
 	 * @return true if valid, false if invalid
 	 */
 	public static boolean isValidEmail(String email) {
-		Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
-		
-		Matcher matcher = pattern.matcher(email);
-		
-		return matcher.matches();
+		return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 	}
 }

@@ -104,11 +104,11 @@ public class LoginActivity extends AbstractActivity implements
 		final String password = login.getPassword();
 		
 		if (!FieldVerifier.isValidPassword(password))
-			goTo( new LoginPlace(username,password, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
+			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
 		else if (!FieldVerifier.isValidEmail(username))
 			goTo( new LoginPlace(username,password, myConstants.errorEmail() ,LoginType.NETMUSREGISTRATION));
 		else if (!password.equals(confirmPassword))
-			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+			goTo( new LoginPlace(username,password, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
 		else {
 		
 			// Initialize the service proxy.

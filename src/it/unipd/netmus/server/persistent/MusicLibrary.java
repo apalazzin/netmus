@@ -34,7 +34,7 @@ public class MusicLibrary {
 	
 	   // STATICO
 	   public static MusicLibrary findLibrary(String owner) {
-	      Iterator<MusicLibrary> found = PMF.get().find().type(MusicLibrary.class).addFilter("owner", FilterOperator.EQUAL, owner).returnResultsNow();
+	      Iterator<MusicLibrary> found = ODF.get().find().type(MusicLibrary.class).addFilter("owner", FilterOperator.EQUAL, owner).returnResultsNow();
 	      if (found.hasNext())
 	    	  return found.next();
 	      else return null;
