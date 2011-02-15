@@ -1,6 +1,5 @@
 package it.unipd.netmus.client.activity;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,8 +9,11 @@ import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
+import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -33,7 +35,8 @@ public class LoginActivity extends AbstractActivity implements
 	private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-
+	MyConstants myConstants = GWT.create(MyConstants.class);
+	
 	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
 		this.user = place.getLoginName();
 		this.password = place.getPassword();
@@ -74,51 +77,84 @@ public class LoginActivity extends AbstractActivity implements
 	    }
 
 	    // Set up the callback object.
-	    AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+	    	
 	      public void onFailure(Throwable caught) {
+	    	  logger.log(Level.INFO, ((WrongLoginException)caught).getMoreInfo());
+	    	  goTo( new LoginPlace(username,password, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
 	      }
 
 	      @Override
-	      public void onSuccess(Boolean result) {
-	    	  logger.log(Level.INFO, "RPC effettiata con successo");
-	    	  if (result.booleanValue() == true) { 
-	    		  logger.log(Level.INFO, "Inserito nel database l'utente: "+ username);
-	    		  goTo( new ProfilePlace("test"));
-	    	  }
-	    	  else {
-	    		  logger.log(Level.INFO, "l'utente: "+ username+" è già presente nel database");
-	    		  goTo( new LoginPlace(username,password,"login sbagliato",LoginType.NETMUSLOGIN));
-	    	  }
+	      public void onSuccess(Void result) {
+	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
+	    	  goTo( new ProfilePlace("test"));
 	      }
 	    };
 
-	    // Make the call to the stock price service.
-	    loginServiceSvc.insertRegistration(login, callback);
-	    
-	    
-	    /*---------------METODO USATO PER TESTING---------------------*/
-	    
-	    // Set up the callback object.
-	    AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
-	      public void onFailure(Throwable caught) {
-	      }
-
-	      @Override
-	      public void onSuccess(ArrayList<UserSummaryDTO> result) {
-	    	  logger.log(Level.INFO, "RPC effettiata con successo");
-	    	  for (UserSummaryDTO tmp:result)
-	    		  logger.log(Level.INFO, tmp.getNickName());
-	      }
-	    };
-
-	    // Make the call to the stock price service.
-	    loginServiceSvc.getAllUsers(callback2);
-	    /*-------------------------------------------------------*/
-
+	    // Make the call to send login info.
+	    try {
+			loginServiceSvc.verifyLogin(login, callback);
+		} catch (LoginException e) {}
 	}
 	
-	public void sendRegistration(LoginDTO login)
-	{//implementation
+	public void sendRegistration(LoginDTO login, String confirmPassword)
+	{
+		final String username = login.getUser();
+		final String password = login.getPassword();
+		
+		if (password.equals(confirmPassword)) {
+		
+			// Initialize the service proxy.
+			if (loginServiceSvc == null) {
+				loginServiceSvc = GWT.create(LoginService.class);
+			}
+
+			// Set up the callback object.
+			AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+	    	
+				public void onFailure(Throwable caught) {
+					logger.log(Level.INFO, username + " " + myConstants.infoUserAlreadyDb());
+					goTo( new LoginPlace(username,password, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
+					goTo( new ProfilePlace("test"));
+				}
+			};
+
+			// Make the call to send login info.
+			try {
+				loginServiceSvc.insertRegistration(login, callback);
+			} catch (RegistrationException e) {
+				//exception alredy cought in method onFailure
+				e.printStackTrace();
+			}
+		}
+		else
+			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
 	}
 }
 
+
+
+
+/*
+BUONO PER TESTARE...
+// Set up the callback object.
+AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
+  public void onFailure(Throwable caught) {
+  }
+
+  @Override
+  public void onSuccess(ArrayList<UserSummaryDTO> result) {
+	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
+	  for (UserSummaryDTO tmp:result)
+		  logger.log(Level.INFO, tmp.getNickName());
+  }
+};
+
+// Make the call to the stock price service.
+loginServiceSvc.getAllUsers(callback2);
+*/
