@@ -1,0 +1,48 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+          xmlns:g="urn:import:com.google.gwt.user.client.ui">
+   
+   <ui:style src="css/LoginView.css" />
+   
+   <g:HTMLPanel ui:field="container" styleName="{style.container}">
+   	<div class="{style.main}">
+
+   		<div style="position: relative; width: 100%; height: 100%">
+   		
+   			<div style="margin-left: 60px; text-align: left; width: 390px; height: 200px; border: 0px solid #FF0000;">
+   				<g:Label ui:field="account" styleName="{style.account}">Account Google</g:Label>
+   				<div style="float: left; width: 170px;">Username:</div><div style="">Password:</div>
+   			
+   				<g:TextBox ui:field="user"  styleName="{style.user}">	</g:TextBox>
+   				<g:TextBox ui:field="password" styleName="{style.pass}">	</g:TextBox>
+   				<g:Label ui:field="login" styleName="{style.login}">Login</g:Label>
+   				
+   				<div id="registrazione" class="{style.registrazione}">
+	   				<div style="float: left; width: 170px;">&nbsp;</div><div id="password_check">&nbsp;</div>
+   					<div style="float: left; width: 160px;">&nbsp;</div><g:TextBox ui:field="c_password" styleName="{style.pass}">	</g:TextBox>
+   				</div>
+   				
+   				<div style="margin-top: 15px; border: 0px solid #FF00FF; position: relative; height: 50px;">
+   					<div style="float: left; margin-top: 6px; margin-right: 3px;"><g:RadioButton ui:field="check_google" name="check_g"/></div>
+   					<img src="images/google_logo.png" style="width: 100px; float: left;" />
+   					<div style="float: left; margin-top: 6px; margin-right: 3px; margin-left: 45px;"><g:RadioButton ui:field="check_netmus" name="check_n"/></div>
+   					<img src="images/netmus_scritta.png" style="width: 120px; float: left;" />
+   				</div>
+
+   				<div>
+   				
+   				</div>
+
+ 			</div>
+   			
+   		
+   		
+   		</div>
+
+   		<img src="images/netmus.png" style="position: absolute; bottom: 10px; left: 20px; width: 300px;"/>
+   		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
+   		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}"></g:Label></div>
+   	</div>
+   </g:HTMLPanel>
+   
+</ui:UiBinder>
