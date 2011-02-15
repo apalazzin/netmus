@@ -10,6 +10,7 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
+import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
@@ -102,7 +103,13 @@ public class LoginActivity extends AbstractActivity implements
 		final String username = login.getUser();
 		final String password = login.getPassword();
 		
-		if (password.equals(confirmPassword)) {
+		if (!FieldVerifier.isValidPassword(password))
+			goTo( new LoginPlace(username,password, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
+		else if (!FieldVerifier.isValidEmail(username))
+			goTo( new LoginPlace(username,password, myConstants.errorEmail() ,LoginType.NETMUSREGISTRATION));
+		else if (!password.equals(confirmPassword))
+			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+		else {
 		
 			// Initialize the service proxy.
 			if (loginServiceSvc == null) {
@@ -132,8 +139,7 @@ public class LoginActivity extends AbstractActivity implements
 				e.printStackTrace();
 			}
 		}
-		else
-			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+			
 	}
 }
 

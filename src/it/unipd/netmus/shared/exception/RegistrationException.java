@@ -10,4 +10,12 @@ package it.unipd.netmus.shared.exception;
 @SuppressWarnings("serial")
 public class RegistrationException extends NetmusException {
 
+	public RegistrationException() {
+		super();
+	}
+	
+	public RegistrationException(String moreInfo) {
+		super(moreInfo);
+	}
+
 }

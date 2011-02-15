@@ -10,11 +10,11 @@ import com.vercer.engine.persist.annotation.AnnotationObjectDatastore;
  * @author ValterTexasGroup
  *
  */
-public final class PMF {
+public final class ODF {
    
 	private static final ObjectDatastore datastoreIstance = new AnnotationObjectDatastore(false);
 
-	private PMF() {
+	private ODF() {
 	}
 
 	public static ObjectDatastore get() {

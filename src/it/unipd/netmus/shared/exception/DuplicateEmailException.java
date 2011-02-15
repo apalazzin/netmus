@@ -10,4 +10,11 @@ package it.unipd.netmus.shared.exception;
 @SuppressWarnings("serial")
 public class DuplicateEmailException extends RegistrationException {
 
+	public DuplicateEmailException() {
+		super();
+	}
+	
+	public DuplicateEmailException(String moreInfo) {
+		super(moreInfo);
+	}
 }

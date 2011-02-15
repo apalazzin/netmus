@@ -1,5 +1,8 @@
 package it.unipd.netmus.shared;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.
@@ -25,11 +28,6 @@ public class FieldVerifier {
 	/**
 	 * Verifies that the specified name is valid for our service.
 	 * 
-	 * In this example, we only require that the name is at least four
-	 * characters. In your application, you can use more complex checks to ensure
-	 * that usernames, passwords, email addresses, URLs, and other fields have the
-	 * proper syntax.
-	 * 
 	 * @param name the name to validate
 	 * @return true if valid, false if invalid
 	 */
@@ -38,5 +36,32 @@ public class FieldVerifier {
 			return false;
 		}
 		return name.length() > 3;
+	}
+	
+	/**
+	 * Verifies that the specified password is valid for our service.
+	 * 
+	 * @param name the password to validate
+	 * @return true if valid, false if invalid
+	 */
+	public static boolean isValidPassword(String password) {
+		if (password == null) {
+			return false;
+		}
+		return password.length() > 4;
+	}
+	
+	/**
+	 * Verifies that the specified e-mail is valid for e-mail common addresses.
+	 * 
+	 * @param name the e-mail to validate
+	 * @return true if valid, false if invalid
+	 */
+	public static boolean isValidEmail(String email) {
+		Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
+		
+		Matcher matcher = pattern.matcher(email);
+		
+		return matcher.matches();
 	}
 }

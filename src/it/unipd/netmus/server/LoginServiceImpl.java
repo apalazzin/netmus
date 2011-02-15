@@ -33,7 +33,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 		//persist the new user
 		try {
-			PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+			ODF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
 		} catch (IllegalStateException e) {
 			throw new RegistrationException();
 		}
@@ -44,7 +44,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public void verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = PMF.get().load(UserAccount.class, login.getUser());
+		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
@@ -91,7 +91,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	/*METODO USATO PER TESTING*/
 	@Override
 	public ArrayList<UserSummaryDTO> getAllUsers() {
-		Iterator<UserAccount> allUsers = PMF.get().find().type(UserAccount.class).returnResultsNow();
+		Iterator<UserAccount> allUsers = ODF.get().find().type(UserAccount.class).returnResultsNow();
 		ArrayList<UserAccount> allUsersList = new ArrayList<UserAccount>();
 		while (allUsers.hasNext() == true)
 			allUsersList.add(allUsers.next());
