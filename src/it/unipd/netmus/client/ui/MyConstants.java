@@ -20,5 +20,6 @@ public interface MyConstants extends Constants {
 	String infoUserAlreadyDb();
 	String infoCorrectLogin();
 	String infoLoginIncorrect();
+	String databaseErrorGeneric();
 	
 	}
