@@ -44,7 +44,9 @@ public class Netmus implements EntryPoint {
       historyHandler.register(placeController, eventBus, defaultPlace);
 
       RootPanel.get().setStyleName( "gwt-root" );
-      RootPanel.get().add(appWidget);
+      // applet e' la barra applet, resta inizialmente invisibile e vuota
+      RootPanel.get("applet-bar").setVisible(false);
+      RootPanel.get("application").add(appWidget);
      
       // Goes to place represented on URL or default place
       historyHandler.handleCurrentHistory();
