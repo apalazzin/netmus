@@ -63,13 +63,12 @@ public class LoginHelper extends RemoteServiceServlet {
 	    }
 	  }
 
-	  static public UserAccount loginStarts(HttpSession session, UserAccount user) {
+	  static public void loginStarts(HttpSession session, UserAccount user) {
 		  ODF.get().associate(user);
 		  user.setLastLogin(new Date());
 		  ODF.get().update(user);
 		  
-		  session.setAttribute("userId", "");
-		  session.setAttribute("loggedin", true);
-		  return null;
+		  /*session.setAttribute("userId", "");
+		  session.setAttribute("loggedin", true);*/
 	  }
 }

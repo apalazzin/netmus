@@ -60,15 +60,14 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public boolean startLogin(LoginDTO login) {
-	/*	if (verifyLogin(login)) {
-			UserAccount userAccount = UserAccount.findUser(login.getUser());
-			HttpSession session = getThreadLocalRequest().getSession();
-			LoginHelper.loginStarts(session, userAccount);
-			return true;
-		}
-		return false;*/
-		return true;
+	public void startLogin(LoginDTO login) throws LoginException {
+		verifyLogin(login);
+
+		//find user in the database
+		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
+		
+		HttpSession session = getThreadLocalRequest().getSession();
+		LoginHelper.loginStarts(session, userAccount);
 	}
 
 	@Override
@@ -77,9 +76,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    HttpSession session = getThreadLocalRequest().getSession();
 
 	    UserAccount u = LoginHelper.getLoggedInUser(session);
-	    if (u == null)
-	      return null;
-	    userDTO = u.toUserSummaryDTO();
+	    userDTO = u.toUserCompleteDTO();
 	    return userDTO;
 	}
 

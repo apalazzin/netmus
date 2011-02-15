@@ -26,7 +26,7 @@ public interface LoginServiceAsync {
 
 	void logout(AsyncCallback<Void> callback);
 
-	void startLogin(LoginDTO login, AsyncCallback<Boolean> callback);
+	void startLogin(LoginDTO login, AsyncCallback<Void> callback);
 
 	void getAllUsers(AsyncCallback<ArrayList<UserSummaryDTO>> callback);
 
