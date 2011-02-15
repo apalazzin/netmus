@@ -30,13 +30,17 @@ public class TranslateDTOXML {
 	
 	
 	public TranslateDTOXML() {
+		reset();
 	};
 	
-	public String DTOtoXML(SongDTO brano){
-		
+	//used to start with a fresh DOM tree, it must be called to use DTOtoXML.
+	public void reset(){
 		document = XMLParser.createDocument();
 		root = document.createElement(ROOT_NAME);
 		document.appendChild(root);
+	};
+	
+	public String DTOtoXML(SongDTO brano){
 		
 		//create the new song node
 		Element song = document.createElement(SONG_NAME);
