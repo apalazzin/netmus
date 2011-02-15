@@ -12,6 +12,9 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -24,38 +27,35 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
 	@Override
-	public boolean insertRegistration(LoginDTO login) {
+	public void insertRegistration(LoginDTO login) throws RegistrationException {
+		//create new user in the database
+		UserAccount userAccount = new UserAccount(login.getUser(),login.getPassword());
 		
-		//find user in the database
-		UserAccount userAccount = UserAccount.findUser(login.getUser());
-		
-		if (userAccount == null) {
-			//create new user in the database
-			userAccount = new UserAccount(login.getUser(),login.getPassword());
-			PMF.get().store(userAccount);
-			return true;
+		//persist the new user
+		try {
+			PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+		} catch (IllegalStateException e) {
+			throw new RegistrationException();
 		}
-		else return false;
 	}
 
 	
 	@Override
-	public boolean verifyLogin(LoginDTO login) {
+	public void verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = UserAccount.findUser(login.getUser());
+		UserAccount userAccount = PMF.get().load(UserAccount.class, login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
-			return false;
+			throw new WrongLoginException("L'utente non esiste");
 		}
 		else {
-			if (login.getPassword() == userAccount.getPassword()) {
+			if (login.getPassword().contentEquals(userAccount.getPassword())) {
 				//correct password
-				return true;
+				return;
 			}
-			//incorrect password
-			else return false;
+			else throw new WrongLoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
 		}
 	}
 

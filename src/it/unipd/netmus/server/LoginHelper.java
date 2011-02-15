@@ -34,8 +34,8 @@ public class LoginHelper extends RemoteServiceServlet {
 	    	return null; // user not logged in
 	    }
 
-	    //UserAccount user = UserAccount.findUser(userId);
-	    return null;
+	    UserAccount user = UserAccount.findUser(userId);
+	    return user;
 	  }
 
 	  static public boolean isLoggedIn(HttpServletRequest req) {
