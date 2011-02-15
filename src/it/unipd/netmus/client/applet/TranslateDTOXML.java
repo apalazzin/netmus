@@ -40,7 +40,8 @@ public class TranslateDTOXML {
 		document.appendChild(root);
 	};
 	
-	public String DTOtoXML(SongDTO brano){
+	//add a single DTO to XML
+	public void DTOtoXML(SongDTO brano){
 		
 		//create the new song node
 		Element song = document.createElement(SONG_NAME);
@@ -75,10 +76,13 @@ public class TranslateDTOXML {
 		song.appendChild(year);
 		
 		//add the new node to the tree
-		root.appendChild(song);
-		
+		root.appendChild(song);	
+	}
+	
+	//generate the XML code
+	public String generateXML(){
 		return document.toString();
-	};
+	}
 	
 	private SongDTO generateDTO(Element node){
 		SongDTO song = new SongDTO();
