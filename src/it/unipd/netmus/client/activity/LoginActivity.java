@@ -15,6 +15,7 @@ import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
+import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -112,6 +113,8 @@ public class LoginActivity extends AbstractActivity implements
 	      @Override
 	      public void onSuccess(Void result) {
 	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
+	    	  goTo( new ProfilePlace(username));
+	      }
 	    	  goTo(new ProfilePlace(username));
 	    	  
 	    	  
@@ -177,6 +180,7 @@ public class LoginActivity extends AbstractActivity implements
 				@Override
 				public void onSuccess(LoginDTO result) {
 					logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
+					goTo( new ProfilePlace(username));
 					sendLogin(result);
 				}
 			};
