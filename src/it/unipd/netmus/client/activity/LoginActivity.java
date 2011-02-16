@@ -114,8 +114,6 @@ public class LoginActivity extends AbstractActivity implements
 	      public void onSuccess(Void result) {
 	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
 	    	  goTo( new ProfilePlace(username));
-	      }
-	    	  goTo(new ProfilePlace(username));
 	    	  
 	    	  
 	    	  	/*
