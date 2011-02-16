@@ -31,4 +31,5 @@
   <!-- Italian -->
   <extend-property name="locale" values="it"/>
 
+  <set-property name="gwt.logging.popupHandler" value="DISABLED" />
 </module>

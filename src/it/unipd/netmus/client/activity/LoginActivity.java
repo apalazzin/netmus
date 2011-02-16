@@ -87,7 +87,7 @@ public class LoginActivity extends AbstractActivity implements
 	      @Override
 	      public void onSuccess(Void result) {
 	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
-	    	  goTo( new ProfilePlace("test"));
+	    	  goTo( new ProfilePlace(username));
 	      }
 	    };
 
@@ -120,7 +120,7 @@ public class LoginActivity extends AbstractActivity implements
 				@Override
 				public void onSuccess(Void result) {
 					logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
-					goTo( new ProfilePlace("test"));
+					goTo( new ProfilePlace(username));
 				}
 			};
 
