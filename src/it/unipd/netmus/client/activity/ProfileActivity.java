@@ -3,6 +3,7 @@ package it.unipd.netmus.client.activity;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
+import it.unipd.netmus.client.applet.ABF;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LoginService;
@@ -54,6 +55,9 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(String result) {
                 logger.info("Utente loggato - puo' accedere");
+                
+              //load applet bar, if not active yet
+                ABF.get().appletBarON();
             }
         };
         
@@ -91,6 +95,9 @@ public class ProfileActivity extends AbstractActivity implements
          public void onSuccess(Void result) {
             logger.info("Logout effettuato con successo");
             goTo(new LoginPlace(""));
+            
+         // bisogna togliere applet bar se caricata
+            ABF.get().appletBarOFF();
          }
       };
       
