@@ -90,6 +90,7 @@
 				<img src="images/edit_button.png" style="position: absolute; top: 20px; right: 370px; width: 60px;" />
 				<span style="position: absolute; top: 83px; right: 375px; font-size: 10px; font-family: Verdana;">Edit Song</span>
 
+				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
 				
 				
 				<div class="{style.info}"><div style="margin-top: 7px;">Nessun brano in ascolto.</div></div>
