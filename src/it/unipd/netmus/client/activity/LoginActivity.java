@@ -12,6 +12,7 @@ import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
+import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -32,7 +33,7 @@ public class LoginActivity extends AbstractActivity implements
 	private String error;
 	private LoginType loginType;
 	
-	private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
+	private static Logger logger = Logger.getLogger("LoginActivity");
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
 	MyConstants myConstants = GWT.create(MyConstants.class);
@@ -50,6 +51,26 @@ public class LoginActivity extends AbstractActivity implements
 	*/
 	@Override
 	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+	    
+	    AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException)
+                    logger.severe("Utente non ancora loggato");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                logger.info("Utente gia' loggato");
+                goTo(new ProfilePlace(result));
+            }
+        };
+        
+        try { loginServiceSvc.getLoggedInUserDTO(callback); }
+        catch(LoginException e) {
+        }
+	    
 		LoginView loginView = clientFactory.getLoginView();
 		loginView.setError(error);
 		loginView.setLoginType(loginType);
@@ -144,25 +165,19 @@ public class LoginActivity extends AbstractActivity implements
 		else if (!password.equals(confirmPassword))
 			goTo( new LoginPlace(username,password, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
 		else {
-		
-			// Initialize the service proxy.
-			if (loginServiceSvc == null) {
-				loginServiceSvc = GWT.create(LoginService.class);
-			}
-
+		    
 			// Set up the callback object.
-			AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+			AsyncCallback<LoginDTO> callback = new AsyncCallback<LoginDTO>() {
 	    	
 				public void onFailure(Throwable caught) {
-					caught.printStackTrace();
 					logger.log(Level.INFO, "");
-					goTo( new LoginPlace(username,password, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
+					goTo(new LoginPlace(username,password, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
 				}
 
 				@Override
-				public void onSuccess(Void result) {
+				public void onSuccess(LoginDTO result) {
 					logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
-					goTo( new ProfilePlace("test"));
+					sendLogin(result);
 				}
 			};
 

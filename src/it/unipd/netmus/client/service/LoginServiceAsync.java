@@ -18,11 +18,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface LoginServiceAsync {
 
-	void insertRegistration(LoginDTO login, AsyncCallback<Void> callback) throws RegistrationException;
+	void insertRegistration(LoginDTO login, AsyncCallback<LoginDTO> callback) throws RegistrationException;
 
 	void verifyLogin(LoginDTO login, AsyncCallback<Void> callback) throws LoginException;
 
-	void getLoggedInUserDTO(AsyncCallback<UserSummaryDTO> callback);
+	void getLoggedInUserDTO(AsyncCallback<String> callback) throws LoginException;
 
 	void logout(AsyncCallback<Void> callback);
 

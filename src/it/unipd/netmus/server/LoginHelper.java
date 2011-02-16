@@ -20,20 +20,24 @@ public class LoginHelper extends RemoteServiceServlet {
 	
 	private static Logger logger = Logger.getLogger(LoginHelper.class.getName());
 	
-	static public UserAccount getLoggedInUser(HttpSession session) {
+	static public String getLoggedInUser(HttpSession session) {
 
 	    if (session == null) {
 	    	logger.info("L'utente non è loggato");
 	      	return null; // user not logged in
 	    }
 
-	    UserAccount user = (UserAccount) session.getAttribute("userLoggedIn");
-	    if (user == null) {
+	    String username = (String) session.getAttribute("userLoggedIn");
+	    if (username == null) {
 	    	logger.info("L'utente non è loggato (sessione esistente)");
 	    	return null; // user not logged in
 	    }
+	    
+	    // non mi restituisce l'utente, che effettivamente esiste (username e' corretto)
+	    //UserAccount user = UserAccount.findUser(username);
 
-	    return user;
+	    //return user;
+	    return username;
 	  }
 
 	  static public boolean isLoggedIn(HttpServletRequest req) {
@@ -46,7 +50,7 @@ public class LoginHelper extends RemoteServiceServlet {
 	    	  logger.info("Nessuna sessione aperta al momento");
 	    	  return false;
 	      } else {
-	        UserAccount user = (UserAccount) session.getAttribute("userLoggedIn");
+	        String user = (String) session.getAttribute("userLoggedIn");
 	        if (user != null){
 	        	logger.info("L'utente è loggato");
 	        	return true;
@@ -60,7 +64,7 @@ public class LoginHelper extends RemoteServiceServlet {
 
 	  static public void loginStarts(HttpSession session, UserAccount user) {
 	     try {
-	        session.setAttribute("userLoggedIn", user);
+	        session.setAttribute("userLoggedIn", user.getUser());
 	     } catch (Exception e) {
 	        logger.severe("Eccezione loginStarts");
 	     }
