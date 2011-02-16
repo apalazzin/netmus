@@ -4,12 +4,7 @@ package it.unipd.netmus.server;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
@@ -62,28 +57,34 @@ public class LoginServiceImplTest extends RemoteServiceServlet{
     @Test
     public void testVerifyLogin(){
     	UserAccount usr = new UserAccount("pippo","poppa");
-		datastore.store().instance(usr).ensureUniqueKey().returnKeyNow();
+		datastore.store()
+		.instance(usr)
+		.ensureUniqueKey()
+		.returnKeyNow();
     	LoginDTO login = new LoginDTO("pippo","poppa");
-    	assertEquals(true,doVerify(login));
+    	assertEquals(1,doVerify(login));
     }
 
     public static UserAccount doFindUser(String user) {
-        Iterator<UserAccount> found = datastore.find().type(UserAccount.class).returnResultsNow();
+        Iterator<UserAccount> found = datastore.find()
+        .type(UserAccount.class)
+        .addFilter("user",FilterOperator.EQUAL,user)
+        .returnResultsNow();
         if (found.hasNext())
       	  return found.next();
         else return null;
      }
     
-    public boolean doVerify(LoginDTO login){
+    public int doVerify(LoginDTO login){
 		UserAccount userAccount = doFindUser(login.getUser());
 		if (userAccount == null) {
-			return false;
+			return 0;
 		}
 		else {
 			if (login.getPassword() == userAccount.getPassword()) {
-				return true;
+				return 1;
 			}
-			else return false;
+			else return 2;
 		}
     }
     
@@ -96,7 +97,7 @@ public class LoginServiceImplTest extends RemoteServiceServlet{
 	public UserSummaryDTO doGetLoggedInUserDTO() {
 	    //http session stub
 	    class HttpSessionStub{
-			public Object getAttribute(String arg0) {
+			public Object getAttribute() {
 				return "pippo";
 			}
 	    };
@@ -104,7 +105,7 @@ public class LoginServiceImplTest extends RemoteServiceServlet{
 	    class LoginHelperStub{
 	    	public UserAccount getLoggedInUser(HttpSessionStub s){
 	    		if(s!=null)
-	    		  return new UserAccount((String)s.getAttribute("x"),"poppa");
+	    		  return new UserAccount((String)s.getAttribute(),"poppa");
 	    		return null;
 	    	}	    	
 	    };

@@ -20,7 +20,7 @@ import com.vercer.engine.persist.annotation.Key;
  */
 public class UserAccount {
    
-   @Key private String user;
+   @Key public String user;
    
    private String password; // da criptare e decriptare con algoritmi DES o AES
    
