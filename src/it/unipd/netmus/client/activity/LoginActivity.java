@@ -12,7 +12,6 @@ import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -74,11 +73,6 @@ public class LoginActivity extends AbstractActivity implements
 	{
 		final String username = login.getUser();
 		final String password = login.getPassword();
-		
-	    // Initialize the service proxy.
-	    if (loginServiceSvc == null) {
-	    	loginServiceSvc = GWT.create(LoginService.class);
-	    }
 
 	    // Set up the callback object.
 	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
@@ -90,14 +84,14 @@ public class LoginActivity extends AbstractActivity implements
 	    	  }
 	    	  else {
 	    		  logger.log(Level.INFO, ("Impossibile connettersi al database"));
-	    		  goTo( new LoginPlace(username,password, myConstants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
+	    		  goTo(new LoginPlace(username,password, myConstants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
 	    	  }
 	      }
 	      
 	      @Override
 	      public void onSuccess(Void result) {
 	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
-	    	  goTo( new ProfilePlace("test"));
+	    	  goTo(new ProfilePlace(username));
 	    	  
 	    	  
 	    	  	/*

@@ -3,7 +3,6 @@
  */
 package it.unipd.netmus.server;
 
-import java.util.Date;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.server.persistent.UserAccount;
@@ -28,13 +27,12 @@ public class LoginHelper extends RemoteServiceServlet {
 	      	return null; // user not logged in
 	    }
 
-	    String userId = (String) session.getAttribute("userId");
-	    if (userId == null) {
-	    	logger.info("L'utente non è loggato");
+	    UserAccount user = (UserAccount) session.getAttribute("userLoggedIn");
+	    if (user == null) {
+	    	logger.info("L'utente non è loggato (sessione esistente)");
 	    	return null; // user not logged in
 	    }
 
-	    UserAccount user = UserAccount.findUser(userId);
 	    return user;
 	  }
 
@@ -48,11 +46,8 @@ public class LoginHelper extends RemoteServiceServlet {
 	    	  logger.info("Nessuna sessione aperta al momento");
 	    	  return false;
 	      } else {
-	        Boolean isLoggedIn = (Boolean) session.getAttribute("loggedin");
-	        if(isLoggedIn == null){
-	        	logger.info("Non si sa se l'utente sia loggato");
-	        	return false;
-	        } else if (isLoggedIn){
+	        UserAccount user = (UserAccount) session.getAttribute("userLoggedIn");
+	        if (user != null){
 	        	logger.info("L'utente è loggato");
 	        	return true;
 	        } else {
@@ -64,11 +59,12 @@ public class LoginHelper extends RemoteServiceServlet {
 	  }
 
 	  static public void loginStarts(HttpSession session, UserAccount user) {
-		  ODF.get().associate(user);
-		  user.setLastLogin(new Date());
-		  ODF.get().update(user);
+	     try {
+	        session.setAttribute("userLoggedIn", user);
+	     } catch (Exception e) {
+	        logger.severe("Eccezione loginStarts");
+	     }
+	     
 		  
-		  /*session.setAttribute("userId", "");
-		  session.setAttribute("loggedin", true);*/
 	  }
 }
