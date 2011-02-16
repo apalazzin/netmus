@@ -18,5 +18,10 @@
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   </system-properties>
+  
+  <!-- Enable Session Manipulation -->
+  <sessions-enabled>
+    true
+  </sessions-enabled>
 
 </appengine-web-app>

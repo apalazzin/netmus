@@ -5,9 +5,11 @@ package it.unipd.netmus.server;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+//import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
+//import it.unipd.netmus.client.activity.LoginActivity;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
@@ -26,6 +28,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
+    //private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
+   
 	@Override
 	public void insertRegistration(LoginDTO login) throws RegistrationException {
 		//create new user in the database
@@ -72,12 +76,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public UserSummaryDTO getLoggedInUserDTO() {
-	    UserSummaryDTO userDTO;
 	    HttpSession session = getThreadLocalRequest().getSession();
 
-	    UserAccount u = LoginHelper.getLoggedInUser(session);
-	    userDTO = u.toUserCompleteDTO();
-	    return userDTO;
+	    UserAccount user = LoginHelper.getLoggedInUser(session);
+	    if (user != null)
+	       return user.toUserCompleteDTO();
+	    return null;
 	}
 
 	@Override
