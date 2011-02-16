@@ -3,7 +3,7 @@
  */
 package it.unipd.netmus.server.persistent;
 
-import it.unipd.netmus.server.PMF;
+import it.unipd.netmus.server.ODF;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
@@ -53,7 +53,7 @@ public class UserAccount {
    
    // STATICO
    public static UserAccount findUser(String user) {
-      Iterator<UserAccount> found = PMF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnResultsNow();
+      Iterator<UserAccount> found = ODF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnResultsNow();
       if (found.hasNext())
     	  return found.next();
       else return null;

@@ -10,4 +10,12 @@ package it.unipd.netmus.shared.exception;
 @SuppressWarnings("serial")
 public class NickNotFreeException extends RegistrationException {
 
+	public NickNotFreeException() {
+		super();
+	}
+	
+	public NickNotFreeException(String moreInfo) {
+		super(moreInfo);
+	}
+	
 }

@@ -24,7 +24,7 @@ public interface LoginService extends RemoteService {
 	
 	void verifyLogin(LoginDTO login) throws LoginException;
 	
-	boolean startLogin(LoginDTO login);
+	void startLogin(LoginDTO login) throws LoginException;
 	
 	UserSummaryDTO getLoggedInUserDTO();
 	

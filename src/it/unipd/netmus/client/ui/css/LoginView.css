@@ -21,9 +21,7 @@
 	-webkit-box-shadow: 4px 4px 10px #888888;
 	-moz-box-shadow: 4px 4px 10px #888888;
 	
-	
 	text-align: center;
-	
 }
 
 .container {
@@ -86,13 +84,11 @@
 	
 }
 
-
 .pass {
 	
 	width: 150px;
 	margin-left: 10px;
-	}
-	
+}
 
 .register {
 

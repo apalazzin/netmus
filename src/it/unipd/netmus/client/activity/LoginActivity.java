@@ -10,10 +10,10 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
+import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
-import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -66,43 +66,84 @@ public class LoginActivity extends AbstractActivity implements
 		clientFactory.getPlaceController().goTo(place);
 	}
 	
+	/**
+	* Send and verify login informations to server datastore.
+	*/
 	public void sendLogin(LoginDTO login)
 	{
 		final String username = login.getUser();
 		final String password = login.getPassword();
-		
-	    // Initialize the service proxy.
-	    if (loginServiceSvc == null) {
-	    	loginServiceSvc = GWT.create(LoginService.class);
-	    }
 
 	    // Set up the callback object.
 	    AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
 	      public void onFailure(Throwable caught) {
-	    	  logger.log(Level.INFO, ((WrongLoginException)caught).getMoreInfo());
-	    	  goTo( new LoginPlace(username,password, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
+	    	  if (caught instanceof LoginException) {
+	    		  logger.log(Level.INFO, ((LoginException)caught).getMoreInfo());
+	    		  goTo( new LoginPlace(username,password, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
+	    	  }
+	    	  else {
+	    		  logger.log(Level.INFO, ("Impossibile connettersi al database"));
+	    		  goTo(new LoginPlace(username,password, myConstants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
+	    	  }
 	      }
-
+	      
 	      @Override
 	      public void onSuccess(Void result) {
 	    	  logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
-	    	  goTo( new ProfilePlace("test"));
-	      }
+	    	  goTo(new ProfilePlace(username));
+	    	  
+	    	  
+	    	  	/*
+	    	  	// Initialize the service proxy.
+				if (loginServiceSvc == null) {
+					loginServiceSvc = GWT.create(LoginService.class);
+				}
+
+				// Set up the callback object.
+				AsyncCallback<UserSummaryDTO> callback2 = new AsyncCallback<UserSummaryDTO>() {
+		    	
+				public void onFailure(Throwable caught) {
+					logger.log(Level.INFO, "GET LOGIN SESSION FAILED");
+					}
+
+					@Override
+					public void onSuccess(UserSummaryDTO result) {
+						logger.log(Level.INFO, "GET LOGIN SESSION SUCCESS:" + result.getNickName());
+					}
+				};
+
+				// Make the call to send login info.
+				try {
+					loginServiceSvc.getLoggedInUserDTO(callback2);
+				} catch (Exception e) {}
+
+	    */  }
 	    };
 
 	    // Make the call to send login info.
 	    try {
-			loginServiceSvc.verifyLogin(login, callback);
-		} catch (LoginException e) {}
+			loginServiceSvc.startLogin(login, callback);
+		} catch (Exception e) {}
+
 	}
 	
+	
+	/**
+	* Send and verify registration informations to server datastore.
+	*/
 	public void sendRegistration(LoginDTO login, String confirmPassword)
 	{
 		final String username = login.getUser();
 		final String password = login.getPassword();
 		
-		if (password.equals(confirmPassword)) {
+		if (!FieldVerifier.isValidPassword(password))
+			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+		else if (!FieldVerifier.isValidEmail(username))
+			goTo( new LoginPlace(username,password, myConstants.errorEmail() ,LoginType.NETMUSREGISTRATION));
+		else if (!password.equals(confirmPassword))
+			goTo( new LoginPlace(username,password, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
+		else {
 		
 			// Initialize the service proxy.
 			if (loginServiceSvc == null) {
@@ -113,7 +154,8 @@ public class LoginActivity extends AbstractActivity implements
 			AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 	    	
 				public void onFailure(Throwable caught) {
-					logger.log(Level.INFO, username + " " + myConstants.infoUserAlreadyDb());
+					caught.printStackTrace();
+					logger.log(Level.INFO, "");
 					goTo( new LoginPlace(username,password, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
 				}
 
@@ -132,8 +174,7 @@ public class LoginActivity extends AbstractActivity implements
 				e.printStackTrace();
 			}
 		}
-		else
-			goTo( new LoginPlace(username,password, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+			
 	}
 }
 
