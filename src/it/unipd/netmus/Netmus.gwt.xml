@@ -15,6 +15,7 @@
   <inherits name="com.google.gwt.place.Place"/>
   <inherits name="com.google.gwt.logging.Logging"/>
   <inherits name ="com.google.gwt.xml.XML"/> 
+  <inherits name="com.reveregroup.gwt.imagepreloader.ImagePreloader" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='it.unipd.netmus.client.Netmus'/>
