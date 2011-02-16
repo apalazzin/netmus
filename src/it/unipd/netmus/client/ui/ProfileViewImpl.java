@@ -45,7 +45,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private Presenter listener;
    private String name;
    
-   //@UiField Anchor logout;
+   @UiField Anchor logout;
    //@UiField Anchor back;
    
    
@@ -182,12 +182,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickBack(ClickEvent e) {
       listener.goTo(new LoginPlace(name));
    }
-   
+*/   
    @UiHandler("logout")
    void handleClickLogout(ClickEvent e) {
       listener.logout();
    }
-*/
+
    @Override
    public void setName(String profileName) {
       this.name = profileName;
