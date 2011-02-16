@@ -21,7 +21,9 @@
 	-webkit-box-shadow: 4px 4px 10px #888888;
 	-moz-box-shadow: 4px 4px 10px #888888;
 	
+	
 	text-align: center;
+	
 }
 
 .container {
@@ -30,9 +32,9 @@
 	opacity: 0;
 	
 	-webkit-transition: opacity 1.0s ease-in-out, height 0.3s ease-in-out;
-	-moz-transition: opacity 1.0s ease;  height 1s ease-in-out;
-	-o-transition: opacity 1.0s ease-in-out;  height 1s ease-in-out;
-	transition: opacity 1.0s ease-in-out;  height 1s ease-in-out;
+	-moz-transition: opacity 1.0s ease, height 1s ease-in-out;
+	-o-transition: opacity 1.0s ease-in-out, height 1s ease-in-out;
+	transition: opacity 1.0s ease-in-out, height 1s ease-in-out;
 		
 }
 
@@ -70,9 +72,9 @@
 	margin-left: 5px;
 	
 	-webkit-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
-	-moz-transition: opacity 0.2s ease;  height 1s ease-in-out;
-	-o-transition: opacity 0.2s ease-in-out;  height 1s ease-in-out;
-	transition: opacity 0.2s ease-in-out;  height 1s ease-in-out;
+	-moz-transition: opacity 0.2s ease, height 1s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
 	
 	
 }
@@ -84,11 +86,13 @@
 	
 }
 
+
 .pass {
 	
 	width: 150px;
 	margin-left: 10px;
-}
+	}
+	
 
 .register {
 
@@ -100,9 +104,9 @@
 	border: 0px solid #FF0000;
 	
 	-webkit-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
-	-moz-transition: opacity 0.2s ease;  height 1s ease-in-out;
-	-o-transition: opacity 0.2s ease-in-out;  height 1s ease-in-out;
-	transition: opacity 0.2s ease-in-out;  height 1s ease-in-out;
+	-moz-transition: opacity 0.2s ease, height 1s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
 	
 	
 }
@@ -120,9 +124,9 @@
 	height: 0px;
 	opacity: 0;
 	-webkit-transition: opacity 0.7s ease-in-out, height 0.3s ease-in-out;
-	-moz-transition: opacity 0.7s ease;  height 1s ease-in-out;
-	-o-transition: opacity 0.7s ease-in-out;  height 1s ease-in-out;
-	transition: opacity 0.7s ease-in-out;  height 1s ease-in-out;
+	-moz-transition: opacity 0.7s ease, height 1s ease-in-out;
+	-o-transition: opacity 0.7s ease-in-out, height 1s ease-in-out;
+	transition: opacity 0.7s ease-in-out, height 1s ease-in-out;
 	
 	}
 
