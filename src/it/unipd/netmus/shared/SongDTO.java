@@ -26,6 +26,16 @@ public class SongDTO extends SongSummaryDTO {
 		file = "";		
 	}
 	
+	//constructor with only file
+	public SongDTO (String file){
+		super();
+		year = "";
+		composer = "";
+		genre = "";
+		trackNumber = "";
+		this.file = file;
+	}
+	
 	// costruttore con parametri summary
 	public SongDTO(String author, String title, String album){
 		super(author,title,album);

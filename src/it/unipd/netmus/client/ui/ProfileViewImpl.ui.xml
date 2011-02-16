@@ -5,6 +5,8 @@
       
    </ui:style>
    <g:HTMLPanel>
-      ProfileView prova
+      ProfileView <br/>
+      <g:Anchor ui:field="logout">Logout</g:Anchor><br/>
+      <g:Anchor ui:field="back">Torna a Login</g:Anchor> (per testare che la sessione attiva ti riporta al Profile)
    </g:HTMLPanel>
 </ui:UiBinder>

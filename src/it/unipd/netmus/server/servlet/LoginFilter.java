@@ -18,21 +18,25 @@ public final class LoginFilter implements Filter {
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Distrutto filtro");
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
+	    
+	    System.out.println("Filtraggio in corso");
 		
 	    try {
 	      HttpServletRequest req = (HttpServletRequest) request;
 	      
 	      if (LoginHelper.isLoggedIn(req)) {
+	        System.out.println("Utente loggato: accesso consentito");
 	        chain.doFilter(request, response);
 	      } else {
+	          System.out.println("Utente non loggato: accesso non consentito");
 	          HttpServletResponse resp = (HttpServletResponse) response;
-	          resp.sendRedirect("");
+	          resp.sendRedirect("/");
 	      }
 	    } catch (Exception e) {
 	      e.printStackTrace();
@@ -42,7 +46,7 @@ public final class LoginFilter implements Filter {
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
-		
+	    System.out.println("Creato filtro");
 	}
 
 }

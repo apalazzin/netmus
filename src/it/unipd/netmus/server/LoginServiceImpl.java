@@ -5,9 +5,11 @@ package it.unipd.netmus.server;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+//import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
+//import it.unipd.netmus.client.activity.LoginActivity;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.LoginDTO;
@@ -26,6 +28,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
+    //private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
+   
 	@Override
 	public void insertRegistration(LoginDTO login) throws RegistrationException {
 		//create new user in the database
@@ -33,7 +37,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 		//persist the new user
 		try {
-			PMF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+			ODF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
 		} catch (IllegalStateException e) {
 			throw new RegistrationException();
 		}
@@ -44,7 +48,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public void verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = PMF.get().load(UserAccount.class, login.getUser());
+		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
@@ -60,27 +64,24 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public boolean startLogin(LoginDTO login) {
-	/*	if (verifyLogin(login)) {
-			UserAccount userAccount = UserAccount.findUser(login.getUser());
-			HttpSession session = getThreadLocalRequest().getSession();
-			LoginHelper.loginStarts(session, userAccount);
-			return true;
-		}
-		return false;*/
-		return true;
+	public void startLogin(LoginDTO login) throws LoginException {
+		verifyLogin(login);
+
+		//find user in the database
+		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
+		
+		HttpSession session = getThreadLocalRequest().getSession();
+		LoginHelper.loginStarts(session, userAccount);
 	}
 
 	@Override
 	public UserSummaryDTO getLoggedInUserDTO() {
-	    UserSummaryDTO userDTO;
 	    HttpSession session = getThreadLocalRequest().getSession();
 
-	    UserAccount u = LoginHelper.getLoggedInUser(session);
-	    if (u == null)
-	      return null;
-	    userDTO = u.toUserSummaryDTO();
-	    return userDTO;
+	    UserAccount user = LoginHelper.getLoggedInUser(session);
+	    if (user != null)
+	       return user.toUserCompleteDTO();
+	    return null;
 	}
 
 	@Override
@@ -91,7 +92,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	/*METODO USATO PER TESTING*/
 	@Override
 	public ArrayList<UserSummaryDTO> getAllUsers() {
-		Iterator<UserAccount> allUsers = PMF.get().find().type(UserAccount.class).returnResultsNow();
+		Iterator<UserAccount> allUsers = ODF.get().find().type(UserAccount.class).returnResultsNow();
 		ArrayList<UserAccount> allUsersList = new ArrayList<UserAccount>();
 		while (allUsers.hasNext() == true)
 			allUsersList.add(allUsers.next());

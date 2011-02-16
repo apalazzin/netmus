@@ -13,10 +13,13 @@ public interface MyConstants extends Constants {
 	String accountNetmus();  
 	String passwordCheck();
 	String errorPassword();
+	String errorCPassword();
+	String errorEmail();
 	String infoUserInsertDb();
 	String infoUserUsato();
 	String infoUserAlreadyDb();
 	String infoCorrectLogin();
 	String infoLoginIncorrect();
+	String databaseErrorGeneric();
 	
 	}

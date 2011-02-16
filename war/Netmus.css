@@ -1,17 +1,23 @@
 /** Add css rules here for your application. */
 
+div#applet-bar {
+   height: 20px;
+   width: 100%;
+   background-color: gray;
+   float: right;
+}
 
-/** Example rules used by the template application (remove for your app) */
+div#application {
+   clear:both;
+}
 
 .gwt-root {
-	
-	background-color: #DDDDDD;
-	background-image: url('images/tribale.png');
-	background-repeat: no-repeat;
-	background-position: right top;
-	}
-	
-	
+   background-color: #DDDDDD;
+   background-image: url('images/tribale.png');
+   background-repeat: no-repeat;
+   background-position: right top;
+}
+
 h1 {
   font-size: 2em;
   font-weight: bold;
