@@ -8,8 +8,11 @@ import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -76,7 +79,6 @@ public class LoginViewImpl extends Composite implements LoginView {
       this.listener = listener;
    }
    
-   
    @UiHandler("login")
    void handleClickLogin(ClickEvent e) {
 	 try {
@@ -90,7 +92,22 @@ public class LoginViewImpl extends Composite implements LoginView {
 		 e2.printStackTrace();
 	 }
    }
-
+   
+   @UiHandler(value={"password", "c_password"})
+   void handlePressEnterPassword(KeyPressEvent e) {
+       if (e.getNativeEvent().getKeyCode()==KeyCodes.KEY_ENTER) {
+           try {
+               if(type != LoginType.NETMUSREGISTRATION)
+                   listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
+               else
+                   listener.sendRegistration(new LoginDTO(user.getText(),password.getText()),c_password.getText());
+           } catch (LoginException e1) {
+               e1.printStackTrace();
+           } catch (RegistrationException e2) {
+               e2.printStackTrace();
+           }
+       }
+   }
 
    @UiHandler("register")
    void handleClickRegister(ClickEvent e) {

@@ -5,6 +5,7 @@ package it.unipd.netmus.server;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Logger;
 //import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
@@ -28,21 +29,21 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
 	
-    //private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
+    private static Logger logger = Logger.getLogger(LoginServiceImpl.class.getName());
    
 	@Override
-	public void insertRegistration(LoginDTO login) throws RegistrationException {
+	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
 		//create new user in the database
 		UserAccount userAccount = new UserAccount(login.getUser(),login.getPassword());
 		
 		//persist the new user
 		try {
 			ODF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
+			return login;
 		} catch (IllegalStateException e) {
 			throw new RegistrationException();
 		}
 	}
-
 	
 	@Override
 	public void verifyLogin(LoginDTO login) throws LoginException {
@@ -65,7 +66,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void startLogin(LoginDTO login) throws LoginException {
-		verifyLogin(login);
+		
+	    verifyLogin(login); // non si potrebbe fare restituire direttamente a verify l' UserAccount ??
 
 		//find user in the database
 		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
@@ -75,13 +77,16 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public UserSummaryDTO getLoggedInUserDTO() {
+	public String getLoggedInUserDTO() throws LoginException {
 	    HttpSession session = getThreadLocalRequest().getSession();
 
-	    UserAccount user = LoginHelper.getLoggedInUser(session);
-	    if (user != null)
-	       return user.toUserCompleteDTO();
-	    return null;
+	    String user = LoginHelper.getLoggedInUser(session);
+	    if (user != null) {
+	        logger.info("user not null");
+	       return user;//.toUserSummaryDTO();
+	    }
+	    System.out.println("user null"); // rimuovere
+	    throw new LoginException();
 	}
 
 	@Override

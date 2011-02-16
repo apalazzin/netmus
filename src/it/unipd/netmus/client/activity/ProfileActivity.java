@@ -9,6 +9,7 @@ import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.shared.exception.LoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -24,7 +25,7 @@ public class ProfileActivity extends AbstractActivity implements
 
 	private String name;
 	
-	private static Logger logger = Logger.getLogger(LoginActivity.class.getName());
+	private static Logger logger = Logger.getLogger("ProfileActivity");
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
 	MyConstants myConstants = GWT.create(MyConstants.class);
@@ -39,6 +40,27 @@ public class ProfileActivity extends AbstractActivity implements
 	 */
 	@Override
 	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+	    
+	    AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    logger.info("Utente non ancora loggato");
+                    goTo(new LoginPlace(""));
+                }
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                logger.info("Utente loggato - puo' accedere");
+            }
+        };
+        
+        try { loginServiceSvc.getLoggedInUserDTO(callback); }
+        catch(LoginException e) {
+        }
+	    
 		ProfileView profileView = clientFactory.getProfileView();
 		profileView.setName(name);
 		profileView.setPresenter(this);
@@ -62,13 +84,13 @@ public class ProfileActivity extends AbstractActivity implements
 
          @Override
          public void onFailure(Throwable caught) {
-            logger.severe("errore logout");
+            logger.info("errore logout");
          }
 
          @Override
          public void onSuccess(Void result) {
             logger.info("Logout effettuato con successo");
-            goTo(new LoginPlace("netmus"));
+            goTo(new LoginPlace(""));
          }
       };
       

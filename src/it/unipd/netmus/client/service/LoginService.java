@@ -20,13 +20,13 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("loginService")
 public interface LoginService extends RemoteService {
    
-	void insertRegistration(LoginDTO login) throws RegistrationException;
+	LoginDTO insertRegistration(LoginDTO login) throws RegistrationException;
 	
 	void verifyLogin(LoginDTO login) throws LoginException;
 	
 	void startLogin(LoginDTO login) throws LoginException;
 	
-	UserSummaryDTO getLoggedInUserDTO();
+	String getLoggedInUserDTO() throws LoginException;
 	
 	void logout();
 	
