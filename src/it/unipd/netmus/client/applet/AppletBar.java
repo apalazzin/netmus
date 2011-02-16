@@ -21,11 +21,13 @@ public class AppletBar {
     
     private Label title = new Label("Device Scanner BAR");
     private Anchor onOff = new Anchor();
-    private Anchor rescan = new Anchor();
+    private Anchor rescan = new Anchor(); // VISIBILE FINITA LA SCANSIONE
     private TextBox status = new TextBox();
     private HTML applet = new HTML();
     
     public AppletBar() {
+        
+        makeNativeFunction(this);
 
         title.setSize("150", "14");
         
@@ -52,6 +54,7 @@ public class AppletBar {
             @Override
             public void onClick(ClickEvent event) {
                 // send changeStatus signal
+                changeState();
             }
         });
         
@@ -59,6 +62,7 @@ public class AppletBar {
             @Override
             public void onClick(ClickEvent event) {
                 // send rescan signal
+                reScanAll();
             }
         });
     }
@@ -77,11 +81,38 @@ public class AppletBar {
         }
     }
     
-    
     // metodi per comunicare con l applet
     
-    void sendStarts() {
+    // per dire all'applet di cambiare stato
+    // dopo che ONOFF e' stato premuto
+    private void changeState() {
     }
     
+    // per dire all'applet di rifare interamente
+    // la scansione dopo che RESCAN e' stato premuto
+    private void reScanAll() {
+    }
     
+    /**
+     * Metodo che deve chiamare il metodo dell'applet 
+     * letsGo(String username, boolean state)
+     * per mandare user e stato iniziale e avviare il thread
+     */
+    private void sendStarts() {
+    }
+    
+    private void translateXML() {
+        
+    }
+    
+    // metodo per pubblicare le funzioni native di linking
+    private native void makeNativeFunction(AppletBar x)/*-{
+    $wnd.getStarts = function () {
+    x.@it.unipd.netmus.client.applet.AppletBar::sendStarts()();
+    };
+    $wnd.scanResult = function () {
+    x.@it.unipd.netmus.client.applet.AppletBar::translateXML()();
+    };
+    }-*/;
+    // mancano parametri sopra in ingresso Stringa XML da applet
 }
