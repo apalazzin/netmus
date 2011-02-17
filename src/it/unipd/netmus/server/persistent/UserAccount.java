@@ -10,11 +10,14 @@ import it.unipd.netmus.shared.UserDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Text;
 import com.reveregroup.gwt.imagepreloader.FitImage;
 import com.vercer.engine.persist.annotation.Child;
+import com.vercer.engine.persist.annotation.Index;
 import com.vercer.engine.persist.annotation.Key;
 import com.vercer.engine.persist.annotation.Type;
 
@@ -53,7 +56,7 @@ public class UserAccount {
    
    private Date lastImport;
    
-   private String lastSessionId;
+   @Index private String lastSessionId;
    
    //private boolean isGoogleUser;
    
@@ -107,6 +110,16 @@ public class UserAccount {
        UserCompleteDTO tmp = (UserCompleteDTO) toUserDTO();
        //tmp.setMusicLibrary(this.MUSICLIBRARY.toMusicLibraryDTO);
        return tmp;
+   }
+   
+   public UserAccount findSessionUser(String sessionId) {
+       Iterator<UserAccount> user = ODF.get().find().type(UserAccount.class)
+       .addFilter("lastSessionId", FilterOperator.EQUAL, sessionId)
+       .returnResultsNow();
+       if (user.hasNext()) {
+           return user.next();
+       }
+       else return null;
    }
    
    public String getUser() {
