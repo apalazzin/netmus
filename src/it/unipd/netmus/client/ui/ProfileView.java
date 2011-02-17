@@ -23,5 +23,19 @@ public interface ProfileView extends IsWidget {
    {
       void logout();
       void goTo(Place place);
+      
+      //restituisce lo username dell'utente connesso.
+      String getUsername();
+      
+      //restituisce la dimensione del catalogo dell'utente
+      String getLibrarySize();
+      
+      //restituisce la lista dei titoli delle singole playlist dell'utente
+      String[] getPlaylistList(); 
+
+      //restituisce la lista degli utenti affini su Netmus
+      String[] getFriendList(); 
+
+   
    }
 }
