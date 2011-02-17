@@ -64,10 +64,27 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
    @UiField HTMLPanel friends;
+   @UiField HTMLPanel info;
+   @UiField HTMLPanel search;
    
    @UiField Image play;
+   @UiField Image play_youtube;
    @UiField Image forward;
    @UiField Image rewind;
+   @UiField Image cover;
+   @UiField Image edit_button;
+   @UiField Image account_button;
+   @UiField Image social_button;
+   @UiField Image star1;
+   @UiField Image star2;
+   @UiField Image star3;
+   @UiField Image star4;
+   @UiField Image star5;
+   
+   
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
    
    //classe interna che rappresenta un brano
    private static class Song {
@@ -99,6 +116,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    
   
+   
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+   
+   
    public ProfileViewImpl() {
 
 	   //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
@@ -106,9 +129,37 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			@Override
 			public void onResize(ResizeEvent event) {				
 				int catalogo_h = main_panel.getOffsetHeight();
-				left_panel.getElement().getStyle().setHeight(event.getHeight()-60, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(event.getHeight()-60, Style.Unit.PX);
-				container_catalogo.getElement().getStyle().setHeight(event.getHeight()-270, Style.Unit.PX);
+				left_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
+				main_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
+				container_catalogo.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
+				
+				if(event.getWidth()<1200) {
+					
+					search.getElement().getStyle().setOpacity(0);
+					social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
+					account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
+					edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);
+
+					
+					
+				} else {
+					
+					social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
+					account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
+					edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+					
+					   Timer timerSearch = new Timer() {
+						   public void run() {
+							   
+							   if(Window.getClientWidth()>1200)
+								search.getElement().getStyle().setOpacity(1);
+								
+						   }
+					   };
+					   timerSearch.schedule(300);
+					
+				}
+
 			}			
 		});
 	   
@@ -175,16 +226,49 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   Timer timerMain = new Timer() {
 		   public void run() {
 			   
-				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-60, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-60, Style.Unit.PX);
-				container_catalogo.getElement().getStyle().setHeight(Window.getClientHeight()-270, Style.Unit.PX);
+			   
+			  		if(Window.getClientWidth()<1200) {
+						
+						search.getElement().getStyle().setOpacity(0);
+						social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
+						account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
+						edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);
 
-				//recupero lo username e lo imposto
+						
+						
+					} else {
+						
+						social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
+						account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
+						edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+						
+						   Timer timerSearch = new Timer() {
+							   public void run() {
+								   
+								   if(Window.getClientWidth()>1200)
+									search.getElement().getStyle().setOpacity(1);
+									
+							   }
+						   };
+						   timerSearch.schedule(300);
+						
+					}
+			  		
+			   	//ridimensiono il layout in base alla dimensione della finestra del browser
+				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
+				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
+				container_catalogo.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
+
+				//imposto lo user dell'utente
 				utente.setText(listener.getUsername());
+				//imposto il numero di brani dell'utente
 				numero_brani.setText(listener.getLibrarySize());
-				
+				//imposto la lista delle playlist
 				paintPlaylist(listener.getPlaylistList());
+				//imposto la lista degli amici
 				paintFriendlist(listener.getFriendList());
+				//imposto la finestra delle informazioni
+				setInfo("Monsoon - Tokio Hotel");
 
 		   }
 	   };
@@ -192,7 +276,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   
 	   	   
    }
- /*  
+ 
+   
+   
+   
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+   
+   
+   /*  
    @UiHandler("back")
    void handleClickBack(ClickEvent e) {
       listener.goTo(new LoginPlace(name));
@@ -209,8 +301,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       play.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
    @UiHandler("play")
-   void handleMouseOut(MouseOutEvent e) {
+   void handleMouseOutPlay(MouseOutEvent e) {
       play.setUrl("images/play.png");
+   }
+   
+   @UiHandler("play_youtube")
+   void handleMouseOverPlayYoutube(MouseOverEvent e) {
+      play_youtube.setUrl("images/pause.png");
+      play_youtube.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   @UiHandler("play_youtube")
+   void handleMouseOutPlayYouTube(MouseOutEvent e) {
+      play_youtube.setUrl("images/play.png");
    }
 
    @UiHandler("forward")
@@ -222,6 +324,78 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       rewind.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
+
+   @UiHandler("star1")
+   void handleMouseOverStar1(MouseOverEvent e) {
+
+	   star1.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	   star1.setUrl("images/star.png");
+   }
+   @UiHandler("star1")
+   void handleMouseOutStar1(MouseOutEvent e) {
+	   star1.setUrl("images/starbw.png");
+   }
+   @UiHandler("star2")
+   void handleMouseOverStar2(MouseOverEvent e) {
+	   star2.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	   star1.setUrl("images/star.png");
+	   star2.setUrl("images/star.png");
+   }
+   @UiHandler("star2")
+   void handleMouseOutStar2(MouseOutEvent e) {
+	   star1.setUrl("images/starbw.png");
+	   star2.setUrl("images/starbw.png");
+   }
+   @UiHandler("star3")
+   void handleMouseOverStar3(MouseOverEvent e) {
+	   star3.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	   star1.setUrl("images/star.png");
+	   star2.setUrl("images/star.png");
+	   star3.setUrl("images/star.png");
+   }
+   @UiHandler("star3")
+   void handleMouseOutStar3(MouseOutEvent e) {
+	   star1.setUrl("images/starbw.png");
+	   star2.setUrl("images/starbw.png");
+	   star3.setUrl("images/starbw.png");
+   }
+   @UiHandler("star4")
+   void handleMouseOverStar4(MouseOverEvent e) {
+	   star4.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	   star1.setUrl("images/star.png");
+	   star2.setUrl("images/star.png");
+	   star3.setUrl("images/star.png");
+	   star4.setUrl("images/star.png");
+   }
+   @UiHandler("star4")
+   void handleMouseOutStar4(MouseOutEvent e) {
+	   star1.setUrl("images/starbw.png");
+	   star2.setUrl("images/starbw.png");
+	   star3.setUrl("images/starbw.png");
+	   star4.setUrl("images/starbw.png");
+   }
+   @UiHandler("star5")
+   void handleMouseOverStar5(MouseOverEvent e) {
+	   star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	   star1.setUrl("images/star.png");
+	   star2.setUrl("images/star.png");
+	   star3.setUrl("images/star.png");
+	   star4.setUrl("images/star.png");
+	   star5.setUrl("images/star.png");
+   }
+   @UiHandler("star5")
+   void handleMouseOutStar5(MouseOutEvent e) {
+	   star1.setUrl("images/starbw.png");
+	   star2.setUrl("images/starbw.png");
+	   star3.setUrl("images/starbw.png");
+	   star4.setUrl("images/starbw.png");
+	   star5.setUrl("images/starbw.png");
+   }
+   
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+   
+   
    @Override
    public void setName(String profileName) {
       this.name = profileName;
@@ -232,6 +406,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       this.listener = listener;
    }
 
+   
+   
+   
+   
+   
+   //riempie la lista delle playlists
    private void paintPlaylist(String[] lista) {
 	   
 	   for(int k=0; k< lista.length; k++) {
@@ -248,6 +428,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   }
    }
 
+   //riempie la lista degli amici netmus
    private void paintFriendlist(String[] lista) {
 	   
 	   for(int k=0; k< lista.length; k++) {
@@ -264,5 +445,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   }
    }
 
+   //imposta il testo all'interno della finestra informativa
+   private void setInfo(String text) {
+	   info.getElement().setInnerHTML(text);
+   }
    
 }
