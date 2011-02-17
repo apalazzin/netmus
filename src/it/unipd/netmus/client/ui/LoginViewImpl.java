@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,8 +50,8 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiField HTMLPanel container;
    
    @UiField TextBox user;
-   @UiField TextBox password;
-   @UiField TextBox c_password;
+   @UiField PasswordTextBox password;
+   @UiField PasswordTextBox c_password;
    @UiField RadioButton check_google;
    @UiField RadioButton check_netmus;
    
