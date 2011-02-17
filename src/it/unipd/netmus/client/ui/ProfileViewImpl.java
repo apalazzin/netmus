@@ -138,9 +138,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 					search.getElement().getStyle().setOpacity(0);
 					social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
 					account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
-					edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);
-
-					
+					edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);					
 					
 				} else {
 					
@@ -157,6 +155,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 						   }
 					   };
 					   timerSearch.schedule(300);
+					
+				}
+				
+				
+				if(event.getHeight()<650) {
+					
+					friends.getElement().getStyle().setOpacity(0);
+					
+				} else {
+					
+					friends.getElement().getStyle().setOpacity(1);
 					
 				}
 

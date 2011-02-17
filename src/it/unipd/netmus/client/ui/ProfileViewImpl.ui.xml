@@ -15,11 +15,8 @@
 
 
 				<g:HTMLPanel styleName="{style.statistiche}">				
-				<div style="">
 				<span style="color: green; font-family: Verdana; font-size: 12px; font-weight: bold;">Numero di Brani:</span>
 				<g:Label ui:field="numero_brani" styleName="{style.numero_brani}"></g:Label>
-				<br/>
-				</div>
 				</g:HTMLPanel>
 
 
