@@ -11,56 +11,24 @@
 
 			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
 			
-				<g:Label ui:field="utente" styleName="{style.utente}">Nome dell'Utente</g:Label>
+				<g:Label ui:field="utente" styleName="{style.utente}"></g:Label>
 
 
 				<g:HTMLPanel styleName="{style.statistiche}">				
 				<div style="">
 				<span style="color: green; font-family: Verdana; font-size: 12px; font-weight: bold;">Numero di Brani:</span>
-				<span style="color: #000000; font-family: Verdana; font-size: 11px; font-weight: bold;">78</span>
+				<g:Label ui:field="numero_brani" styleName="{style.numero_brani}"></g:Label>
 				<br/>
 				</div>
 				</g:HTMLPanel>
 
 
-				<g:HTMLPanel styleName="{style.playlist}">				
-				<span style="color: green; font-family: Verdana; font-size: 12px; font-weight: bold;">Playlist +</span><br/>
-				<div style="margin-top: 10px; margin-bottom: -7px;">
-				<img src="images/playlist.jpg" style="width: 25px; margin-right: 11px; float: left;"/><div style=""> Playlist 1</div><br/>
-				</div>
-				<div style="margin-top: -7px; margin-bottom: -7px;">
-				<img src="images/playlist.jpg" style="width: 25px; margin-right: 11px; float: left;"/><div style=""> Playlist 2</div><br/>
-				</div>
-				<div style="margin-top: -7px; margin-bottom: -7px;">
-				<img src="images/playlist.jpg" style="width: 25px; margin-right: 11px; float: left;"/><div style=""> Playlist 3</div><br/>
-				</div>
-				<div style="margin-top: -7px; margin-bottom: -7px;">
-				<img src="images/playlist.jpg" style="width: 25px; margin-right: 11px; float: left;"/><div style=""> Playlist 4</div><br/>
-				</div>				
+				<g:HTMLPanel ui:field="playlists" styleName="{style.playlist}">
+				<g:HTMLPanel styleName="{style.title}"><span>Playlist +</span></g:HTMLPanel>
 				</g:HTMLPanel>
 					
-				<g:HTMLPanel styleName="{style.social}">				
-				<div style="">
-				<span style="color: green; font-family: Verdana; font-size: 12px; font-weight: bold;">Amici su Netmus +</span>
-				<span style="color: #000000; font-family: Verdana; font-size: 12px; font-weight: bold;"></span>
-				</div>
-				<div style="">
-				<span style="color: #000000; font-family: Verdana; font-size: 12px; font-weight: bold;">&bull;&nbsp;</span>
-				<span style="color: #37A6EB; font-family: Verdana; font-size: 12px; font-weight: bold;">Nome Utente 1</span>				
-				</div>
-				<div style="">
-				<span style="color: #000000; font-family: Verdana; font-size: 12px; font-weight: bold;">&bull;&nbsp;</span>
-				<span style="color: #37A6EB; font-family: Verdana; font-size: 12px; font-weight: bold;">Nome Utente 2</span>				
-				</div>
-				<div style="">
-				<span style="color: #000000; font-family: Verdana; font-size: 12px; font-weight: bold;">&bull;&nbsp;</span>
-				<span style="color: #37A6EB; font-family: Verdana; font-size: 12px; font-weight: bold;">Nome Utente 3</span>				
-				</div>
-				<div style="">
-				<span style="color: #000000; font-family: Verdana; font-size: 12px; font-weight: bold;">&bull;&nbsp;</span>
-				<span style="color: #37A6EB; font-family: Verdana; font-size: 12px; font-weight: bold;">Nome Utente 4</span>				
-				</div>
-
+				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
+				<g:HTMLPanel styleName="{style.title}"><span>Utenti affini su Netmus</span></g:HTMLPanel>
 				</g:HTMLPanel>
 
 				
@@ -76,18 +44,17 @@
 
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
 	
-				<img src="images/play.png" style="position: absolute; top: 15px; left: 25px; width: 80px;" />
-				<img src="images/rw.png" style="position: absolute; top: 30px; left: 105px; width: 50px;" />
-				<img src="images/fw.png" style="position: absolute; top: 30px; left: 150px; width: 50px;" />
-
-
-				<img src="images/temp_button.png" style="position: absolute; top: 20px; right: 230px; width: 60px;" />
+				<g:Image ui:field="play" url="images/play.png" styleName="{style.play}"> </g:Image>
+				<g:Image ui:field="forward" url="images/rw.png" styleName="{style.fw}"> </g:Image>
+				<g:Image ui:field="rewind" url="images/fw.png" styleName="{style.rw}"> </g:Image>
+	
+				<g:Image ui:field="social_button" url="images/temp_button.png" styleName="{style.socialButton}"></g:Image>
 				<span style="position: absolute; top: 83px; right: 245px; font-size: 10px; font-family: Verdana;">Social</span>
 
-				<img src="images/account_button.png" style="position: absolute; top: 20px; right: 300px; width: 60px;" />
+				<g:Image ui:field="account_button" url="images/account_button.png" styleName="{style.accountButton}"></g:Image>
 				<span style="position: absolute; top: 83px; right: 310px; font-size: 10px; font-family: Verdana;">Account</span>
 
-				<img src="images/edit_button.png" style="position: absolute; top: 20px; right: 370px; width: 60px;" />
+				<g:Image ui:field="edit_button" url="images/edit_button.png" styleName="{style.editButton}"></g:Image>
 				<span style="position: absolute; top: 83px; right: 375px; font-size: 10px; font-family: Verdana;">Edit Song</span>
 
 				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>

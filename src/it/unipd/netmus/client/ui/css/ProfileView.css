@@ -26,6 +26,16 @@
 	
 }
 
+.accountButton {
+	
+	position: absolute;
+	top: 20px;
+	right: 300px;
+	width: 60px;
+	
+	}
+	
+	
 .cover {
 	
 	position: absolute;
@@ -38,6 +48,17 @@
 	-webkit-box-shadow: 2px 2px 4px #888888;
 	-moz-box-shadow: 2px 2px 4px #888888;
 	}
+	
+
+
+.editButton {
+	
+	position: absolute;
+	top: 20px;
+	right: 370px;
+	width: 60px;	
+	
+}
 	
 	
 .left {
@@ -114,6 +135,17 @@
 		
 }
 
+
+.fw {
+		
+	position: absolute;
+	top: 30px;
+	left: 105px;
+	width: 50px;
+	
+}
+
+
 .info {
 
 	
@@ -166,6 +198,27 @@
 	
 	}
 
+.numero_brani {
+	
+	color: #000000;
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: bold;
+	display: inline;
+	}
+	
+
+
+.play {
+	
+	position: absolute;
+	top: 15px;
+	left: 25px;
+	width: 80px;
+	
+	}
+	
+	
 .playlist {
 	
 	margin-top: 15px;
@@ -174,6 +227,17 @@
 	
 	
 	}
+
+
+
+.rw {
+		
+	position: absolute;
+	top: 30px;
+	left: 150px;
+	width: 50px;
+	
+}
 
 
 .search {
@@ -193,14 +257,28 @@
 .social {
 	
 	margin-top: 10px;
-	margin-bottom: 15px;
 	margin-left: 10px;
 	text-align: left;
 	
+	color: #37A6EB;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
 	
 	}
 
 
+
+.socialButton {
+	
+	position: absolute;
+	top: 20px;
+	right: 230px;
+	width: 60px;
+		
+}
+	
+	
 .statistiche {
 	
 	margin-top: 10px;
@@ -211,7 +289,19 @@
 	
 	}
 
+
+.title {
 	
+	color: green;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	margin-top: 10px;
+	
+	}
+
+
 .utente {
 	
 	color: #37A6EB;
