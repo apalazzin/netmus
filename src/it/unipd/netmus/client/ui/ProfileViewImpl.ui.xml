@@ -30,13 +30,10 @@
 				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
 				<g:HTMLPanel styleName="{style.title}"><span>Utenti affini su Netmus</span></g:HTMLPanel>
 				</g:HTMLPanel>
-
 				
-				<div class="{style.cover}">
-				<img src="images/test_cover.jpg" style="width: 164px; height: 164px;" />
-				</div>
-
-
+				<g:Image ui:field="cover" url="images/test_cover.jpg" styleName="{style.cover}"></g:Image>
+				
+				
 				<img src="images/netmus_scritta.png" style="position: absolute; bottom: 5px; left: 5px; width: 170px; margin-top: 5px;" />
 			
 			
@@ -45,48 +42,50 @@
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
 	
 				<g:Image ui:field="play" url="images/play.png" styleName="{style.play}"> </g:Image>
-				<g:Image ui:field="forward" url="images/rw.png" styleName="{style.fw}"> </g:Image>
-				<g:Image ui:field="rewind" url="images/fw.png" styleName="{style.rw}"> </g:Image>
+				<g:Image ui:field="forward" url="images/fw.png" styleName="{style.fw}"> </g:Image>
+				<g:Image ui:field="rewind" url="images/rw.png" styleName="{style.rw}"> </g:Image>
 	
 				<g:Image ui:field="social_button" url="images/temp_button.png" styleName="{style.socialButton}"></g:Image>
-				<span style="position: absolute; top: 83px; right: 245px; font-size: 10px; font-family: Verdana;">Social</span>
 
 				<g:Image ui:field="account_button" url="images/account_button.png" styleName="{style.accountButton}"></g:Image>
-				<span style="position: absolute; top: 83px; right: 310px; font-size: 10px; font-family: Verdana;">Account</span>
 
 				<g:Image ui:field="edit_button" url="images/edit_button.png" styleName="{style.editButton}"></g:Image>
-				<span style="position: absolute; top: 83px; right: 375px; font-size: 10px; font-family: Verdana;">Edit Song</span>
 
 				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
 				
 				
-				<div class="{style.info}"><div style="margin-top: 7px;">Nessun brano in ascolto.</div></div>
+				<g:HTMLPanel ui:field="info" styleName="{style.info}">Nessun brano in ascolto.</g:HTMLPanel>
 			
-				<div class="{style.search}"><input type="search" style="width: 150px"></input><img src="images/magnifier.jpg" style="float: right; height: 20px; margin-left: 0px;" /></div>
+				<g:HTMLPanel ui:field="search" styleName="{style.search}">
+				<input type="search" style="width: 150px"></input>
+				<img src="images/magnifier.jpg" style="float: right; height: 20px; margin-left: 0px;" />
+				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="container_catalogo" styleName="{style.catalogo_container}">
 				<c:CellTable ui:field="catalogo"></c:CellTable>
 				</g:HTMLPanel>
 			
+				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
+					<g:Image ui:field="play_youtube" url="images/play.png" styleName="{style.playYoutube}" />
+					<img src="images/youtube.png" style="width: 110px; margin-top: 10px" />	
+				</g:HTMLPanel>
 			
-				<div class="{style.youtube}">
-					<img src="images/play.png" style="width: 70px; margin-top: 10px; margin-left: 5px; float: left;" />
-					<img src="images/youtube.png" style="width: 110px; margin-top: 20px" />	
-				</div>
-			
-				<img src="images/star.png" style="position: absolute; bottom: 40px; left: 265px; height: 30px;" />
-				<img src="images/star.png" style="position: absolute; bottom: 40px; left: 305px; height: 30px;" />
-				<img src="images/star.png" style="position: absolute; bottom: 40px; left: 345px; height: 30px;" />
-				<img src="images/star.png" style="position: absolute; bottom: 40px; left: 385px; height: 30px;" />
-				<img src="images/star.png" style="position: absolute; bottom: 40px; left: 425px; height: 30px;" />
-				<span style="position: absolute; bottom: 72px; left: 265px; font-size: 12px; font-family: Verdana; font-weight: bold;">Classifica</span>
-				<div style="position: absolute; bottom: 32px; left: 265px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 200px;"></div>
+				<g:HTMLPanel styleName="{style.classifica}">
+				<g:Image ui:field="star1" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star2" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star3" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
+				</g:HTMLPanel>
 				
-				<img src="images/pdf.png" style="position: absolute; bottom: 30px; right: 25px; height: 50px;" />
+				<span style="position: absolute; bottom: 50px; left: 265px; font-size: 12px; font-family: Verdana; font-weight: bold;">Classifica</span>
+				<div style="position: absolute; bottom: 21px; left: 265px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
+
+				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
 				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
 				
-				<img src="images/statistiche.png" style="position: absolute; bottom: 30px; right: 100px; height: 60px;" />
-				<span style="position: absolute; bottom: 12px; right: 108px; font-size: 10px; font-family: Verdana;">Statistiche</span>
+				<g:Image ui:field="statistiche" styleName="{style.statistiche2}" url="images/statistiche.png"/>
+				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;">Statistiche</span>
 				
 			
 			
