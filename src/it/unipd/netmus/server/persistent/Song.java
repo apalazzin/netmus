@@ -4,6 +4,8 @@
 package it.unipd.netmus.server.persistent;
 
 
+import com.vercer.engine.persist.annotation.Key;
+
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -13,13 +15,22 @@ import it.unipd.netmus.shared.SongSummaryDTO;
  */
 public class Song {
 
+    @Key private String id;
+    
 	private String author;
+	
 	private String title;
+	
 	private String album;
+	
 	private String year;
+	
 	private String composer;
+	
 	private String genre;
+	
 	private String trackNumber;
+	
 	private String file;
 
 	public Song(String auth,String tit,String alb,String y,String c,String g,String t,String f){
@@ -34,7 +45,15 @@ public class Song {
 		file = f;
 	}
 
-	public String getAuthor(){return author;}
+	public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getAuthor(){return author;}
 	public String getTitle(){return title;}
 	public String getAlbum(){return album;}
 	public String getYear(){return year;}

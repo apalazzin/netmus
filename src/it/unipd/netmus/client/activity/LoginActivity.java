@@ -12,10 +12,8 @@ import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
-import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
