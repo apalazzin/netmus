@@ -18,7 +18,13 @@ public interface ProfileView extends IsWidget {
    
    void setName(String profileName);
    void setPresenter(Presenter listener);
+   void setNumeroBrani(String numero);
+   void setUser(String username);
+   void paintPlaylist(String[] lista);
+   void paintFriendlist(String[] lista);
+   void setInfo(String testo);
 
+   
    public interface Presenter
    {
       void logout();
@@ -35,6 +41,9 @@ public interface ProfileView extends IsWidget {
 
       //restituisce la lista degli utenti affini su Netmus
       String[] getFriendList(); 
+
+      //restituisce il titolo della canzone in ascolto
+      String getSongInfo(); 
 
    
    }

@@ -259,17 +259,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
 				container_catalogo.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
 
-				//imposto lo user dell'utente
-				utente.setText(listener.getUsername());
-				//imposto il numero di brani dell'utente
-				numero_brani.setText(listener.getLibrarySize());
-				//imposto la lista delle playlist
-				paintPlaylist(listener.getPlaylistList());
-				//imposto la lista degli amici
-				paintFriendlist(listener.getFriendList());
-				//imposto la finestra delle informazioni
-				setInfo("Monsoon - Tokio Hotel");
-
 		   }
 	   };
 	   timerMain.schedule(10);
@@ -406,13 +395,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       this.listener = listener;
    }
 
-   
-   
-   
-   
+   @Override
+   public void setNumeroBrani(String numero) {
+	   numero_brani.setText(numero);
+   }
    
    //riempie la lista delle playlists
-   private void paintPlaylist(String[] lista) {
+   @Override
+   public void paintPlaylist(String[] lista) {
 	   
 	   for(int k=0; k< lista.length; k++) {
 
@@ -429,7 +419,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    //riempie la lista degli amici netmus
-   private void paintFriendlist(String[] lista) {
+   @Override
+   public void paintFriendlist(String[] lista) {
 	   
 	   for(int k=0; k< lista.length; k++) {
 
@@ -446,8 +437,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    //imposta il testo all'interno della finestra informativa
-   private void setInfo(String text) {
+   @Override
+   public void setInfo(String text) {
 	   info.getElement().setInnerHTML(text);
    }
+
+
+
+
+   @Override
+   public void setUser(String username) {
+	   utente.setText(username);
+	
+}
+
+
+
    
 }
