@@ -53,6 +53,8 @@ public class UserAccount {
    
    private Date lastImport;
    
+   private String lastSessionId;
+   
    //private boolean isGoogleUser;
    
    public UserAccount() {
@@ -74,7 +76,9 @@ public class UserAccount {
    }
    
    public LoginDTO toLoginDTO() {
-       return new LoginDTO(this.user, this.password);
+       LoginDTO tmp = new LoginDTO(this.user, this.password);
+       tmp.setLastSessionId(this.lastSessionId);
+       return tmp;
    }
    
    public UserSummaryDTO toUserSummaryDTO() {
@@ -211,6 +215,14 @@ public class UserAccount {
 
    public void setLastImport(Date lastImport) {
        this.lastImport = lastImport;
+   }
+
+   public void setLastSessionId(String lastSessionId) {
+       this.lastSessionId = lastSessionId;
+   }
+
+   public String getLastSessionId() {
+       return lastSessionId;
    }
    
 }

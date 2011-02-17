@@ -12,6 +12,7 @@ public class LoginDTO implements GenericDTO {
 
 	  private String user;
 	  private String password;
+	  private String lastSessionId;
 	  
 	  public LoginDTO(){
 		  
@@ -25,13 +26,24 @@ public class LoginDTO implements GenericDTO {
 	  public void setUser(String user) {
 		  this.user = user;
 	  }
+	  
 	  public String getUser() {
 		  return user;
 	  }
+	  
 	  public void setPassword(String password) {
 		  this.password = password;
 	  }
+	  
 	  public String getPassword() {
 		  return password;
+	  }
+
+	  public void setLastSessionId(String lastSessionId) {
+	      this.lastSessionId = lastSessionId;
+	  }
+
+	  public String getLastSessionId() {
+	      return lastSessionId;
 	  }
 }
