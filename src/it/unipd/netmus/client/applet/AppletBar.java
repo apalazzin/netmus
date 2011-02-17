@@ -29,25 +29,25 @@ public class AppletBar {
         
         makeNativeFunction(this);
 
-        title.setSize("150", "14");
+        title.setSize("150px", "14px");
         
-        onOff.setSize("50","14");
+        onOff.setSize("50px","14px");
         onOff.setText("Attiva");
         
-        rescan.setSize("50", "14");
+        rescan.setSize("50px", "10px");
         rescan.setText("Riscansiona");
         
-        status.setSize("180", "14");
+        status.setSize("180px", "10px");
         
         applet.setHTML("<applet id='netmus_applet' name='netmus_applet' " +
         		"code=\"applet/NetmusApplet.class\" " +
         		"archive=\"applet/netmusApplet.jar,applet/jid3lib-0.5.4.jar\" " +
         		"width=0 height=0></applet>");
 
-        RootPanel.get("applet-bar").add(title,0,3);
-        RootPanel.get("applet-bar").add(onOff,140,3);
-        RootPanel.get("applet-bar").add(rescan,190,3);
-        RootPanel.get("applet-bar").add(status,280,-2);
+        RootPanel.get("applet-bar").add(title,5,2);
+        RootPanel.get("applet-bar").add(onOff,145,2);
+        RootPanel.get("applet-bar").add(rescan,195,2);
+        RootPanel.get("applet-bar").add(status,285,2);
         RootPanel.get("applet-bar").add(applet);
         
         onOff.addClickHandler(new ClickHandler() {
