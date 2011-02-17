@@ -20,16 +20,14 @@ public interface LoginServiceAsync {
 
 	void insertRegistration(LoginDTO login, AsyncCallback<LoginDTO> callback) throws RegistrationException;
 
-	void verifyLogin(LoginDTO login, AsyncCallback<Void> callback) throws LoginException;
+	void getLoggedInUser(AsyncCallback<String> callback) throws LoginException;
 
-	void getLoggedInUserDTO(AsyncCallback<String> callback) throws LoginException;
+	void logout(AsyncCallback<String> callback);
 
-	void logout(AsyncCallback<Void> callback);
-
-	void startLogin(LoginDTO login, AsyncCallback<Void> callback);
+	void startLogin(LoginDTO login, AsyncCallback<String> callback);
 
 	void getAllUsers(AsyncCallback<ArrayList<UserSummaryDTO>> callback);
 
-    void restartSession(String session_id, AsyncCallback<Void> callback);
+    void restartSession(String user, String session_id, AsyncCallback<String> callback)  throws LoginException;
 
 }

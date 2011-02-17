@@ -22,15 +22,13 @@ public interface LoginService extends RemoteService {
    
 	LoginDTO insertRegistration(LoginDTO login) throws RegistrationException;
 	
-	void verifyLogin(LoginDTO login) throws LoginException;
+	String startLogin(LoginDTO login) throws LoginException;
 	
-	void startLogin(LoginDTO login) throws LoginException;
+	String getLoggedInUser() throws LoginException;
 	
-	String getLoggedInUserDTO() throws LoginException;
+	String logout();
 	
-	void logout();
-	
-	void restartSession(String session_id);
+	String restartSession(String user, String session_id) throws LoginException;
 	
 	/*METODO USATO PER TESTING*/
 	ArrayList<UserSummaryDTO> getAllUsers();

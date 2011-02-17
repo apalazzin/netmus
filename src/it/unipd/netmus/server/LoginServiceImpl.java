@@ -5,12 +5,9 @@ package it.unipd.netmus.server;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Logger;
-//import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
-//import it.unipd.netmus.client.activity.LoginActivity;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
@@ -20,7 +17,6 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
 
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -30,8 +26,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
-	
-    private static Logger logger = Logger.getLogger(LoginServiceImpl.class.getName());
    
 	@Override
 	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
@@ -50,55 +44,60 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 	
-	@Override
-	public void verifyLogin(LoginDTO login) throws LoginException {
+	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
 		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
-			throw new WrongLoginException("L'utente non esiste");
+			throw new WrongLoginException("User don't exists");
 		}
 		else {
-		    
 			if (BCrypt.checkpw(login.getPassword(), userAccount.getPassword())) {
 				//correct password
-				return;
+				return userAccount;
 			}
-			else throw new WrongLoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
+			else
+			    throw new WrongLoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
 		}
 	}
 
 	@Override
-	public void startLogin(LoginDTO login) throws LoginException {
-		
-	    verifyLogin(login); // non si potrebbe fare restituire direttamente a verify l' UserAccount ??
-
+	public String startLogin(LoginDTO login) throws LoginException {
+	    
 		//find user in the database
-		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
+		UserAccount userAccount = verifyLogin(login);
 		
 		HttpSession session = getThreadLocalRequest().getSession();
-		LoginHelper.loginStarts(session, userAccount);
+		String session_id = session.getId();
+
+		// set session parameter - userID
+		LoginHelper.setSession(session, login.getUser());
+		// set in DB userAccount the new SessionID
+		userAccount.setLastSessionId(session_id);
+		
+		return session_id;
 	}
 
 	@Override
-	public String getLoggedInUserDTO() throws LoginException {
+	public String getLoggedInUser() throws LoginException {
 	    
 	    HttpSession session = getThreadLocalRequest().getSession();
 	    String user = LoginHelper.getLoggedInUser(session);
-	    if (user != null) {
-	        logger.info("user not null");
-	        return user;//.toUserSummaryDTO();
+	    if (user == null) {
+	        throw new LoginException();
 	    }
-	    throw new LoginException();
+	    return user;
+	    
 	}
 
 	@Override
-	public void logout() {
+	public String logout() {
 	    HttpSession session = getThreadLocalRequest().getSession();
-	    //Cookies.removeCookie("sid", "/");
+	    String user = (String) session.getAttribute("userLoggedIn");
 	    session.invalidate();
+	    return user;
 	}
 
 	/*METODO USATO PER TESTING*/
@@ -115,20 +114,38 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
     @Override
-    public void restartSession(String session_id) {
+    public String restartSession(String user, String session_id) throws LoginException {
         
-        try {
-            UserAccount user = UserAccount.findSessionUser(session_id);
-            HttpSession session = getThreadLocalRequest().getSession();
+        HttpSession session = getThreadLocalRequest().getSession();
+        String session_id_new = session.getId();
+        String userLoggedIn = (String) session.getAttribute("userLoggedIn");
+        
+        if (userLoggedIn != null)
+            // deve aggionare i cookie pero' (refresh)
+            return session_id_new;
+        else {
+            if (user==null || session_id == null)
+                // non deve fare niente sui cookie, non esistono
+                throw new LoginException();
             
-            // set username in the current session
-            session.setAttribute("userLoggedIn", user.getUser());
+            // restart old session by Cookies (se soddisfa)
+            UserAccount userAccount = UserAccount.loadUserWithoutLibrary(user);
+            String session_id_old = userAccount.getLastSessionId();
             
-        } catch(IllegalStateException ise) {
-            ise.printStackTrace();
+            if (session_id_old.equals(session_id)) {
+                // caricare attributi in nuova session
+                session.setAttribute("userLoggedIn", user);
+                
+                // aggiornare il campo lastSessionId
+                userAccount.setLastSessionId(session_id_new);
+                
+                // deve aggionare i cookie pero' (refresh)
+                return session_id_new;
+                
+            } else {
+                // non c'e' sessione, ci sono cookie, ma son estranei (altra macchina)
+                throw new LoginException();
+            }
         }
-        
-        
     }
-
 }

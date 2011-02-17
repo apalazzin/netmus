@@ -1,5 +1,6 @@
 package it.unipd.netmus.client.activity;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +20,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -74,7 +76,7 @@ public class LoginActivity extends AbstractActivity implements
             }
         };
         
-        try { loginServiceSvc.getLoggedInUserDTO(callback); }
+        try { loginServiceSvc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
 		
@@ -94,12 +96,12 @@ public class LoginActivity extends AbstractActivity implements
         LoginDTO login = new LoginDTO(user,password);
 
         // Set up the callback object.
-        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
             
           public void onFailure(Throwable caught) {
               if (caught instanceof LoginException) {
                   logger.log(Level.INFO, ((LoginException)caught).getMoreInfo());
-                  goTo( new LoginPlace(username,pass, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
+                  goTo(new LoginPlace(username,pass, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
               }
               else {
                   logger.log(Level.INFO, ("Impossibile connettersi al database"));
@@ -108,9 +110,16 @@ public class LoginActivity extends AbstractActivity implements
           }
           
           @Override
-          public void onSuccess(Void result) {
+          public void onSuccess(String session_id) {
               logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
-              goTo( new ProfilePlace(username));
+              
+              // create the cookie for this session
+              final long DURATION = 1000 * 60 * 60 * 24;
+              Date expires = new Date(System.currentTimeMillis() + DURATION);
+              Cookies.setCookie("user", username, expires);
+              Cookies.setCookie("sid", session_id, expires);
+              
+              goTo(new ProfilePlace(username));
           }
         };
 

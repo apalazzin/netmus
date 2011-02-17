@@ -16,6 +16,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -70,7 +71,7 @@ public class ProfileActivity extends AbstractActivity implements
             }
         };
         
-        try { loginServiceSvc.getLoggedInUserDTO(callback); }
+        try { loginServiceSvc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
 	}
@@ -86,15 +87,19 @@ public class ProfileActivity extends AbstractActivity implements
    @Override
    public void logout() {
       
-      AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+      AsyncCallback<String> callback = new AsyncCallback<String>() {
          @Override
          public void onFailure(Throwable caught) {
             logger.info("Logout Error");
          }
 
          @Override
-         public void onSuccess(Void result) {
-            logger.info("Logout user");
+         public void onSuccess(String user) {
+            logger.info("Logout user: "+user);
+            
+            // remove the session cookie
+            Cookies.removeCookie("user");
+            Cookies.removeCookie("sid");
             
             // hide and disable the applet
             ABF.get().appletBarOFF();
