@@ -16,7 +16,6 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Text;
 import com.reveregroup.gwt.imagepreloader.FitImage;
-import com.vercer.engine.persist.annotation.Child;
 import com.vercer.engine.persist.annotation.Index;
 import com.vercer.engine.persist.annotation.Key;
 import com.vercer.engine.persist.annotation.Type;
@@ -232,6 +231,7 @@ public class UserAccount {
 
    public void setLastSessionId(String lastSessionId) {
        this.lastSessionId = lastSessionId;
+       ODF.get().update(this);
    }
 
    public String getLastSessionId() {
