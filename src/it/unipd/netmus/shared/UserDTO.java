@@ -3,6 +3,8 @@
  */
 package it.unipd.netmus.shared;
 
+import java.util.Date;
+
 /**
  * @author ValterTexasGroup
  *
@@ -12,66 +14,87 @@ public class UserDTO extends UserSummaryDTO {
 	
 	private String firstName;
 	private String lastName;
-	private String birth;
+	private String gender;
+	private String nationality;
+	private String aboutMe;
+	private Date birthDate;
+	private Date registrationDate;
+	private Date lastLogin;
+	private Date lastImport;
 	
-	//default constructor
-	public UserDTO(){
-		super();
-		firstName = "";
-		lastName = "";
-		birth = "";
-	}
-	
-	public UserDTO(String nick,String mail,String sexType,String city){
-		super(nick,mail,sexType,city);
-		firstName = "";
-		lastName = "";
-		birth = "";		
-	}
-	
-	public UserDTO(String name,String surname,String birthDate){
-		super();
-		firstName = name;
-		lastName = surname;
-		birth = birthDate;		
-	}
-	
-	public UserDTO(String nick,String mail,String sexType,String city,String name,String surname,String birthDate){
-		super(nick,mail,sexType,city);
-		this.firstName = name;
-		this.lastName = surname;
-		this.birth = birthDate;
-	}
-	
-	
-	
-	public String getName()
-	{
-		return firstName;
-	}
-	
-	public void setFirstName(String name)
-	{
-		this.firstName = name;
-	}
-	
-	public String getLastName()
-	{
-		return lastName;
-	}
-	
-	public void setLastName(String surname)
-	{
-		this.lastName = surname;
-	}
+    public UserDTO() {
+        super();
+    }
 
-	public void setBirthDate(String birthDate)
-	{
-		this.birth = birthDate;
-	}
-	
-	public String getBirthDate()
-	{
-		return birth;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Date getLastImport() {
+        return lastImport;
+    }
+
+    public void setLastImport(Date lastImport) {
+        this.lastImport = lastImport;
+    }
 }

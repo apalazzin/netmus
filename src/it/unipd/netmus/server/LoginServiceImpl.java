@@ -49,7 +49,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public void verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
+		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
@@ -70,7 +70,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    verifyLogin(login); // non si potrebbe fare restituire direttamente a verify l' UserAccount ??
 
 		//find user in the database
-		UserAccount userAccount = ODF.get().load(UserAccount.class, login.getUser());
+		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
 		
 		HttpSession session = getThreadLocalRequest().getSession();
 		LoginHelper.loginStarts(session, userAccount);
