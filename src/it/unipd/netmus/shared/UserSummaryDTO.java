@@ -3,44 +3,70 @@
  */
 package it.unipd.netmus.shared;
 
-import java.io.Serializable;
-
 /**
  * @author ValterTexasGroup
  *
  */
 @SuppressWarnings("serial")
-public class UserSummaryDTO implements Serializable {
-    private String user;
+public class UserSummaryDTO implements GenericDTO {
 	private String nickName;
-	private String avatar;
+	private String email;
+	private String sex;
+	private String location;
 	
 	//default constructor
 	public UserSummaryDTO(){
-	}
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+		nickName = "";
+		email = "";
+		sex = "";
+		location = "";
+		}
 	
+	public UserSummaryDTO(String nick,String mail,String sexType,String city){
+		this.nickName = nick;
+		this.email = mail;
+		this.sex = sexType;
+		this.location = city;
+	}
+	
+	public String getNickName()
+	{
+		return nickName;
+	}
+	
+	public void setNickName(String nick)
+	{
+		this.nickName = nick;
+	}
+	
+		
+	public String getEmail()
+	{
+		return email;
+	}
+	
+	public void setEmail(String mail)
+	{
+		this.email = mail;
+	}
+	
+	public String getSex()
+	{
+		return sex;
+	}
+	
+	public void setSex(String sexType)
+	{
+		this.sex = sexType;
+	}
+	
+	public String getLocation()
+	{
+		return location;
+	}
+	
+	public void setLocation(String city)
+	{
+		this.location = city;
+	}
 }

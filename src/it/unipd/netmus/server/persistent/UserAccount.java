@@ -4,19 +4,14 @@
 package it.unipd.netmus.server.persistent;
 
 import it.unipd.netmus.server.ODF;
-import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserCompleteDTO;
-import it.unipd.netmus.shared.UserDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
+import java.util.Iterator;
 
-import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Text;
-import com.reveregroup.gwt.imagepreloader.FitImage;
-import com.vercer.engine.persist.annotation.Child;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.vercer.engine.persist.annotation.Index;
 import com.vercer.engine.persist.annotation.Key;
-import com.vercer.engine.persist.annotation.Type;
 
 
 /**
@@ -27,22 +22,14 @@ public class UserAccount {
    
    @Key public String user;
    
-   private String password;
+   private String password; // da criptare e decriptare con algoritmi DES o AES
    
    private String firstName;
    
    private String lastName;
    
-   private String nickName;
+   @Index private String emailAddress;
    
-   private char gender;
-   
-   private String nationality;
-   
-   @Type(Blob.class) private FitImage avatar;
-
-   @Type(Text.class) private String aboutMe;
-
    private Date birthDate;
    
    private Date registrationDate;
@@ -50,155 +37,127 @@ public class UserAccount {
    private Date lastLogin;
    
    private Date lastImport;
-
-   @Child private MusicLibrary musicLibrary;
    
-   //private boolean isGoogleUser;
+   private int numSongs;
+   
+   private boolean isGoogleUser;
    
    public UserAccount() {
    }
    
    public UserAccount(String user, String password) {
+      this();
       this.user = user;
       this.password = password;
    }
    
-   public static UserAccount loadUserWithLibrary(String user) {
-       ODF.get().setActivationDepth(3);
-       return ODF.get().load(UserAccount.class, user);
-   }
-
-   public static UserAccount loadUserWithoutLibrary(String user) {
-       ODF.get().setActivationDepth(1);
-       return ODF.get().load(UserAccount.class, user);
+   // STATICO
+   public static UserAccount findUser(String user) {
+      Iterator<UserAccount> found = ODF.get().find().type(UserAccount.class).addFilter("user", FilterOperator.EQUAL, user).returnResultsNow();
+      if (found.hasNext())
+    	  return found.next();
+      else return null;
    }
    
-   public LoginDTO toLoginDTO() {
-       return new LoginDTO(this.user, this.password);
+   public boolean isGoogleUser() {
+      return isGoogleUser;
    }
    
    public UserSummaryDTO toUserSummaryDTO() {
-       return null;
+      return new UserSummaryDTO(this.user,"email","sex","city");
    }
    
-   public UserDTO toUserDTO() {
-       return null;
+   public UserSummaryDTO toUserDTO() {
+      
+      return null;
    }
    
-   public UserCompleteDTO toUserCompleteDTO() {
-       return null;
-   }
-   
-   public String getUser() {
-       return user;
+   public UserSummaryDTO toUserCompleteDTO() {
+      
+      return null;
    }
 
-   public void setUser(String user) {
-       this.user = user;
+   public String getUser() {
+      return user;
+   }
+
+   // eventuali cambi password (da decidere come finirlo)
+   public void changePassword(String old_pwd, String new_pwd) {
+      if(old_pwd == password) {
+         this.password = new_pwd;
+      }
    }
 
    public String getPassword() {
-       return password;
-   }
-
-   public void setPassword(String password) {
-       this.password = password;
+      return password;
    }
 
    public String getFirstName() {
-       return firstName;
+      return firstName;
    }
 
    public void setFirstName(String firstName) {
-       this.firstName = firstName;
+      this.firstName = firstName;
    }
 
    public String getLastName() {
-       return lastName;
+      return lastName;
    }
 
    public void setLastName(String lastName) {
-       this.lastName = lastName;
+      this.lastName = lastName;
    }
 
-   public String getNickName() {
-       return nickName;
+   public String getEmailAddress() {
+      return emailAddress;
    }
 
-   public void setNickName(String nickName) {
-       this.nickName = nickName;
-   }
-
-   public char getGender() {
-       return gender;
-   }
-
-   public void setGender(char gender) {
-       this.gender = gender;
-   }
-
-   public String getNationality() {
-       return nationality;
-   }
-
-   public void setNationality(String nationality) {
-       this.nationality = nationality;
-   }
-
-   public FitImage getAvatar() {
-       return avatar;
-   }
-
-   public void setAvatar(FitImage avatar) {
-       this.avatar = avatar;
-   }
-
-   public String getAboutMe() {
-       return aboutMe;
-   }
-
-   public void setAboutMe(String aboutMe) {
-       this.aboutMe = aboutMe;
+   public void setEmailAddress(String emailAddress) {
+      this.emailAddress = emailAddress;
    }
 
    public Date getBirthDate() {
-       return birthDate;
+      return birthDate;
    }
 
    public void setBirthDate(Date birthDate) {
-       this.birthDate = birthDate;
+      this.birthDate = birthDate;
    }
 
    public Date getRegistrationDate() {
-       return registrationDate;
+      return registrationDate;
    }
 
    public void setRegistrationDate(Date registrationDate) {
-       this.registrationDate = registrationDate;
+      this.registrationDate = registrationDate;
    }
 
    public Date getLastLogin() {
-       return lastLogin;
+      return lastLogin;
    }
 
    public void setLastLogin(Date lastLogin) {
-       this.lastLogin = lastLogin;
+      this.lastLogin = lastLogin;
    }
 
    public Date getLastImport() {
-       return lastImport;
+      return lastImport;
    }
 
    public void setLastImport(Date lastImport) {
-       this.lastImport = lastImport;
+      this.lastImport = lastImport;
    }
 
-   public MusicLibrary getMusicLibrary() {
-       return musicLibrary;
+   public int getNumSongs() {
+      return numSongs;
    }
 
-   public void setMusicLibrary(MusicLibrary musicLibrary) {
-       this.musicLibrary = musicLibrary;
+   public void setNumSongs(int numSongs) {
+      this.numSongs = numSongs;
+   }
+
+   public void setGoogleUser(boolean isGoogleUser) {
+      this.isGoogleUser = isGoogleUser;
    }
    
    
