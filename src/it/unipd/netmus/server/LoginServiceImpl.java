@@ -84,14 +84,13 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String getLoggedInUserDTO() throws LoginException {
+	    
 	    HttpSession session = getThreadLocalRequest().getSession();
-
 	    String user = LoginHelper.getLoggedInUser(session);
 	    if (user != null) {
 	        logger.info("user not null");
-	       return user;//.toUserSummaryDTO();
+	        return user;//.toUserSummaryDTO();
 	    }
-	    System.out.println("user null"); // rimuovere
 	    throw new LoginException();
 	}
 

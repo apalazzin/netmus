@@ -49,19 +49,27 @@ public class LoginActivity extends AbstractActivity implements
 	* Invoked by the ActivityManager to start a new Activity
 	*/
 	@Override
-	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
 	    AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException)
-                    logger.severe("Utente non ancora loggato");
+                if (caught instanceof LoginException) {
+                    // user not logged yet - show loginView
+                    LoginView loginView = clientFactory.getLoginView();
+                    loginView.setError(error);
+                    loginView.setLoginType(loginType);
+                    loginView.setPassword(password);
+                    loginView.setUser(user);
+                    loginView.setPresenter(LoginActivity.this);
+                    containerWidget.setWidget(loginView.asWidget());
+                }
             }
 
             @Override
             public void onSuccess(String result) {
-                logger.info("Utente gia' loggato");
+                logger.info("User '"+result+"' Logged - Redirect to Profile");
                 goTo(new ProfilePlace(result));
             }
         };
@@ -69,14 +77,7 @@ public class LoginActivity extends AbstractActivity implements
         try { loginServiceSvc.getLoggedInUserDTO(callback); }
         catch(LoginException e) {
         }
-	    
-		LoginView loginView = clientFactory.getLoginView();
-		loginView.setError(error);
-		loginView.setLoginType(loginType);
-		loginView.setPassword(password);
-		loginView.setUser(user);
-		loginView.setPresenter(this);
-		containerWidget.setWidget(loginView.asWidget());
+		
 	}
 	
 	/**
