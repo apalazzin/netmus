@@ -4,7 +4,7 @@
 	width: auto;
 	height: 90%;
 	
-	min-width: 450px;      	
+	min-width: 700px;      	
 	min-height: 300px;      	
 	
 	border: 2px solid #AAAAAA;
@@ -33,21 +33,36 @@
 	right: 300px;
 	width: 60px;
 	
+	-webkit-transition: right 0.3s ease-in-out;
+	-moz-transition: right 0.3s ease-in-out;
+	-o-transition: right 0.3s ease-in-out;
+	transition: right 0.3s ease-in-out;
 	}
 	
+
+.classifica {
 	
+	position: absolute;
+	bottom: 24px;
+	left: 265px;
+	
+	}
+
 .cover {
 	
 	position: absolute;
-	bottom: 60px; left:
-	7px; width:
-	164px;
+	bottom: 60px;
+	left:7px; 
 	height: 164px;
 	border: 1px solid #37A6EB;
 	
 	-webkit-box-shadow: 2px 2px 4px #888888;
 	-moz-box-shadow: 2px 2px 4px #888888;
-	}
+	
+	width: 164px;
+	height: 164px;
+
+}
 	
 
 
@@ -56,7 +71,12 @@
 	position: absolute;
 	top: 20px;
 	right: 370px;
-	width: 60px;	
+	width: 60px;
+	
+	-webkit-transition: right 0.3s ease-in-out;
+	-moz-transition: right 0.3s ease-in-out;
+	-o-transition: right 0.3s ease-in-out;
+	transition: right 0.3s ease-in-out;
 	
 }
 	
@@ -140,8 +160,8 @@
 		
 	position: absolute;
 	top: 30px;
-	left: 105px;
-	width: 50px;
+	left: 145px;
+	width: 40px;
 	
 }
 
@@ -150,7 +170,8 @@
 
 	
 	width: 200px;
-	height: 30px;
+	height: 23px;
+	padding-top: 7px;
 	
 	font-size: 11px;
 	text-align: center;
@@ -167,7 +188,8 @@
 	
 	top: 35px;
 	left: 250px;
-	position: absolute;		
+	position: absolute;
+			
 	
 }
 
@@ -175,7 +197,7 @@
 .logout {
 	
 	position: absolute;
-	top: 10px;
+	top: -20px;
 	right: 20px;
 	font-size: 12px;
 	font-family: Verdana;
@@ -187,7 +209,7 @@
 .logout:hover {
 	
 	position: absolute;
-	top: 10px;
+	top: -20px;
 	right: 20px;
 	font-size: 12px;
 	font-family: Verdana;
@@ -208,17 +230,26 @@
 	}
 	
 
-
-.play {
+.pdf {
 	
 	position: absolute;
-	top: 15px;
-	left: 25px;
-	width: 80px;
+	bottom: 28px;
+	right: 25px;
+	height: 50px;
 	
 	}
 	
 	
+.play {
+	
+	position: absolute;
+	top: 18px;
+	left: 25px;
+	width: 60px;
+	
+	}
+	
+
 .playlist {
 	
 	margin-top: 15px;
@@ -228,15 +259,21 @@
 	
 	}
 
-
+.playYoutube {
+	
+	width: 40px;
+	margin-top: 10px;
+	margin-left: 18px;
+	float: left;
+	
+	}
 
 .rw {
 		
 	position: absolute;
 	top: 30px;
-	left: 150px;
-	width: 50px;
-	
+	left: 100px;
+	width: 40px;
 }
 
 
@@ -250,7 +287,12 @@
 	
 	top: 55px;
 	right: 15px;
-	position: absolute;		
+	position: absolute;
+	
+	-webkit-transition: opacity 0.1s ease-out-in;
+	-moz-transition: opacity 0.1s ease-in-out;
+	-o-transition: opacity 0.1s ease-in-out;
+	transition: opacity 0.1s ease-in-out;
 	
 }
 	
@@ -265,9 +307,22 @@
 	font-size: 12px;
 	font-weight: bold;
 	
+	-webkit-transition: right 0.3s ease-in-out;
+	-moz-transition: right 0.3s ease-in-out;
+	-o-transition: right 0.3s ease-in-out;
+	transition: right 0.3s ease-in-out;
+	
 	}
 
 
+.statistiche2 {
+	
+	position: absolute;
+	bottom: 28px;
+	right: 100px;
+	height: 60px;
+	
+	}
 
 .socialButton {
 	
@@ -277,8 +332,14 @@
 	width: 60px;
 		
 }
+
+
+.star {
 	
-	
+	height: 20px;
+		
+	}
+
 .statistiche {
 	
 	margin-top: 10px;
@@ -318,7 +379,7 @@
 	
 	
 	width: 200px;
-	height: 80px;
+	height: 60px;
 	
 	font-size: 11px;
 	text-align: center;
@@ -333,7 +394,7 @@
 	-webkit-box-shadow: 0px 0px 2px #EEEEEE;
 	-moz-box-shadow: 0px 0px 2px #EEEEEE;
 	
-	bottom: 12px;
+	bottom: 22px;
 	left: 25px;
 	position: absolute;		
 	
