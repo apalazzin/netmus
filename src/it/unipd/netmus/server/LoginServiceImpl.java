@@ -112,7 +112,19 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
     @Override
     public void restartSession(String session_id) {
-        // da implementare per recuparare la sessione
+        
+        try {
+            UserAccount user = UserAccount.findSessionUser(session_id);
+            HttpSession session = getThreadLocalRequest().getSession();
+            
+            // set username in the current session
+            session.setAttribute("userLoggedIn", user.getUser());
+            
+        } catch(IllegalStateException ise) {
+            ise.printStackTrace();
+        }
+        
+        
     }
 
 }
