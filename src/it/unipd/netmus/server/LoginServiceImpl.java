@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 //import it.unipd.netmus.client.activity.LoginActivity;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
+import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
@@ -34,8 +35,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
    
 	@Override
 	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
-		//create new user in the database
-		UserAccount userAccount = new UserAccount(login.getUser(),login.getPassword());
+		
+	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
+		
+		//create new user in the databas
+		UserAccount userAccount = new UserAccount(login.getUser(), passwordHash);
 		
 		//persist the new user
 		try {
@@ -57,7 +61,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			throw new WrongLoginException("L'utente non esiste");
 		}
 		else {
-			if (login.getPassword().equals(userAccount.getPassword())) {
+		    
+			if (BCrypt.checkpw(login.getPassword(), userAccount.getPassword())) {
 				//correct password
 				return;
 			}
