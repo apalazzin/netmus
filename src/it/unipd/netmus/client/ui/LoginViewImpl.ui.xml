@@ -14,12 +14,12 @@
    				<div style="float: left; width: 170px;">E-mail:</div><div style="">Password:</div>
    			
    				<g:TextBox ui:field="user"  styleName="{style.user}">	</g:TextBox>
-   				<g:TextBox ui:field="password" styleName="{style.pass}">	</g:TextBox>
+   				<g:PasswordTextBox ui:field="password" styleName="{style.pass}">	</g:PasswordTextBox>
    				<g:Label ui:field="login" styleName="{style.login}">Login</g:Label>
    				
    				<div id="registrazione" class="{style.registrazione}">
 	   				<div style="float: left; width: 170px;">&nbsp;</div><div id="password_check">&nbsp;</div>
-   					<div style="float: left; width: 160px;">&nbsp;</div><g:TextBox ui:field="c_password" styleName="{style.pass}">	</g:TextBox>
+   					<div style="float: left; width: 160px;">&nbsp;</div><g:PasswordTextBox ui:field="c_password" styleName="{style.pass}">	</g:PasswordTextBox>
    				</div>
    				
    				<div style="margin-top: 15px; border: 0px solid #FF00FF; position: relative; height: 50px;">
