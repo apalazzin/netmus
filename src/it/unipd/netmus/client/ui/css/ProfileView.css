@@ -5,7 +5,7 @@
 	height: 90%;
 	
 	min-width: 700px;      	
-	min-height: 300px;      	
+	min-height: 450px;      	
 	
 	border: 2px solid #AAAAAA;
 	
@@ -85,10 +85,11 @@
 
 		 
 	width: 180px;
-	height: 90%;      	
+	height: 90%;
+   	
 	
 	min-width: 180px;      	
-	min-height: 300px;      	
+	min-height: 450px;      	
 	
 	border: 2px solid #AAAAAA;
 	
@@ -114,13 +115,13 @@
 .catalogo {
 	
 	width: 300px;
-	height: 200px;	
+	height: 200px;
 	
 }
 
 .catalogo_container {
 	
-	min-height: 100px;    
+	min-height: 240px;    
 	
 	margin-top: 100px;
 	margin-bottom: 100px;
@@ -252,9 +253,12 @@
 
 .playlist {
 	
-	margin-top: 15px;
+	margin-top: 5px;
 	margin-left: 10px;
 	text-align: left;
+	
+	max-height: 150px;
+	overflow: auto;
 	
 	
 	}
@@ -289,7 +293,7 @@
 	right: 15px;
 	position: absolute;
 	
-	-webkit-transition: opacity 0.1s ease-out-in;
+	-webkit-transition: opacity 0.1s ease-in-out;
 	-moz-transition: opacity 0.1s ease-in-out;
 	-o-transition: opacity 0.1s ease-in-out;
 	transition: opacity 0.1s ease-in-out;
@@ -298,31 +302,26 @@
 	
 .social {
 	
-	margin-top: 10px;
+	margin-top: 0px;
 	margin-left: 10px;
 	text-align: left;
+	
+	max-height: 145px;
+	overflow: auto;
+	
 	
 	color: #37A6EB;
 	font-family: Verdana;
 	font-size: 12px;
 	font-weight: bold;
 	
-	-webkit-transition: right 0.3s ease-in-out;
-	-moz-transition: right 0.3s ease-in-out;
-	-o-transition: right 0.3s ease-in-out;
-	transition: right 0.3s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 	
 	}
 
-
-.statistiche2 {
-	
-	position: absolute;
-	bottom: 28px;
-	right: 100px;
-	height: 60px;
-	
-	}
 
 .socialButton {
 	
@@ -330,7 +329,12 @@
 	top: 20px;
 	right: 230px;
 	width: 60px;
-		
+
+	-webkit-transition: right 0.3s ease-in-out;
+	-moz-transition: right 0.3s ease-in-out;
+	-o-transition: right 0.3s ease-in-out;
+	transition: right 0.3s ease-in-out;
+	
 }
 
 
@@ -343,13 +347,24 @@
 .statistiche {
 	
 	margin-top: 10px;
-	margin-bottom: 15px;
+	margin-bottom: 5px;
 	margin-left: 10px;
 	text-align: left;
 	
 	
 	}
 
+
+.statistiche2 {
+	
+	position: absolute;
+	bottom: 28px;
+	right: 100px;
+	height: 60px;
+	
+	}
+	
+	
 
 .title {
 	
