@@ -263,6 +263,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 						
 					}
 			  		
+			  		
+					if(Window.getClientHeight()<650) {
+						
+						friends.getElement().getStyle().setOpacity(0);
+						
+					} else {
+						
+						friends.getElement().getStyle().setOpacity(1);
+						
+					}
+
+			  		
 			   	//ridimensiono il layout in base alla dimensione della finestra del browser
 				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
 				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
