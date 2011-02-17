@@ -68,6 +68,12 @@ public class ProfileActivity extends AbstractActivity implements
 		ProfileView profileView = clientFactory.getProfileView();
 		profileView.setName(name);
 		profileView.setPresenter(this);
+		
+		profileView.setNumeroBrani(getLibrarySize());
+		profileView.setUser(getUsername());
+		profileView.paintPlaylist(getPlaylistList());
+		profileView.paintFriendlist(getFriendList());
+		profileView.setInfo(getSongInfo());
 		containerWidget.setWidget(profileView.asWidget());
 	}
 
@@ -134,5 +140,11 @@ public class ProfileActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
 		return friends;
+	}
+
+	@Override
+	public String getSongInfo() {
+		// TODO Auto-generated method stub
+		return "Nessun brano in ascolto.";
 	}
 }
