@@ -101,4 +101,31 @@ public class ProfileActivity extends AbstractActivity implements
       }
       
    }
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return new String("giovytr@trezzi.net");
+	}
+
+	@Override
+	public String getLibrarySize() {
+		// TODO Auto-generated method stub
+		return new String("69");
+	}
+
+	@Override
+	public String[] getPlaylistList() {
+		// TODO Auto-generated method stub
+		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock" };
+		return playlists;
+		
+	}
+
+	@Override
+	public String[] getFriendList() {
+		// TODO Auto-generated method stub
+		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
+		return friends;
+	}
 }
