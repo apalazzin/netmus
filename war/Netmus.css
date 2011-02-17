@@ -1,10 +1,15 @@
 /** Add css rules here for your application. */
 
 div#applet-bar {
-   height: 20px;
+   
+   height: 26px;
    width: 100%;
    background-color: gray;
-   float: right;
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
+   z-index: 5;
+
 }
 
 div#application {
