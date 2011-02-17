@@ -47,12 +47,12 @@ public class Netmus implements EntryPoint {
       historyHandler.register(placeController, eventBus, defaultPlace);
       
       // ripresa sessione
-      String sid = Cookies.getCookie("sid");
-      if(sid != null) {
-          // manda al server 
-          LoginService login_service = GWT.create(LoginService.class);
-          login_service.restartSession(sid);
-      }
+//      String sid = Cookies.getCookie("sid");
+//      if(sid != null) {
+//          // manda al server 
+//          LoginService login_service = GWT.create(LoginService.class);
+//          login_service.restartSession(sid);
+//      }
 
       RootPanel.get().setStyleName( "gwt-root" );
       // applet e' la barra applet, resta inizialmente invisibile e vuota

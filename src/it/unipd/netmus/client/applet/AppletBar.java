@@ -38,11 +38,6 @@ public class AppletBar {
         rescan.setText("Riscansiona");
         
         status.setSize("180px", "10px");
-        
-        applet.setHTML("<applet id='netmus_applet' name='netmus_applet' " +
-        		"code=\"applet/NetmusApplet.class\" " +
-        		"archive=\"applet/netmusApplet.jar,applet/jid3lib-0.5.4.jar\" " +
-        		"width=0 height=0></applet>");
 
         RootPanel.get("applet-bar").add(title,5,2);
         RootPanel.get("applet-bar").add(onOff,145,2);
@@ -71,6 +66,10 @@ public class AppletBar {
         if (!visible) {
             visible = true;
             RootPanel.get("applet-bar").setVisible(true);
+            applet.setHTML("<applet id='netmus_applet' name='netmus_applet' " +
+                    "code=\"applet/NetmusApplet.class\" " +
+                    "archive=\"applet/netmusApplet.jar,applet/jid3lib-0.5.4.jar\" " +
+                    "width=0 height=0></applet>");
         }
     }
     
@@ -78,6 +77,7 @@ public class AppletBar {
         if (visible) {
             visible = false;
             RootPanel.get("applet-bar").setVisible(false);
+            applet.setHTML("");
         }
     }
     

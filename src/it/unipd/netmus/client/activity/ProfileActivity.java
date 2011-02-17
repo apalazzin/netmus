@@ -40,23 +40,32 @@ public class ProfileActivity extends AbstractActivity implements
 	 * Invoked by the ActivityManager to start a new Activity
 	 */
 	@Override
-	public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
 	    AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
-                    logger.info("Utente non ancora loggato");
+                    logger.info("User not logged yet - Redirect to Login");
                     goTo(new LoginPlace(""));
                 }
             }
 
             @Override
             public void onSuccess(String result) {
-                logger.info("Utente loggato - puo' accedere");
+                ProfileView profileView = clientFactory.getProfileView();
+                profileView.setName(name);
+                profileView.setPresenter(ProfileActivity.this);
                 
-              //load applet bar, if not active yet
+                profileView.setNumeroBrani(getLibrarySize());
+                profileView.setUser(getUsername());
+                profileView.paintPlaylist(getPlaylistList());
+                profileView.paintFriendlist(getFriendList());
+                profileView.setInfo(getSongInfo());
+                containerWidget.setWidget(profileView.asWidget());
+                
+               //load the applet bar, if not active yet
                 ABF.get().appletBarON();
             }
         };
@@ -64,17 +73,6 @@ public class ProfileActivity extends AbstractActivity implements
         try { loginServiceSvc.getLoggedInUserDTO(callback); }
         catch(LoginException e) {
         }
-	    
-		ProfileView profileView = clientFactory.getProfileView();
-		profileView.setName(name);
-		profileView.setPresenter(this);
-		
-		profileView.setNumeroBrani(getLibrarySize());
-		profileView.setUser(getUsername());
-		profileView.paintPlaylist(getPlaylistList());
-		profileView.paintFriendlist(getFriendList());
-		profileView.setInfo(getSongInfo());
-		containerWidget.setWidget(profileView.asWidget());
 	}
 
 	/**
@@ -84,37 +82,34 @@ public class ProfileActivity extends AbstractActivity implements
 		clientFactory.getPlaceController().goTo(place);
 	}
 
-   /* (non-Javadoc)
-    * @see it.unipd.netmus.client.ui.ProfileView.Presenter#logout()
-    */
+
    @Override
    public void logout() {
       
       AsyncCallback<Void> callback = new AsyncCallback<Void>() {
-
          @Override
          public void onFailure(Throwable caught) {
-            logger.info("errore logout");
+            logger.info("Logout Error");
          }
 
          @Override
          public void onSuccess(Void result) {
-            logger.info("Logout effettuato con successo");
-            goTo(new LoginPlace(""));
+            logger.info("Logout user");
             
-         // bisogna togliere applet bar se caricata
+            // hide and disable the applet
             ABF.get().appletBarOFF();
+            
+            goTo(new LoginPlace(""));
          }
       };
       
       try {
          loginServiceSvc.logout(callback);
       } catch (Exception e) {
-         // che tipo di ecc ??
       }
-      
    }
 
+   
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
