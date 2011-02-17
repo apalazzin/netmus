@@ -21,7 +21,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class LoginPlace extends Place {
 	   
 	   private String user;
-	   private String password;
+	   private String passwordHash;
 	   private String error;
 	   private LoginType loginType;
 	   
@@ -30,10 +30,10 @@ public class LoginPlace extends Place {
 	      this.user = token;
 	   }
 
-	   public LoginPlace(String user, String password, String error, LoginType loginType)
+	   public LoginPlace(String user, String passwordHash, String error, LoginType loginType)
 	   {
 	      this.user = user;
-	      this.password = password;
+	      this.passwordHash = passwordHash;
 	      this.error = error;
 	      this.loginType = loginType;
 	   }
@@ -45,7 +45,7 @@ public class LoginPlace extends Place {
 	   
 	   public String getPassword()
 	   {
-		   return password;
+		   return passwordHash;
 	   }
 	   
 	   public String getError()

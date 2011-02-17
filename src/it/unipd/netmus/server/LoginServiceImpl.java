@@ -57,7 +57,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			throw new WrongLoginException("L'utente non esiste");
 		}
 		else {
-			if (login.getPassword().contentEquals(userAccount.getPassword())) {
+			if (login.getPassword().equals(userAccount.getPassword())) {
 				//correct password
 				return;
 			}
@@ -93,7 +93,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public void logout() {
 	    HttpSession session = getThreadLocalRequest().getSession();
-	    Cookies.removeCookie("sid", "/");
+	    //Cookies.removeCookie("sid", "/");
 	    session.invalidate();
 	}
 

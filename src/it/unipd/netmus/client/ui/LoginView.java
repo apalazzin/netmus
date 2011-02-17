@@ -4,7 +4,6 @@
 package it.unipd.netmus.client.ui;
 
 import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
-import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -21,15 +20,15 @@ public interface LoginView extends IsWidget {
    
    void setPresenter(Presenter listener);
    void setUser(String user);
-   void setPassword(String password);
+   void setPassword(String passwordHash);
    void setError(String error);
    void setLoginType(LoginType loginType);
 
    public interface Presenter
    {
       void goTo(Place place);
-      void sendLogin(LoginDTO login) throws LoginException;
-      void sendRegistration(LoginDTO login, String confirmPassword) throws RegistrationException;
+      void sendLogin(String login, String password) throws LoginException;
+      void sendRegistration(String login, String password, String confirmPassword) throws RegistrationException;
       enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION, GOOGLELOGIN};
    }
 }

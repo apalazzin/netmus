@@ -69,10 +69,10 @@ public class LoginHelper extends RemoteServiceServlet {
 	        session.setAttribute("userLoggedIn", user.getUser());
 	        
 	        // create a cookie for this section
-	        String sid = session.getId();
-	        final long DURATION = 1000 * 60 * 60 * 24;
-	        Date expires = new Date(System.currentTimeMillis() + DURATION);
-	        Cookies.setCookie("sid", sid, expires, null, "/", false);
+	        //String sid = session.getId();
+	        //final long DURATION = 1000 * 60 * 60 * 24;
+	        //Date expires = new Date(System.currentTimeMillis() + DURATION);
+	        //Cookies.setCookie("sid", sid, expires, null, "/", false);
 	        
 	     } catch (Exception e) {
 	        logger.severe("Eccezione loginStarts");

@@ -4,7 +4,6 @@
 package it.unipd.netmus.client.ui;
 
 import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
-import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -83,9 +82,9 @@ public class LoginViewImpl extends Composite implements LoginView {
    void handleClickLogin(ClickEvent e) {
 	 try {
 		 if(type != LoginType.NETMUSREGISTRATION)
-			 listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
+			 listener.sendLogin(user.getText(), password.getText());
 		 else
-			 listener.sendRegistration(new LoginDTO(user.getText(),password.getText()),c_password.getText());
+			 listener.sendRegistration(user.getText(), password.getText(), c_password.getText());
 	 } catch (LoginException e1) {
 		 e1.printStackTrace();
 	 } catch (RegistrationException e2) {
@@ -98,9 +97,9 @@ public class LoginViewImpl extends Composite implements LoginView {
        if (e.getNativeEvent().getKeyCode()==KeyCodes.KEY_ENTER) {
            try {
                if(type != LoginType.NETMUSREGISTRATION)
-                   listener.sendLogin(new LoginDTO(user.getText(),password.getText()));
+                   listener.sendLogin(user.getText(), password.getText());
                else
-                   listener.sendRegistration(new LoginDTO(user.getText(),password.getText()),c_password.getText());
+                   listener.sendRegistration(user.getText(), password.getText(), c_password.getText());
            } catch (LoginException e1) {
                e1.printStackTrace();
            } catch (RegistrationException e2) {

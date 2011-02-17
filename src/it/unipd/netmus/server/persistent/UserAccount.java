@@ -30,9 +30,9 @@ public class UserAccount {
    
    @Key public String user;
    
-   @Child private MusicLibrary MUSICLIBRARY = new MusicLibrary(this);
+   //@Child private MusicLibrary MUSICLIBRARY = new MusicLibrary(this);
    
-   private String password;
+   private String passwordHash;
    
    private String firstName;
    
@@ -63,9 +63,9 @@ public class UserAccount {
    public UserAccount() {
    }
    
-   public UserAccount(String user, String password) { 
+   public UserAccount(String user, String passwordHash) { 
        this.user = user;
-       this.password = password;
+       this.passwordHash = passwordHash;
    }
    
    public static UserAccount loadUserWithLibrary(String user) {
@@ -79,7 +79,7 @@ public class UserAccount {
    }
    
    public LoginDTO toLoginDTO() {
-       LoginDTO tmp = new LoginDTO(this.user, this.password);
+       LoginDTO tmp = new LoginDTO(this.user, this.passwordHash);
        tmp.setLastSessionId(this.lastSessionId);
        return tmp;
    }
@@ -130,16 +130,16 @@ public class UserAccount {
        this.user = user;
    }
 
-   public MusicLibrary getMUSICLIBRARY() {
-    return MUSICLIBRARY;
-   }
+   //public MusicLibrary getMUSICLIBRARY() {
+   // return MUSICLIBRARY;
+   //}
 
    public String getPassword() {
-       return password;
+       return passwordHash;
    }
 
-   public void setPassword(String password) {
-       this.password = password;
+   public void setPassword(String passwordHash) {
+       this.passwordHash = passwordHash;
    }
 
    public String getFirstName() {

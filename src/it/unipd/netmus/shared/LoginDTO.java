@@ -11,16 +11,16 @@ package it.unipd.netmus.shared;
 public class LoginDTO implements GenericDTO {
 
 	  private String user;
-	  private String password;
+	  private String passwordHash;
 	  private String lastSessionId;
 	  
 	  public LoginDTO(){
 		  
 	  }
 	  
-	  public LoginDTO(String user, String password) {
+	  public LoginDTO(String user, String passwordHash) {
 		  setUser(user);
-		  setPassword(password);
+		  setPassword(passwordHash);
 	  }
 	  
 	  public void setUser(String user) {
@@ -31,12 +31,12 @@ public class LoginDTO implements GenericDTO {
 		  return user;
 	  }
 	  
-	  public void setPassword(String password) {
-		  this.password = password;
+	  public void setPassword(String passwordHash) {
+		  this.passwordHash = passwordHash;
 	  }
 	  
 	  public String getPassword() {
-		  return password;
+		  return passwordHash;
 	  }
 
 	  public void setLastSessionId(String lastSessionId) {
