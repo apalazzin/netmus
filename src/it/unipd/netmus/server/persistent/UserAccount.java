@@ -112,7 +112,7 @@ public class UserAccount {
        return tmp;
    }
    
-   public UserAccount findSessionUser(String sessionId) {
+   public static UserAccount findSessionUser(String sessionId) {
        Iterator<UserAccount> user = ODF.get().find().type(UserAccount.class)
        .addFilter("lastSessionId", FilterOperator.EQUAL, sessionId)
        .returnResultsNow();
