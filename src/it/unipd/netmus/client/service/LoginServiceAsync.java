@@ -30,4 +30,6 @@ public interface LoginServiceAsync {
 
 	void getAllUsers(AsyncCallback<ArrayList<UserSummaryDTO>> callback);
 
+    void restartSession(String session_id, AsyncCallback<Void> callback);
+
 }

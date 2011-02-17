@@ -3,6 +3,7 @@
  */
 package it.unipd.netmus.server;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.server.persistent.UserAccount;
@@ -10,6 +11,7 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * @author ValterTexasGroup
@@ -65,6 +67,13 @@ public class LoginHelper extends RemoteServiceServlet {
 	  static public void loginStarts(HttpSession session, UserAccount user) {
 	     try {
 	        session.setAttribute("userLoggedIn", user.getUser());
+	        
+	        // create a cookie for this section
+	        String sid = session.getId();
+	        final long DURATION = 1000 * 60 * 60 * 24;
+	        Date expires = new Date(System.currentTimeMillis() + DURATION);
+	        Cookies.setCookie("sid", sid, expires, null, "/", false);
+	        
 	     } catch (Exception e) {
 	        logger.severe("Eccezione loginStarts");
 	     }

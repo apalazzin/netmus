@@ -30,6 +30,8 @@ public interface LoginService extends RemoteService {
 	
 	void logout();
 	
+	void restartSession(String session_id);
+	
 	/*METODO USATO PER TESTING*/
 	ArrayList<UserSummaryDTO> getAllUsers();
 

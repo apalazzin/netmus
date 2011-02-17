@@ -19,6 +19,7 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -91,7 +92,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void logout() {
-	    getThreadLocalRequest().getSession().invalidate();
+	    HttpSession session = getThreadLocalRequest().getSession();
+	    Cookies.removeCookie("sid", "/");
+	    session.invalidate();
 	}
 
 	/*METODO USATO PER TESTING*/
@@ -106,5 +109,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			allUsersDTO.add(tmp.toUserSummaryDTO());
 		return allUsersDTO;
 	}
+
+    @Override
+    public void restartSession(String session_id) {
+        // da implementare per recuparare la sessione
+    }
 
 }
