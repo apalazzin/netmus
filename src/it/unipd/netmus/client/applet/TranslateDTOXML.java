@@ -45,34 +45,37 @@ public class TranslateDTOXML {
 		
 		//create the new song node
 		Element song = document.createElement(SONG_NAME);
-		song.setAttribute(FILE_NAME, brano.getFile());
+		//append the filename
+		Element fileName = document.createElement(FILE_NAME);
+		fileName.appendChild(document.createCDATASection(brano.getFile()));
+		song.appendChild(fileName);
 		//fill the new node with data.
 		Element albumTitle = document.createElement(ALBUMTITLE_NAME);
-		albumTitle.appendChild(document.createTextNode(brano.getAlbum()));
+		albumTitle.appendChild(document.createCDATASection(brano.getAlbum()));
 		song.appendChild(albumTitle);
 		
 		Element authorComposer = document.createElement(AUTHORCOMPOSER_NAME);
-		authorComposer.appendChild(document.createTextNode(brano.getComposer()));
+		authorComposer.appendChild(document.createCDATASection(brano.getComposer()));
 		song.appendChild(authorComposer);
 		
 		Element leadArtist = document.createElement(LEADARTIST_NAME);
-		leadArtist.appendChild(document.createTextNode(brano.getAuthor()));
+		leadArtist.appendChild(document.createCDATASection(brano.getAuthor()));
 		song.appendChild(leadArtist);
 		
 		Element songGenre = document.createElement(SONGGENRE_NAME);
-		songGenre.appendChild(document.createTextNode(brano.getGenre()));
+		songGenre.appendChild(document.createCDATASection(brano.getGenre()));
 		song.appendChild(songGenre);
 		
 		Element songTitle = document.createElement(SONGTITLE_NAME);
-		songTitle.appendChild(document.createTextNode(brano.getTitle()));
+		songTitle.appendChild(document.createCDATASection(brano.getTitle()));
 		song.appendChild(songTitle);
 		
 		Element trackNumber = document.createElement(TRACKNUMBER_NAME);
-		trackNumber.appendChild(document.createTextNode(brano.getTrackNumber()));
+		trackNumber.appendChild(document.createCDATASection(brano.getTrackNumber()));
 		song.appendChild(trackNumber);
 		
 		Element year = document.createElement(YEAR_NAME);
-		year.appendChild(document.createTextNode(brano.getYear()));
+		year.appendChild(document.createCDATASection(brano.getYear()));
 		song.appendChild(year);
 		
 		//add the new node to the tree
@@ -86,11 +89,11 @@ public class TranslateDTOXML {
 	
 	private SongDTO generateDTO(Element node){
 		SongDTO song = new SongDTO();
-		song.setFile(node.getAttribute(FILE_NAME));
 		while (node.hasChildNodes()){
 			Element child = (Element) node.getFirstChild();
 			String name = child.getNodeName();
-			if (name.equals(ALBUMTITLE_NAME)) song.setAlbum(child.getFirstChild().getNodeValue());
+			if (name.equals(FILE_NAME)) song.setFile(child.getFirstChild().getNodeValue());
+			else if (name.equals(ALBUMTITLE_NAME)) song.setAlbum(child.getFirstChild().getNodeValue());
 			else if (name.equals(AUTHORCOMPOSER_NAME)) song.setComposer(child.getFirstChild().getNodeValue());
 			else if (name.equals(LEADARTIST_NAME)) song.setAuthor(child.getFirstChild().getNodeValue());
 			else if (name.equals(SONGGENRE_NAME)) song.setGenre(child.getFirstChild().getNodeValue());
