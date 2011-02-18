@@ -8,6 +8,7 @@ import java.util.List;
 import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.dom.client.Style;
@@ -26,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -56,10 +58,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiField Label utente;
    @UiField Label numero_brani;
+   @UiField Label titolo_playlist;
    
-   @UiField(provided=true) final CellTable<Song> catalogo; 
+   @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
-   @UiField HTMLPanel container_catalogo;
+   @UiField HTMLPanel catalogo_container;
+   @UiField HTMLPanel playlist_container;
+   @UiField HTMLPanel playlist_contenuto;
    @UiField HTMLPanel main_panel;
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
@@ -80,6 +85,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image star3;
    @UiField Image star4;
    @UiField Image star5;
+   @UiField Image chiudi_playlist;
    
    
 ///////////////////////////////////////////////////////
@@ -131,8 +137,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 				int catalogo_h = main_panel.getOffsetHeight();
 				left_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
 				main_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
-				container_catalogo.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
-				
+				catalogo_container.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
+				playlist_container.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
+                
 				if(event.getWidth()<1200) {
 					
 					search.getElement().getStyle().setOpacity(0);
@@ -217,6 +224,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   autoreColumn.setSortable(true);
 	   // la aggiunge al catalogo
 	   catalogo.addColumn(albumColumn, "Album");
+	   
+	   //final SingleSelectionModel<Song> selectionModel = new SingleSelectionModel<Song>();
+	   //catalogo.setSelectionModel(selectionModel);
+	   
 
 	   
 	   // Create a data provider.
@@ -278,7 +289,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			   	//ridimensiono il layout in base alla dimensione della finestra del browser
 				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
 				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
-				container_catalogo.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
+				catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
+				playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
 
 		   }
 	   };
@@ -401,6 +413,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   star4.setUrl("images/starbw.png");
 	   star5.setUrl("images/starbw.png");
    }
+
+   @UiHandler("chiudi_playlist")
+   void handleClickChiudiPlaylist(ClickEvent e) {
+      closePlaylist();
+   }
+   
+   @UiHandler("chiudi_playlist")
+   void handleMouseOverChiudiPlaylist(MouseOverEvent e) {
+      chiudi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
    
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -429,11 +451,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 		   	Label tmpTxt = new Label(lista[k]);
 			tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+	        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+	        
 			Image tmpImg = new Image("images/playlist.jpg");
 			tmpImg.setWidth("25px");
 			HorizontalPanel tmpPnl = new HorizontalPanel();
 			tmpPnl.add(tmpImg);
 			tmpPnl.add(tmpTxt);
+			
+			tmpTxt.addClickHandler(new ClickHandler() { 
+			    
+                @Override
+                public void onClick(ClickEvent event) {
+                    viewPlaylist(((Label)event.getSource()).getText());
+                }
+			    
+			});
+			
 			
 			playlists.add(tmpPnl);
 	   }
@@ -470,9 +504,37 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    public void setUser(String username) {
 	   utente.setText(username);
 	
-}
+   }
 
 
+   @Override
+   public void viewPlaylist(String titolo) {
+       
+      titolo_playlist.setText(titolo);
+      catalogo_container.getElement().getStyle().setWidth(80, Style.Unit.PCT);
+      playlist_container.getElement().getStyle().setWidth(20, Style.Unit.PCT);
+      //playlist_container.getElement().getStyle().setOpacity(1);      
+      
+      Timer timerPlaylist = new Timer() {
+          public void run() {
+              playlist_contenuto.getElement().getStyle().setOpacity(1);      
+          }     
+      };
+      
+      timerPlaylist.schedule(400);
+      
+   }
+
+   @Override
+   public void closePlaylist() {
+       
+      catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+      playlist_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
+      //playlist_container.getElement().getStyle().setOpacity(0);
+      playlist_contenuto.getElement().getStyle().setOpacity(0);
+
+      
+   }
 
    
 }

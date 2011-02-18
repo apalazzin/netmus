@@ -55,6 +55,7 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(String result) {
+                
                 ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
@@ -65,6 +66,11 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.paintFriendlist(getFriendList());
                 profileView.setInfo(getSongInfo());
                 containerWidget.setWidget(profileView.asWidget());
+                
+                
+                //CHIAMTE TEMPORANEEE DI TEST, DA ELIMINARE
+                //profileView.viewPlaylist("Tokio Hotel");
+                ///////////////////////////////////////////
                 
                //load the applet bar, if not active yet
                 ABF.get().appletBarON();
