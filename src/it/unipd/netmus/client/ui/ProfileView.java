@@ -20,7 +20,10 @@ public interface ProfileView extends IsWidget {
    void setPresenter(Presenter listener);
    void setNumeroBrani(String numero);
    void setUser(String username);
+   //riempie la lista delle playlist
    void paintPlaylist(String[] lista);
+   // riempie la singola playlist delle sue canzoni
+   void paintPlaylistSongs(String[][] lista);
    void paintFriendlist(String[] lista);
    void setInfo(String testo);
    //visualizza la playlist scelta
@@ -47,6 +50,9 @@ public interface ProfileView extends IsWidget {
 
       //restituisce il titolo della canzone in ascolto
       String getSongInfo(); 
+      
+      //restituisce le canzoni con i relativi album di una data playlist
+      String[][] getPlaylistSongs(String titoloPlaylist);
 
    
    }

@@ -3,8 +3,11 @@
  */
 package it.unipd.netmus.client.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
+
 import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,6 +20,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -51,6 +55,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private Presenter listener;
    private String name;
    
+   private CellTable lista_canzoni;
+   
    //elementi uiBinder
 
    @UiField Anchor logout;
@@ -65,6 +71,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel catalogo_container;
    @UiField HTMLPanel playlist_container;
    @UiField HTMLPanel playlist_contenuto;
+   @UiField HTMLPanel playlist_songs;
    @UiField HTMLPanel main_panel;
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
@@ -91,6 +98,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 
+   
+   //Estensione necessarria x la configurazione tramite CSS della cellTabel
+   public interface MyCellTableResources extends CellTable.Resources {
+
+       public interface CellTableStyle extends CellTable.Style {};
+
+       @Source({"css/CellTable.css"})
+       CellTableStyle cellTableStyle();
+       
+   }
+   MyCellTableResources resource = GWT.create( MyCellTableResources.class);
+   //Estensione necessarria x la configurazione tramite CSS della cellTabel
+   
+   
    
    //classe interna che rappresenta un brano
    private static class Song {
@@ -182,9 +203,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	  
 	   
 	   //costruisco la componente widget x il catalogo delle canzoni
-	   catalogo = new CellTable<Song>();
+	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
 	   catalogo.setWidth("100%");
-	   catalogo.setPageSize(100000);
+//	   catalogo.setPageSize(100000);
 	  
 	   initWidget(uiBinder.createAndBindUi(this));
 
@@ -446,7 +467,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    //riempie la lista delle playlists
    @Override
    public void paintPlaylist(String[] lista) {
-	   
+	          
 	   for(int k=0; k< lista.length; k++) {
 
 		   	Label tmpTxt = new Label(lista[k]);
@@ -509,11 +530,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @Override
    public void viewPlaylist(String titolo) {
+      
+      paintPlaylistSongs(listener.getPlaylistSongs(titolo));
        
       titolo_playlist.setText(titolo);
       catalogo_container.getElement().getStyle().setWidth(80, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(20, Style.Unit.PCT);
-      //playlist_container.getElement().getStyle().setOpacity(1);      
+      
       
       Timer timerPlaylist = new Timer() {
           public void run() {
@@ -530,10 +553,79 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
-      //playlist_container.getElement().getStyle().setOpacity(0);
       playlist_contenuto.getElement().getStyle().setOpacity(0);
 
       
+   }
+
+   
+   //riempie la lista delle playlists
+   @Override
+   public void paintPlaylistSongs(String[][] lista) {
+
+       playlist_songs.getElement().setInnerHTML("");
+           
+       class PlaylistSong {
+
+           private final String titolo;
+           private final String album;
+           
+           public PlaylistSong(String titolo, String album) {
+               this.titolo = titolo;
+               this.album = album;
+
+           }
+       }
+       
+       List<PlaylistSong> canzoni = new ArrayList<PlaylistSong>();
+       
+       for(int k=0; k<=lista.length; k++) {
+           
+           canzoni.add(new PlaylistSong(lista[0][k], lista[1][k]));
+
+       }
+       
+       
+       lista_canzoni = new CellTable<PlaylistSong>(Integer.MAX_VALUE, resource);
+       lista_canzoni.setWidth("100%", true);
+
+       //crea la colonna titolo
+       TextColumn<PlaylistSong> titoloColumn = new TextColumn<PlaylistSong>() {
+           @Override
+           public String getValue(PlaylistSong song) {
+               return song.titolo;
+           }
+       };
+       //la rende ordinabile
+       titoloColumn.setSortable(true);
+       // la aggiunge al catalogo
+       lista_canzoni.addColumn(titoloColumn, "Titolo");
+
+       
+       //crea la colonna Album
+       TextColumn<PlaylistSong> albumColumn = new TextColumn<PlaylistSong>() {
+           @Override
+           public String getValue(PlaylistSong song) {
+               return song.album;
+           }
+       };
+       //la rende ordinabile
+       albumColumn.setSortable(true);
+       // la aggiunge al catalogo
+       lista_canzoni.addColumn(albumColumn, "Album");
+
+       // Create a data provider.
+       ListDataProvider<PlaylistSong> dataProvider = new ListDataProvider<PlaylistSong>();
+       // Connect the table to the data provider.
+       dataProvider.addDataDisplay(lista_canzoni);
+       // Add the data to the data provider, which automatically pushes it to the
+       // widget.
+       List<PlaylistSong> list = dataProvider.getList();
+       for (PlaylistSong song : canzoni) {
+           list.add(song);
+       }
+       playlist_songs.add(lista_canzoni);
+       
    }
 
    
