@@ -122,6 +122,10 @@ public class AppletBar {
     	//aggiornare la grafica con le nuove info
     }
     
+    private void status(String status){
+    	//modifica le informazioni di stato sulla grafica
+    }
+    
     private void translateXML(String result) {
         List<SongDTO> temp = translator.XMLToDTO(result);
     }
@@ -136,6 +140,9 @@ public class AppletBar {
     };
     $wnd.scanStatus = function (actual, total) {
     x.@it.unipd.netmus.client.applet.AppletBar::scanningStatus(II)(actual, total);
+    };
+    $wnd.status = function (status) {
+    x.@it.unipd.netmus.client.applet.AppletBar::status(Ljava/lang/String;)(status);
     };
     }-*/;
     // mancano parametri sopra in ingresso Stringa XML da applet
