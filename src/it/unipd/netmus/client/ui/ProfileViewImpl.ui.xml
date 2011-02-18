@@ -70,6 +70,9 @@
 				<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
 				<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
 				<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
+				<g:HTMLPanel ui:field="playlist_songs">
+				
+				</g:HTMLPanel>
 				</g:HTMLPanel>
 				
 				
