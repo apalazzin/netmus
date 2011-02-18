@@ -23,7 +23,10 @@ public interface ProfileView extends IsWidget {
    void paintPlaylist(String[] lista);
    void paintFriendlist(String[] lista);
    void setInfo(String testo);
-
+   //visualizza la playlist scelta
+   void viewPlaylist(String playlist_name);
+   //chiude il gestore della playlist
+   void closePlaylist();
    
    public interface Presenter
    {
