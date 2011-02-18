@@ -54,7 +54,7 @@ public class ProfileActivity extends AbstractActivity implements
             }
 
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(String user) {
                 
                 ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
@@ -73,7 +73,7 @@ public class ProfileActivity extends AbstractActivity implements
                 ///////////////////////////////////////////
                 
                //load the applet bar, if not active yet
-                ABF.get().appletBarON();
+                ABF.get(user,true).appletBarON();
             }
         };
         
@@ -108,7 +108,7 @@ public class ProfileActivity extends AbstractActivity implements
             Cookies.removeCookie("sid");
             
             // hide and disable the applet
-            ABF.get().appletBarOFF();
+            ABF.get(user,true).appletBarOFF();
             
             goTo(new LoginPlace(""));
          }
