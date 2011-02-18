@@ -3,6 +3,11 @@
  */
 package it.unipd.netmus.client.applet;
 
+import it.unipd.netmus.shared.SongDTO;
+
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -18,24 +23,31 @@ import com.google.gwt.user.client.ui.TextBox;
 public class AppletBar {
     
     private boolean visible = false;
-    
-    private Label title = new Label("Device Scanner BAR");
+    private AppletConstants constants = GWT.create(AppletConstants.class);
+    private Label title = new Label(constants.title());
     private Anchor onOff = new Anchor();
     private Anchor rescan = new Anchor(); // VISIBILE FINITA LA SCANSIONE
     private TextBox status = new TextBox();
     private HTML applet = new HTML();
+    private String user;
+    private boolean state;
+    private TranslateDTOXML translator = new TranslateDTOXML();
     
-    public AppletBar() {
+    public AppletBar(String user, boolean state) {
+    	
+    	this.user=user.replaceAll("@\\S*", "");
+    	this.state=state;
         
         makeNativeFunction(this);
 
         title.setSize("150px", "14px");
         
         onOff.setSize("50px","14px");
-        onOff.setText("Attiva");
+        if (state) onOff.setText(constants.appletEnabled());
+        else onOff.setText(constants.appletDisabled());
         
         rescan.setSize("50px", "10px");
-        rescan.setText("Riscansiona");
+        rescan.setText(constants.rescan());
         
         status.setSize("180px", "10px");
 
@@ -99,10 +111,19 @@ public class AppletBar {
      * per mandare user e stato iniziale e avviare il thread
      */
     private void sendStarts() {
+    	sendStartsJSNI(user,state);
     }
     
-    private void translateXML() {
-        
+    private native void sendStartsJSNI( String user, boolean state )/*-{
+    	$doc.getElementById('netmus_applet').letsGO(user,state);
+    }-*/;
+    
+    private void scanningStatus(int actual, int total){
+    	//aggiornare la grafica con le nuove info
+    }
+    
+    private void translateXML(String result) {
+        List<SongDTO> temp = translator.XMLToDTO(result);
     }
     
     // metodo per pubblicare le funzioni native di linking
@@ -110,8 +131,11 @@ public class AppletBar {
     $wnd.getStarts = function () {
     x.@it.unipd.netmus.client.applet.AppletBar::sendStarts()();
     };
-    $wnd.scanResult = function () {
-    x.@it.unipd.netmus.client.applet.AppletBar::translateXML()();
+    $wnd.scanResult = function (result) {
+    x.@it.unipd.netmus.client.applet.AppletBar::translateXML(Ljava/lang/String;)(result);
+    };
+    $wnd.scanStatus = function (actual, total) {
+    x.@it.unipd.netmus.client.applet.AppletBar::scanningStatus(II)(actual, total);
     };
     }-*/;
     // mancano parametri sopra in ingresso Stringa XML da applet
