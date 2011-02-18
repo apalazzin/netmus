@@ -55,6 +55,7 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(String result) {
+                
                 ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
