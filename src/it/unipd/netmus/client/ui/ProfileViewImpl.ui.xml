@@ -66,11 +66,13 @@
 				
 				<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
 				
-				<div style="top:0px; left: 0px; position: absolute; border: 0px solid #FF0000; height: 100%; width: 100%; ">
 				
+				<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
 				<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
 				<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
-				</div>
+				</g:HTMLPanel>
+				
+				
 				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">

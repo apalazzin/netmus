@@ -64,6 +64,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel container;
    @UiField HTMLPanel catalogo_container;
    @UiField HTMLPanel playlist_container;
+   @UiField HTMLPanel playlist_contenuto;
    @UiField HTMLPanel main_panel;
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
@@ -512,7 +513,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       titolo_playlist.setText(titolo);
       catalogo_container.getElement().getStyle().setWidth(80, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(20, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setOpacity(1);
+      //playlist_container.getElement().getStyle().setOpacity(1);      
+      
+      Timer timerPlaylist = new Timer() {
+          public void run() {
+              playlist_contenuto.getElement().getStyle().setOpacity(1);      
+          }     
+      };
+      
+      timerPlaylist.schedule(400);
       
    }
 
@@ -521,7 +530,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
-      playlist_container.getElement().getStyle().setOpacity(0);
+      //playlist_container.getElement().getStyle().setOpacity(0);
+      playlist_contenuto.getElement().getStyle().setOpacity(0);
+
       
    }
 
