@@ -66,6 +66,11 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setInfo(getSongInfo());
                 containerWidget.setWidget(profileView.asWidget());
                 
+                
+                //CHIAMTE TEMPORANEEE DI TEST, DA ELIMINARE
+                //profileView.viewPlaylist("Tokio Hotel");
+                ///////////////////////////////////////////
+                
                //load the applet bar, if not active yet
                 ABF.get().appletBarON();
             }

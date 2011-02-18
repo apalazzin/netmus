@@ -39,6 +39,18 @@
 	transition: right 0.3s ease-in-out;
 	}
 	
+	
+	
+.chiudi_playlist {
+	
+	position: absolute;
+	top: 0px;
+	right: 5px;
+	
+	 
+	}
+	
+	
 
 .classifica {
 	
@@ -47,6 +59,57 @@
 	left: 265px;
 	
 	}
+
+
+.catalogo {
+	
+	
+}
+
+.catalogo_container {
+	
+	min-height: 240px;    
+	
+	margin-top: 100px;
+	margin-bottom: 100px;
+	
+	
+	
+	width: 100%;
+	height: 0px;
+	border-bottom: 2px solid #DDDDDD;
+	border-top: 2px solid #DDDDDD;
+	
+	float: left;
+	overflow: auto;
+	
+	-webkit-transition: width 0.5s ease-in-out;
+	-moz-transition: width 0.5s ease-in-out;
+	-o-transition: width 0.5s ease-in-out;
+	transition: width 0.5s ease-in-out;
+	
+	
+	}
+
+.container {
+	
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	border: 0px solid #FF0000;
+	
+	overflow: hidden;
+	
+	opacity: 1;
+	
+	-webkit-transition: opacity 1.0s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: opacity 1.0s ease,  height 1.0s ease-in-out;
+	-o-transition: opacity 1.0s ease-in-out,  height 1.0s ease-in-out;
+	transition: opacity 1.0s ease-in-out, height 1.0s ease-in-out;
+		
+}
+
+
 
 .cover {
 	
@@ -112,49 +175,6 @@
 	text-align: left;
 }
 
-.catalogo {
-	
-	width: 300px;
-	height: 200px;
-	
-}
-
-.catalogo_container {
-	
-	min-height: 240px;    
-	
-	margin-top: 100px;
-	margin-bottom: 100px;
-	
-	
-	
-	width: 100%;
-	height: 0px;
-	border-bottom: 2px solid #DDDDDD;
-	border-top: 2px solid #DDDDDD;
-	
-	overflow: auto;
-	
-	
-	}
-
-.container {
-	
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	border: 0px solid #FF0000;
-	
-	overflow: hidden;
-	
-	opacity: 1;
-	
-	-webkit-transition: opacity 1.0s ease-in-out, height 0.3s ease-in-out;
-	-moz-transition: opacity 1.0s ease,  height 1.0s ease-in-out;
-	-o-transition: opacity 1.0s ease-in-out,  height 1.0s ease-in-out;
-	transition: opacity 1.0s ease-in-out, height 1.0s ease-in-out;
-		
-}
 
 
 .fw {
@@ -260,6 +280,28 @@
 	max-height: 150px;
 	overflow: auto;
 	
+	
+	}
+	
+	
+.playlist_container {
+	
+	margin-top: 100px;
+	min-height: 240px;    		
+	width: 0px;
+	height: 0px;
+	border-bottom: 2px solid #DDDDDD;
+	border-top: 2px solid #DDDDDD;
+	float: left;
+	text-align: left;
+		
+	opacity: 0;
+	position: relative;
+	
+	-webkit-transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-moz-transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	-o-transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 	
 	}
 
@@ -368,13 +410,36 @@
 
 .title {
 	
-	color: green;
+	color: #38D12F;
 	font-family: Verdana;
 	font-size: 12px;
 	font-weight: bold;
 	margin-bottom: 8px;
 	margin-top: 10px;
 	
+	}
+
+.title {
+	
+	color: #38D12F;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	margin-top: 10px;
+	
+	}
+
+.title_playlist {
+	
+	color: #666666;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	margin-top: 3px;
+	margin-left: 10px;
+		
 	}
 
 
