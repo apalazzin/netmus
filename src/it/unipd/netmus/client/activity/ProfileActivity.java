@@ -153,4 +153,12 @@ public class ProfileActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		return "Nessun brano in ascolto.";
 	}
+
+    @Override
+    public String[][] getPlaylistSongs(String titoloPlaylist) {
+        // TODO Auto-generated method stub
+        String[][] lista = {{"Monsoon", "ForeverNow", "Der Letzte Tag"},{"Scream","Humanoid","Schrei so laut du kannst"}};
+        return lista; 
+        
+    }
 }
