@@ -61,7 +61,7 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setPresenter(ProfileActivity.this);
                 
                 profileView.setNumeroBrani(getLibrarySize());
-                profileView.setUser(getUsername());
+                profileView.setUser(user);
                 profileView.paintPlaylist(getPlaylistList());
                 profileView.paintFriendlist(getFriendList());
                 profileView.setInfo(getSongInfo());
