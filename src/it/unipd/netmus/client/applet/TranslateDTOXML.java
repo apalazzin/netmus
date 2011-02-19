@@ -60,7 +60,7 @@ public class TranslateDTOXML {
 		
 		Element leadArtist = document.createElement(LEADARTIST_NAME);
 		leadArtist.appendChild(document.createTextNode(brano.getArtist()));
-		leadArtist.appendChild(document.createCDATASection(brano.getAuthor()));
+		leadArtist.appendChild(document.createCDATASection(brano.getArtist()));
 		song.appendChild(leadArtist);
 		
 		Element songGenre = document.createElement(SONGGENRE_NAME);
