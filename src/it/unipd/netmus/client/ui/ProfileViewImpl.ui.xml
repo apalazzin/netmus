@@ -64,35 +64,48 @@
 				
 				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
 				
-				<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
-				
-				
-				<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
-				<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
-				<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
-				<g:HTMLPanel ui:field="playlist_songs">
-				
-				</g:HTMLPanel>
-				</g:HTMLPanel>
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
+					
+					
+					<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
+					
+						<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
+						<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
+						
+						<g:HTMLPanel ui:field="playlist_songs">					
+						
+						</g:HTMLPanel>
+						
+					</g:HTMLPanel>
+						<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px;"></div>
+						<g:Image ui:field="aggiungi_branoplaylist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
+						<g:Image ui:field="rimuovi_branoplaylist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
 				
 				
 				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
 					<g:Image ui:field="play_youtube" url="images/play.png" styleName="{style.playYoutube}" />
-					<img src="images/youtube.png" style="width: 110px; margin-top: 10px" />	
+					<g:Image ui:field="logo_youtube" url="images/youtube.png" styleName="{style.logo_youtube}" />
+					<g:HTMLPanel ui:field="info_youtube" styleName="{style.info_youtube}">Hurricanes And Suns. Tokio Hotel</g:HTMLPanel>
+					<g:Label ui:field="info_youtube_link" styleName="{style.info_youtube_link}">http://www.youtube.com/watch?v=yNBFkANEd5M</g:Label>	
+					
+					<g:HTMLPanel ui:field="youtube_appendice" styleName="{style.youtube_appendice}"></g:HTMLPanel>
+					<g:Image ui:field="chiudi_youtube" styleName="{style.chiudi_youtube}" url="images/close_silver.jpg"/>
 				</g:HTMLPanel>
 			
-				<g:HTMLPanel styleName="{style.classifica}">
+				<g:HTMLPanel ui:field="classifica" styleName="{style.classifica}">
 				<g:Image ui:field="star1" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star2" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star3" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
+				
+				<span style="position: absolute; top: -20px; left: 0px; font-size: 12px; font-family: Verdana; font-weight: bold;">Classifica</span>
+				<div style="position: absolute; bottom: -3px; left: 0px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
+				
 				</g:HTMLPanel>
 				
-				<span style="position: absolute; bottom: 50px; left: 265px; font-size: 12px; font-family: Verdana; font-weight: bold;">Classifica</span>
-				<div style="position: absolute; bottom: 21px; left: 265px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
 
 				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
 				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
