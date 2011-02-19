@@ -59,7 +59,8 @@ public class TranslateDTOXML {
 		song.appendChild(authorComposer);
 		
 		Element leadArtist = document.createElement(LEADARTIST_NAME);
-		leadArtist.appendChild(document.createCDATASection(brano.getAuthor()));
+		leadArtist.appendChild(document.createTextNode(brano.getArtist()));
+		leadArtist.appendChild(document.createCDATASection(brano.getArtist()));
 		song.appendChild(leadArtist);
 		
 		Element songGenre = document.createElement(SONGGENRE_NAME);
@@ -95,7 +96,7 @@ public class TranslateDTOXML {
 			if (name.equals(FILE_NAME)) song.setFile(child.getFirstChild().getNodeValue());
 			else if (name.equals(ALBUMTITLE_NAME)) song.setAlbum(child.getFirstChild().getNodeValue());
 			else if (name.equals(AUTHORCOMPOSER_NAME)) song.setComposer(child.getFirstChild().getNodeValue());
-			else if (name.equals(LEADARTIST_NAME)) song.setAuthor(child.getFirstChild().getNodeValue());
+			else if (name.equals(LEADARTIST_NAME)) song.setArtist(child.getFirstChild().getNodeValue());
 			else if (name.equals(SONGGENRE_NAME)) song.setGenre(child.getFirstChild().getNodeValue());
 			else if (name.equals(SONGTITLE_NAME)) song.setTitle(child.getFirstChild().getNodeValue());
 			else if (name.equals(TRACKNUMBER_NAME)) song.setTrackNumber(child.getFirstChild().getNodeValue());

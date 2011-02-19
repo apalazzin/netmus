@@ -3,10 +3,7 @@
  */
 package it.unipd.netmus.client.service;
 
-import java.util.ArrayList;
-
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -25,8 +22,6 @@ public interface LoginServiceAsync {
 	void logout(AsyncCallback<String> callback);
 
 	void startLogin(LoginDTO login, AsyncCallback<String> callback);
-
-	void getAllUsers(AsyncCallback<ArrayList<UserSummaryDTO>> callback);
 
     void restartSession(String user, String session_id, AsyncCallback<String> callback)  throws LoginException;
 
