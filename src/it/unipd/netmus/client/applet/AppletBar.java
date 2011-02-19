@@ -148,7 +148,7 @@ public class AppletBar {
         
         System.out.println("Dati XML arrivati: \n"+result);
         List<SongDTO> new_songs = translator.XMLToDTO(result);
-        
+        if (new_songs == null){showStatus("Errore nel parsing XML");}
         
         this.status.setText("Dati XML arrivati");
         AsyncCallback<Void> callback = new AsyncCallback<Void>() {

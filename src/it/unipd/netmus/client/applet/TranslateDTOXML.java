@@ -112,7 +112,7 @@ public class TranslateDTOXML {
 		try {
 			//create the DOM tree
 			document = XMLParser.parse(xml);
-			root = (Element) document.getElementsByTagName(ROOT_NAME);
+			root = (Element) document.getFirstChild();
 			//create the list
 			list = new ArrayList<SongDTO>();
 			//start parsing
