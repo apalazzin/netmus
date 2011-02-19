@@ -54,17 +54,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    private Presenter listener;
    private String name;
+   private int vertical_offset = 65;
+   private int vertical_semioffset = 275;
    
    private CellTable lista_canzoni;
    
    //elementi uiBinder
 
    @UiField Anchor logout;
+   
    //@UiField Anchor back;
    
    @UiField Label utente;
    @UiField Label numero_brani;
    @UiField Label titolo_playlist;
+   @UiField Label info_youtube_link;
    
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
@@ -78,6 +82,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel friends;
    @UiField HTMLPanel info;
    @UiField HTMLPanel search;
+   @UiField HTMLPanel youtube;
+   @UiField HTMLPanel classifica;
+   @UiField HTMLPanel info_youtube;
+   @UiField HTMLPanel youtube_appendice;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -93,7 +101,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image star4;
    @UiField Image star5;
    @UiField Image chiudi_playlist;
-   
+   @UiField Image logo_youtube;
+   @UiField Image chiudi_youtube;
+
    
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -156,10 +166,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			@Override
 			public void onResize(ResizeEvent event) {				
 				int catalogo_h = main_panel.getOffsetHeight();
-				left_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(event.getHeight()-65, Style.Unit.PX);
-				catalogo_container.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
-				playlist_container.getElement().getStyle().setHeight(event.getHeight()-275, Style.Unit.PX);
+				left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
+				main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
+                catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+                playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+				catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
+				playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                 
 				if(event.getWidth()<1200) {
 					
@@ -308,10 +320,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 			  		
 			   	//ridimensiono il layout in base alla dimensione della finestra del browser
-				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-65, Style.Unit.PX);
-				catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
-				playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-275, Style.Unit.PX);
+				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
+				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);				
+				catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+				playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
 
 		   }
 	   };
@@ -349,15 +361,46 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
    
    @UiHandler("play_youtube")
+   void handleClickPlayYoutube(ClickEvent e) {
+      playYouTube(listener.getYouTubeLink());
+   }
+
+   @UiHandler("play_youtube")
    void handleMouseOverPlayYoutube(MouseOverEvent e) {
       play_youtube.setUrl("images/pause.png");
       play_youtube.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
+
    @UiHandler("play_youtube")
    void handleMouseOutPlayYouTube(MouseOutEvent e) {
       play_youtube.setUrl("images/play.png");
    }
 
+   @UiHandler("chiudi_youtube")
+   void handleClickChiudiYoutube(ClickEvent e) {
+      closeYouTube();
+   }
+
+   @UiHandler("play_youtube")
+   void handleMouseOverChiudiYoutube(MouseOverEvent e) {     
+      chiudi_youtube.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   @UiHandler("play_youtube")
+   void handleMouseOutChiudiYouTube(MouseOutEvent e) {
+      
+   }
+
+   @UiHandler("info_youtube_link")
+   void handleMouseOverInfoYoutubeLink(MouseOverEvent e) {     
+      info_youtube_link.getElement().getStyle().setColor("#38D12F");
+      info_youtube_link.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   @UiHandler("info_youtube_link")
+   void handleMouseOutInfoYouTubeLink(MouseOutEvent e) {
+       info_youtube_link.getElement().getStyle().setColor("#000000");
+   }
+   
+   
    @UiHandler("forward")
    void handleMouseOverForward(MouseOverEvent e) {
       forward.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -624,9 +667,96 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        for (PlaylistSong song : canzoni) {
            list.add(song);
        }
+       
        playlist_songs.add(lista_canzoni);
+       HTMLPanel off = new HTMLPanel("");
+       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
+       playlist_songs.add(off);
+
+       System.out.println(lista_canzoni.getElement().getClientHeight());
+       
+//       Integer h = new Integer(lista_canzoni.getElement().getStyle().getHeight().substring(0, lista_canzoni.getElement().getStyle().getHeight().length()-2));
+ //      lista_canzoni.getElement().getStyle().setHeight(h-22, Style.Unit.PX);
+
+   }
+   
+   
+   public void playYouTube(String link) {
+       
+       
+       youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
+       youtube.getElement().getStyle().setWidth(335, Style.Unit.PX);
+       youtube.getElement().getStyle().setBottom(7, Style.Unit.PX);
+       youtube.getElement().getStyle().setLeft(5, Style.Unit.PX);
+
+       vertical_semioffset = 400;
+       catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+       playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+
+       catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+       playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+       
+       play_youtube.getElement().getStyle().setOpacity(0);
+   
+
+       logo_youtube.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+       logo_youtube.getElement().getStyle().setBottom(173, Style.Unit.PX);
+       logo_youtube.getElement().getStyle().setLeft(355, Style.Unit.PX);
+
+       
+       classifica.getElement().getStyle().setLeft(365, Style.Unit.PX);
+       
+       HTMLPanel player = new HTMLPanel("player");
+       player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+       player.getElement().getStyle().setTop(8, Style.Unit.PX);
+       player.getElement().getStyle().setLeft(5, Style.Unit.PX);
+       youtube.add(player);
+       
+       
+       info_youtube.getElement().getStyle().setOpacity(1);
+       info_youtube_link.getElement().getStyle().setOpacity(1);
+       youtube_appendice.getElement().getStyle().setOpacity(1);
+       chiudi_youtube.getElement().getStyle().setOpacity(1);
+
+       
+       player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "\" frameborder=\"0\" allowfullscreen></iframe>");
+
        
    }
 
+   public void closeYouTube() {
+       
+       youtube.getElement().getStyle().setHeight(60, Style.Unit.PX);
+       youtube.getElement().getStyle().setWidth(200, Style.Unit.PX);
+       youtube.getElement().getStyle().setBottom(22, Style.Unit.PX);
+       youtube.getElement().getStyle().setLeft(25, Style.Unit.PX);
+
+       vertical_semioffset = 275;
+       catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+       playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+       
+       play_youtube.getElement().getStyle().setOpacity(1);
+       logo_youtube.getElement().getStyle().setOpacity(1);
+
+       logo_youtube.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+       logo_youtube.getElement().getStyle().setBottom(0, Style.Unit.PX);
+       logo_youtube.getElement().getStyle().setLeft(0, Style.Unit.PX);
+       
+       
+       info_youtube.getElement().getStyle().setOpacity(0);
+       info_youtube_link.getElement().getStyle().setOpacity(0);
+       youtube_appendice.getElement().getStyle().setOpacity(0);
+       chiudi_youtube.getElement().getStyle().setOpacity(0);
+       
+       classifica.getElement().getStyle().setLeft(265, Style.Unit.PX);
+       
+       youtube.getWidget(6).removeFromParent();
+       
+
+       
+   }
+   
    
 }
+
+

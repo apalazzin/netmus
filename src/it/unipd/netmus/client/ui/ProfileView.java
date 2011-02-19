@@ -30,6 +30,10 @@ public interface ProfileView extends IsWidget {
    void viewPlaylist(String playlist_name);
    //chiude il gestore della playlist
    void closePlaylist();
+   //apre il player youtube sulla relativa canzone
+   void playYouTube(String titolo);
+ //chiude il player youtube
+   void closeYouTube();
    
    public interface Presenter
    {
@@ -53,6 +57,9 @@ public interface ProfileView extends IsWidget {
       
       //restituisce le canzoni con i relativi album di una data playlist
       String[][] getPlaylistSongs(String titoloPlaylist);
+
+      //restituisce il link youtube della canzone selezionata
+      String getYouTubeLink();
 
    
    }

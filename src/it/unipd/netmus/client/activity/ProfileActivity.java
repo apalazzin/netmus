@@ -68,8 +68,9 @@ public class ProfileActivity extends AbstractActivity implements
                 containerWidget.setWidget(profileView.asWidget());
                 
                 
-                //CHIAMTE TEMPORANEEE DI TEST, DA ELIMINARE
-                //profileView.viewPlaylist("Tokio Hotel");
+                //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
+                profileView.playYouTube("Tokio Hotel");
+                profileView.closeYouTube();
                 ///////////////////////////////////////////
                 
                //load the applet bar, if not active yet
@@ -157,8 +158,14 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public String[][] getPlaylistSongs(String titoloPlaylist) {
         // TODO Auto-generated method stub
-        String[][] lista = {{"Monsoon", "ForeverNow", "Der Letzte Tag"},{"Scream","Humanoid","Schrei so laut du kannst"}};
+        String[][] lista = {{"Monsoon", "ForeverNow", "Der Letzte Tag"},{"Scream","Humanoid","Schrei"}};
         return lista; 
         
+    }
+
+    @Override
+    public String getYouTubeLink() {
+        // TODO Auto-generated method stub
+        return "yNBFkANEd5M";
     }
 }

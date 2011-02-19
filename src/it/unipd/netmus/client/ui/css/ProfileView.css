@@ -23,7 +23,6 @@
 	
 	position: relative;
 	
-	
 }
 
 .accountButton {
@@ -39,7 +38,17 @@
 	transition: right 0.3s ease-in-out;
 	}
 	
+
+
+.aggiungibrano_playlist {
 	
+	position: absolute;
+	bottom: 3px;
+	left: 10px;
+	
+	 
+	}
+
 	
 .chiudi_playlist {
 	
@@ -50,7 +59,14 @@
 	 
 	}
 	
+.chiudi_youtube {
 	
+	position: absolute;
+	z-index: 3;
+	bottom: 110px;
+	left: 340px;
+	
+	}
 
 .classifica {
 	
@@ -215,6 +231,50 @@
 }
 
 
+.info_youtube {
+
+	position: absolute;
+	bottom: 155px; 
+	left: 355px;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;	
+	
+	opacity: 0;
+	
+	width: 400px;
+	
+	text-align: left;
+	
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: bold;
+	
+	}
+
+.info_youtube_link {
+
+	position: absolute;
+	bottom: 143px; 
+	left: 355px;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;	
+	
+	width: 400px;
+	
+	opacity: 0;
+	
+	text-align: left;
+	
+	font-family: Verdana;
+	font-size: 11px;
+	
+	
+	}
+
 .logout {
 	
 	position: absolute;
@@ -240,6 +300,21 @@
 	text-decoration: underline; 
 	
 	}
+
+
+.logo_youtube {
+	
+	width: 110px;
+	margin-top: 10px;
+	
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;	
+	
+	}
+	
+	
 
 .numero_brani {
 	
@@ -297,6 +372,7 @@
 		
 	opacity: 1;
 	position: relative;
+	overflow: auto;
 	
 	-webkit-transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 	-moz-transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
@@ -315,20 +391,22 @@
 	width: 100%;
 	
 	opacity: 0;
+	overflow: auto;
 	
 	-webkit-transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
 	-moz-transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
 	-o-transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
 	transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
-	 overflow: hidden;
+	
 	
 }
 
 .playlist_songs {
 	
 	position: relative;
-	overflow: hidden;
+	overflow: auto;
 	width: 100px;
+	
 	}
 	
 .playYoutube {
@@ -339,6 +417,19 @@
 	float: left;
 	
 	}
+
+
+
+.rimuovibrano_playlist {
+	
+	position: absolute;
+	bottom: 3px;
+	left: 35px;
+	
+	 
+	}
+
+
 
 .rw {
 		
@@ -505,7 +596,43 @@
 	
 	bottom: 22px;
 	left: 25px;
-	position: absolute;		
+	position: absolute;
+	
+	
+	-webkit-box-shadow: 2px 2px 4px #888888;
+	-moz-box-shadow: 2px 2px 4px #888888;
+	box-shadow: 2px 2px 4px #888888;
 	
 	
 	}
+
+	.youtube_appendice {
+	
+	
+	width: 28px;
+	height: 40px;
+	
+	font-size: 11px;
+	text-align: center;
+	
+	
+	border-right: 2px solid #CCCCCC;
+	border-top: 2px solid #CCCCCC;
+	border-bottom: 2px solid #CCCCCC;
+	
+	background-color: #F0F0F0;
+	-webkit-box-shadow: 0px 0px 2px #EEEEEE;
+	-moz-box-shadow: 0px 0px 2px #EEEEEE;
+	
+	bottom: 90px;
+	left: 335px;
+	position: absolute;
+	
+	z-index:2;
+	
+	-webkit-box-shadow: 3px 3px 3px #888888;
+	-moz-box-shadow: 3px 3px 3px #888888;
+	box-shadow: 3px 3px 3px #888888;
+	
+	}
+	
