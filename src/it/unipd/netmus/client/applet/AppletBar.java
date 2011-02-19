@@ -78,10 +78,14 @@ public class AppletBar {
         if (!visible) {
             visible = true;
             RootPanel.get("applet-bar").setVisible(true);
-            applet.setHTML("<applet id='netmus_applet' name='netmus_applet' " +
-                    "code=\"applet.NetmusApplet\" " +
+            applet.setHTML("<applet " +
+            		"style=\"position:relative; left:-99999px;\"" +
+            		"id='netmus_applet' name='netmus_applet' " +
+                    "code=\"applet/NetmusApplet.class\" " +
                     "archive=\"applet/netmusApplet.jar, applet/jid3lib-0.5.4.jar\" " +
-                    "width=0 height=0></applet>");
+                    "width=1 height=1></applet>");
+            
+            System.out.println("Applet caricata");
         }
     }
     
@@ -120,7 +124,7 @@ public class AppletBar {
     	System.out.println("Inviati!");
     }
     
-    private native void sendStartsJSNI( String user, boolean state )/*-{
+    public native void sendStartsJSNI( String user, boolean state )/*-{
     	var t = $doc.getElementById('netmus_applet');
     	t.letsGO(user,state);
     }-*/;
@@ -132,6 +136,7 @@ public class AppletBar {
     private void showStatus(String status){
     	//modifica le informazioni di stato sulla grafica
     	System.out.println("Stato: "+status);
+    	this.status.setText("Stato: "+status);
     }
     
     private void translateXML(String result) {
@@ -150,7 +155,6 @@ public class AppletBar {
     x.@it.unipd.netmus.client.applet.AppletBar::scanningStatus(II)(actual, total);
     };
     $wnd.showStatus = function (s) {
-    	$wnd.alert(s);
     x.@it.unipd.netmus.client.applet.AppletBar::showStatus(Ljava/lang/String;)(s);
     };
     }-*/;
