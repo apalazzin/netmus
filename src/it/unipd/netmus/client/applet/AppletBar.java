@@ -3,9 +3,8 @@
  */
 package it.unipd.netmus.client.applet;
 
-import it.unipd.netmus.shared.SongDTO;
-
-import java.util.List;
+import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.client.service.LibraryServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,6 +31,8 @@ public class AppletBar {
     private String user;
     private boolean state;
     private TranslateDTOXML translator = new TranslateDTOXML();
+    
+    private LibraryServiceAsync libraryService = GWT.create(LibraryService.class);
     
     public AppletBar(String user, boolean state) {
     	
@@ -140,7 +141,27 @@ public class AppletBar {
     }
     
     private void translateXML(String result) {
-        List<SongDTO> temp = translator.XMLToDTO(result);
+        
+        System.out.println("Dati XML arrivati: \n"+result);
+//        List<SongDTO> new_songs = translator.XMLToDTO(result);
+//        
+//        
+//        this.status.setText("Dati XML arrivati");
+//        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+//            @Override
+//            public void onFailure(Throwable caught) {
+//                showStatus("Sending Error");
+//                System.out.println("KO");
+//            }
+//            @Override
+//            public void onSuccess(Void result) {
+//                showStatus("Sent to Server");
+//                System.out.println("OK");
+//            }
+//        };
+//        
+//        libraryService.sendUserNewMusic(user, new_songs, callback);
+//        System.out.println("Dati XML spediti");
     }
     
     // metodo per pubblicare le funzioni native di linking
