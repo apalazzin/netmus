@@ -3,7 +3,11 @@
  */
 package it.unipd.netmus.server;
 
+import java.util.List;
+
 import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.server.persistent.DatastoreUtils;
+import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.SongDTO;
 
@@ -20,5 +24,21 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
 		return null;
 	}
 	public void addSong(SongDTO newTrack){}
+	
+	
+    @Override
+    public void sendUserNewMusic(String user, List<SongDTO> new_songs) {
+        
+        for (SongDTO song : new_songs){            
+            Song.storeOrUpdateFromDTO(song);
+        }
+        
+        List<Song> list = DatastoreUtils.getAllSongsInDatastore();
+
+        for (Song s : list) {
+            System.out.println(s.getArtist()+" || "+s.getTitle());
+        }
+        
+    }
 
 }
