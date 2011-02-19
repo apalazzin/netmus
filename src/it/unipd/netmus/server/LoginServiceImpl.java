@@ -3,16 +3,16 @@
  */
 package it.unipd.netmus.server;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import javax.servlet.http.HttpSession;
 
 import it.unipd.netmus.client.service.LoginService;
+import it.unipd.netmus.server.persistent.DatastoreUtils;
+import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
+import it.unipd.netmus.shared.SongDTO;
+import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
@@ -33,21 +33,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
 		//create new user in the databas
-		UserAccount userAccount = new UserAccount(login.getUser(), passwordHash);
+        new UserAccount(login.getUser(), passwordHash);
 		
-		//persist the new user
-		try {
-			ODF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
-			return login;
-		} catch (IllegalStateException e) {
-			throw new RegistrationException();
-		}
+        return login;
 	}
 	
 	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
+		UserAccount userAccount = UserAccount.load(login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
@@ -100,19 +94,6 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    return user;
 	}
 
-	/*METODO USATO PER TESTING*/
-	@Override
-	public ArrayList<UserSummaryDTO> getAllUsers() {
-		Iterator<UserAccount> allUsers = ODF.get().find().type(UserAccount.class).returnResultsNow();
-		ArrayList<UserAccount> allUsersList = new ArrayList<UserAccount>();
-		while (allUsers.hasNext() == true)
-			allUsersList.add(allUsers.next());
-		ArrayList<UserSummaryDTO> allUsersDTO = new ArrayList<UserSummaryDTO>();
-		for (UserAccount tmp:allUsersList)
-			allUsersDTO.add(tmp.toUserSummaryDTO());
-		return allUsersDTO;
-	}
-
     @Override
     public String restartSession(String user, String session_id) throws LoginException {
         
@@ -129,7 +110,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
                 throw new LoginException();
             
             // restart old session by Cookies (se soddisfa)
-            UserAccount userAccount = UserAccount.loadUserWithoutLibrary(user);
+            UserAccount userAccount = UserAccount.load(user);
             String session_id_old = userAccount.getLastSessionId();
             
             if (session_id_old.equals(session_id)) {
@@ -147,5 +128,36 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
                 throw new LoginException();
             }
         }
+    }
+    
+    
+    
+    @Override
+    public UserCompleteDTO testDatastore(SongDTO song) throws LoginException {
+        System.out.println("Utenti registrati nel datastore: "+DatastoreUtils.usersInDatastore());
+        System.out.println("Canzoni registrate nel datastore: "+DatastoreUtils.songsInDatastore());
+        DatastoreUtils.getAllSongsInDatastore();
+        
+        
+        //String passwordHash = BCrypt.hashpw("haha", BCrypt.gensalt());
+        //new UserAccount("asd2@asd.it", passwordHash);
+        
+        Song s = Song.storeOrUpdateFromDTO(song);
+        UserAccount user2 = UserAccount.load("asd@asd.it");
+        //UserAccount user = UserAccount.load("asd2@asd.it");
+        //Song s = user2.getMusicLibrary().allSongs().get(0);
+        //s.update();
+        user2.getMusicLibrary().addSong(s, true);
+        //UserAccount.deleteUser(user2);
+        
+        System.out.println("Utenti registrati nel datastore: "+DatastoreUtils.usersInDatastore());
+        System.out.println("Canzoni registrate nel datastore: "+DatastoreUtils.songsInDatastore());
+        DatastoreUtils.getAllSongsInDatastore();
+        //System.out.println("asd2@asd.it possiede "+user.getMusicLibrary().getNumSongs()+" canzoni, il suo artista preferito è :"+user.getMusicLibrary().getPreferredArtist()+"ed il genere più ascoltato è: "+user.getMusicLibrary().getPreferredGenre());
+        //System.out.println("asd@asd.it possiede "+user2.getMusicLibrary().getNumSongs()+" canzoni, il suo artista preferito è :"+user2.getMusicLibrary().getPreferredArtist()+"ed il genere più ascoltato è: "+user2.getMusicLibrary().getPreferredGenre());
+        UserCompleteDTO asd = user2.toUserCompleteDTO();
+        System.out.println(user2.getMusicLibrary().getNumSongs());
+        System.out.println(asd.getMusicLibrary().getSongs().size());
+        return user2.toUserCompleteDTO();
     }
 }

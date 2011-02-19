@@ -9,60 +9,23 @@ package it.unipd.netmus.shared;
  */
 @SuppressWarnings("serial")
 public class SongDTO extends SongSummaryDTO {
+    
 	private String year;
+	
 	private String composer;
+	
 	private String genre;
+	
 	private String trackNumber;
+	
 	private String file;
-
+	
+	private String albumCover;
+	
+	private int numOwners;
 	
 	//costruttore di default
-	public SongDTO(){
-		super();
-		year = "";
-		composer = "";
-		genre = "";
-		trackNumber = "";
-		file = "";		
-	}
-	
-	//constructor with only file
-	public SongDTO (String file){
-		super();
-		year = "";
-		composer = "";
-		genre = "";
-		trackNumber = "";
-		this.file = file;
-	}
-	
-	// costruttore con parametri summary
-	public SongDTO(String author, String title, String album){
-		super(author,title,album);
-		year = "";
-		composer = "";
-		genre = "";
-		trackNumber = "";
-		file = "";
-	}
-	// costruttore senza parametri summary	
-	public SongDTO(String y, String c, String g, String t, String f){
-		super();
-		year = y;
-		composer = c;
-		genre = g;
-		trackNumber = t;
-		file = f;
-	}
-	// costruttore completo
-	public SongDTO(String author, String title, String album, String y, String c,String g, String t, String f){
-		super(author,title,album);
-		year = y;
-		composer = c;
-		genre = g;
-		trackNumber = t;
-		file = f;
-	}
+	public SongDTO(){}
 	
 	public String getYear() {
 		return year;
@@ -95,4 +58,20 @@ public class SongDTO extends SongSummaryDTO {
 	public void setFile(String file) {
 		this.file = file;
 	}
+
+    public void setAlbumCover(String albumCover) {
+        this.albumCover = albumCover;
+    }
+
+    public String getAlbumCover() {
+        return albumCover;
+    }
+
+    public void setNumOwners(int numOwners) {
+        this.numOwners = numOwners;
+    }
+
+    public int getNumOwners() {
+        return numOwners;
+    }
 }
