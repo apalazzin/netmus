@@ -174,25 +174,3 @@ public class LoginActivity extends AbstractActivity implements
         }   
     }
 }
-
-
-
-
-/*
-BUONO PER TESTARE...
-// Set up the callback object.
-AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
-  public void onFailure(Throwable caught) {
-  }
-
-  @Override
-  public void onSuccess(ArrayList<UserSummaryDTO> result) {
-	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
-	  for (UserSummaryDTO tmp:result)
-		  logger.log(Level.INFO, tmp.getNickName());
-  }
-};
-
-// Make the call to the stock price service.
-loginServiceSvc.getAllUsers(callback2);
-*/

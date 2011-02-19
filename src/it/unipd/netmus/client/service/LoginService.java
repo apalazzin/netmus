@@ -3,10 +3,7 @@
  */
 package it.unipd.netmus.client.service;
 
-import java.util.ArrayList;
-
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -29,8 +26,5 @@ public interface LoginService extends RemoteService {
 	String logout();
 	
 	String restartSession(String user, String session_id) throws LoginException;
-	
-	/*METODO USATO PER TESTING*/
-	ArrayList<UserSummaryDTO> getAllUsers();
 
 }

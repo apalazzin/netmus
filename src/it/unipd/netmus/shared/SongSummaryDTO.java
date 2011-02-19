@@ -10,27 +10,24 @@ package it.unipd.netmus.shared;
 @SuppressWarnings("serial")
 public class SongSummaryDTO implements GenericDTO {
 	
-	private String author;
+	private String artist;
 	private String title;
 	private String album;
 	
 	public SongSummaryDTO(){
-		author = "";
-		title = "";
-		album = "";
 	}
 	
-	public SongSummaryDTO(String author, String title, String album){
-		this.author = author;
+	public SongSummaryDTO(String artist, String title, String album){
+		this.artist = artist;
 		this.title = title;
 		this.album = album;
 	}
 	
-	public String getAuthor() {
-		return author;
+	public String getArtist() {
+		return artist;
 	}
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setArtist(String artist) {
+		this.artist = artist;
 	}
 	public String getTitle() {
 		return title;

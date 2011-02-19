@@ -3,16 +3,12 @@
  */
 package it.unipd.netmus.server;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import javax.servlet.http.HttpSession;
 
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
@@ -32,22 +28,17 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
-		//create new user in the databas
-		UserAccount userAccount = new UserAccount(login.getUser(), passwordHash);
-		
-		//persist the new user
-		try {
-			ODF.get().store().instance(userAccount).ensureUniqueKey().returnKeyNow();
-			return login;
-		} catch (IllegalStateException e) {
-			throw new RegistrationException();
-		}
+        //create new user in the databas
+        new UserAccount(login.getUser(), passwordHash);
+        
+        return login;
+
 	}
 	
 	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
-		UserAccount userAccount = UserAccount.loadUserWithoutLibrary(login.getUser());
+		UserAccount userAccount = UserAccount.load(login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
@@ -100,19 +91,6 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    return user;
 	}
 
-	/*METODO USATO PER TESTING*/
-	@Override
-	public ArrayList<UserSummaryDTO> getAllUsers() {
-		Iterator<UserAccount> allUsers = ODF.get().find().type(UserAccount.class).returnResultsNow();
-		ArrayList<UserAccount> allUsersList = new ArrayList<UserAccount>();
-		while (allUsers.hasNext() == true)
-			allUsersList.add(allUsers.next());
-		ArrayList<UserSummaryDTO> allUsersDTO = new ArrayList<UserSummaryDTO>();
-		for (UserAccount tmp:allUsersList)
-			allUsersDTO.add(tmp.toUserSummaryDTO());
-		return allUsersDTO;
-	}
-
     @Override
     public String restartSession(String user, String session_id) throws LoginException {
         
@@ -129,7 +107,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
                 throw new LoginException();
             
             // restart old session by Cookies (se soddisfa)
-            UserAccount userAccount = UserAccount.loadUserWithoutLibrary(user);
+            UserAccount userAccount = UserAccount.load(user);
             String session_id_old = userAccount.getLastSessionId();
             
             if (session_id_old.equals(session_id)) {

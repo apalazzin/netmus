@@ -3,22 +3,22 @@
  */
 package it.unipd.netmus.server.persistent;
 
-import it.unipd.netmus.server.ODF;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Text;
+import com.google.code.twig.annotation.Child;
+import com.google.code.twig.annotation.Id;
+import com.google.code.twig.annotation.Index;
+import com.google.code.twig.annotation.Type;
 import com.reveregroup.gwt.imagepreloader.FitImage;
-import com.vercer.engine.persist.annotation.Index;
-import com.vercer.engine.persist.annotation.Key;
-import com.vercer.engine.persist.annotation.Type;
 
 
 /**
@@ -27,9 +27,9 @@ import com.vercer.engine.persist.annotation.Type;
  */
 public class UserAccount {
    
-   @Key public String user;
+   @Id public String user;
    
-   //@Child private MusicLibrary MUSICLIBRARY = new MusicLibrary(this);
+   @Child private MusicLibrary musicLibrary;
    
    private String passwordHash;
    
@@ -60,21 +60,26 @@ public class UserAccount {
    //private boolean isGoogleUser;
    
    public UserAccount() {
+       musicLibrary = new MusicLibrary(this);
    }
    
    public UserAccount(String user, String passwordHash) { 
+       musicLibrary = new MusicLibrary(this);
        this.user = user;
        this.passwordHash = passwordHash;
+       this.store();
    }
    
-   public static UserAccount loadUserWithLibrary(String user) {
-       ODF.get().setActivationDepth(3);
-       return ODF.get().load(UserAccount.class, user);
+   public void store() {
+       ODF.get().store().instance(this).ensureUniqueKey().now();
    }
-
-   public static UserAccount loadUserWithoutLibrary(String user) {
-       ODF.get().setActivationDepth(1);
-       return ODF.get().load(UserAccount.class, user);
+   
+   public void update() {
+       ODF.get().storeOrUpdate(this);
+   }
+   
+   public static UserAccount load(String user) {
+       return ODF.get().load().type(UserAccount.class).id(user).now();
    }
    
    public LoginDTO toLoginDTO() {
@@ -92,7 +97,10 @@ public class UserAccount {
    }
    
    public UserDTO toUserDTO() {
-       UserDTO tmp = (UserDTO) toUserSummaryDTO();
+       UserDTO tmp = new UserDTO();
+       tmp.setUser(this.user);
+       tmp.setNickName(this.nickName);
+       //tmp.setAvatar(this.avatar);
        tmp.setAboutMe(this.aboutMe);
        tmp.setBirthDate(this.birthDate);
        tmp.setFirstName(this.firstName);
@@ -106,32 +114,37 @@ public class UserAccount {
    }
    
    public UserCompleteDTO toUserCompleteDTO() {
-       UserCompleteDTO tmp = (UserCompleteDTO) toUserDTO();
-       //tmp.setMusicLibrary(this.MUSICLIBRARY.toMusicLibraryDTO);
+       UserCompleteDTO tmp = new UserCompleteDTO();
+       tmp.setUser(this.user);
+       tmp.setNickName(this.nickName);
+       //tmp.setAvatar(this.avatar);
+       tmp.setAboutMe(this.aboutMe);
+       tmp.setBirthDate(this.birthDate);
+       tmp.setFirstName(this.firstName);
+       tmp.setGender(this.gender);
+       tmp.setLastImport(this.lastImport);
+       tmp.setLastLogin(this.lastLogin);
+       tmp.setLastName(this.lastName);
+       tmp.setNationality(this.nationality);
+       tmp.setRegistrationDate(this.registrationDate);
+       tmp.setMusicLibrary(this.musicLibrary.toMusicLibraryDTO());
        return tmp;
    }
    
    public static UserAccount findSessionUser(String sessionId) {
-       Iterator<UserAccount> user = ODF.get().find().type(UserAccount.class)
+       return ODF.get().find().type(UserAccount.class)
        .addFilter("lastSessionId", FilterOperator.EQUAL, sessionId)
-       .returnResultsNow();
-       if (user.hasNext()) {
-           return user.next();
-       }
-       else return null;
+       .returnUnique()
+       .now();
    }
    
    public String getUser() {
        return user;
    }
 
-   public void setUser(String user) {
-       this.user = user;
+   public MusicLibrary getMusicLibrary() {
+       return musicLibrary;
    }
-
-   //public MusicLibrary getMUSICLIBRARY() {
-   // return MUSICLIBRARY;
-   //}
 
    public String getPassword() {
        return passwordHash;
@@ -139,6 +152,7 @@ public class UserAccount {
 
    public void setPassword(String passwordHash) {
        this.passwordHash = passwordHash;
+       this.update();
    }
 
    public String getFirstName() {
@@ -147,6 +161,7 @@ public class UserAccount {
 
    public void setFirstName(String firstName) {
        this.firstName = firstName;
+       this.update();
    }
 
    public String getLastName() {
@@ -155,6 +170,7 @@ public class UserAccount {
 
    public void setLastName(String lastName) {
        this.lastName = lastName;
+       this.update();
    }
 
    public String getNickName() {
@@ -163,6 +179,7 @@ public class UserAccount {
 
    public void setNickName(String nickName) {
        this.nickName = nickName;
+       this.update();
    }
 
    public String getGender() {
@@ -171,6 +188,7 @@ public class UserAccount {
 
    public void setGender(String gender) {
        this.gender = gender;
+       this.update();
    }
 
    public String getNationality() {
@@ -179,6 +197,7 @@ public class UserAccount {
 
    public void setNationality(String nationality) {
        this.nationality = nationality;
+       this.update();
    }
 
    public FitImage getAvatar() {
@@ -187,6 +206,7 @@ public class UserAccount {
 
    public void setAvatar(FitImage avatar) {
        this.avatar = avatar;
+       this.update();
    }
 
    public String getAboutMe() {
@@ -195,6 +215,7 @@ public class UserAccount {
 
    public void setAboutMe(String aboutMe) {
        this.aboutMe = aboutMe;
+       this.update();
    }
 
    public Date getBirthDate() {
@@ -203,6 +224,7 @@ public class UserAccount {
 
    public void setBirthDate(Date birthDate) {
        this.birthDate = birthDate;
+       this.update();
    }
 
    public Date getRegistrationDate() {
@@ -211,6 +233,7 @@ public class UserAccount {
 
    public void setRegistrationDate(Date registrationDate) {
        this.registrationDate = registrationDate;
+       this.update();
    }
 
    public Date getLastLogin() {
@@ -219,6 +242,7 @@ public class UserAccount {
 
    public void setLastLogin(Date lastLogin) {
        this.lastLogin = lastLogin;
+       this.update();
    }
 
    public Date getLastImport() {
@@ -227,15 +251,29 @@ public class UserAccount {
 
    public void setLastImport(Date lastImport) {
        this.lastImport = lastImport;
+       this.update();
    }
 
    public void setLastSessionId(String lastSessionId) {
        this.lastSessionId = lastSessionId;
-       ODF.get().update(this);
+       this.update();
    }
 
    public String getLastSessionId() {
        return lastSessionId;
+   }
+   
+   public static void deleteUser(UserAccount user) {
+       ODF.get().storeOrUpdate(user);
+       
+       List<Song> songsList = user.getMusicLibrary().allSongs();
+       for (Song tmp:songsList)
+           user.getMusicLibrary().removeSong(tmp, false);
+       ODF.get().delete(user.getMusicLibrary());
+       
+       ODF.get().storeOrUpdate(user);
+       
+       ODF.get().delete(user);
    }
    
 }
