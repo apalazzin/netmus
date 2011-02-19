@@ -79,8 +79,8 @@ public class AppletBar {
             visible = true;
             RootPanel.get("applet-bar").setVisible(true);
             applet.setHTML("<applet id='netmus_applet' name='netmus_applet' " +
-                    "code=\"applet/NetmusApplet.class\" " +
-                    "archive=\"applet/netmusApplet.jar,applet/jid3lib-0.5.4.jar\" " +
+                    "code=\"applet.NetmusApplet\" " +
+                    "archive=\"applet/netmusApplet.jar, applet/jid3lib-0.5.4.jar\" " +
                     "width=0 height=0></applet>");
         }
     }
@@ -111,19 +111,27 @@ public class AppletBar {
      * per mandare user e stato iniziale e avviare il thread
      */
     private void sendStarts() {
-    	sendStartsJSNI(user,state);
+    	System.out.println("invio i dati: "+user);
+    	try {
+    	      sendStartsJSNI(user,state);
+    	   } catch (Exception e) {
+    	      System.out.println(e);
+    	   }
+    	System.out.println("Inviati!");
     }
     
     private native void sendStartsJSNI( String user, boolean state )/*-{
-    	$doc.getElementById('netmus_applet').letsGO(user,state);
+    	var t = $doc.getElementById('netmus_applet');
+    	t.letsGO(user,state);
     }-*/;
     
     private void scanningStatus(int actual, int total){
     	//aggiornare la grafica con le nuove info
     }
     
-    private void status(String status){
+    private void showStatus(String status){
     	//modifica le informazioni di stato sulla grafica
+    	System.out.println("Stato: "+status);
     }
     
     private void translateXML(String result) {
@@ -141,8 +149,9 @@ public class AppletBar {
     $wnd.scanStatus = function (actual, total) {
     x.@it.unipd.netmus.client.applet.AppletBar::scanningStatus(II)(actual, total);
     };
-    $wnd.status = function (status) {
-    x.@it.unipd.netmus.client.applet.AppletBar::status(Ljava/lang/String;)(status);
+    $wnd.showStatus = function (s) {
+    	$wnd.alert(s);
+    x.@it.unipd.netmus.client.applet.AppletBar::showStatus(Ljava/lang/String;)(s);
     };
     }-*/;
     // mancano parametri sopra in ingresso Stringa XML da applet
