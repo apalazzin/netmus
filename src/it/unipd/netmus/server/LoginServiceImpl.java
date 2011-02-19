@@ -6,13 +6,9 @@ package it.unipd.netmus.server;
 import javax.servlet.http.HttpSession;
 
 import it.unipd.netmus.client.service.LoginService;
-import it.unipd.netmus.server.persistent.DatastoreUtils;
-import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 import it.unipd.netmus.shared.exception.WrongLoginException;
@@ -32,10 +28,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
-		//create new user in the databas
+        //create new user in the databas
         new UserAccount(login.getUser(), passwordHash);
-		
+        
         return login;
+
 	}
 	
 	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
@@ -128,36 +125,5 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
                 throw new LoginException();
             }
         }
-    }
-    
-    
-    
-    @Override
-    public UserCompleteDTO testDatastore(SongDTO song) throws LoginException {
-        System.out.println("Utenti registrati nel datastore: "+DatastoreUtils.usersInDatastore());
-        System.out.println("Canzoni registrate nel datastore: "+DatastoreUtils.songsInDatastore());
-        DatastoreUtils.getAllSongsInDatastore();
-        
-        
-        //String passwordHash = BCrypt.hashpw("haha", BCrypt.gensalt());
-        //new UserAccount("asd2@asd.it", passwordHash);
-        
-        Song s = Song.storeOrUpdateFromDTO(song);
-        UserAccount user2 = UserAccount.load("asd@asd.it");
-        //UserAccount user = UserAccount.load("asd2@asd.it");
-        //Song s = user2.getMusicLibrary().allSongs().get(0);
-        //s.update();
-        user2.getMusicLibrary().addSong(s, true);
-        //UserAccount.deleteUser(user2);
-        
-        System.out.println("Utenti registrati nel datastore: "+DatastoreUtils.usersInDatastore());
-        System.out.println("Canzoni registrate nel datastore: "+DatastoreUtils.songsInDatastore());
-        DatastoreUtils.getAllSongsInDatastore();
-        //System.out.println("asd2@asd.it possiede "+user.getMusicLibrary().getNumSongs()+" canzoni, il suo artista preferito è :"+user.getMusicLibrary().getPreferredArtist()+"ed il genere più ascoltato è: "+user.getMusicLibrary().getPreferredGenre());
-        //System.out.println("asd@asd.it possiede "+user2.getMusicLibrary().getNumSongs()+" canzoni, il suo artista preferito è :"+user2.getMusicLibrary().getPreferredArtist()+"ed il genere più ascoltato è: "+user2.getMusicLibrary().getPreferredGenre());
-        UserCompleteDTO asd = user2.toUserCompleteDTO();
-        System.out.println(user2.getMusicLibrary().getNumSongs());
-        System.out.println(asd.getMusicLibrary().getSongs().size());
-        return user2.toUserCompleteDTO();
     }
 }

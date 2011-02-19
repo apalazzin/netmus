@@ -1,8 +1,6 @@
 package it.unipd.netmus.client.activity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +13,6 @@ import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
@@ -25,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -96,60 +91,42 @@ public class LoginActivity extends AbstractActivity implements
 
     @Override
     public void sendLogin(String user, String password) throws LoginException {
+        final String username = user;
+        final String pass = password;
+        LoginDTO login = new LoginDTO(user,password);
 
-        
-        
-        
-        
-        
-        SongDTO song = new SongDTO();
-        song.setArtist("ProvaLowerCase");
-        song.setTitle("Titolo");
-        song.setAlbum("album");
-        
-        
-        
-        
-        
         // Set up the callback object.
-        AsyncCallback<UserCompleteDTO> callback2 = new AsyncCallback<UserCompleteDTO>() {
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
             
           public void onFailure(Throwable caught) {
               if (caught instanceof LoginException) {
                   logger.log(Level.INFO, ((LoginException)caught).getMoreInfo());
-                  
+                  goTo(new LoginPlace(username,pass, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
               }
               else {
                   logger.log(Level.INFO, ("Impossibile connettersi al database"));
-                    
+                  goTo(new LoginPlace(username,pass, myConstants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
               }
           }
-
+          
           @Override
-          public void onSuccess(UserCompleteDTO result) {
-              List<SongDTO> list = result.getMusicLibrary().getSongs();
-              Window.alert(result.getUser()+" ha "+list.size()+" canzoni");
-              for (SongDTO tmp:list) {
-                  Window.alert(tmp.getTitle()+" - "+tmp.getArtist()+" - "+tmp.getAlbum()+"\n");
-              }
-            
+          public void onSuccess(String session_id) {
+              logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
+              
+              // create the cookie for this session
+              final long DURATION = 1000 * 60 * 60 * 24;
+              Date expires = new Date(System.currentTimeMillis() + DURATION);
+              Cookies.setCookie("user", username, expires);
+              Cookies.setCookie("sid", session_id, expires);
+              
+              goTo(new ProfilePlace(username));
           }
-
         };
 
-        loginServiceSvc.testDatastore(song, callback2);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       
+        // Make the call to send login info.
+        try {
+            loginServiceSvc.startLogin(login, callback);
+        } catch (Exception e) {}
 
     }
 
@@ -197,25 +174,3 @@ public class LoginActivity extends AbstractActivity implements
         }   
     }
 }
-
-
-
-
-/*
-BUONO PER TESTARE...
-// Set up the callback object.
-AsyncCallback<ArrayList<UserSummaryDTO>> callback2 = new AsyncCallback<ArrayList<UserSummaryDTO>>() {
-  public void onFailure(Throwable caught) {
-  }
-
-  @Override
-  public void onSuccess(ArrayList<UserSummaryDTO> result) {
-	  logger.log(Level.INFO, "LISTA DI TUTTI GLI UTENTI REGISTRATI");
-	  for (UserSummaryDTO tmp:result)
-		  logger.log(Level.INFO, tmp.getNickName());
-  }
-};
-
-// Make the call to the stock price service.
-loginServiceSvc.getAllUsers(callback2);
-*/
