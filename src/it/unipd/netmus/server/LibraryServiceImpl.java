@@ -8,7 +8,9 @@ import java.util.List;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.server.persistent.DatastoreUtils;
 import it.unipd.netmus.server.persistent.Song;
+import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.MusicLibraryDTO;
+import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -29,16 +31,17 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     @Override
     public void sendUserNewMusic(String user, List<SongDTO> new_songs) {
         
-        for (SongDTO song : new_songs){            
-            Song.storeOrUpdateFromDTO(song);
+        for (SongDTO songDTO : new_songs){            
+            Song song = Song.storeOrUpdateFromDTO(songDTO);
+            UserAccount useraccount = UserAccount.load(user);
+            useraccount.getMusicLibrary().addSong(song, false);
         }
-        
-        List<Song> list = DatastoreUtils.getAllSongsInDatastore();
+    }
 
-        for (Song s : list) {
-            System.out.println(s.getArtist()+" || "+s.getTitle());
-        }
-        
+    @Override
+    public MusicLibrarySummaryDTO getLibrary(String user) {
+        UserAccount useraccount = UserAccount.load(user);
+        return useraccount.getMusicLibrary().toMusicLibrarySummaryDTO();
     }
 
 }

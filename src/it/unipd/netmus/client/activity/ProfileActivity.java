@@ -8,10 +8,14 @@ import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.applet.ABF;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
+import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
+import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -32,6 +36,8 @@ public class ProfileActivity extends AbstractActivity implements
 	private static Logger logger = Logger.getLogger("ProfileActivity");
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
+	private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
+	
 	MyConstants myConstants = GWT.create(MyConstants.class);
 
 	public ProfileActivity(ProfilePlace place, ClientFactory clientFactory) {
@@ -56,20 +62,34 @@ public class ProfileActivity extends AbstractActivity implements
             }
 
             @Override
-            public void onSuccess(String user) {
+            public void onSuccess(final String user) {
                 
-                ProfileView profileView = clientFactory.getProfileView();
+                final ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
                 
-                profileView.setNumeroBrani(getLibrarySize());
-                profileView.setUser(user);
-                profileView.paintPlaylist(getPlaylistList());
-                profileView.paintFriendlist(getFriendList());
-                profileView.setInfo(getSongInfo());
-                profileView.paintCatalogo(getSongs());
-                containerWidget.setWidget(profileView.asWidget());
                 
+                AsyncCallback<MusicLibrarySummaryDTO> callback = new AsyncCallback<MusicLibrarySummaryDTO>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        logger.info("Problema richiesta catalogo");
+                    }
+
+                    @Override
+                    public void onSuccess(MusicLibrarySummaryDTO user_library) {
+                        
+                        profileView.setNumeroBrani(user_library.getLibrarySize());
+                        profileView.paintCatalogo(getSongs(user_library));
+                        profileView.setUser(user);
+                        profileView.paintPlaylist(getPlaylistList());
+                        profileView.paintFriendlist(getFriendList());
+                        profileView.setInfo(getSongInfo());
+                        containerWidget.setWidget(profileView.asWidget());
+                    }
+                };
+                
+                libraryServiceSvc.getLibrary(user,callback);
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
               
@@ -131,12 +151,6 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public String getLibrarySize() {
-		// TODO Auto-generated method stub
-		return new String("69");
-	}
-
-	@Override
 	public String[] getPlaylistList() {
 		// TODO Auto-generated method stub
 		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock" };
@@ -174,22 +188,19 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     @Override
-    public List<String> getSongs() {
-        
-        // TODO Auto-generated method stub
-        
-        List<String> lista_canzoni = new ArrayList<String>();
-        
-        for(int k=0; k<100; k++) {
+    public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
 
-            lista_canzoni.add("Autore " + k);
-            lista_canzoni.add("Titolo " + k);
-            lista_canzoni.add("Album " + k);
-            
+        List<SongSummaryDTO> library = user_library.getSongs();
+        List<String> song_list = new ArrayList<String>();
+        
+        for(SongSummaryDTO song : library) {
+
+            song_list.add(song.getArtist());
+            song_list.add(song.getTitle());
+            song_list.add(song.getAlbum());    
         }
-
         
-        return lista_canzoni;
+        return song_list;
     }
 
     @Override
