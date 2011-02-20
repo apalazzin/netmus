@@ -38,7 +38,7 @@ import com.reveregroup.gwt.imagepreloader.FitImage;
  */
 public class Song {
     
-    private static final String SEPARATOR = "-vt.g-";
+    static final String SEPARATOR = "-vt.g-";
 
     @Id private String id;
     
@@ -236,7 +236,7 @@ public class Song {
         this.file = file;
     }
     
-    public static void deleteSong(Song s) {
+    static void deleteSong(Song s) {
         ODF.get().storeOrUpdate(s);
         ODF.get().delete(s);
     }

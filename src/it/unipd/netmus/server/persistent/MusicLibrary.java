@@ -7,6 +7,7 @@ import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
+import it.unipd.netmus.shared.exception.DatastoreException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +32,23 @@ public class MusicLibrary {
     private String preferredArtist;
     
     private String preferredGenre;
+    
+    private int numPlaylists;
 	//---------------------------------------------------
     
+    //gestione PLAYLISTS
+    @Index private List<Playlist> playlists;
+    //---------------------------------------------------
+    
 	public MusicLibrary() {
-	    songList = new ArrayList<String>();
+	    this.songList = new ArrayList<String>();
+	    this.playlists = new ArrayList<Playlist>();
 	}
 	
 	public MusicLibrary(UserAccount owner) {
 	    this.owner = owner;
-	    songList = new ArrayList<String>();
+	    this.songList = new ArrayList<String>();
+	    this.playlists = new ArrayList<Playlist>();
 	}
 	
 	public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
@@ -96,7 +105,11 @@ public class MusicLibrary {
         this.preferredGenre = preferredGenre;
         this.update();
     }
-    
+
+    public int getNumPlaylists() {
+        return numPlaylists;
+    }
+
     public boolean addSong(Song song, boolean update) {
         
         song.update();
@@ -137,13 +150,18 @@ public class MusicLibrary {
             }
         }
         if (this.songList.indexOf(song.getId())>=0) {
-            //add songId to the list
+            //remove songId to the list
             this.songList.remove(song.getId());
             
             //update song's attributes and delete it form database if necessary
             song.deleteOwner();
             if (song.getNumOwners() == 0)
                 Song.deleteSong(song);
+            
+            //remove song from playlists
+            for (Playlist tmp:this.playlists) {
+                tmp.removeSong(song.getId());
+            }
             
             //increment the counter
             this.setNumSongs(numSongs-1);
@@ -229,5 +247,162 @@ public class MusicLibrary {
         return lista;
     }
 
+    static void deleteMusicLibrary(MusicLibrary ml) {
+        ODF.get().storeOrUpdate(ml);
+        ODF.get().delete(ml);
+    }
+    
+    
+    
+    //Playlist's methods
+    public void addPlaylist(String playlistName) throws DatastoreException {
+        if (this.getPlaylist(playlistName) == null) {
+            Playlist tmp = new Playlist(playlistName);
+            this.playlists.add(tmp);
+            this.numPlaylists++;
+            this.update();
+        }
+        else throw new DatastoreException();
+    }
+    
+    public void removePlaylist(String playlistName) throws DatastoreException {
+        Playlist playlist = this.getPlaylist(playlistName);
+        if (playlist != null) {
+            this.playlists.remove(playlist);
+            Playlist.deletePlaylist(playlist);
+            this.numPlaylists--;
+            this.update();
+        }
+        else throw new DatastoreException();
+    }
+
+    private Playlist getPlaylist(String playlistName) {
+        for (int i=0; i<this.playlists.size(); i++) {
+            Playlist tmp = this.playlists.get(i);
+            if (tmp.getName().equalsIgnoreCase(playlistName))
+                return tmp;
+        }
+        return null;
+    }
+    
+    public List<String> getPlaylists() {
+        List<String> playlists = new ArrayList<String>();
+        for (Playlist tmp:this.playlists)
+            playlists.add(tmp.getName());
+        return playlists;
+    }
+
+    
+    
+    //Playlist's songs methods
+    public List<Song> getPlaylistSongs(String playlistName) {
+        for (Playlist tmp:this.playlists) {
+            if (tmp.getName().equalsIgnoreCase(playlistName)) {
+                List<String> songNames = tmp.getSongs();
+                List<Song> songs = new ArrayList<Song>();
+                for (String tmp2:songNames) {
+                    songs.add(Song.load(tmp2));
+                }
+                return songs;
+            }
+        }
+        return null;
+    }
+    
+    public List<String> getPlaylistSongNames(String playlistName) {
+        for (Playlist tmp:this.playlists) {
+            if (tmp.getName().equalsIgnoreCase(playlistName))
+                return tmp.getSongs();
+        }
+        return null;
+    }
+    
+    public boolean addSongToPlaylist(String playlistName, String songId) {
+        Playlist tmp = this.getPlaylist(playlistName);
+        if (tmp != null) {
+            if (this.songList.indexOf(songId) > 0) {
+                return tmp.addSong(songId);
+            }
+            else return false;
+        }
+        else return false;
+    }
+    
+    public boolean moveSongInPlaylist(String playlistName, int from, int to) {
+        Playlist tmp = this.getPlaylist(playlistName);
+        if (tmp != null) {
+            return tmp.moveSong(from, to);
+        }
+        else return false;
+    }
+    
+    public boolean removeSongFromPlaylist(String playlistName, String songId) {
+        Playlist tmp = this.getPlaylist(playlistName);
+        if (tmp != null) {
+            return tmp.removeSong(songId);
+        }
+        else return false;
+    }
+    
+    
+    //NESTED CLASS: PLAYLIST, IT'S NECESSARY FOR IMPLEMENTATION WITH TWIG-PERIST  
+    static private class Playlist {
+        
+        @Id private String name;
+        
+        private List<String> songsList;
+
+        @SuppressWarnings("unused")
+        Playlist() {
+            this.songsList = new ArrayList<String>();
+        }
+        
+        Playlist(String name) {
+            this.name = name;
+            this.songsList = new ArrayList<String>();
+        }
+        
+        void update() {
+            ODF.get().storeOrUpdate(this);
+        }
+        
+        String getName() {
+            return name;
+        }
+        
+        List<String> getSongs() {
+            return this.songsList;
+        }
+        
+        boolean addSong(String songId) {
+            if (songsList.indexOf(songId)<0) {
+                songsList.add(songId);
+                this.update();
+                return true;
+            }
+            else return false;
+        }
+        
+        boolean removeSong(String songId) {
+            boolean tmp = songsList.remove(songId);
+            this.update();
+            return tmp;
+        }
+        
+        boolean moveSong(int from, int to) {
+            if (from >=0 && from<songsList.size() && to>=0 && to<songsList.size() && to != from) {
+                String tmp = songsList.remove(from);
+                songsList.add(to, tmp);
+                this.update();
+                return true;
+            }
+            else return false;
+        }
+        
+        static void deletePlaylist(Playlist p) {
+            ODF.get().storeOrUpdate(p);
+            ODF.get().delete(p);
+        }
+    }
 
 }

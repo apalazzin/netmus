@@ -269,7 +269,7 @@ public class UserAccount {
        List<Song> songsList = user.getMusicLibrary().allSongs();
        for (Song tmp:songsList)
            user.getMusicLibrary().removeSong(tmp, false);
-       ODF.get().delete(user.getMusicLibrary());
+       MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
        
        ODF.get().storeOrUpdate(user);
        
