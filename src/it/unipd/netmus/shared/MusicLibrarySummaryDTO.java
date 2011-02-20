@@ -39,4 +39,8 @@ public class MusicLibrarySummaryDTO implements Serializable {
     public List<SongSummaryDTO> getSongs() {
         return songs;
     }
+    
+    public int getLibrarySize() {
+        return songs.size();
+    }
 }

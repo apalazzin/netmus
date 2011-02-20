@@ -6,6 +6,7 @@ package it.unipd.netmus.client.service;
 import java.util.List;
 
 import it.unipd.netmus.shared.MusicLibraryDTO;
+import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -21,4 +22,5 @@ public interface LibraryService extends RemoteService {
 	public void addSong(SongDTO newTrack);
 	
 	public void sendUserNewMusic(String user, List<SongDTO> new_songs);
+    MusicLibrarySummaryDTO getLibrary(String user);
 }
