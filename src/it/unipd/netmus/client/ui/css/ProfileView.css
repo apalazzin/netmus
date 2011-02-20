@@ -156,7 +156,7 @@
 .cover {
 	
 	position: absolute;
-	bottom: 60px;
+	bottom: 10px;
 	left:7px; 
 	height: 164px;
 	border: 1px solid #37A6EB;
@@ -374,11 +374,11 @@
 
 .playlist {
 	
-	margin-top: 5px;
+	margin-top: 0px;
 	margin-left: 10px;
 	text-align: left;
+	min-height: 140px;
 	
-	max-height: 150px;
 	overflow: auto;
 	
 	
@@ -492,18 +492,17 @@
 	
 .social {
 	
-	margin-top: 0px;
 	margin-left: 10px;
 	text-align: left;
-	
-	max-height: 145px;
+	height: auto;	
+
 	overflow: auto;
 	
 	
 	color: #37A6EB;
 	font-family: Verdana;
-	font-size: 12px;
-	font-weight: bold;
+	font-size: 11px;
+	font-weight: 600;
 	
 	-webkit-transition: opacity 0.5s ease-in-out;
 	-moz-transition: opacity 0.5s ease-in-out;
@@ -563,18 +562,13 @@
 	font-size: 12px;
 	font-weight: bold;
 	margin-bottom: 8px;
-	margin-top: 10px;
+	margin-top: 0px;
+	margin-left: 10px;
 	
-	}
-
-.title {
-	
-	color: #38D12F;
-	font-family: Verdana;
-	font-size: 12px;
-	font-weight: bold;
-	margin-bottom: 8px;
-	margin-top: 10px;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 	
 	}
 
@@ -596,13 +590,13 @@
 
 .utente {
 	
-	color: #37A6EB;
+	color: #000000;
 	font-family: Verdana;
 	font-size: 13px;
 	font-weight: bold;
 	
 	margin-left: 10px;
-	margin-top: 10px;
+	margin-top: 45px;
 	
 	}
 	

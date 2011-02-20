@@ -69,7 +69,7 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setInfo(getSongInfo());
                 profileView.paintCatalogo(getSongs());
                 containerWidget.setWidget(profileView.asWidget());
-                
+                profileView.setLayout();
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
               
@@ -139,7 +139,7 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public String[] getPlaylistList() {
 		// TODO Auto-generated method stub
-		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock" };
+		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock","Casa", "Vacanze"};
 		return playlists;
 		
 	}
@@ -147,7 +147,7 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public String[] getFriendList() {
 		// TODO Auto-generated method stub
-		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
+		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
 		return friends;
 	}
 
