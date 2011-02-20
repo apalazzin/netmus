@@ -58,6 +58,8 @@ public interface ProfileView extends IsWidget {
    void addToPLaylist(Song brano);
    //rimuovi il brano dalla playlist
    void removeFromPlaylist(Song brano);
+   //inizializza il layout
+   void setLayout();
    
    public interface Presenter
    {
@@ -66,6 +68,9 @@ public interface ProfileView extends IsWidget {
       
       //restituisce lo username dell'utente connesso.
       String getUsername();
+      
+      //restituisce la dimensione del catalogo dell'utente
+      String getLibrarySize();
       
       //restituisce la lista dei titoli delle singole playlist dell'utente
       String[] getPlaylistList(); 

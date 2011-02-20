@@ -5,6 +5,7 @@ package it.unipd.netmus.client.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -85,6 +86,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
    @UiField HTMLPanel friends;
+   @UiField HTMLPanel friends_titolo;
    @UiField HTMLPanel info;
    @UiField HTMLPanel search;
    @UiField HTMLPanel youtube;
@@ -187,59 +189,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public ProfileViewImpl() {
 
-	   //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
-	   Window.addResizeHandler(new ResizeHandler() {
-			@Override
-			public void onResize(ResizeEvent event) {				
-				int catalogo_h = main_panel.getOffsetHeight();
-				left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
-                catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-                playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-				catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
-				playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
-                
-				if(event.getWidth()<1200) {
-					
-					search.getElement().getStyle().setOpacity(0);
-					social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
-					account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
-					edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);					
-					
-				} else {
-					
-					social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
-					account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
-					edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
-					
-					   Timer timerSearch = new Timer() {
-						   public void run() {
-							   
-							   if(Window.getClientWidth()>1200)
-								search.getElement().getStyle().setOpacity(1);
-								
-						   }
-					   };
-					   timerSearch.schedule(300);
-					
-				}
-				
-				
-				if(event.getHeight()<650) {
-					
-					friends.getElement().getStyle().setOpacity(0);
-					
-				} else {
-					
-					friends.getElement().getStyle().setOpacity(1);
-					
-				}
-
-			}			
-		});
-	   
-	  
-	   
 	   //costruisco la componente widget x il catalogo delle canzoni
 	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
 	   catalogo.setWidth("100%");
@@ -343,61 +292,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       
 	       HTMLPanel off = new HTMLPanel("");
 	       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
-	       playlist_songs.add(off);
-	   
-	   Timer timerMain = new Timer() {
-		   public void run() {
-			   
-			   
-			  		if(Window.getClientWidth()<1200) {
-						
-						search.getElement().getStyle().setOpacity(0);
-						social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
-						account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
-						edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);
-
-						
-						
-					} else {
-						
-						social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
-						account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
-						edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
-						
-						   Timer timerSearch = new Timer() {
-							   public void run() {
-								   
-								   if(Window.getClientWidth()>1200)
-									search.getElement().getStyle().setOpacity(1);
-									
-							   }
-						   };
-						   timerSearch.schedule(300);
-						
-					}
-			  		
-			  		
-					if(Window.getClientHeight()<650) {
-						
-						friends.getElement().getStyle().setOpacity(0);
-						
-					} else {
-						
-						friends.getElement().getStyle().setOpacity(1);
-						
-					}
-
-			  		
-			   	//ridimensiono il layout in base alla dimensione della finestra del browser
-				left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
-				main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);				
-				catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-				playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-
-		   }
-	   };
-	   timerMain.schedule(10);
-	   
+	       playlist_songs.add(off);	   
 	   	   
    }
  
@@ -593,8 +488,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    @Override
-   public void setNumeroBrani(int numero) {
-	   numero_brani.setText(String.valueOf(numero));
+   public void setNumeroBrani(String numero) {
+	   numero_brani.setText(numero);
    }
    
    //riempie la lista delle playlists
@@ -606,10 +501,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		   	Label tmpTxt = new Label(lista[k]);
 			tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
 	        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+            tmpTxt.getElement().getStyle().setColor("#37A6EB");
+            tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
+            tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+            tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+            tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
 	        
 			Image tmpImg = new Image("images/playlist.jpg");
-			tmpImg.setWidth("25px");
+			tmpImg.setWidth("22px");
+			
 			HorizontalPanel tmpPnl = new HorizontalPanel();
+			tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
 			tmpPnl.add(tmpImg);
 			tmpPnl.add(tmpTxt);
 			
@@ -634,9 +536,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   for(int k=0; k< lista.length; k++) {
 
 		   	Label tmpTxt = new Label(lista[k]);
-		   	Label bull = new Label("\u2022");
-		   	bull.getElement().getStyle().setColor("#000000");
-		   	bull.getElement().getStyle().setMarginRight(11, Style.Unit.PX);
+		   	Label bull = new Label("\u25FC");
+		   	bull.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+		   	bull.getElement().getStyle().setColor("#555555");
+		   	bull.getElement().getStyle().setMarginRight(10, Style.Unit.PX);
+            bull.getElement().getStyle().setMarginBottom(6, Style.Unit.PX);
+		   	
+		   	
 			HorizontalPanel tmpPnl = new HorizontalPanel();
 			tmpPnl.add(bull);
 			tmpPnl.add(tmpTxt);
@@ -901,6 +807,137 @@ public class ProfileViewImpl extends Composite implements ProfileView {
      
         
     }
+    
+    public void startsetLayout() {
+        
+        
+            if(Window.getClientWidth()<1200) {
+                
+                search.getElement().getStyle().setOpacity(0);
+                social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
+                account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
+                edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);
+    
+                
+                
+            } else {
+                
+                social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
+                account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
+                edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+                
+                           if(Window.getClientWidth()>1200)
+                            search.getElement().getStyle().setOpacity(1);
+                            
+                
+            }
+            
+            
+            if(Window.getClientHeight()<640) {
+                
+                friends.getElement().getStyle().setOpacity(0);
+                friends_titolo.getElement().getStyle().setOpacity(0);
+                
+            } else {
+                
+                friends.getElement().getStyle().setOpacity(1);
+                friends_titolo.getElement().getStyle().setOpacity(1);
+                
+            }
+    
+            
+        //ridimensiono il layout in base alla dimensione della finestra del browser
+        left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
+        main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);              
+        catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+        playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+        
+    
+    
+        if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
+            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
+            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.4,Style.Unit.PX);
+            
+        } else {
+            
+            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
+            
+        }
+    
+        
+        //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
+        Window.addResizeHandler(new ResizeHandler() {
+             @Override
+             public void onResize(ResizeEvent event) {               
+                 int catalogo_h = main_panel.getOffsetHeight();
+                 left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
+                 main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
+                 catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+                 playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+                 catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
+                 playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
+                 
+                 friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
+                 
+                 if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+                     
+
+                     playlists.getElement().getStyle().setProperty("height", "auto");
+                     
+                     
+                 } else if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
+
+                     playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
+                     
+                 }
+
+                 
+                 if(event.getWidth()<1200) {
+                     
+                     search.getElement().getStyle().setOpacity(0);
+                     social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
+                     account_button.getElement().getStyle().setRight(95, Style.Unit.PX);
+                     edit_button.getElement().getStyle().setRight(165, Style.Unit.PX);                   
+                     
+                 } else {
+                     
+                     social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
+                     account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
+                     edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+                     
+                        Timer timerSearch = new Timer() {
+                            public void run() {
+                                
+                                if(Window.getClientWidth()>1200)
+                                 search.getElement().getStyle().setOpacity(1);
+                                 
+                            }
+                        };
+                        timerSearch.schedule(300);
+                     
+                 }
+                 
+                 
+                 if(event.getHeight()<640) {
+                     
+                     friends.getElement().getStyle().setOpacity(0);
+                     friends_titolo.getElement().getStyle().setOpacity(0);
+
+                     
+                 } else {
+                     
+                     friends.getElement().getStyle().setOpacity(1);
+                     friends_titolo.getElement().getStyle().setOpacity(1);
+                     
+                 }
+
+             }           
+         });
+
+        
+    }
+    
+    
    
    
 }
