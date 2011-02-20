@@ -55,9 +55,9 @@ public interface ProfileView extends IsWidget {
    //imposta il brano selezionato sulla playlist
    void setBranoPlaylist(Song selezione);
    //aggiungi il brano del catalogo alla playlist 
-   void addToPLaylist(Song brano);
+   void addToPLaylist(String autore, String titolo, String album);
    //rimuovi il brano dalla playlist
-   void removeFromPlaylist(Song brano);
+   void removeFromPlaylist(String autore, String titolo, String album);
    //inizializza il layout
    void setLayout();
    
@@ -67,35 +67,32 @@ public interface ProfileView extends IsWidget {
       void goTo(Place place);
       
       //restituisce lo username dell'utente connesso.
-      String getUsername();
-      
-      //restituisce la dimensione del catalogo dell'utente
-      String getLibrarySize();
-      
+      void setUser();
+            
       //restituisce la lista dei titoli delle singole playlist dell'utente
-      String[] getPlaylistList(); 
+      void setPlaylistList(); 
 
       //restituisce la lista degli utenti affini su Netmus
-      String[] getFriendList(); 
+      void setFriendList(); 
 
       //restituisce il titolo della canzone in ascolto
-      String getSongInfo(); 
+      void setSongInfo(); 
       
-      //restituisce le canzoni con i relativi album di una data playlist
-      List<String> getPlaylistSongs(String titoloPlaylist);
+      //restituisce le canzoni con i relativi album data una data playlist
+      void setPlaylistSongs(String titoloPlaylist);
 
       
       //restituisce il summary delle canzoni
-      List<String> getSongs(MusicLibrarySummaryDTO user_library);
+      void setSongs();
 
       //restituisce il link youtube della canzone selezionata
-      String getYouTubeLink();
+      void playYouTube();
 
       //aggiunge song alla playlist e restituisce true in caso di successo
-      boolean addToPLaylist(String playlist, String autore, String titolo, String album);
+      void addToPLaylist(String playlist, String autore, String titolo, String album);
 
       //aggiunge song alla playlist e restituisce true in caso di successo
-      boolean removeFromPLaylist(String playlist, String autore, String titolo, String album);
+      void removeFromPLaylist(String playlist, String autore, String titolo, String album);
 
    }
 }
