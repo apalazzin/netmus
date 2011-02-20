@@ -262,6 +262,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       titoloColumn2.setSortable(true);
 	       // la aggiunge al catalogo
 	       lista_canzoni.addColumn(titoloColumn2, "Titolo");
+	       lista_canzoni.setColumnWidth(titoloColumn2,"60%");
 
 	       
 	       //crea la colonna Album
@@ -573,8 +574,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       paintPlaylistSongs(listener.getPlaylistSongs(titolo));
        
       titolo_playlist.setText(titolo);
-      catalogo_container.getElement().getStyle().setWidth(77, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setWidth(23, Style.Unit.PCT);
+      catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+      playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
       
       
       Timer timerPlaylist = new Timer() {

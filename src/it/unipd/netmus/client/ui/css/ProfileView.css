@@ -55,8 +55,10 @@
 	font-size: 9px;
 	color: green;
 	margin-left: 70px;
-	margin-top: 5px;	
-	 
+	margin-top: 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-height: 12px; 
 	}
 
 .brano_rimuovere {
@@ -64,10 +66,11 @@
 	font-family: Verdana;
 	font-size: 9px;
 	color: #DD0000;
-	
-	margin-left: 15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-left: 8px;
 	margin-top: 5px;	
-	
+	max-height: 12px;
 	 
 	}
 
