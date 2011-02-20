@@ -12,6 +12,7 @@ import it.unipd.netmus.shared.SongDTO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
@@ -33,6 +34,7 @@ public class AppletBar {
     private TextBox status = new TextBox();
     private HTML applet = new HTML();
     private String user;
+    private String original_user;
     private boolean state;
     private TranslateDTOXML translator = new TranslateDTOXML();
     
@@ -40,6 +42,7 @@ public class AppletBar {
     
     public AppletBar(String user, boolean state) {
     	
+        this.original_user = user;
     	this.user=user.replaceAll("@\\S*", "");
     	this.state=state;
         
@@ -166,7 +169,7 @@ public class AppletBar {
             }
         };
         
-        libraryService.sendUserNewMusic(user, new_songs, callback);
+        libraryService.sendUserNewMusic(original_user, new_songs, callback);
         System.out.println("Dati XML spediti");
     }
     

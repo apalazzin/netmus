@@ -5,6 +5,7 @@ package it.unipd.netmus.client.ui;
 
 import java.util.List;
 
+import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import com.google.gwt.place.shared.Place;
@@ -28,7 +29,7 @@ public interface ProfileView extends IsWidget {
     
    void setName(String profileName);
    void setPresenter(Presenter listener);
-   void setNumeroBrani(String numero);
+   void setNumeroBrani(int numero);
    void setUser(String username);
 
    //riempie il catalogo
@@ -66,9 +67,6 @@ public interface ProfileView extends IsWidget {
       //restituisce lo username dell'utente connesso.
       String getUsername();
       
-      //restituisce la dimensione del catalogo dell'utente
-      String getLibrarySize();
-      
       //restituisce la lista dei titoli delle singole playlist dell'utente
       String[] getPlaylistList(); 
 
@@ -83,7 +81,7 @@ public interface ProfileView extends IsWidget {
 
       
       //restituisce il summary delle canzoni
-      List<String> getSongs();
+      List<String> getSongs(MusicLibrarySummaryDTO user_library);
 
       //restituisce il link youtube della canzone selezionata
       String getYouTubeLink();
