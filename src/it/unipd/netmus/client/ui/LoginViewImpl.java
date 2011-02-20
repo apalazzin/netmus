@@ -8,7 +8,6 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -63,7 +62,7 @@ public class LoginViewImpl extends Composite implements LoginView {
       login.setText(myConstants.loginLabel());
       register.setText(myConstants.registerSwitchLabel());
       account.setText(myConstants.accountGoogle());
-      check_google.setValue(true);
+      check_netmus.setValue(true);
       
       Timer timerMain = new Timer() {
 		  public void run() {
@@ -82,8 +81,12 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("login")
    void handleClickLogin(ClickEvent e) {
 	 try {
-		 if(type != LoginType.NETMUSREGISTRATION)
-			 listener.sendLogin(user.getText(), password.getText());
+		 if(type != LoginType.NETMUSREGISTRATION) {
+		     if (type == LoginType.GOOGLELOGIN)
+		         listener.sendGoogleLogin(user.getText(), password.getText());
+		     else
+		         listener.sendLogin(user.getText(), password.getText());
+		 }
 		 else
 			 listener.sendRegistration(user.getText(), password.getText(), c_password.getText());
 	 } catch (LoginException e1) {
@@ -93,12 +96,16 @@ public class LoginViewImpl extends Composite implements LoginView {
 	 }
    }
    
-   @UiHandler(value={"password", "c_password"})
+   @UiHandler(value={"user", "password", "c_password"})
    void handlePressEnterPassword(KeyPressEvent e) {
        if (e.getNativeEvent().getKeyCode()==KeyCodes.KEY_ENTER) {
            try {
-               if(type != LoginType.NETMUSREGISTRATION)
-                   listener.sendLogin(user.getText(), password.getText());
+               if(type != LoginType.NETMUSREGISTRATION) {
+                   if (type == LoginType.GOOGLELOGIN)
+                       listener.sendGoogleLogin(user.getText(), password.getText());
+                   else
+                       listener.sendLogin(user.getText(), password.getText());
+               }
                else
                    listener.sendRegistration(user.getText(), password.getText(), c_password.getText());
            } catch (LoginException e1) {
@@ -146,6 +153,8 @@ public class LoginViewImpl extends Composite implements LoginView {
 		   check_google.setValue(false);
 		   check_netmus.setValue(true);
 		   check_google.setEnabled(false);
+		   user.setEnabled(true);
+           password.setEnabled(true);
 			   
 
 	  } else {
@@ -192,7 +201,8 @@ public class LoginViewImpl extends Composite implements LoginView {
 	   if(check_netmus.getValue()) {
 		   
 		   check_netmus.setValue(false);
-		   
+		   user.setEnabled(false);
+		   password.setEnabled(false);
 	   }
      
    }
@@ -206,6 +216,8 @@ public class LoginViewImpl extends Composite implements LoginView {
 	   if(check_google.getValue()) {
 		   
 		   check_google.setValue(false);
+		   user.setEnabled(true);
+           password.setEnabled(true);
 		   
 	   }
      

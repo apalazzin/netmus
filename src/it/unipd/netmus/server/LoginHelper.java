@@ -3,11 +3,16 @@
  */
 package it.unipd.netmus.server;
 
+import it.unipd.netmus.server.utils.ServletHelper;
+import it.unipd.netmus.server.utils.ServletUtils;
+
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 /**
  * @author ValterTexasGroup
  *
@@ -36,5 +41,15 @@ public class LoginHelper extends RemoteServiceServlet {
 	  static public void setSession(HttpSession session, String user) {
 	      
 	      session.setAttribute("userLoggedIn", user);
+	  }
+	  
+	  static public String getApplitionURL(HttpServletRequest request) {
+
+	      if (ServletHelper.isDevelopment(request)) {
+	        return "http://127.0.0.1:8888/Netmus.html?gwt.codesvr=127.0.0.1:9997";
+	      } else {
+	        return ServletUtils.getBaseUrl(request);
+	      }
+
 	  }
 }

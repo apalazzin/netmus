@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -131,6 +132,11 @@ public class LoginActivity extends AbstractActivity implements
             loginServiceSvc.startLogin(login, callback);
         } catch (Exception e) {}
 
+    }
+    
+    @Override
+    public void sendGoogleLogin(String user, String password) throws LoginException {
+        Window.Location.assign("/logingoogle");
     }
 
     @Override

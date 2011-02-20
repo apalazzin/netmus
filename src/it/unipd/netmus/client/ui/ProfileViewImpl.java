@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Stack;
 
 import it.unipd.netmus.client.place.LoginPlace;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -59,7 +60,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private int vertical_offset = 65;
    private int vertical_semioffset = 275;
    
-   private CellTable lista_canzoni;
+   private CellTable<Song> lista_canzoni;
    
    //elementi uiBinder
 
@@ -71,6 +72,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label numero_brani;
    @UiField Label titolo_playlist;
    @UiField Label info_youtube_link;
+   @UiField Label brano_aggiungere;
+   @UiField Label brano_rimuovere;
    
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
@@ -105,9 +108,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image chiudi_playlist;
    @UiField Image logo_youtube;
    @UiField Image chiudi_youtube;
+   @UiField Image aggiungi_branoplaylist;
+   @UiField Image rimuovi_branoplaylist;
 
-   Song selected;
-   Song selected_inplaylist;
+   Song selected_song;
+   Song selected_song_playlist;
    
    List<Song> canzoni_catalogo = new ArrayList<Song>();
    List<Song> canzoni_playlist = new ArrayList<Song>();
@@ -144,7 +149,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    
    //classe interna che rappresenta un brano
-   private static class Song {
+   private static class Song extends it.unipd.netmus.client.ui.ProfileView.Song {
 
 	   private final String autore;
 	   private final String titolo;
@@ -155,24 +160,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		   this.titolo = titolo;
 		   this.album = album;
 	   }
+	   
+	   @Override
+	   public boolean equals(Object o) {
+
+	       if (o==null)return false;
+	       if (!(o instanceof Song)) return false;
+	       
+	       Song song = (Song) o;
+	       
+	       if(this.autore.equals(song.autore) && this.titolo.equals(song.titolo) && this.album.equals(song.album)) {
+	           
+	           return true;
+	       }
+	           return false;
+	       
+        }
+
    }
-   
-   
-   // Lista fittizia di brani da popolare in teoria via database
-   /*private static List<Song> songs = Arrays.asList(new Song("Tokio Hotel",
-	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Alien", "Humanoid"), new Song("Tokio Hotel","Zoom Into Me", "Humanoid"),new Song("Tokio Hotel",
-	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
-	    	    	    	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Alien", "Humanoid"), new Song("Tokio Hotel","Zoom Into Me", "Humanoid"));
-   
  
- */ 
    
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -284,7 +290,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	    catalogo.setSelectionModel(selectionModel);
 	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 	      public void onSelectionChange(SelectionChangeEvent event) {
-	        Song selected = selectionModel.getSelectedObject();
+	          
+	         setBranoCatalogo(selectionModel.getSelectedObject());
 	      }
 	    });
 	    
@@ -324,9 +331,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
 	       final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
 	       lista_canzoni.setSelectionModel(selectionModel2);
-	       selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+	       selectionModel2.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 	         public void onSelectionChange(SelectionChangeEvent event) {
-	           Song selected_inplaylist = selectionModel.getSelectedObject();
+	             
+	           setBranoPlaylist(selectionModel2.getSelectedObject());	           
 	         }
 	       });
 	       
@@ -549,6 +557,26 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       chiudi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
  
+   @UiHandler("aggiungi_branoplaylist")
+   void handleClickAggiungiBranoPlaylist(ClickEvent e) {
+       addToPLaylist(selected_song);
+   }
+   
+   @UiHandler("aggiungi_branoplaylist")
+   void handleMouseOverAggiungiBranoPlaylist(MouseOverEvent e) {
+      aggiungi_branoplaylist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   @UiHandler("rimuovi_branoplaylist")
+   void handleClickRimuoviBranoPlaylist(ClickEvent e) {
+      removeFromPlaylist(selected_song_playlist);
+   }
+   
+   @UiHandler("rimuovi_branoplaylist")
+   void handleMouseOverRimuoviBranoPlaylist(MouseOverEvent e) {
+      rimuovi_branoplaylist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -565,8 +593,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    @Override
-   public void setNumeroBrani(String numero) {
-	   numero_brani.setText(numero);
+   public void setNumeroBrani(int numero) {
+	   numero_brani.setText(String.valueOf(numero));
    }
    
    //riempie la lista delle playlists
@@ -656,6 +684,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void closePlaylist() {
        
+      brano_rimuovere.setText("");
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
       playlist_contenuto.getElement().getStyle().setOpacity(0);
@@ -663,28 +692,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       
    }
 
-   
-   //riempie la lista canzoni della playlist
-   @Override
-   public void paintPlaylistSongs(List<String> lista) {
-       
-       List<Song> test = dataProvider_playlist.getList();
-       
-       test.removeAll(canzoni_playlist);       
-       canzoni_playlist.removeAll(canzoni_playlist);
-       for (int j=0; j<lista.size(); j+=3) {
-           
-           canzoni_playlist.add(new Song(lista.get(j), lista.get(j+1), lista.get(j+2)));
-       }
-       
-       
-       for (Song song : canzoni_playlist) {
-           test.add(song);
-       }
-
-
-   }
-   
    
    public void playYouTube(String link) {
        
@@ -763,26 +770,137 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 
 
+   //riempie la lista canzoni della playlist
+   @Override
+   public void paintPlaylistSongs(List<String> lista) {
+       
+       List<Song> test = dataProvider_playlist.getList();
+       
+       test.removeAll(canzoni_playlist);       
+       canzoni_playlist.removeAll(canzoni_playlist);
+       for (int j=0; j<lista.size(); j+=3) {
+           
+           canzoni_playlist.add(new Song(lista.get(j), lista.get(j+1), lista.get(j+2)));
+       }
+       
+       
+       for (Song song : canzoni_playlist) {
+           test.add(song);
+       }
 
-@Override
-public void paintCatalogo(List<String> lista_canzoni) {
 
-    List<Song> test = dataProvider_catalogo.getList();
+   }
+
+   
+   //riempie il catalogo/libreria con la lista dei brani
+    @Override
+    public void paintCatalogo(List<String> lista_canzoni) {
     
-    test.removeAll(canzoni_catalogo);       
-    canzoni_catalogo.removeAll(canzoni_catalogo);
-    
-    for (int j=0; j<lista_canzoni.size(); j+=3) {
+        List<Song> test = dataProvider_catalogo.getList();
         
-        canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+        test.removeAll(canzoni_catalogo);       
+        canzoni_catalogo.removeAll(canzoni_catalogo);
+        
+        for (int j=0; j<lista_canzoni.size(); j+=3) {
+            
+            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+        }
+        
+        for (Song song : canzoni_catalogo) {
+            test.add(song);
+        }
+    }
+
+
+
+
+
+    @Override
+    public void setBranoCatalogo(
+            it.unipd.netmus.client.ui.ProfileView.Song selezione) {
+        
+        selected_song = (Song) selezione;
+        if(!canzoni_playlist.contains(selected_song)) {    
+            brano_aggiungere.setText(selected_song.titolo);
+        } else {
+            
+            brano_aggiungere.setText("");
+        }
     }
     
-    for (Song song : canzoni_catalogo) {
-        test.add(song);
-    }
- 
     
-}
+    
+    
+    @Override
+    public void setBranoPlaylist(
+            it.unipd.netmus.client.ui.ProfileView.Song selezione) {
+        // TODO Auto-generated method stub
+    
+        selected_song_playlist = (Song) selezione; 
+        brano_rimuovere.setText(selected_song_playlist.titolo);
+    
+    }
+    
+    
+    
+    
+    @Override
+    public void addToPLaylist(it.unipd.netmus.client.ui.ProfileView.Song brano) {
+        
+        if(listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album)) {
+            
+            if(!canzoni_playlist.contains(brano)) {
+                List<Song> test = dataProvider_playlist.getList();
+                canzoni_playlist.add(new Song(selected_song.autore, selected_song.titolo, selected_song.album));      
+                test.add(canzoni_playlist.get(canzoni_playlist.size()-1));
+                brano_aggiungere.setText("");
+                
+                if(((Song)brano).equals(((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).getSelectedObject()))
+                    brano_rimuovere.setText(((Song)brano).titolo);
+            }
+        }
+        
+        
+    }
+    
+    
+    
+    
+    @Override
+    public void removeFromPlaylist(it.unipd.netmus.client.ui.ProfileView.Song brano) {
+    
+        
+
+       if(listener.removeFromPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album)) {
+            
+            if(canzoni_playlist.contains(brano)) {
+                
+                // LANCIA UN ECCEZIONE com.google.gwt.event.shared.UmbrellaExceptio- PROBABILE BUG GWT - NESSUN ERRORE IN COMPILAZIONE
+                //((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).setSelected(((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).getSelectedObject(), false);
+                // LANCIA UN ECCEZIONE com.google.gwt.event.shared.UmbrellaExceptio- PROBABILE BUG GWT - NESSUN ERRORE IN COMPILAZIONE
+                
+                List<Song> test = dataProvider_playlist.getList();
+                
+                canzoni_playlist.remove(brano); 
+                if(canzoni_playlist.size()==0) {
+                
+                    test.remove(0);
+                    
+                } else {
+                    
+                    test.remove(brano);
+                    
+                }
+                
+                if(((Song)brano).equals(((SingleSelectionModel<Song>)catalogo.getSelectionModel()).getSelectedObject()))
+                    brano_aggiungere.setText(((Song)brano).titolo);
+                
+                brano_rimuovere.setText("");
+            }
+        }
+     
+        
+    }
    
    
 }
