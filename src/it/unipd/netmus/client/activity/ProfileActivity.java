@@ -51,59 +51,27 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
-	    AsyncCallback<String> callback = new AsyncCallback<String>() {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException) {
-                    logger.info("User not logged yet - Redirect to Login");
-                    goTo(new LoginPlace(""));
-                }
-            }
-
-            @Override
-            public void onSuccess(final String user) {
-                
+                setUser();
                 final ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
-                
-                
-                AsyncCallback<MusicLibrarySummaryDTO> callback = new AsyncCallback<MusicLibrarySummaryDTO>() {
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        logger.info("Problema richiesta catalogo");
-                    }
-
-                    @Override
-                    public void onSuccess(MusicLibrarySummaryDTO user_library) {
-                        
-                        profileView.setNumeroBrani(user_library.getLibrarySize());
-                        profileView.paintCatalogo(getSongs(user_library));
-                        profileView.setUser(user);
-                        profileView.paintPlaylist(getPlaylistList());
-                        profileView.paintFriendlist(getFriendList());
-                        profileView.setInfo(getSongInfo());
-                        containerWidget.setWidget(profileView.asWidget());
-                        profileView.setLayout();
-                    }
-                };
-                
-                libraryServiceSvc.getLibrary(user,callback);
+                setSongs();
+                profileView.paintPlaylist(getPlaylistList());
+                setFriendList();
+                profileView.setInfo(getSongInfo());
+                containerWidget.setWidget(profileView.asWidget());
+                profileView.setLayout();
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
               
                 ///////////////////////////////////////////
                 
                //load the applet bar, if not active yet
-                ABF.get(user,true).appletBarON();
-            }
-        };
-        
-        try { loginServiceSvc.getLoggedInUser(callback); }
-        catch(LoginException e) {
-        }
+                startApplet();
+                
+                
+                
 	}
 
 	/**
@@ -145,13 +113,73 @@ public class ProfileActivity extends AbstractActivity implements
    }
 
    
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return new String("giovytr@trezzi.net");
-	}
+   
+   public void startApplet() {
+       
+       AsyncCallback<String> callback = new AsyncCallback<String>() {
 
+           @Override
+           public void onFailure(Throwable caught) {
+               if (caught instanceof LoginException) {
+                   logger.info("User not logged yet - Redirect to Login");
+                   goTo(new LoginPlace(""));
+               }
+           }
+
+           @Override
+           public void onSuccess(final String user) {
+               
+               ABF.get(user,true).appletBarON();
+               
+           }
+           
+       };
+       
+       try { loginServiceSvc.getLoggedInUser(callback); }
+       catch(LoginException e) {
+       }
+       
+       
+   }
+   
+   
+   
 	@Override
+	public void setUser() {
+	
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    logger.info("User not logged yet - Redirect to Login");
+                    goTo(new LoginPlace(""));
+                }
+            }
+
+            @Override
+            public void onSuccess(final String user) {
+                
+                clientFactory.getProfileView().setUser(user);
+                
+            }
+            
+        };
+	    
+        try { loginServiceSvc.getLoggedInUser(callback); }
+        catch(LoginException e) {
+        }
+
+	}
+	
+	
+	@Override
+	public void setPlaylistList() {
+	    
+	    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+	    
+	}
+	
 	public String[] getPlaylistList() {
 		// TODO Auto-generated method stub
 		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock","Casa", "Vacanze"};
@@ -159,20 +187,42 @@ public class ProfileActivity extends AbstractActivity implements
 		
 	}
 
+	
+	
 	@Override
+	public void setFriendList() {
+	    
+	    clientFactory.getProfileView().paintFriendlist(getFriendList());
+	    
+	}
+	
 	public String[] getFriendList() {
 		// TODO Auto-generated method stub
 		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
 		return friends;
 	}
 
+	
+	
 	@Override
+	public void setSongInfo() {
+	    
+	    clientFactory.getProfileView().setInfo(getSongInfo());
+	}
+	
 	public String getSongInfo() {
 		// TODO Auto-generated method stub
 		return "Nessun brano in ascolto.";
 	}
 
-    @Override
+	
+	
+	@Override
+	public void setPlaylistSongs(String titoloPlaylist) {
+	   
+	    clientFactory.getProfileView().paintPlaylistSongs(getPlaylistSongs(titoloPlaylist));
+	}
+    
     public List<String> getPlaylistSongs(String titoloPlaylist) {
         // TODO Auto-generated method stub
         List<String> lista_canzoni = new ArrayList<String>();
@@ -182,13 +232,64 @@ public class ProfileActivity extends AbstractActivity implements
         
     }
 
+    
+    
     @Override
+    public void playYouTube() {
+        
+        clientFactory.getProfileView().playYouTube(getYouTubeLink());
+        
+    }
+    
     public String getYouTubeLink() {
         // TODO Auto-generated method stub
         return "yNBFkANEd5M";
     }
 
-    @Override
+    
+    
+    public void setSongs() {
+        
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    logger.info("User not logged yet - Redirect to Login");
+                    goTo(new LoginPlace(""));
+                }
+            }
+
+            @Override
+            public void onSuccess(final String user) {
+ 
+                AsyncCallback<MusicLibrarySummaryDTO> callback = new AsyncCallback<MusicLibrarySummaryDTO>() {
+        
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        logger.info("Problema richiesta catalogo");
+                    }
+        
+                    @Override
+                    public void onSuccess(MusicLibrarySummaryDTO user_library) {
+                        
+                        clientFactory.getProfileView().paintCatalogo(getSongs(user_library));
+                        clientFactory.getProfileView().setNumeroBrani(user_library.getLibrarySize());
+                     
+                    }
+                };
+                
+                libraryServiceSvc.getLibrary(user,callback);
+            }
+        };
+        
+        try { loginServiceSvc.getLoggedInUser(callback); }
+        catch(LoginException e) {
+        }
+        
+    }
+ 
+    
     public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
 
         List<SongSummaryDTO> library = user_library.getSongs();
@@ -204,22 +305,22 @@ public class ProfileActivity extends AbstractActivity implements
         return song_list;
     }
 
+    
+    
     @Override
-    public boolean addToPLaylist(String playlist, String autore, String titolo, String album) {
-        // TODO Auto-generated method stub
-        return true;
+    public void addToPLaylist(String playlist, String autore, String titolo, String album) {
+        
+        //se l'inserimento nella Playlist nel DB ha successo
+        clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
+        
     }
 
     @Override
-    public boolean removeFromPLaylist(String playlist, String autore,
-            String titolo, String album) {
-        // TODO Auto-generated method stub
-        return true;
+    public void removeFromPLaylist(String playlist, String autore, String titolo, String album) {
+
+      //se la rimozione dalla Playlist nel DB ha successo
+       clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
+        
     }
 
-    @Override
-    public String getLibrarySize() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

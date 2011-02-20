@@ -327,7 +327,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("play_youtube")
    void handleClickPlayYoutube(ClickEvent e) {
-      playYouTube(listener.getYouTubeLink());
+      listener.playYouTube();
    }
 
    @UiHandler("play_youtube")
@@ -455,7 +455,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
  
    @UiHandler("aggiungi_branoplaylist")
    void handleClickAggiungiBranoPlaylist(ClickEvent e) {
-       addToPLaylist(selected_song);
+       listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
    }
    
    @UiHandler("aggiungi_branoplaylist")
@@ -465,7 +465,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("rimuovi_branoplaylist")
    void handleClickRimuoviBranoPlaylist(ClickEvent e) {
-      removeFromPlaylist(selected_song_playlist);
+      listener.removeFromPLaylist(titolo_playlist.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
    }
    
    @UiHandler("rimuovi_branoplaylist")
@@ -568,10 +568,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
 
+ 
    @Override
    public void viewPlaylist(String titolo) {
       
-      paintPlaylistSongs(listener.getPlaylistSongs(titolo));
+      listener.setPlaylistSongs(titolo);
        
       titolo_playlist.setText(titolo);
       catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
@@ -752,10 +753,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
     
     @Override
-    public void addToPLaylist(it.unipd.netmus.client.ui.ProfileView.Song brano) {
-        
-        if(listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album)) {
-            
+    public void addToPLaylist(String autore, String titolo, String album) {
+         
+        Song brano = new Song(autore, titolo, album);
             if(!canzoni_playlist.contains(brano)) {
                 List<Song> test = dataProvider_playlist.getList();
                 canzoni_playlist.add(new Song(selected_song.autore, selected_song.titolo, selected_song.album));      
@@ -765,7 +765,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 if(((Song)brano).equals(((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).getSelectedObject()))
                     brano_rimuovere.setText(((Song)brano).titolo);
             }
-        }
+        
         
         
     }
@@ -774,12 +774,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
     
     @Override
-    public void removeFromPlaylist(it.unipd.netmus.client.ui.ProfileView.Song brano) {
-    
-        
+    public void removeFromPlaylist(String autore, String titolo, String album) {
 
-       if(listener.removeFromPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album)) {
-            
+        Song brano = new Song(autore, titolo, album);
+
             if(canzoni_playlist.contains(brano)) {
                 
                 // LANCIA UN ECCEZIONE com.google.gwt.event.shared.UmbrellaExceptio- PROBABILE BUG GWT - NESSUN ERRORE IN COMPILAZIONE
@@ -804,8 +802,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
                 brano_rimuovere.setText("");
             }
-        }
-     
         
     }
     
