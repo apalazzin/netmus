@@ -216,4 +216,10 @@ public class ProfileActivity extends AbstractActivity implements
         // TODO Auto-generated method stub
         return true;
     }
+
+    @Override
+    public String getLibrarySize() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

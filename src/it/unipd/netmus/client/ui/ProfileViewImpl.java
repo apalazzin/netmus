@@ -488,8 +488,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    @Override
-   public void setNumeroBrani(String numero) {
-	   numero_brani.setText(numero);
+   public void setNumeroBrani(int numero) {
+	   numero_brani.setText(String.valueOf(numero));
    }
    
    //riempie la lista delle playlists
@@ -808,7 +808,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
     }
     
-    public void startsetLayout() {
+    public void setLayout() {
         
         
             if(Window.getClientWidth()<1200) {
@@ -936,6 +936,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
         
     }
+
+
     
     
    
