@@ -28,7 +28,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
-        //create new user in the databas
+        //create new user in the database
         new UserAccount(login.getUser(), passwordHash);
         
         return login;
@@ -38,6 +38,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
+	    String username = login.getUser();
+	    if (username==null || username.equals(""))
+	        throw new WrongLoginException("User empty");
 		UserAccount userAccount = UserAccount.load(login.getUser());
 
 		if (userAccount == null) {
@@ -108,6 +111,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
             
             // restart old session by Cookies (se soddisfa)
             UserAccount userAccount = UserAccount.load(user);
+            if (userAccount == null)
+                throw new LoginException();
             String session_id_old = userAccount.getLastSessionId();
             
             if (session_id_old.equals(session_id)) {

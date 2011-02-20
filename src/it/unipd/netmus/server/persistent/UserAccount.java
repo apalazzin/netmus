@@ -57,7 +57,7 @@ public class UserAccount {
    
    @Index private String lastSessionId;
    
-   //private boolean isGoogleUser;
+   private boolean isGoogleUser;
    
    public UserAccount() {
        musicLibrary = new MusicLibrary(this);
@@ -67,6 +67,7 @@ public class UserAccount {
        musicLibrary = new MusicLibrary(this);
        this.user = user;
        this.passwordHash = passwordHash;
+       this.isGoogleUser = false;
        this.store();
    }
    
@@ -263,6 +264,15 @@ public class UserAccount {
        return lastSessionId;
    }
    
+   public void setGoogleUser(boolean isGoogleUser) {
+       this.isGoogleUser = isGoogleUser;
+       this.update();
+   }
+
+   public boolean isGoogleUser() {
+       return isGoogleUser;
+   }
+   
    public static void deleteUser(UserAccount user) {
        ODF.get().storeOrUpdate(user);
        
@@ -274,6 +284,5 @@ public class UserAccount {
        ODF.get().storeOrUpdate(user);
        
        ODF.get().delete(user);
-   }
-   
+   }  
 }

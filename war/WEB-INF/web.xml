@@ -42,6 +42,28 @@
     <url-pattern>/netmus/usersService</url-pattern>
   </servlet-mapping>
   
+    <!-- ===================== Login Google Servlet ===================== -->
+
+  <servlet>
+    <servlet-name>logingoogle</servlet-name>
+    <servlet-class>it.unipd.netmus.server.servlet.LoginGoogleServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>logingoogle</servlet-name>
+    <url-pattern>/logingoogle</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>logingooglecallback</servlet-name>
+    <servlet-class>it.unipd.netmus.server.servlet.LoginGoogleCallbackServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>logingooglecallback</servlet-name>
+    <url-pattern>/logingooglecallback</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Netmus.html</welcome-file>
