@@ -77,7 +77,14 @@
 						</g:HTMLPanel>
 						
 					</g:HTMLPanel>
-						<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;"></div>
+						
+					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
+						<g:HorizontalPanel>
+							<g:Label ui:field="brano_aggiungere" styleName="{style.brano_aggiungere}"></g:Label>
+							<g:Label ui:field="brano_rimuovere" styleName="{style.brano_rimuovere}"></g:Label>
+						</g:HorizontalPanel>
+					</div>
+						
 						<g:Image ui:field="aggiungi_branoplaylist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
 						<g:Image ui:field="rimuovi_branoplaylist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
 				
