@@ -23,7 +23,9 @@ public interface LoginView extends IsWidget {
    void setPassword(String passwordHash);
    void setError(String error);
    void setLoginType(LoginType loginType);
-
+   //aggiusta il layout all'avvio
+   void setLayout();
+   
    public interface Presenter
    {
       void goTo(Place place);

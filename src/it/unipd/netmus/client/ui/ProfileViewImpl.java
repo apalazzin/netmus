@@ -724,7 +724,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        chiudi_youtube.getElement().getStyle().setOpacity(1);
 
        
-       player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "\" frameborder=\"0\" allowfullscreen></iframe>");
+       player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
 
        
    }

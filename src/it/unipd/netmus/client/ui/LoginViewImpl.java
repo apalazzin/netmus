@@ -8,6 +8,7 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -57,7 +58,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    public LoginViewImpl()
    {
       initWidget(uiBinder.createAndBindUi(this));
-      
+            
       //localizzazione
       login.setText(myConstants.loginLabel());
       register.setText(myConstants.registerSwitchLabel());
@@ -210,24 +211,48 @@ public class LoginViewImpl extends Composite implements LoginView {
      
    }
 
-@Override
-public void setUser(String user) {
-	this.user.setText(user);
-}
-
-@Override
-public void setPassword(String password) {
-	this.password.setText(password);
-}
-
-@Override
-public void setError(String error) {
-	this.error.setText(error);	
-}
-
-@Override
-public void setLoginType(LoginType loginType) {
-	this.type = loginType;
-}
+    @Override
+    public void setUser(String user) {
+    	this.user.setText(user);
+    }
+    
+    @Override
+    public void setPassword(String password) {
+    	this.password.setText(password);
+    }
+    
+    @Override
+    public void setError(String error) {
+    	this.error.setText(error);	
+    }
+    
+    @Override
+    public void setLoginType(LoginType loginType) {
+    	this.type = loginType;
+    }
    
+    
+    @Override
+    public void setLayout() {
+        
+        c_password.setText("");
+        
+        DOM.getElementById("registrazione").getStyle().setProperty("opacity", "0");
+        DOM.getElementById("registrazione").getStyle().setProperty("height", "0");
+            
+        register.getElement().getStyle().setProperty("opacity", "0");
+    
+        register.setText(myConstants.registerSwitchLabel());
+        register.getElement().getStyle().setProperty("opacity", "1");
+
+        login.getElement().getStyle().setProperty("opacity", "0");
+  
+        login.setText(myConstants.loginLabel());
+        login.getElement().getStyle().setProperty("opacity", "1");
+        check_google.setValue(false);
+        check_netmus.setValue(true);
+        check_google.setEnabled(true);
+
+    }
+    
 }
