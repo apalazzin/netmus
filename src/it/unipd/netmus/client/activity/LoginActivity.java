@@ -53,6 +53,8 @@ public class LoginActivity extends AbstractActivity implements
 	@Override
 	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
+	    
+	    
 	    AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
@@ -66,6 +68,7 @@ public class LoginActivity extends AbstractActivity implements
                     loginView.setUser(user);
                     loginView.setPresenter(LoginActivity.this);
                     containerWidget.setWidget(loginView.asWidget());
+                    
                 }
             }
 
@@ -155,6 +158,11 @@ public class LoginActivity extends AbstractActivity implements
 
                 @Override
                 public void onSuccess(LoginDTO result) {
+                    
+                    //Reimposta la login
+                    LoginView loginView = clientFactory.getLoginView();
+                    loginView.setLayout();
+                    
                     logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
                     try {
                         sendLogin(result.getUser(), result.getPassword());
@@ -163,7 +171,9 @@ public class LoginActivity extends AbstractActivity implements
                     }
                 }
             };
+            
 
+            
             // Make the call to send login info.
             try {
                 loginServiceSvc.insertRegistration(login, callback);
