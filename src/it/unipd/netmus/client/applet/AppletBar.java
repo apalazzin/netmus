@@ -136,6 +136,7 @@ public class AppletBar {
     
     private void scanningStatus(int actual, int total){
     	//aggiornare la grafica con le nuove info
+        showStatus(actual+"/"+total);
     }
     
     private void showStatus(String status){
@@ -156,6 +157,7 @@ public class AppletBar {
             public void onFailure(Throwable caught) {
                 showStatus("Sending Error");
                 System.out.println("KO");
+                System.err.println(caught.toString());
             }
             @Override
             public void onSuccess(Void result) {

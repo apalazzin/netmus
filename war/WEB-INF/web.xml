@@ -15,6 +15,33 @@
     <url-pattern>/netmus/loginService</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>libraryService</servlet-name>
+    <servlet-class>it.unipd.netmus.server.LibraryServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>libraryService</servlet-name>
+    <url-pattern>/netmus/libraryService</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>songsService</servlet-name>
+    <servlet-class>it.unipd.netmus.server.SongsServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>songsService</servlet-name>
+    <url-pattern>/netmus/songsService</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>usersService</servlet-name>
+    <servlet-class>it.unipd.netmus.server.UsersServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>usersService</servlet-name>
+    <url-pattern>/netmus/usersService</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Netmus.html</welcome-file>
