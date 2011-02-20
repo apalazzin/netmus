@@ -3,6 +3,8 @@
  */
 package it.unipd.netmus.client.ui;
 
+import java.util.List;
+
 import it.unipd.netmus.shared.UserSummaryDTO;
 
 import com.google.gwt.place.shared.Place;
@@ -20,10 +22,13 @@ public interface ProfileView extends IsWidget {
    void setPresenter(Presenter listener);
    void setNumeroBrani(String numero);
    void setUser(String username);
+
+   //riempie la lista delle playlist
+   void paintCatalogo(List<String> lista_canzoni);
    //riempie la lista delle playlist
    void paintPlaylist(String[] lista);
    // riempie la singola playlist delle sue canzoni
-   void paintPlaylistSongs(String[][] lista);
+   void paintPlaylistSongs(List<String> lista);
    void paintFriendlist(String[] lista);
    void setInfo(String testo);
    //visualizza la playlist scelta
@@ -56,7 +61,11 @@ public interface ProfileView extends IsWidget {
       String getSongInfo(); 
       
       //restituisce le canzoni con i relativi album di una data playlist
-      String[][] getPlaylistSongs(String titoloPlaylist);
+      List<String> getPlaylistSongs(String titoloPlaylist);
+
+      
+      //restituisce il summary delle canzoni
+      List<String> getSongs();
 
       //restituisce il link youtube della canzone selezionata
       String getYouTubeLink();

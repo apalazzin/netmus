@@ -1,5 +1,7 @@
 package it.unipd.netmus.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
@@ -65,12 +67,12 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.paintPlaylist(getPlaylistList());
                 profileView.paintFriendlist(getFriendList());
                 profileView.setInfo(getSongInfo());
+                profileView.paintCatalogo(getSongs());
                 containerWidget.setWidget(profileView.asWidget());
                 
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
-                profileView.playYouTube("Tokio Hotel");
-                profileView.closeYouTube();
+              
                 ///////////////////////////////////////////
                 
                //load the applet bar, if not active yet
@@ -156,10 +158,20 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 
     @Override
-    public String[][] getPlaylistSongs(String titoloPlaylist) {
+    public List<String> getPlaylistSongs(String titoloPlaylist) {
         // TODO Auto-generated method stub
-        String[][] lista = {{"Monsoon", "ForeverNow", "Der Letzte Tag"},{"Scream","Humanoid","Schrei"}};
-        return lista; 
+        List<String> lista_canzoni = new ArrayList<String>();
+        
+        for(int k=0; k<30; k++) {
+
+            lista_canzoni.add("Autore " + k);
+            lista_canzoni.add("Titolo " + k);
+            lista_canzoni.add("Album " + k);
+            
+        }
+
+        
+        return lista_canzoni;
         
     }
 
@@ -167,5 +179,24 @@ public class ProfileActivity extends AbstractActivity implements
     public String getYouTubeLink() {
         // TODO Auto-generated method stub
         return "yNBFkANEd5M";
+    }
+
+    @Override
+    public List<String> getSongs() {
+        
+        // TODO Auto-generated method stub
+        
+        List<String> lista_canzoni = new ArrayList<String>();
+        
+        for(int k=0; k<100; k++) {
+
+            lista_canzoni.add("Autore " + k);
+            lista_canzoni.add("Titolo " + k);
+            lista_canzoni.add("Album " + k);
+            
+        }
+
+        
+        return lista_canzoni;
     }
 }
