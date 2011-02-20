@@ -57,6 +57,8 @@ public interface ProfileView extends IsWidget {
    void addToPLaylist(Song brano);
    //rimuovi il brano dalla playlist
    void removeFromPlaylist(Song brano);
+   //inizializza il layout
+   void setLayout();
    
    public interface Presenter
    {
