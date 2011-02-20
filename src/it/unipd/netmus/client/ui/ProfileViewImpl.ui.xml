@@ -10,31 +10,35 @@
 	
 
 			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
+			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
 			
 				<g:Label ui:field="utente" styleName="{style.utente}"></g:Label>
 
 
 				<g:HTMLPanel styleName="{style.statistiche}">				
-				<span style="color: green; font-family: Verdana; font-size: 12px; font-weight: bold;">Numero di Brani:</span>
+				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600;">Numero di Brani:</span>
 				<g:Label ui:field="numero_brani" styleName="{style.numero_brani}"></g:Label>
 				</g:HTMLPanel>
 
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
 
+
+				<g:HTMLPanel styleName="{style.title}"><span>PLAYLIST</span></g:HTMLPanel>
 				<g:HTMLPanel ui:field="playlists" styleName="{style.playlist}">
-				<g:HTMLPanel styleName="{style.title}"><span>Playlist +</span></g:HTMLPanel>
 				</g:HTMLPanel>
-					
+
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
+	
+				<g:HTMLPanel ui:field="friends_titolo" styleName="{style.title}"><span>UTENTI AFFINI</span></g:HTMLPanel>					
 				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
-				<g:HTMLPanel styleName="{style.title}"><span>Utenti affini su Netmus</span></g:HTMLPanel>
 				</g:HTMLPanel>
 				
 				<g:Image ui:field="cover" url="images/test_cover.jpg" styleName="{style.cover}"></g:Image>
 				
-				
-				<img src="images/netmus_scritta.png" style="position: absolute; bottom: 5px; left: 5px; width: 170px; margin-top: 5px;" />
+				<img src="images/netmus_scritta.png" style="position: absolute; top: 0px; left: 5px; width: 170px; margin-top: 5px;" />
 			
-			
-			 </g:HTMLPanel>
+			</div>
+			</g:HTMLPanel>
 
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
 	
