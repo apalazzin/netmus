@@ -65,6 +65,7 @@
 	z-index: 3;
 	bottom: 110px;
 	left: 340px;
+	opacity: 0;
 	
 	}
 
@@ -79,6 +80,10 @@
 
 .catalogo {
 	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
 	
 }
 
@@ -365,11 +370,17 @@
 	min-height: 240px;    		
 	width: 0px;
 	height: 0px;
+	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+	
 	border-bottom: 2px solid #DDDDDD;
 	border-top: 2px solid #DDDDDD;
 	float: left;
 	text-align: left;
-		
+	
 	opacity: 1;
 	position: relative;
 	overflow: auto;
@@ -389,7 +400,6 @@
 	border: 0px solid #FF0000;
 	height: 100%;
 	width: 100%;
-	
 	opacity: 0;
 	overflow: auto;
 	
@@ -614,6 +624,8 @@
 	
 	font-size: 11px;
 	text-align: center;
+	
+	opacity: 0;
 	
 	
 	border-right: 2px solid #CCCCCC;
