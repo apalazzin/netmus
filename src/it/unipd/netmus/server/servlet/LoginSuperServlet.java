@@ -17,7 +17,7 @@ public abstract class LoginSuperServlet extends HttpServlet {
       super();
     }
 
-    protected String buildCallBackURL(HttpServletRequest request, Integer provider) {
+    protected String buildCallBackURL(HttpServletRequest request) {
       StringBuffer requestURL = request.getRequestURL();
       String callbackURL = requestURL.toString();
       callbackURL += "callback";
