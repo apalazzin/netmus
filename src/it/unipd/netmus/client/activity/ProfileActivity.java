@@ -162,15 +162,7 @@ public class ProfileActivity extends AbstractActivity implements
         // TODO Auto-generated method stub
         List<String> lista_canzoni = new ArrayList<String>();
         
-        for(int k=0; k<30; k++) {
-
-            lista_canzoni.add("Autore " + k);
-            lista_canzoni.add("Titolo " + k);
-            lista_canzoni.add("Album " + k);
-            
-        }
-
-        
+        //RIEMPIRE LA LISTA CON LA SEQUENZA: autore1, titolo1, album1, autore2, titolo2, album2, autoreN, titoloN, albumN,...
         return lista_canzoni;
         
     }
@@ -198,5 +190,18 @@ public class ProfileActivity extends AbstractActivity implements
 
         
         return lista_canzoni;
+    }
+
+    @Override
+    public boolean addToPLaylist(String playlist, String autore, String titolo, String album) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public boolean removeFromPLaylist(String playlist, String autore,
+            String titolo, String album) {
+        // TODO Auto-generated method stub
+        return true;
     }
 }

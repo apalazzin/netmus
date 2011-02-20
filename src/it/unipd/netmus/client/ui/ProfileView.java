@@ -18,18 +18,28 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface ProfileView extends IsWidget {
    
+    //classe interna che rappresenta un brano
+    public abstract class Song{
+        
+        @Override
+        public abstract boolean equals(Object o);
+    };
+
+    
    void setName(String profileName);
    void setPresenter(Presenter listener);
    void setNumeroBrani(String numero);
    void setUser(String username);
 
-   //riempie la lista delle playlist
+   //riempie il catalogo
    void paintCatalogo(List<String> lista_canzoni);
    //riempie la lista delle playlist
    void paintPlaylist(String[] lista);
    // riempie la singola playlist delle sue canzoni
    void paintPlaylistSongs(List<String> lista);
+   //riempie la lista dei contatti
    void paintFriendlist(String[] lista);
+   //imposta la finestra informativa
    void setInfo(String testo);
    //visualizza la playlist scelta
    void viewPlaylist(String playlist_name);
@@ -37,8 +47,16 @@ public interface ProfileView extends IsWidget {
    void closePlaylist();
    //apre il player youtube sulla relativa canzone
    void playYouTube(String titolo);
- //chiude il player youtube
+   //chiude il player youtube
    void closeYouTube();
+   //imposta il brano selezionato sul catalogo
+   void setBranoCatalogo(Song selezione);
+   //imposta il brano selezionato sulla playlist
+   void setBranoPlaylist(Song selezione);
+   //aggiungi il brano del catalogo alla playlist 
+   void addToPLaylist(Song brano);
+   //rimuovi il brano dalla playlist
+   void removeFromPlaylist(Song brano);
    
    public interface Presenter
    {
@@ -70,6 +88,11 @@ public interface ProfileView extends IsWidget {
       //restituisce il link youtube della canzone selezionata
       String getYouTubeLink();
 
-   
+      //aggiunge song alla playlist e restituisce true in caso di successo
+      boolean addToPLaylist(String playlist, String autore, String titolo, String album);
+
+      //aggiunge song alla playlist e restituisce true in caso di successo
+      boolean removeFromPLaylist(String playlist, String autore, String titolo, String album);
+
    }
 }
