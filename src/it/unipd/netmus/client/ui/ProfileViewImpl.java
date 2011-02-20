@@ -684,6 +684,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void closePlaylist() {
        
+      brano_rimuovere.setText("");
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
       playlist_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
       playlist_contenuto.getElement().getStyle().setOpacity(0);
