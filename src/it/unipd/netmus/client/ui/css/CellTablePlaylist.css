@@ -77,7 +77,7 @@
 }
 
 .cellTableHoveredRow {
-  background: #a8ffaa;
+  background: #FF9999;
   cursor: pointer;
 }
 
@@ -95,7 +95,7 @@
 
 .cellTableSelectedRow {
   background: #a8ddff;
-  color: green;
+  color: #DD0000;
   height: auto;
   overflow: auto;
 }

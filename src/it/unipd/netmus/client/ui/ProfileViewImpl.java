@@ -12,6 +12,7 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.dom.client.Style;
@@ -31,6 +32,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -104,7 +106,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image logo_youtube;
    @UiField Image chiudi_youtube;
 
+   Song selected;
+   Song selected_inplaylist;
    
+   List<Song> canzoni_catalogo = new ArrayList<Song>();
+   List<Song> canzoni_playlist = new ArrayList<Song>();
+   
+   ListDataProvider<Song> dataProvider_playlist = new ListDataProvider<Song>();
+   ListDataProvider<Song> dataProvider_catalogo = new ListDataProvider<Song>();
+
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 
@@ -119,6 +129,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
    }
    MyCellTableResources resource = GWT.create( MyCellTableResources.class);
+   
+   public interface MyCellTableResourcesPlaylist extends CellTable.Resources {
+
+       public interface CellTableStyle extends CellTable.Style {};
+
+       @Source({"css/CellTablePlaylist.css"})
+       CellTableStyle cellTableStyle();
+       
+   }
+   MyCellTableResourcesPlaylist resourcePlaylist = GWT.create( MyCellTableResourcesPlaylist.class);
    //Estensione necessarria x la configurazione tramite CSS della cellTabel
    
    
@@ -139,7 +159,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    
    // Lista fittizia di brani da popolare in teoria via database
-   private static List<Song> SONGS = Arrays.asList(new Song("Tokio Hotel",
+   /*private static List<Song> songs = Arrays.asList(new Song("Tokio Hotel",
 	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
 	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
 	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
@@ -151,8 +171,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	    	    	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Der Letzte Tag", "Schrei so laut du kannst"),new Song("Tokio Hotel",
 	    	    	    	    	    	    	    	    	    	       "Monsoon", "Scream"), new Song("Tokio Hotel","Forever Now", "Humanoid"), new Song("Tokio Hotel","Alien", "Humanoid"), new Song("Tokio Hotel","Zoom Into Me", "Humanoid"));
    
-   
-  
+ 
+ */ 
    
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -258,23 +278,64 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   // la aggiunge al catalogo
 	   catalogo.addColumn(albumColumn, "Album");
 	   
-	   //final SingleSelectionModel<Song> selectionModel = new SingleSelectionModel<Song>();
-	   //catalogo.setSelectionModel(selectionModel);
 	   
+	    // Imposta l'oggetto Song selected in base alla selezione sulla tabella
+	    final SingleSelectionModel<Song> selectionModel = new SingleSelectionModel<Song>();
+	    catalogo.setSelectionModel(selectionModel);
+	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+	      public void onSelectionChange(SelectionChangeEvent event) {
+	        Song selected = selectionModel.getSelectedObject();
+	      }
+	    });
+	    
+	    dataProvider_catalogo.addDataDisplay(catalogo);
 
-	   
-	   // Create a data provider.
-	   ListDataProvider<Song> dataProvider = new ListDataProvider<Song>();
-	   // Connect the table to the data provider.
-	   dataProvider.addDataDisplay(catalogo);
-	   // Add the data to the data provider, which automatically pushes it to the
-	   // widget.
-	   List<Song> list = dataProvider.getList();
-	   for (Song song : SONGS) {
-		   list.add(song);
-	   }
-	   
-	   
+	       playlist_songs.getElement().setInnerHTML("");
+
+	       lista_canzoni = new CellTable<Song>(Integer.MAX_VALUE, resourcePlaylist);
+	       lista_canzoni.setWidth("100%", true);
+
+	       //crea la colonna titolo
+	       TextColumn<Song> titoloColumn2 = new TextColumn<Song>() {
+	           @Override
+	           public String getValue(Song song) {
+	               return song.titolo;
+	           }
+	       };
+	       //la rende ordinabile
+	       titoloColumn2.setSortable(true);
+	       // la aggiunge al catalogo
+	       lista_canzoni.addColumn(titoloColumn2, "Titolo");
+
+	       
+	       //crea la colonna Album
+	       TextColumn<Song> albumColumn2 = new TextColumn<Song>() {
+	           @Override
+	           public String getValue(Song song) {
+	               return song.album;
+	           }
+	       };
+	       //la rende ordinabile
+	       albumColumn2.setSortable(true);
+	       // la aggiunge al catalogo
+	       lista_canzoni.addColumn(albumColumn2, "Album");
+
+	       
+	       // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
+	       final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
+	       lista_canzoni.setSelectionModel(selectionModel2);
+	       selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+	         public void onSelectionChange(SelectionChangeEvent event) {
+	           Song selected_inplaylist = selectionModel.getSelectedObject();
+	         }
+	       });
+	       
+	       dataProvider_playlist.addDataDisplay(lista_canzoni);
+	       playlist_songs.add(lista_canzoni);
+	       
+	       HTMLPanel off = new HTMLPanel("");
+	       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
+	       playlist_songs.add(off);
 	   
 	   Timer timerMain = new Timer() {
 		   public void run() {
@@ -487,7 +548,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOverChiudiPlaylist(MouseOverEvent e) {
       chiudi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
-   
+ 
+
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -577,8 +639,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       paintPlaylistSongs(listener.getPlaylistSongs(titolo));
        
       titolo_playlist.setText(titolo);
-      catalogo_container.getElement().getStyle().setWidth(80, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setWidth(20, Style.Unit.PCT);
+      catalogo_container.getElement().getStyle().setWidth(77, Style.Unit.PCT);
+      playlist_container.getElement().getStyle().setWidth(23, Style.Unit.PCT);
       
       
       Timer timerPlaylist = new Timer() {
@@ -602,81 +664,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    
-   //riempie la lista delle playlists
+   //riempie la lista canzoni della playlist
    @Override
-   public void paintPlaylistSongs(String[][] lista) {
-
-       playlist_songs.getElement().setInnerHTML("");
-           
-       class PlaylistSong {
-
-           private final String titolo;
-           private final String album;
-           
-           public PlaylistSong(String titolo, String album) {
-               this.titolo = titolo;
-               this.album = album;
-
-           }
-       }
+   public void paintPlaylistSongs(List<String> lista) {
        
-       List<PlaylistSong> canzoni = new ArrayList<PlaylistSong>();
+       List<Song> test = dataProvider_playlist.getList();
        
-       for(int k=0; k<=lista.length; k++) {
+       test.removeAll(canzoni_playlist);       
+       canzoni_playlist.removeAll(canzoni_playlist);
+       for (int j=0; j<lista.size(); j+=3) {
            
-           canzoni.add(new PlaylistSong(lista[0][k], lista[1][k]));
-
+           canzoni_playlist.add(new Song(lista.get(j), lista.get(j+1), lista.get(j+2)));
        }
        
        
-       lista_canzoni = new CellTable<PlaylistSong>(Integer.MAX_VALUE, resource);
-       lista_canzoni.setWidth("100%", true);
-
-       //crea la colonna titolo
-       TextColumn<PlaylistSong> titoloColumn = new TextColumn<PlaylistSong>() {
-           @Override
-           public String getValue(PlaylistSong song) {
-               return song.titolo;
-           }
-       };
-       //la rende ordinabile
-       titoloColumn.setSortable(true);
-       // la aggiunge al catalogo
-       lista_canzoni.addColumn(titoloColumn, "Titolo");
-
-       
-       //crea la colonna Album
-       TextColumn<PlaylistSong> albumColumn = new TextColumn<PlaylistSong>() {
-           @Override
-           public String getValue(PlaylistSong song) {
-               return song.album;
-           }
-       };
-       //la rende ordinabile
-       albumColumn.setSortable(true);
-       // la aggiunge al catalogo
-       lista_canzoni.addColumn(albumColumn, "Album");
-
-       // Create a data provider.
-       ListDataProvider<PlaylistSong> dataProvider = new ListDataProvider<PlaylistSong>();
-       // Connect the table to the data provider.
-       dataProvider.addDataDisplay(lista_canzoni);
-       // Add the data to the data provider, which automatically pushes it to the
-       // widget.
-       List<PlaylistSong> list = dataProvider.getList();
-       for (PlaylistSong song : canzoni) {
-           list.add(song);
+       for (Song song : canzoni_playlist) {
+           test.add(song);
        }
-       
-       playlist_songs.add(lista_canzoni);
-       HTMLPanel off = new HTMLPanel("");
-       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
-       playlist_songs.add(off);
 
-       System.out.println(lista_canzoni.getElement().getClientHeight());
-       
-//       Integer h = new Integer(lista_canzoni.getElement().getStyle().getHeight().substring(0, lista_canzoni.getElement().getStyle().getHeight().length()-2));
- //      lista_canzoni.getElement().getStyle().setHeight(h-22, Style.Unit.PX);
 
    }
    
@@ -755,6 +760,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
        
    }
+
+
+
+
+@Override
+public void paintCatalogo(List<String> lista_canzoni) {
+
+    List<Song> test = dataProvider_catalogo.getList();
+    
+    test.removeAll(canzoni_catalogo);       
+    canzoni_catalogo.removeAll(canzoni_catalogo);
+    
+    for (int j=0; j<lista_canzoni.size(); j+=3) {
+        
+        canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+    }
+    
+    for (Song song : canzoni_catalogo) {
+        test.add(song);
+    }
+ 
+    
+}
    
    
 }
