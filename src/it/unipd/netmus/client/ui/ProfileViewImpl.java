@@ -16,10 +16,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -29,7 +32,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -499,7 +504,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	          
 	   for(int k=0; k< lista.length; k++) {
 
-		   	Label tmpTxt = new Label(lista[k]);
+		   	final Label tmpTxt = new Label(lista[k]);
 			tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
 	        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
             tmpTxt.getElement().getStyle().setColor("#37A6EB");
@@ -507,26 +512,57 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+            
 	        
-			Image tmpImg = new Image("images/playlist.jpg");
-			tmpImg.setWidth("22px");
+			Image tmpImg = new Image("images/playlistT.png");
+			tmpImg.setWidth("25px");
+			tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+			tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+			tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
 			
+			FocusPanel wrapper = new FocusPanel();
+
 			HorizontalPanel tmpPnl = new HorizontalPanel();
+			tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 			tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
 			tmpPnl.add(tmpImg);
 			tmpPnl.add(tmpTxt);
-			
-			tmpTxt.addClickHandler(new ClickHandler() { 
-			    
+
+			wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+			wrapper.getElement().getStyle().setProperty("outline", "0");
+			wrapper.addMouseOverHandler( new MouseOverHandler(){
+
                 @Override
-                public void onClick(ClickEvent event) {
-                    viewPlaylist(((Label)event.getSource()).getText());
-                }
-			    
-			});
+                public void onMouseOver(MouseOverEvent event) {
+                    
+                      event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                      event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+                } });
+			
+	         wrapper.addMouseOutHandler( new MouseOutHandler(){
+
+	                @Override
+	                public void onMouseOut(MouseOutEvent event) {
+	                    
+	                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+	                    
+	                } });
+
+	          wrapper.addClickHandler(new ClickHandler() { 
+	                
+	                @Override
+	                public void onClick(ClickEvent event) {
+	                    viewPlaylist(tmpTxt.getText());
+	                }
+	                
+	            });
+
+	         
+			wrapper.add(tmpPnl);
 			
 			
-			playlists.add(tmpPnl);
+			
+			playlists.add(wrapper);
 	   }
    }
 
