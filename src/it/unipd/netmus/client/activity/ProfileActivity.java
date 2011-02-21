@@ -323,4 +323,11 @@ public class ProfileActivity extends AbstractActivity implements
         
     }
 
+    @Override
+    public void addPlaylist(String title) {
+        
+        // se l'inserimento della playlist nel DB ha successo 
+        clientFactory.getProfileView().addToPlaylists(title);
+    }
+
 }

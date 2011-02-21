@@ -14,6 +14,9 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -39,6 +42,9 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -119,7 +125,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image chiudi_youtube;
    @UiField Image aggiungi_branoplaylist;
    @UiField Image rimuovi_branoplaylist;
-
+   @UiField Image aggiungi_playlist;
+   
    Song selected_song;
    Song selected_song_playlist;
    
@@ -480,6 +487,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       rimuovi_branoplaylist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
+   @UiHandler("aggiungi_playlist")
+   void handleClickAggiungiPlaylist(ClickEvent e) {
+       
+      addPlaylist(); 
+      
+   }
+
+   @UiHandler("aggiungi_playlist")
+   void handleMouseOverAggiungiPlaylist(MouseOverEvent e) {
+      aggiungi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -562,6 +580,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 			wrapper.add(tmpPnl);
 			
+			//playlists.getElement().setPropertyString("width", "100%");
 			playlists.add(wrapper);
 	   }
    }
@@ -887,16 +906,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
     
     
-        if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
-            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
-            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.4,Style.Unit.PX);
+        friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
+        
+        
+        if(friends.getElement().getStyle().getOpacity().equals("0")) {
             
-        } else {
+            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338), Style.Unit.PX);
             
-            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
+        
+        }
+        if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+            
+
+            playlists.getElement().getStyle().setProperty("height", "auto");
+            
             
         }
-    
+        if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
+
+            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
+            
+        }
+        
+            
         
         //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
         Window.addResizeHandler(new ResizeHandler() {
@@ -911,19 +943,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  
                  friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
-                 
+
                  if(friends.getElement().getStyle().getOpacity().equals("0")) {
                      
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338), Style.Unit.PX);
                      
                  
-                 } else if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+                 }
+                 if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
                      
 
                      playlists.getElement().getStyle().setProperty("height", "auto");
                      
                      
-                 } else if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
+                 }
+                 if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
 
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
                      
@@ -978,9 +1012,158 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
 
+
+
+    @Override
+    public void addToPlaylists(String titolo) {
+        
+        final Label tmpTxt = new Label(titolo);
+        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        tmpTxt.getElement().getStyle().setColor("#37A6EB");
+        tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
+        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+        
+        
+        Image tmpImg = new Image("images/playlistT.png");
+        tmpImg.setWidth("25px");
+        tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+        tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+        tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+        
+        final FocusPanel wrapper = new FocusPanel();
+
+        HorizontalPanel tmpPnl = new HorizontalPanel();
+        tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
+        tmpPnl.add(tmpImg);
+        tmpPnl.add(tmpTxt);
+
+        wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+        wrapper.getElement().getStyle().setProperty("outline", "0");
+        wrapper.addMouseOverHandler( new MouseOverHandler(){
+
+            @Override
+            public void onMouseOver(MouseOverEvent event) {                    
+                  event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                  event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+            } });
+        
+         wrapper.addMouseOutHandler( new MouseOutHandler(){
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+                } });
+
+          wrapper.addClickHandler(new ClickHandler() { 
+                @Override
+                public void onClick(ClickEvent event) {
+                    viewPlaylist(tmpTxt.getText());
+                    wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
+                    Timer timerButton = new Timer() {
+                        public void run() {
+                            wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
+                        }     
+                    };
+                    timerButton.schedule(50);
+                }
+            });
+
+        wrapper.add(tmpPnl);
+        playlists.add(wrapper);
+        setLayout();
+    }
     
     
-   
+    private void addPlaylist() {
+        
+            final TextBox nome = new TextBox(); 
+            nome.getElement().getStyle().setWidth(80, Style.Unit.PCT);
+            
+            Image tmpImg = new Image("images/playlistT.png");
+            tmpImg.setWidth("25px");
+            tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+            
+            final FocusPanel wrapper = new FocusPanel();
+
+            final HorizontalPanel tmpPnl = new HorizontalPanel();
+            tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
+            tmpPnl.add(tmpImg);
+            tmpPnl.add(nome);
+
+            wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+            wrapper.getElement().getStyle().setProperty("outline", "0");
+            wrapper.addMouseOverHandler( new MouseOverHandler(){
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {                    
+                      event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                      event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+                } });
+            
+             wrapper.addMouseOutHandler( new MouseOutHandler(){
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                          event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+                    } });
+
+              wrapper.addClickHandler(new ClickHandler() { 
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        
+                    }
+                });
+              
+              nome.addKeyDownHandler(new KeyDownHandler(){
+
+                @Override
+                public void onKeyDown(KeyDownEvent event) {
+
+                    if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                        
+                        Label tmpTxt = new Label(nome.getText());
+                        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+                        tmpTxt.getElement().getStyle().setColor("#999999");
+                        tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
+                        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+                        
+                        wrapper.remove(tmpPnl);
+                        listener.addPlaylist(nome.getText());
+                        
+                        
+                    }
+                        
+                    
+                }
+                  
+                  
+              });
+
+            wrapper.add(tmpPnl);
+            
+            playlists.add(wrapper);
+            
+            setLayout();
+                        
+            Timer timerFocus = new Timer() {
+                public void run() {
+                    nome.setFocus(true);
+                }
+            };
+            timerFocus.schedule(50);
+            
+            
+    }
+        
+       
    
 }
 
