@@ -54,7 +54,8 @@ public class MusicLibrary {
 	public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
 	    List<SongSummaryDTO> list = new ArrayList<SongSummaryDTO>();
 	    for (Song tmp:this.allSongs()) {
-	        list.add(tmp.toSummaryDTO());
+	        //if (!tmp.getId().equals(Song.SEPARATOR))
+	            list.add(tmp.toSummaryDTO());
 	    }
 	    return new MusicLibrarySummaryDTO(this.owner.toUserSummaryDTO(), list);
 	}
@@ -62,7 +63,8 @@ public class MusicLibrary {
 	public MusicLibraryDTO toMusicLibraryDTO() {
 	    List<SongDTO> list = new ArrayList<SongDTO>();
 	    for (Song tmp:this.allSongs()) {
-	        list.add(tmp.toSongDTO());
+	        //if (!tmp.getId().equals(Song.SEPARATOR))
+	            list.add(tmp.toSongDTO());
 	    }
 	    return new MusicLibraryDTO(this.owner.toUserSummaryDTO(), list);
 	}
@@ -113,12 +115,7 @@ public class MusicLibrary {
     public boolean addSong(Song song, boolean update) {
         
         song.update();
-        if (!songList.isEmpty() && songList.get(0) == null) {
-            for (String tmp:songList) {
-                ODF.get().refresh(tmp);
-            }
-        }
-        if (this.songList.indexOf(song.getId())<0) {
+        if (song.getTitle() != null && song.getArtist() != null && this.songList.indexOf(song.getId())<0) {
             //add songId to the list
             this.songList.add(song.getId());
             
@@ -144,11 +141,6 @@ public class MusicLibrary {
     public boolean removeSong(Song song, boolean update) {
         
         song.update();
-        if (!songList.isEmpty() && songList.get(0) == null) {
-            for (String tmp:songList) {
-                ODF.get().refresh(tmp);
-            }
-        }
         if (this.songList.indexOf(song.getId())>=0) {
             //remove songId to the list
             this.songList.remove(song.getId());

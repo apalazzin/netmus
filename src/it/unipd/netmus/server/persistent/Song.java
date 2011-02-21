@@ -80,7 +80,7 @@ public class Song {
     }
     
     public static Song load(String id) {
-        return ODF.get().load().type(Song.class).id(id).now();
+        return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
     }
     
     public SongSummaryDTO toSummaryDTO() {
@@ -131,19 +131,23 @@ public class Song {
     }
 
     public Song changeArtist(String artist) {
-        Song.deleteSong(this);
-        this.artist = artist;
+        if (artist != null && !artist.equals("")) {
+            Song.deleteSong(this);
+            this.artist = artist;
         
-        Song tmp= Song.load(this.title+SEPARATOR+this.artist);
-        if (tmp == null) { 
-            this.setId(this.title+SEPARATOR+this.artist);
-            return this;
+            Song tmp= Song.load(this.title+SEPARATOR+this.artist);
+            
+            if (tmp == null) { 
+                this.setId(this.title+SEPARATOR+this.artist);
+                return this;
+            }
+            else {
+                return tmp;
+            }
         }
-        else {
-            return tmp;
-        }
+        else return this;
     }
-
+        
     public String getArtist() {
         return artist;
     }
@@ -157,11 +161,13 @@ public class Song {
     }
 
     void newOwner() {
+        System.out.println("Add owner to "+this.getTitle()+": "+this.getNumOwners());
         this.numOwners += 1;
         this.update();
     }
     
     void deleteOwner() {
+        System.out.println("Delete owner to "+this.getTitle()+": "+this.getNumOwners());
         this.numOwners -= 1;
         this.update();
     }
@@ -171,17 +177,20 @@ public class Song {
     }
 
     public Song changeTitle(String title) {
-        Song.deleteSong(this);
-        this.title = title;
+        if (artist != null && !artist.equals("")) {
+            Song.deleteSong(this);
+            this.title = title;
         
-        Song tmp= Song.load(this.title+SEPARATOR+this.artist);
-        if (tmp == null) { 
-            this.setId(this.title+SEPARATOR+this.artist);
-            return this;
+            Song tmp= Song.load(this.title+SEPARATOR+this.artist);
+            if (tmp == null) { 
+                this.setId(this.title+SEPARATOR+this.artist);
+                return this;
+            }
+            else {
+                return tmp;
+            }
         }
-        else {
-            return tmp;
-        }
+        else return this;
     }
 
     public String getTitle() {
