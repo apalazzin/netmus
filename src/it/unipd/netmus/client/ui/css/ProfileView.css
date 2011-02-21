@@ -426,7 +426,7 @@
 	
 .playlist_contenuto {
 	
-	top:0px;
+	top:22px;
 	left: 0px;
 	position: absolute;
 	border: 0px solid #FF0000;
@@ -605,6 +605,9 @@
 	width: 20%;
 	white-space: nowrap;
 	
+	position: absolute;
+	top: 0px;
+	left: 3px;
 	}
 
 

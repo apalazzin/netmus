@@ -903,7 +903,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);              
         catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
         playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-        
+        playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
     
     
         friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
@@ -941,6 +941,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
                  catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
+                 playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
                  
                  friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
 

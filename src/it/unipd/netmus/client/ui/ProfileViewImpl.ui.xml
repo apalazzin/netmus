@@ -69,21 +69,20 @@
 				<c:CellTable ui:field="catalogo" styleName="{style.catalogo}"></c:CellTable>
 				</g:HTMLPanel>
 				
-				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
 				
-					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
-					
-					
+				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
+									
 					<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
-					
-						<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
-						<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
+									
 						
 						<g:HTMLPanel ui:field="playlist_songs">					
-						
 						</g:HTMLPanel>
 						
 					</g:HTMLPanel>
+				<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
+				<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
+				<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
+				
 						
 					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
 						<g:HorizontalPanel>
@@ -92,10 +91,10 @@
 						</g:HorizontalPanel>
 					</div>
 						
-						<g:Image ui:field="aggiungi_branoplaylist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
-						<g:Image ui:field="rimuovi_branoplaylist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
+					<g:Image ui:field="aggiungi_branoplaylist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
+					<g:Image ui:field="rimuovi_branoplaylist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
 				
-				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
+					<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
 				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
