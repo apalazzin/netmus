@@ -48,6 +48,14 @@
 	
 	 
 	}
+	
+.aggiungi_playlist {
+	
+	position: absolute;
+	top: 2px;
+	right: 6px;
+	
+	}
 
 .brano_aggiungere {
 	
@@ -377,7 +385,7 @@
 
 .playlist {
 	
-	margin-top: 0px;
+	padding-top: 5px;
 	margin-left: 10px;
 	text-align: left;
 	min-height: 140px;
@@ -494,7 +502,8 @@
 }
 	
 .social {
-	
+
+	padding-top: 5px;	
 	margin-left: 10px;
 	text-align: left;
 	height: auto;	
@@ -560,13 +569,19 @@
 
 .title {
 	
+	position: relative;
 	color: #38D12F;
 	font-family: Verdana;
 	font-size: 12px;
 	font-weight: bold;
-	margin-bottom: 8px;
-	margin-top: 0px;
-	margin-left: 10px;
+	margin-bottom: 0px;
+	margin-top: -2px;
+	padding-left: 10px;
+	padding-bottom: 3px;
+	
+	border-top: 1px solid #DDDDDD;
+	
+	background-color: #EEEEEE;
 	
 	-webkit-transition: opacity 0.5s ease-in-out;
 	-moz-transition: opacity 0.5s ease-in-out;

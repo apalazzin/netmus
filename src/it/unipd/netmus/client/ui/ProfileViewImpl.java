@@ -191,7 +191,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 	   //costruisco la componente widget x il catalogo delle canzoni
 	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
-	   catalogo.setWidth("100%");
+	   catalogo.setWidth("100%", true);
 //	   catalogo.setPageSize(100000);
 	  
 	   initWidget(uiBinder.createAndBindUi(this));
@@ -876,7 +876,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  
                  friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
                  
-                 if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+                 if(friends.getElement().getStyle().getOpacity().equals("0")) {
+                     
+                     playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338), Style.Unit.PX);
+                     
+                 
+                 } else if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
                      
 
                      playlists.getElement().getStyle().setProperty("height", "auto");
@@ -887,6 +892,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
                      
                  }
+                 
+                 
 
                  
                  if(event.getWidth()<1200) {
