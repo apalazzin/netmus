@@ -19,6 +19,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -520,7 +522,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
 			tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
 			
-			FocusPanel wrapper = new FocusPanel();
+			final FocusPanel wrapper = new FocusPanel();
 
 			HorizontalPanel tmpPnl = new HorizontalPanel();
 			tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -533,34 +535,32 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			wrapper.addMouseOverHandler( new MouseOverHandler(){
 
                 @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    
+                public void onMouseOver(MouseOverEvent event) {                    
                       event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
                       event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
                 } });
 			
 	         wrapper.addMouseOutHandler( new MouseOutHandler(){
-
 	                @Override
 	                public void onMouseOut(MouseOutEvent event) {
-	                    
 	                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
-	                    
 	                } });
 
 	          wrapper.addClickHandler(new ClickHandler() { 
-	                
 	                @Override
 	                public void onClick(ClickEvent event) {
 	                    viewPlaylist(tmpTxt.getText());
+	                    wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
+	                    Timer timerButton = new Timer() {
+	                        public void run() {
+	                            wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
+	                        }     
+	                    };
+	                    timerButton.schedule(50);
 	                }
-	                
 	            });
 
-	         
 			wrapper.add(tmpPnl);
-			
-			
 			
 			playlists.add(wrapper);
 	   }
@@ -923,7 +923,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                      playlists.getElement().getStyle().setProperty("height", "auto");
                      
                      
-                 } else if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
+                 } else if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
 
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
                      
