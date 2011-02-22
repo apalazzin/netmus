@@ -1,0 +1,137 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+          xmlns:g="urn:import:com.google.gwt.user.client.ui"
+          xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
+ 
+   <ui:style src="css/ProfileView.css" />
+   
+	<g:HTMLPanel ui:field="container" styleName="{style.container}">
+	
+	
+
+			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
+			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
+			
+				<g:Label ui:field="utente" styleName="{style.utente}"></g:Label>
+
+
+				<g:HTMLPanel styleName="{style.statistiche}">				
+				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600;">Numero di Brani:</span>
+				<g:Label ui:field="numero_brani" styleName="{style.numero_brani}"></g:Label>
+				</g:HTMLPanel>
+
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
+
+
+				<g:HTMLPanel styleName="{style.title}"><span>PLAYLIST</span>
+				<g:Image ui:field="aggiungi_playlist" styleName="{style.aggiungi_playlist}" url="images/plus_silver.png"></g:Image></g:HTMLPanel>
+				
+				
+				<g:HTMLPanel ui:field="playlists" styleName="{style.playlist}">
+				</g:HTMLPanel>
+
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
+	
+				<g:HTMLPanel ui:field="friends_titolo" styleName="{style.title}"><span>UTENTI AFFINI</span></g:HTMLPanel>					
+				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
+				</g:HTMLPanel>
+				
+				<g:Image ui:field="cover" url="images/test_cover.jpg" styleName="{style.cover}"></g:Image>
+				
+				<img src="images/netmus_scritta.png" style="position: absolute; top: 0px; left: 5px; width: 170px; margin-top: 5px;" />
+			
+			</div>
+			</g:HTMLPanel>
+
+			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
+	
+				<g:Image ui:field="play" url="images/play.png" styleName="{style.play}"> </g:Image>
+				<g:Image ui:field="forward" url="images/fw.png" styleName="{style.fw}"> </g:Image>
+				<g:Image ui:field="rewind" url="images/rw.png" styleName="{style.rw}"> </g:Image>
+	
+				<g:Image ui:field="social_button" url="images/temp_button.png" styleName="{style.socialButton}"></g:Image>
+
+				<g:Image ui:field="account_button" url="images/account_button.png" styleName="{style.accountButton}"></g:Image>
+
+				<g:Image ui:field="edit_button" url="images/edit_button.png" styleName="{style.editButton}"></g:Image>
+
+				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
+				
+				
+				<g:HTMLPanel ui:field="info" styleName="{style.info}">Nessun brano in ascolto.</g:HTMLPanel>
+			
+				<g:HTMLPanel ui:field="search" styleName="{style.search}">
+				<input type="search" style="width: 150px"></input>
+				<img src="images/magnifier.jpg" style="float: right; height: 20px; margin-left: 0px;" />
+				</g:HTMLPanel>
+				
+				<g:HTMLPanel ui:field="catalogo_container" styleName="{style.catalogo_container}">
+				<c:CellTable ui:field="catalogo" styleName="{style.catalogo}"></c:CellTable>
+				</g:HTMLPanel>
+				
+				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
+				
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
+					
+					
+					<g:HTMLPanel ui:field="playlist_contenuto" styleName="{style.playlist_contenuto}">
+					
+						<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
+						<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
+						
+						<g:HTMLPanel ui:field="playlist_songs">					
+						
+						</g:HTMLPanel>
+						
+					</g:HTMLPanel>
+						
+					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
+						<g:HorizontalPanel>
+							<g:Label ui:field="brano_aggiungere" styleName="{style.brano_aggiungere}"></g:Label>
+							<g:Label ui:field="brano_rimuovere" styleName="{style.brano_rimuovere}"></g:Label>
+						</g:HorizontalPanel>
+					</div>
+						
+						<g:Image ui:field="aggiungi_branoplaylist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
+						<g:Image ui:field="rimuovi_branoplaylist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
+				
+				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
+				</g:HTMLPanel>
+				
+				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
+					<g:Image ui:field="play_youtube" url="images/play.png" styleName="{style.playYoutube}" />
+					<g:Image ui:field="logo_youtube" url="images/youtube.png" styleName="{style.logo_youtube}" />
+					<g:HTMLPanel ui:field="info_youtube" styleName="{style.info_youtube}">Hurricanes And Suns. Tokio Hotel</g:HTMLPanel>
+					<g:Label ui:field="info_youtube_link" styleName="{style.info_youtube_link}">http://www.youtube.com/watch?v=yNBFkANEd5M</g:Label>	
+					
+					<g:HTMLPanel ui:field="youtube_appendice" styleName="{style.youtube_appendice}"></g:HTMLPanel>
+					<g:Image ui:field="chiudi_youtube" styleName="{style.chiudi_youtube}" url="images/close_silver.jpg"/>
+				</g:HTMLPanel>
+			
+				<g:HTMLPanel ui:field="classifica" styleName="{style.classifica}">
+				<g:Image ui:field="star1" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star2" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star3" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
+				
+				<span style="position: absolute; top: -20px; left: 0px; font-size: 12px; font-family: Verdana; font-weight: bold;">Classifica</span>
+				<div style="position: absolute; bottom: -3px; left: 0px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
+				
+				</g:HTMLPanel>
+				
+
+				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
+				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
+				
+				<g:Image ui:field="statistiche" styleName="{style.statistiche2}" url="images/statistiche.png"/>
+				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;">Statistiche</span>
+				
+			
+			
+			</g:HTMLPanel>
+	
+   	
+	</g:HTMLPanel>
+   
+</ui:UiBinder>
