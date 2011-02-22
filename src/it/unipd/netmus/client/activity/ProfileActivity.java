@@ -52,7 +52,20 @@ public class ProfileActivity extends AbstractActivity implements
 	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
 
-                setUser();
+		AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    logger.info("User not logged yet - Redirect to Login");
+                    goTo(new LoginPlace(""));
+                }
+            }
+
+            @Override
+            public void onSuccess(final String user) {
+                
+                clientFactory.getProfileView().setUser(user);                
                 final ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
@@ -62,6 +75,15 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setInfo(getSongInfo());
                 containerWidget.setWidget(profileView.asWidget());
                 profileView.setLayout();
+                
+            }
+            
+        };
+	    
+        try { loginServiceSvc.getLoggedInUser(callback); }
+        catch(LoginException e) {
+        }
+               
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
               
