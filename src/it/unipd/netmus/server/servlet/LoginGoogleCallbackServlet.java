@@ -56,6 +56,6 @@ public class LoginGoogleCallbackServlet extends HttpServlet {
             }
         }
         // TORNO AL ENTRY POINT E SE E' STATO LOGGATO PASSA IN AUTOMATICO AL PROFILE
-        response.sendRedirect(LoginHelper.getApplitionURL(request));
+        response.sendRedirect(LoginHelper.getApplicationURL(request));
     }
 }

@@ -43,7 +43,7 @@ public class LoginHelper extends RemoteServiceServlet {
 	      session.setAttribute("userLoggedIn", user);
 	  }
 	  
-	  static public String getApplitionURL(HttpServletRequest request) {
+	  static public String getApplicationURL(HttpServletRequest request) {
 
 	      if (ServletHelper.isDevelopment(request)) {
 	        return "http://127.0.0.1:8888/Netmus.html?gwt.codesvr=127.0.0.1:9997";
