@@ -62,6 +62,11 @@ public interface ProfileView extends IsWidget {
    void setLayout();
    //Aggiunge una nuova playlist
    void addToPlaylists(String titolo);
+   //Visulaizza la scheda della canzone
+   void viewSong(Song song);
+   //Chiudel la scheda della canzone
+   void closeSong();
+
    
    public interface Presenter
    {
@@ -99,4 +104,6 @@ public interface ProfileView extends IsWidget {
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
 
    }
+
+
 }

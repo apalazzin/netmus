@@ -293,6 +293,7 @@ public class ProfileActivity extends AbstractActivity implements
     public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
 
         List<SongSummaryDTO> library = user_library.getSongs();
+        
         List<String> song_list = new ArrayList<String>();
         
         for(SongSummaryDTO song : library) {
