@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
-import it.unipd.netmus.client.applet.ABF;
+import it.unipd.netmus.client.applet.AppletBar;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LibraryService;
@@ -52,7 +52,20 @@ public class ProfileActivity extends AbstractActivity implements
 	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
 
-                setUser();
+		AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    logger.info("User not logged yet - Redirect to Login");
+                    goTo(new LoginPlace(""));
+                }
+            }
+
+            @Override
+            public void onSuccess(final String user) {
+                
+                clientFactory.getProfileView().setUser(user);                
                 final ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
@@ -62,6 +75,15 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setInfo(getSongInfo());
                 containerWidget.setWidget(profileView.asWidget());
                 profileView.setLayout();
+                
+            }
+            
+        };
+	    
+        try { loginServiceSvc.getLoggedInUser(callback); }
+        catch(LoginException e) {
+        }
+               
                 
                 //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
               
@@ -100,7 +122,7 @@ public class ProfileActivity extends AbstractActivity implements
             Cookies.removeCookie("sid");
             
             // hide and disable the applet
-            ABF.get(user,true).appletBarOFF();
+            AppletBar.get(user,true).appletBarOFF();
             
             goTo(new LoginPlace(""));
          }
@@ -129,7 +151,7 @@ public class ProfileActivity extends AbstractActivity implements
            @Override
            public void onSuccess(final String user) {
                
-               ABF.get(user,true).appletBarON();
+               AppletBar.get(user,true).appletBarON();
                
            }
            
@@ -293,6 +315,7 @@ public class ProfileActivity extends AbstractActivity implements
     public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
 
         List<SongSummaryDTO> library = user_library.getSongs();
+        
         List<String> song_list = new ArrayList<String>();
         
         for(SongSummaryDTO song : library) {
@@ -321,6 +344,13 @@ public class ProfileActivity extends AbstractActivity implements
       //se la rimozione dalla Playlist nel DB ha successo
        clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
         
+    }
+
+    @Override
+    public void addPlaylist(String title) {
+        
+        // se l'inserimento della playlist nel DB ha successo 
+        clientFactory.getProfileView().addToPlaylists(title);
     }
 
 }

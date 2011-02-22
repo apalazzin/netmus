@@ -106,7 +106,9 @@ public class MusicLibrary {
 	public MusicLibraryDTO toMusicLibraryDTO() {
 	    List<SongDTO> list = new ArrayList<SongDTO>();
 	    for (Song tmp:this.allSongs()) {
-	        list.add(tmp.toSongDTO());
+	        SongDTO tmp2 = tmp.toSongDTO();
+	        tmp2.setRatingForThisUser(this.getSongRate(tmp));
+	        list.add(tmp2);
 	    }
 	    return new MusicLibraryDTO(this.owner.toUserSummaryDTO(), list);
 	}

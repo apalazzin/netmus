@@ -60,6 +60,13 @@ public interface ProfileView extends IsWidget {
    void removeFromPlaylist(String autore, String titolo, String album);
    //inizializza il layout
    void setLayout();
+   //Aggiunge una nuova playlist
+   void addToPlaylists(String titolo);
+   //Visulaizza la scheda della canzone
+   void viewSong(Song song);
+   //Chiudel la scheda della canzone
+   void closeSong();
+
    
    public interface Presenter
    {
@@ -81,12 +88,14 @@ public interface ProfileView extends IsWidget {
       //restituisce le canzoni con i relativi album data una data playlist
       void setPlaylistSongs(String titoloPlaylist);
 
-      
       //restituisce il summary delle canzoni
       void setSongs();
 
       //restituisce il link youtube della canzone selezionata
       void playYouTube();
+
+      //Aggiunge una nuova Playlist
+      void addPlaylist(String title);
 
       //aggiunge song alla playlist e restituisce true in caso di successo
       void addToPLaylist(String playlist, String autore, String titolo, String album);
@@ -95,4 +104,6 @@ public interface ProfileView extends IsWidget {
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
 
    }
+
+
 }
