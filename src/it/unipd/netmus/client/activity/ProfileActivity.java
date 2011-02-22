@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
-import it.unipd.netmus.client.applet.ABF;
+import it.unipd.netmus.client.applet.AppletBar;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LibraryService;
@@ -100,7 +100,7 @@ public class ProfileActivity extends AbstractActivity implements
             Cookies.removeCookie("sid");
             
             // hide and disable the applet
-            ABF.get(user,true).appletBarOFF();
+            AppletBar.get(user,true).appletBarOFF();
             
             goTo(new LoginPlace(""));
          }
@@ -129,7 +129,7 @@ public class ProfileActivity extends AbstractActivity implements
            @Override
            public void onSuccess(final String user) {
                
-               ABF.get(user,true).appletBarON();
+               AppletBar.get(user,true).appletBarON();
                
            }
            
