@@ -30,7 +30,7 @@ public interface LoginView extends IsWidget {
    {
       void goTo(Place place);
       void sendLogin(String login, String password) throws LoginException;
-      void sendGoogleLogin(String user, String password) throws LoginException;;
+      void sendGoogleLogin(String user, String password) throws LoginException;
       void sendRegistration(String login, String password, String confirmPassword) throws RegistrationException;
       enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION, GOOGLELOGIN}
     /**
