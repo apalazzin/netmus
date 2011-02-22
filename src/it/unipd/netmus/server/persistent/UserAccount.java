@@ -27,7 +27,7 @@ import com.reveregroup.gwt.imagepreloader.FitImage;
  */
 public class UserAccount {
    
-   @Id public String user;
+   @Id private String user;
    
    @Child private MusicLibrary musicLibrary;
    
@@ -60,7 +60,21 @@ public class UserAccount {
    private boolean isGoogleUser;
    
    public UserAccount() {
-       musicLibrary = new MusicLibrary(this);
+       this.musicLibrary = new MusicLibrary(this);
+       this.aboutMe = "";
+       this.birthDate = new Date(0);
+       this.firstName = "";
+       this.gender = "";
+       this.isGoogleUser = false;
+       this.lastImport = new Date(0);
+       this.lastLogin = new Date(0);
+       this.lastName = "";
+       this.lastSessionId = "";
+       this.nationality = "";
+       this.nickName = "";
+       this.passwordHash = "";
+       this.registrationDate = new Date(0);
+       this.user = "";
    }
    
    public UserAccount(String user, String passwordHash) { 
@@ -68,6 +82,17 @@ public class UserAccount {
        this.user = user;
        this.passwordHash = passwordHash;
        this.isGoogleUser = false;
+       this.aboutMe = "";
+       this.birthDate = new Date(0);
+       this.firstName = "";
+       this.gender = "";
+       this.lastImport = new Date(0);
+       this.lastLogin = new Date(0);
+       this.lastName = "";
+       this.lastSessionId = "";
+       this.nationality = "";
+       this.nickName = "";
+       this.registrationDate = new Date(0);
        this.store();
    }
    

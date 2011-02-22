@@ -24,6 +24,10 @@ public class SongDTO extends SongSummaryDTO {
 	
 	private int numOwners;
 	
+	private String youtube_code;
+	
+	private String playme_code;
+	
 	//costruttore di default
 	public SongDTO(){}
 	
@@ -73,5 +77,21 @@ public class SongDTO extends SongSummaryDTO {
 
     public int getNumOwners() {
         return numOwners;
+    }
+
+    public void setYoutubeCode(String youtube_code) {
+        this.youtube_code = youtube_code;
+    }
+
+    public String getYoutubeCode() {
+        return youtube_code;
+    }
+
+    public void setPlaymeCode(String playme_code) {
+        this.playme_code = playme_code;
+    }
+
+    public String getPlaymeCode() {
+        return playme_code;
     }
 }
