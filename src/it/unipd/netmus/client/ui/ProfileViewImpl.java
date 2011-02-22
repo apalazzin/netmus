@@ -14,6 +14,8 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -278,7 +280,27 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
 	         
 	      }
+	      
+	      
 	    });
+	    
+	    catalogo.addDomHandler(new DoubleClickHandler() {
+
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+
+                if(playlist_opened) {
+                    
+                    listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
+                    
+                } else {
+                    
+                    if(selected_song!=null)
+                        viewSong(selected_song);                    
+                }
+
+            }}, DoubleClickEvent.getType());
+	    
 	    
 	    dataProvider_catalogo.addDataDisplay(catalogo);
 
@@ -577,7 +599,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
             tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
-            tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+            tmpTxt.getElement().getStyle().setProperty("fontWeight", "bold");
             
 	        
 			Image tmpImg = new Image("images/playlistT.png");
