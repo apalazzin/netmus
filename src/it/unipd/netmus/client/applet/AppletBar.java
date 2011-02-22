@@ -12,7 +12,6 @@ import it.unipd.netmus.shared.SongDTO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
@@ -32,6 +31,7 @@ public class AppletBar {
     private Label title = new Label(constants.title());
     private Anchor onOff = new Anchor();
     private Anchor rescan = new Anchor(); // VISIBILE FINITA LA SCANSIONE
+    private Anchor chooser = new Anchor();
     private TextBox status = new TextBox();
     private HTML applet = new HTML();
     private String user;
@@ -68,13 +68,18 @@ public class AppletBar {
         
         rescan.setSize("50px", "10px");
         rescan.setText(constants.rescan());
+        rescan.setVisible(false); // diventera' visibile a fine scansione di un dispositivo
         
         status.setSize("180px", "10px");
+        
+        chooser.setSize("70px", "10px");
+        chooser.setText(constants.chooser());
 
         RootPanel.get("applet-bar").add(title,5,2);
-        RootPanel.get("applet-bar").add(onOff,145,2);
-        RootPanel.get("applet-bar").add(rescan,195,2);
-        RootPanel.get("applet-bar").add(status,285,2);
+        RootPanel.get("applet-bar").add(onOff,145,2);    
+        RootPanel.get("applet-bar").add(status,195,2);
+        RootPanel.get("applet-bar").add(rescan,400,2);
+        RootPanel.get("applet-bar").add(chooser,460,2);
         RootPanel.get("applet-bar").add(applet);
         
         onOff.addClickHandler(new ClickHandler() {
@@ -90,6 +95,14 @@ public class AppletBar {
             public void onClick(ClickEvent event) {
                 // send rescan signal
                 reScanAll();
+            }
+        });
+        
+        chooser.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // send rescan signal
+                showChooser();
             }
         });
     }
@@ -134,6 +147,9 @@ public class AppletBar {
     // per dire all'applet di rifare interamente
     // la scansione dopo che RESCAN e' stato premuto
     private void reScanAll() {
+        showStatus("RESCAN");
+        
+        sendRescan();
     }
     
     /**
@@ -155,6 +171,16 @@ public class AppletBar {
     private native void setState( boolean state )/*-{
         var t = $doc.getElementById('netmus_applet');
         t.setState(state);
+    }-*/;
+    
+    private native void sendRescan()/*-{
+        var t = $doc.getElementById('netmus_applet');
+        t.rescanAll();
+    }-*/;
+    
+    private native void showChooser()/*-{
+        var t = $doc.getElementById('netmus_applet');
+        t.showChooser();
     }-*/;
     
     private void scanningStatus(int actual, int total){
@@ -193,6 +219,13 @@ public class AppletBar {
         System.out.println("Dati XML spediti");
     }
     
+    private void rescanNotVisible() {
+        rescan.setVisible(false);
+    }
+    private void rescanVisible() {
+        rescan.setVisible(true);
+    }
+    
     // metodo per pubblicare le funzioni native di linking
     private native void makeNativeFunction(AppletBar x)/*-{
     $wnd.getStarts = function () {
@@ -206,6 +239,12 @@ public class AppletBar {
     };
     $wnd.showStatus = function (s) {
     x.@it.unipd.netmus.client.applet.AppletBar::showStatus(Ljava/lang/String;)(s);
+    };
+    $wnd.rescanVisible = function () {
+    x.@it.unipd.netmus.client.applet.AppletBar::rescanVisible()();
+    };
+    $wnd.rescanNotVisible = function () {
+    x.@it.unipd.netmus.client.applet.AppletBar::rescanNotVisible()();
     };
     }-*/;
     // mancano parametri sopra in ingresso Stringa XML da applet

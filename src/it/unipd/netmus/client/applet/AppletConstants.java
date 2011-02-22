@@ -7,4 +7,5 @@ public interface AppletConstants extends Constants {
 	String appletDisable();
 	String rescan();
 	String title();
+	String chooser();
 }
