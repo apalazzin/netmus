@@ -4,37 +4,21 @@ import java.util.List;
 
 public class YouTubeVideo {
  
-     private List<String> thumbnails;
      private List<YouTubeMedia> medias;
-     private String webPlayerUrl;
-     private String embeddedWebPlayerUrl;
+     private String video_code;
  
-     public List<String> getThumbnails() {
-          return thumbnails;
-     }
-     public void setThumbnails(List<String> thumbnails) {
-          this.thumbnails = thumbnails;
-     }
-
      public List<YouTubeMedia> getMedias() {
           return medias;
      }
      public void setMedias(List<YouTubeMedia> medias) {
          this.medias = medias;
      }
- 
-     public String getWebPlayerUrl() {
-          return webPlayerUrl;
-     }
-     public void setWebPlayerUrl(String webPlayerUrl) {
-            this.webPlayerUrl = webPlayerUrl;
-     }
 
-     public String getEmbeddedWebPlayerUrl() {
-          return embeddedWebPlayerUrl;
+     public String getVideoCode() {
+          return video_code;
      }
-     public void setEmbeddedWebPlayerUrl(String embeddedWebPlayerUrl) {
-          this.embeddedWebPlayerUrl = embeddedWebPlayerUrl;
+     public void setVideoCode(String embeddedWebPlayerUrl) {
+          this.video_code = embeddedWebPlayerUrl;
      }
  
      public String retrieveHttpLocation() {
