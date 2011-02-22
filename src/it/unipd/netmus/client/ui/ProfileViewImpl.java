@@ -93,6 +93,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label song_autore;
    @UiField Label song_album;
    @UiField Label song_genere;
+   @UiField Label song_anno;
+   @UiField Label song_compositore;
+   @UiField Label song_traccia;
    
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
@@ -266,10 +269,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	      public void onSelectionChange(SelectionChangeEvent event) {
 	          
 	         setBranoCatalogo(selectionModel.getSelectedObject());
+	         
 	         titolo_song.setText(selected_song.titolo);
 	         song_titolo.setText(selected_song.titolo);
 	         song_autore.setText(selected_song.autore);
 	         song_album.setText(selected_song.album);
+	         
+	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
 	         
 	      }
 	    });
@@ -306,7 +312,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       albumColumn2.setSortable(true);
 	       // la aggiunge al catalogo
 	       lista_canzoni.addColumn(albumColumn2, "Album");
-
+	       lista_canzoni.setColumnWidth(albumColumn2,"60%");
 	       
 	       // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
 	       final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
@@ -1328,6 +1334,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             
     }
+
+
+
+
+	@Override
+	public void setSongFields(String autore, String titolo, String album,
+			String genere, String anno, String compositore, String traccia) {
+		
+        song_titolo.setText(titolo);
+        song_autore.setText(autore);
+        song_album.setText(album);
+        song_genere.setText(genere);
+        song_anno.setText(anno);
+        song_compositore.setText(compositore);
+        song_traccia.setText(traccia);
+	
+	}
         
        
    

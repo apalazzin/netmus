@@ -64,8 +64,11 @@ public interface ProfileView extends IsWidget {
    void addToPlaylists(String titolo);
    //Visulaizza la scheda della canzone
    void viewSong(Song song);
-   //Chiudel la scheda della canzone
+   //Chiude la scheda della canzone
    void closeSong();
+   //Imposta i campi della canzone nella scheda di dettaglio
+   void setSongFields(String autore, String titolo, String album, String genere,
+			String anno, String compositore, String traccia);
 
    
    public interface Presenter
@@ -102,8 +105,10 @@ public interface ProfileView extends IsWidget {
 
       //aggiunge song alla playlist e restituisce true in caso di successo
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
+	
+      //Imposta i campi della canzone selezionata.
+      void setSongFields(String autore, String titolo, String album);
 
    }
-
 
 }
