@@ -92,7 +92,7 @@ public interface ProfileView extends IsWidget {
       void setSongs();
 
       //restituisce il link youtube della canzone selezionata
-      void playYouTube();
+      void playYouTube(String autore, String titolo, String album);
 
       //Aggiunge una nuova Playlist
       void addPlaylist(String title);

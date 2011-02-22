@@ -257,7 +257,7 @@ public class ProfileActivity extends AbstractActivity implements
     
     
     @Override
-    public void playYouTube() {
+    public void playYouTube(String autore, String titolo, String album) {
         
         clientFactory.getProfileView().playYouTube(getYouTubeLink());
         
@@ -266,6 +266,7 @@ public class ProfileActivity extends AbstractActivity implements
     public String getYouTubeLink() {
         // TODO Auto-generated method stub
         return "yNBFkANEd5M";
+    	//return "UISQF9uHEv0";
     }
 
     

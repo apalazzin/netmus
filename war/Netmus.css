@@ -1,5 +1,11 @@
 /** Add css rules here for your application. */
 
+@font-face {
+	font-family: Verdana;
+	src: url('Verdana.ttf');
+}
+
+
 div#applet-bar {
    
    height: 26px;

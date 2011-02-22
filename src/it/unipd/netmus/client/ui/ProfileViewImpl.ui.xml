@@ -94,11 +94,24 @@
 				<g:HTMLPanel ui:field="song_container" styleName="{style.song_container}">
 									
 					<g:HTMLPanel ui:field="song_contenuto" styleName="{style.song_contenuto}">
+						
+						
+						<g:HTMLPanel ui:field="song_fields" styleName="{style.song_fields}">
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Titolo:&nbsp;</g:Label><g:Label ui:field="song_titolo">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Autore:&nbsp;</g:Label><g:Label ui:field="song_autore">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Album:&nbsp;</g:Label><g:Label ui:field="song_album">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Genere:&nbsp;</g:Label><g:Label ui:field="song_genere">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_anno">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_compositore">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_traccia">Test</g:Label></g:HorizontalPanel>
+						</g:HTMLPanel>
 					
 					</g:HTMLPanel>
-					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"></div>
-					<g:Image ui:field="chiudi_song" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>
 					
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="titolo_song" styleName="{style.title_song}"></g:Label></div>
+					<g:Image ui:field="chiudi_song" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>					
+					
+				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>	
 				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
