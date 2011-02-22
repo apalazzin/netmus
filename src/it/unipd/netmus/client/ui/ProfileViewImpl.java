@@ -95,6 +95,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel playlist_container;
    @UiField HTMLPanel playlist_contenuto;
    @UiField HTMLPanel playlist_songs;
+   @UiField HTMLPanel song_container;
+   @UiField HTMLPanel song_contenuto;
    @UiField HTMLPanel main_panel;
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
@@ -121,11 +123,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image star4;
    @UiField Image star5;
    @UiField Image chiudi_playlist;
+   @UiField Image chiudi_song;
    @UiField Image logo_youtube;
    @UiField Image chiudi_youtube;
    @UiField Image aggiungi_branoplaylist;
    @UiField Image rimuovi_branoplaylist;
    @UiField Image aggiungi_playlist;
+   
+   boolean playlist_opened; 
+   boolean song_opened; 
    
    Song selected_song;
    Song selected_song_playlist;
@@ -466,7 +472,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOverChiudiPlaylist(MouseOverEvent e) {
       chiudi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
- 
+
+   @UiHandler("edit_button")
+   void handleClickEditButton(ClickEvent e) {
+      viewSong(selected_song);
+   }
+   
+   @UiHandler("edit_button")
+   void handleMouseOverEditButton(MouseOverEvent e) {
+      edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+
+   @UiHandler("chiudi_song")
+   void handleClickChiudiSong(ClickEvent e) {
+      closeSong();
+   }
+   
+   @UiHandler("chiudi_song")
+   void handleMouseOverChiudiSong(MouseOverEvent e) {
+      chiudi_song.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
    @UiHandler("aggiungi_branoplaylist")
    void handleClickAggiungiBranoPlaylist(ClickEvent e) {
        listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
@@ -623,29 +651,134 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
 
+   @Override
+   public void viewSong(it.unipd.netmus.client.ui.ProfileView.Song song) {
+       
+             
+      if(playlist_opened) {
+          
+          closePlaylist();
+          
+          Timer timerOpen = new Timer() {
+              public void run() {
+     
+                  
+                  song_opened = true;
+                  
+                  catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+                  song_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+                  
+                  
+                  Timer timerPlaylist = new Timer() {
+                      public void run() {
+                          song_contenuto.getElement().getStyle().setOpacity(1);      
+                      }     
+                  };
+                  
+                  timerPlaylist.schedule(400);
+                  
+              }        
+          };
+                 
+                 timerOpen.schedule(600);
+
+          }  else {
+              
+              song_opened = true;
+              
+              catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+              song_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+              
+              
+              Timer timerPlaylist = new Timer() {
+                  public void run() {
+                      song_contenuto.getElement().getStyle().setOpacity(1);      
+                  }     
+              };
+              
+              timerPlaylist.schedule(400);
+              
+          }
+      
+      
+}  
+      
+
+   
+   @Override
+   public void closeSong() {
+       
+       song_opened = false;
+       
+       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+       song_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
+       song_contenuto.getElement().getStyle().setOpacity(0);
+       
+   }
+
  
    @Override
-   public void viewPlaylist(String titolo) {
+   public void viewPlaylist(final String titolo) {
       
-      listener.setPlaylistSongs(titolo);
+       if(song_opened)  {
+           
+           closeSong();
        
-      titolo_playlist.setText(titolo);
-      catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+           Timer timerOpen = new Timer() {
+               public void run() {
       
-      
-      Timer timerPlaylist = new Timer() {
-          public void run() {
-              playlist_contenuto.getElement().getStyle().setOpacity(1);      
-          }     
-      };
-      
-      timerPlaylist.schedule(400);
+                   
+                  playlist_opened= true;
+                   
+                  listener.setPlaylistSongs(titolo);
+                   
+                  titolo_playlist.setText(titolo);
+                  catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+                  playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+                  
+                  
+                  Timer timerPlaylist = new Timer() {
+                      public void run() {
+                          playlist_contenuto.getElement().getStyle().setOpacity(1);      
+                      }     
+                  };
+                  
+                  timerPlaylist.schedule(400);
+
+               }     
+           };
+           
+           timerOpen.schedule(600);
+       
+       
+       } else {
+           
+           
+          playlist_opened= true;
+           
+          listener.setPlaylistSongs(titolo);
+           
+          titolo_playlist.setText(titolo);
+          catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+          playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+          
+          
+          Timer timerPlaylist = new Timer() {
+              public void run() {
+                  playlist_contenuto.getElement().getStyle().setOpacity(1);      
+              }     
+          };
+          
+          timerPlaylist.schedule(400);
+
+       }
       
    }
 
    @Override
    public void closePlaylist() {
+       
+      playlist_opened= false;
        
       brano_rimuovere.setText("");
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
@@ -904,7 +1037,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
         playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
         playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
-    
+ 
+        song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+        song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+
     
         friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
         
@@ -934,14 +1070,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         Window.addResizeHandler(new ResizeHandler() {
              @Override
              public void onResize(ResizeEvent event) {               
+
                  int catalogo_h = main_panel.getOffsetHeight();
                  left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+
                  playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
                  catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
+                 
+                 song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+                 song_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  
                  friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
 
