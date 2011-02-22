@@ -25,7 +25,8 @@ import com.google.gwt.user.client.ui.TextBox;
  *
  */
 public class AppletBar {
-    
+	
+	private static AppletBar APPLET_BAR = null;
     private boolean visible = false;
     private AppletConstants constants = GWT.create(AppletConstants.class);
     private Label title = new Label(constants.title());
@@ -40,7 +41,13 @@ public class AppletBar {
     
     private LibraryServiceAsync libraryService = GWT.create(LibraryService.class);
     
-    public AppletBar(String user, boolean state) {
+    public static AppletBar get(String user, boolean state) {
+		if (APPLET_BAR == null)
+			APPLET_BAR = new AppletBar(user, state);
+		return APPLET_BAR;
+	}
+    
+    private AppletBar(String user, boolean state) {
     	
         this.original_user = user;
     	this.user=user.replaceAll("@\\S*", "");
