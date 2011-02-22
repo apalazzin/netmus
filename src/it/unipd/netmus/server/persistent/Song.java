@@ -62,10 +62,30 @@ public class Song {
     
     private String file;
     
+    private String youtube_code;
+    
+    private String playme_code;
+    
+    @Index private double rating;
+    
+    private int num_ratings;
+    
     
     public Song() {
         this.id = SEPARATOR;
         this.numOwners = 0;
+        this.album = "";
+        this.artist = "";
+        this.composer = "";
+        this.file = "";
+        this.genre = "";
+        this.title = "";
+        this.trackNumber = "";
+        this.year = "";
+        this.youtube_code = "";
+        this.playme_code = "";
+        this.num_ratings = 0;
+        this.rating = 0;
     }
     
     public void store() throws DatastoreException {
@@ -99,6 +119,10 @@ public class Song {
         tmp.setYear(this.year); 
         //tmp.setAlbumCover(this.albumCover.toString());
         tmp.setNumOwners(this.numOwners);
+        tmp.setYoutubeCode(this.youtube_code);
+        tmp.setPlaymeCode(this.playme_code);
+        tmp.setNumRatings(this.num_ratings);
+        tmp.setRating(this.rating);
         return tmp;
     }
     
@@ -245,6 +269,41 @@ public class Song {
         this.file = file;
     }
     
+    public void setYoutubeCode(String youtube_code) {
+        this.youtube_code = youtube_code;
+    }
+
+    public String getYoutubeCode() {
+        return youtube_code;
+    }
+
+    public void setPlaymeCode(String playme_code) {
+        this.playme_code = playme_code;
+    }
+
+    public String getPlaymeCode() {
+        return playme_code;
+    }
+
+    public int getRatingInt() {
+        return (int) rating;
+    }
+    
+    public double getRatingDouble() {
+        return rating;
+    }
+
+    public double addRate(int rate) {
+        this.num_ratings++;
+        double tmp = this.rating = (this.rating + rate) / this.num_ratings;
+        this.update();
+        return tmp;
+    }
+
+    public int getNumRatings() {
+        return num_ratings;
+    }
+
     static void deleteSong(Song s) {
         ODF.get().storeOrUpdate(s);
         ODF.get().delete(s);
