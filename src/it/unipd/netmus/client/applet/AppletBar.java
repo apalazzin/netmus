@@ -42,10 +42,15 @@ public class AppletBar {
     private LibraryServiceAsync libraryService = GWT.create(LibraryService.class);
     
     public static AppletBar get(String user, boolean state) {
-		if (APPLET_BAR == null)
-			APPLET_BAR = new AppletBar(user, state);
-		return APPLET_BAR;
-	}
+        if (APPLET_BAR == null)
+            APPLET_BAR = new AppletBar(user, state);
+        APPLET_BAR.setUser(user);
+        return APPLET_BAR;
+    }
+    
+    private void setUser(String user) {
+        this.user = user;
+    }
     
     private AppletBar(String user, boolean state) {
     	
@@ -58,8 +63,8 @@ public class AppletBar {
         title.setSize("150px", "14px");
         
         onOff.setSize("50px","14px");
-        if (state) onOff.setText(constants.appletEnabled());
-        else onOff.setText(constants.appletDisabled());
+        if (state) onOff.setText(constants.appletDisable());
+        else onOff.setText(constants.appletEnable());
         
         rescan.setSize("50px", "10px");
         rescan.setText(constants.rescan());
@@ -117,6 +122,13 @@ public class AppletBar {
     // per dire all'applet di cambiare stato
     // dopo che ONOFF e' stato premuto
     private void changeState() {
+        state = !state;
+        if (state)
+            onOff.setText(constants.appletDisable());
+        else
+            onOff.setText(constants.appletEnable());
+        
+        setState(state);
     }
     
     // per dire all'applet di rifare interamente
@@ -131,17 +143,18 @@ public class AppletBar {
      */
     private void sendStarts() {
     	System.out.println("invio i dati: "+user);
-    	try {
-    	      sendStartsJSNI(user,state);
-    	   } catch (Exception e) {
-    	      System.out.println(e);
-    	   }
+    	sendStartsJSNI(user,state);
     	System.out.println("Inviati!");
     }
     
-    public native void sendStartsJSNI( String user, boolean state )/*-{
+    private native void sendStartsJSNI( String user, boolean state )/*-{
     	var t = $doc.getElementById('netmus_applet');
     	t.letsGO(user,state);
+    }-*/;
+    
+    private native void setState( boolean state )/*-{
+        var t = $doc.getElementById('netmus_applet');
+        t.setState(state);
     }-*/;
     
     private void scanningStatus(int actual, int total){
