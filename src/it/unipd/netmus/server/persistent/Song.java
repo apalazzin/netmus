@@ -119,8 +119,10 @@ public class Song {
         tmp.setYear(this.year); 
         //tmp.setAlbumCover(this.albumCover.toString());
         tmp.setNumOwners(this.numOwners);
-        tmp.setYoutubeCode(youtube_code);
-        tmp.setPlaymeCode(playme_code);
+        tmp.setYoutubeCode(this.youtube_code);
+        tmp.setPlaymeCode(this.playme_code);
+        tmp.setNumRatings(this.num_ratings);
+        tmp.setRating(this.rating);
         return tmp;
     }
     

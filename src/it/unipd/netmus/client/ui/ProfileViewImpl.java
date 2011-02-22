@@ -14,12 +14,20 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -29,9 +37,14 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -82,6 +95,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel playlist_container;
    @UiField HTMLPanel playlist_contenuto;
    @UiField HTMLPanel playlist_songs;
+   @UiField HTMLPanel song_container;
+   @UiField HTMLPanel song_contenuto;
    @UiField HTMLPanel main_panel;
    @UiField HTMLPanel left_panel;
    @UiField HTMLPanel playlists;
@@ -108,11 +123,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image star4;
    @UiField Image star5;
    @UiField Image chiudi_playlist;
+   @UiField Image chiudi_song;
    @UiField Image logo_youtube;
    @UiField Image chiudi_youtube;
    @UiField Image aggiungi_branoplaylist;
    @UiField Image rimuovi_branoplaylist;
-
+   @UiField Image aggiungi_playlist;
+   
+   boolean playlist_opened; 
+   boolean song_opened; 
+   
    Song selected_song;
    Song selected_song_playlist;
    
@@ -452,7 +472,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOverChiudiPlaylist(MouseOverEvent e) {
       chiudi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
- 
+
+   @UiHandler("edit_button")
+   void handleClickEditButton(ClickEvent e) {
+      viewSong(selected_song);
+   }
+   
+   @UiHandler("edit_button")
+   void handleMouseOverEditButton(MouseOverEvent e) {
+      edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+
+   @UiHandler("chiudi_song")
+   void handleClickChiudiSong(ClickEvent e) {
+      closeSong();
+   }
+   
+   @UiHandler("chiudi_song")
+   void handleMouseOverChiudiSong(MouseOverEvent e) {
+      chiudi_song.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
    @UiHandler("aggiungi_branoplaylist")
    void handleClickAggiungiBranoPlaylist(ClickEvent e) {
        listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
@@ -473,6 +515,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       rimuovi_branoplaylist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
+   @UiHandler("aggiungi_playlist")
+   void handleClickAggiungiPlaylist(ClickEvent e) {
+       
+      addPlaylist(); 
+      
+   }
+
+   @UiHandler("aggiungi_playlist")
+   void handleMouseOverAggiungiPlaylist(MouseOverEvent e) {
+      aggiungi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -499,7 +552,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	          
 	   for(int k=0; k< lista.length; k++) {
 
-		   	Label tmpTxt = new Label(lista[k]);
+		   	final Label tmpTxt = new Label(lista[k]);
 			tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
 	        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
             tmpTxt.getElement().getStyle().setColor("#37A6EB");
@@ -507,26 +560,56 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+            
 	        
-			Image tmpImg = new Image("images/playlist.jpg");
-			tmpImg.setWidth("22px");
+			Image tmpImg = new Image("images/playlistT.png");
+			tmpImg.setWidth("25px");
+			tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+			tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+			tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
 			
+			final FocusPanel wrapper = new FocusPanel();
+
 			HorizontalPanel tmpPnl = new HorizontalPanel();
+			tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 			tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
 			tmpPnl.add(tmpImg);
 			tmpPnl.add(tmpTxt);
-			
-			tmpTxt.addClickHandler(new ClickHandler() { 
-			    
+
+			wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+			wrapper.getElement().getStyle().setProperty("outline", "0");
+			wrapper.addMouseOverHandler( new MouseOverHandler(){
+
                 @Override
-                public void onClick(ClickEvent event) {
-                    viewPlaylist(((Label)event.getSource()).getText());
-                }
-			    
-			});
+                public void onMouseOver(MouseOverEvent event) {                    
+                      event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                      event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+                } });
 			
+	         wrapper.addMouseOutHandler( new MouseOutHandler(){
+	                @Override
+	                public void onMouseOut(MouseOutEvent event) {
+	                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+	                } });
+
+	          wrapper.addClickHandler(new ClickHandler() { 
+	                @Override
+	                public void onClick(ClickEvent event) {
+	                    viewPlaylist(tmpTxt.getText());
+	                    wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
+	                    Timer timerButton = new Timer() {
+	                        public void run() {
+	                            wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
+	                        }     
+	                    };
+	                    timerButton.schedule(50);
+	                }
+	            });
+
+			wrapper.add(tmpPnl);
 			
-			playlists.add(tmpPnl);
+			//playlists.getElement().setPropertyString("width", "100%");
+			playlists.add(wrapper);
 	   }
    }
 
@@ -568,29 +651,134 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
 
+   @Override
+   public void viewSong(it.unipd.netmus.client.ui.ProfileView.Song song) {
+       
+             
+      if(playlist_opened) {
+          
+          closePlaylist();
+          
+          Timer timerOpen = new Timer() {
+              public void run() {
+     
+                  
+                  song_opened = true;
+                  
+                  catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+                  song_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+                  
+                  
+                  Timer timerPlaylist = new Timer() {
+                      public void run() {
+                          song_contenuto.getElement().getStyle().setOpacity(1);      
+                      }     
+                  };
+                  
+                  timerPlaylist.schedule(400);
+                  
+              }        
+          };
+                 
+                 timerOpen.schedule(600);
+
+          }  else {
+              
+              song_opened = true;
+              
+              catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+              song_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+              
+              
+              Timer timerPlaylist = new Timer() {
+                  public void run() {
+                      song_contenuto.getElement().getStyle().setOpacity(1);      
+                  }     
+              };
+              
+              timerPlaylist.schedule(400);
+              
+          }
+      
+      
+}  
+      
+
+   
+   @Override
+   public void closeSong() {
+       
+       song_opened = false;
+       
+       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+       song_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
+       song_contenuto.getElement().getStyle().setOpacity(0);
+       
+   }
+
  
    @Override
-   public void viewPlaylist(String titolo) {
+   public void viewPlaylist(final String titolo) {
       
-      listener.setPlaylistSongs(titolo);
+       if(song_opened)  {
+           
+           closeSong();
        
-      titolo_playlist.setText(titolo);
-      catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+           Timer timerOpen = new Timer() {
+               public void run() {
       
-      
-      Timer timerPlaylist = new Timer() {
-          public void run() {
-              playlist_contenuto.getElement().getStyle().setOpacity(1);      
-          }     
-      };
-      
-      timerPlaylist.schedule(400);
+                   
+                  playlist_opened= true;
+                   
+                  listener.setPlaylistSongs(titolo);
+                   
+                  titolo_playlist.setText(titolo);
+                  catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+                  playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+                  
+                  
+                  Timer timerPlaylist = new Timer() {
+                      public void run() {
+                          playlist_contenuto.getElement().getStyle().setOpacity(1);      
+                      }     
+                  };
+                  
+                  timerPlaylist.schedule(400);
+
+               }     
+           };
+           
+           timerOpen.schedule(600);
+       
+       
+       } else {
+           
+           
+          playlist_opened= true;
+           
+          listener.setPlaylistSongs(titolo);
+           
+          titolo_playlist.setText(titolo);
+          catalogo_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+          playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+          
+          
+          Timer timerPlaylist = new Timer() {
+              public void run() {
+                  playlist_contenuto.getElement().getStyle().setOpacity(1);      
+              }     
+          };
+          
+          timerPlaylist.schedule(400);
+
+       }
       
    }
 
    @Override
    public void closePlaylist() {
+       
+      playlist_opened= false;
        
       brano_rimuovere.setText("");
       catalogo_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
@@ -848,46 +1036,70 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);              
         catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
         playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+        playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
+ 
+        song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+        song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+
+    
+        friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
         
-    
-    
-        if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
-            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
-            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.4,Style.Unit.PX);
+        
+        if(friends.getElement().getStyle().getOpacity().equals("0")) {
             
-        } else {
+            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338), Style.Unit.PX);
             
-            friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
+        
+        }
+        if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+            
+
+            playlists.getElement().getStyle().setProperty("height", "auto");
+            
             
         }
-    
+        if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
+
+            playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
+            
+        }
+        
+            
         
         //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
         Window.addResizeHandler(new ResizeHandler() {
              @Override
              public void onResize(ResizeEvent event) {               
+
                  int catalogo_h = main_panel.getOffsetHeight();
                  left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+
                  playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
                  catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
+                 playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
+                 
+                 song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+                 song_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  
                  friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
-                 
+
                  if(friends.getElement().getStyle().getOpacity().equals("0")) {
                      
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338), Style.Unit.PX);
                      
                  
-                 } else if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
+                 }
+                 if(friends.getOffsetHeight()>=(Window.getClientHeight()-vertical_offset-338)*0.44) {
                      
 
                      playlists.getElement().getStyle().setProperty("height", "auto");
                      
                      
-                 } else if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.65) {
+                 }
+                 if(playlists.getOffsetHeight()>(Window.getClientHeight()-vertical_offset-338)*0.66) {
 
                      playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
                      
@@ -942,9 +1154,158 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
 
+
+
+    @Override
+    public void addToPlaylists(String titolo) {
+        
+        final Label tmpTxt = new Label(titolo);
+        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        tmpTxt.getElement().getStyle().setColor("#37A6EB");
+        tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
+        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+        tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+        
+        
+        Image tmpImg = new Image("images/playlistT.png");
+        tmpImg.setWidth("25px");
+        tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+        tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+        tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+        
+        final FocusPanel wrapper = new FocusPanel();
+
+        HorizontalPanel tmpPnl = new HorizontalPanel();
+        tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
+        tmpPnl.add(tmpImg);
+        tmpPnl.add(tmpTxt);
+
+        wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+        wrapper.getElement().getStyle().setProperty("outline", "0");
+        wrapper.addMouseOverHandler( new MouseOverHandler(){
+
+            @Override
+            public void onMouseOver(MouseOverEvent event) {                    
+                  event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                  event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+            } });
+        
+         wrapper.addMouseOutHandler( new MouseOutHandler(){
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+                } });
+
+          wrapper.addClickHandler(new ClickHandler() { 
+                @Override
+                public void onClick(ClickEvent event) {
+                    viewPlaylist(tmpTxt.getText());
+                    wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
+                    Timer timerButton = new Timer() {
+                        public void run() {
+                            wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
+                        }     
+                    };
+                    timerButton.schedule(50);
+                }
+            });
+
+        wrapper.add(tmpPnl);
+        playlists.add(wrapper);
+        setLayout();
+    }
     
     
-   
+    private void addPlaylist() {
+        
+            final TextBox nome = new TextBox(); 
+            nome.getElement().getStyle().setWidth(80, Style.Unit.PCT);
+            
+            Image tmpImg = new Image("images/playlistT.png");
+            tmpImg.setWidth("25px");
+            tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+            
+            final FocusPanel wrapper = new FocusPanel();
+
+            final HorizontalPanel tmpPnl = new HorizontalPanel();
+            tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
+            tmpPnl.add(tmpImg);
+            tmpPnl.add(nome);
+
+            wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+            wrapper.getElement().getStyle().setProperty("outline", "0");
+            wrapper.addMouseOverHandler( new MouseOverHandler(){
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {                    
+                      event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
+                      event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+                } });
+            
+             wrapper.addMouseOutHandler( new MouseOutHandler(){
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                          event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+                    } });
+
+              wrapper.addClickHandler(new ClickHandler() { 
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        
+                    }
+                });
+              
+              nome.addKeyDownHandler(new KeyDownHandler(){
+
+                @Override
+                public void onKeyDown(KeyDownEvent event) {
+
+                    if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                        
+                        Label tmpTxt = new Label(nome.getText());
+                        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+                        tmpTxt.getElement().getStyle().setColor("#999999");
+                        tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
+                        tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+                        tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+                        
+                        wrapper.remove(tmpPnl);
+                        listener.addPlaylist(nome.getText());
+                        
+                        
+                    }
+                        
+                    
+                }
+                  
+                  
+              });
+
+            wrapper.add(tmpPnl);
+            
+            playlists.add(wrapper);
+            
+            setLayout();
+                        
+            Timer timerFocus = new Timer() {
+                public void run() {
+                    nome.setFocus(true);
+                }
+            };
+            timerFocus.schedule(50);
+            
+            
+    }
+        
+       
    
 }
 

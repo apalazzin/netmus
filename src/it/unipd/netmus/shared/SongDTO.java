@@ -28,6 +28,12 @@ public class SongDTO extends SongSummaryDTO {
 	
 	private String playme_code;
 	
+	private double rating;
+	
+	private int num_ratings;
+	
+	private int rating_for_this_user;
+	
 	//costruttore di default
 	public SongDTO(){}
 	
@@ -93,5 +99,29 @@ public class SongDTO extends SongSummaryDTO {
 
     public String getPlaymeCode() {
         return playme_code;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setNumRatings(int num_ratings) {
+        this.num_ratings = num_ratings;
+    }
+
+    public int getNumRatings() {
+        return num_ratings;
+    }
+
+    public void setRatingForThisUser(int rating_for_this_user) {
+        this.rating_for_this_user = rating_for_this_user;
+    }
+
+    public int getRatingForThisUser() {
+        return rating_for_this_user;
     }
 }
