@@ -354,4 +354,18 @@ public class ProfileActivity extends AbstractActivity implements
         clientFactory.getProfileView().addToPlaylists(title);
     }
 
+	@Override
+	public void setSongFields(String autore, String titolo, String album) {
+		
+		// imposta i campi dettagliati della canzone
+		// TODO Auto-generated method stub
+		String genere ="valore-genere";
+		String anno ="valore-anno";
+		String compositore ="valore-compositore";
+		String traccia ="valore-traccia";
+		
+		clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia);
+		
+	}
+
 }

@@ -14,6 +14,8 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -93,6 +95,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label song_autore;
    @UiField Label song_album;
    @UiField Label song_genere;
+   @UiField Label song_anno;
+   @UiField Label song_compositore;
+   @UiField Label song_traccia;
    
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
@@ -266,13 +271,36 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	      public void onSelectionChange(SelectionChangeEvent event) {
 	          
 	         setBranoCatalogo(selectionModel.getSelectedObject());
+	         
 	         titolo_song.setText(selected_song.titolo);
 	         song_titolo.setText(selected_song.titolo);
 	         song_autore.setText(selected_song.autore);
 	         song_album.setText(selected_song.album);
 	         
+	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
+	         
 	      }
+	      
+	      
 	    });
+	    
+	    catalogo.addDomHandler(new DoubleClickHandler() {
+
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+
+                if(playlist_opened) {
+                    
+                    listener.addToPLaylist(titolo_playlist.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
+                    
+                } else {
+                    
+                    if(selected_song!=null)
+                        viewSong(selected_song);                    
+                }
+
+            }}, DoubleClickEvent.getType());
+	    
 	    
 	    dataProvider_catalogo.addDataDisplay(catalogo);
 
@@ -306,7 +334,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       albumColumn2.setSortable(true);
 	       // la aggiunge al catalogo
 	       lista_canzoni.addColumn(albumColumn2, "Album");
-
+	       lista_canzoni.setColumnWidth(albumColumn2,"60%");
 	       
 	       // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
 	       final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
@@ -571,7 +599,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
             tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
-            tmpTxt.getElement().getStyle().setProperty("fontWeight", "600");
+            tmpTxt.getElement().getStyle().setProperty("fontWeight", "bold");
             
 	        
 			Image tmpImg = new Image("images/playlistT.png");
@@ -1328,6 +1356,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             
     }
+
+
+
+
+	@Override
+	public void setSongFields(String autore, String titolo, String album,
+			String genere, String anno, String compositore, String traccia) {
+		
+        song_titolo.setText(titolo);
+        song_autore.setText(autore);
+        song_album.setText(album);
+        song_genere.setText(genere);
+        song_anno.setText(anno);
+        song_compositore.setText(compositore);
+        song_traccia.setText(traccia);
+	
+	}
         
        
    
