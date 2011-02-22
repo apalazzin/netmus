@@ -5,6 +5,11 @@
 	src: url('Verdana.ttf');
 }
 
+@font-face {
+	font-family: Verdana;
+	font-weight: bold;
+	src: url('Verdana_Bold.ttf');
+}
 
 div#applet-bar {
    
