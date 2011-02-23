@@ -68,7 +68,7 @@ public interface ProfileView extends IsWidget {
    void closeSong();
    //Imposta i campi della canzone nella scheda di dettaglio
    void setSongFields(String autore, String titolo, String album, String genere,
-			String anno, String compositore, String traccia);
+			String anno, String compositore, String traccia, String cover);
 
    
    public interface Presenter
