@@ -109,6 +109,13 @@
 	
 	}
 
+.classificaG {
+	
+	margin-top: 2px;
+	
+	
+	}
+
 
 .catalogo {
 	
@@ -631,6 +638,12 @@
 .star {
 	
 	height: 20px;
+		
+	}
+
+.starG {
+	
+	height: 14px;
 		
 	}
 

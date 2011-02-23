@@ -105,7 +105,9 @@ public class ProfileActivity extends AbstractActivity implements
                 
                 };
                 usersServiceSvc.loadProfile(user, callback2);
+                //load the applet bar, if not active yet
                 
+                AppletBar.get(user,true).appletBarON();
             }
             
         };
@@ -114,15 +116,6 @@ public class ProfileActivity extends AbstractActivity implements
         catch(LoginException e) {
         }
                
-                
-                //CHIAMATE TEMPORANEEE DI TEST, DA ELIMINARE
-              
-                ///////////////////////////////////////////
-                
-               //load the applet bar, if not active yet
-                startApplet();
-                
-                
                 
 	}
 
@@ -163,37 +156,6 @@ public class ProfileActivity extends AbstractActivity implements
       } catch (Exception e) {
       }
    }
-
-   
-   
-   public void startApplet() {
-       
-       AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-           @Override
-           public void onFailure(Throwable caught) {
-               if (caught instanceof LoginException) {
-                   logger.info("User not logged yet - Redirect to Login");
-                   goTo(new LoginPlace(""));
-               }
-           }
-
-           @Override
-           public void onSuccess(final String user) {
-               
-               AppletBar.get(user,true).appletBarON();
-               
-           }
-           
-       };
-       
-       try { loginServiceSvc.getLoggedInUser(callback); }
-       catch(LoginException e) {
-       }
-       
-       
-   }
-   
    
    
 	@Override

@@ -105,11 +105,23 @@
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_anno">Test</g:Label></g:HorizontalPanel>
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_compositore">Test</g:Label></g:HorizontalPanel>
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_traccia">Test</g:Label></g:HorizontalPanel>
+						<g:HTMLPanel ui:field="classificaG" styleName="{style.classificaG}">
+							<span style="font-size: 12px; font-family: Verdana; margin-right: 15px;">Classifica:</span>
+							<g:Image ui:field="starG1" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG2" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG3" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG4" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG5" styleName="{style.starG}" url="images/starbw.png"/>
+				
+
+						</g:HTMLPanel>
+				
+						
 						</g:HTMLPanel>
 						
 						<g:Image ui:field="song_cover" styleName="{style.song_cover}"></g:Image>
 					
-					</g:HTMLPanel>
+				</g:HTMLPanel>
 					
 					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="titolo_song" styleName="{style.title_song}"></g:Label></div>
 					<g:Image ui:field="chiudi_song" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>					
