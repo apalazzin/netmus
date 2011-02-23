@@ -3,17 +3,12 @@
  */
 package it.unipd.netmus.server.persistent;
 
-import java.util.List;
-
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
-import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
-import com.google.code.twig.annotation.Type;
-import com.reveregroup.gwt.imagepreloader.FitImage;
+
 
 /**
  * @author ValterTexasGroup
@@ -62,7 +57,7 @@ public class Song {
     
     @Index private String genre;
     
-    @Type(Blob.class) private FitImage albumCover;
+    private String albumCover;
     
     private String year;
     
@@ -417,11 +412,11 @@ public class Song {
         return album;
     }
 
-    public FitImage getAlbumCover() {
+    public String getAlbumCover() {
         return albumCover;
     }
 
-    public void setAlbumCover(FitImage albumCover) {
+    public void setAlbumCover(String albumCover) {
         this.albumCover = albumCover;
     }
 
