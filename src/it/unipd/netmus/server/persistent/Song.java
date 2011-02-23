@@ -7,6 +7,8 @@ import java.util.List;
 
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
+import it.unipd.netmus.shared.exception.SongAlbumMissingException;
+import it.unipd.netmus.shared.exception.SongTitleMissingException;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -133,6 +135,7 @@ public class Song {
     
     
     //OLD VERSION
+    /*
     public static Song storeOrUpdateFromDTO(SongDTO song) {
         Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle()).changeAlbum(song.getAlbum());
         if (song.getAlbum() != null)
@@ -146,11 +149,10 @@ public class Song {
         if (song.getYear() != null)
             s.setYear(song.getYear());
         return s;
-    }
+    }*/
     
     //NEW VERSION IN COSTRUZIONE
-    /*
-    public static Song storeOrUpdateFromDTO(SongDTO song) throws Exception {
+    public static Song storeOrUpdateFromDTO(SongDTO song) throws SongAlbumMissingException, SongTitleMissingException {
         //prelievo delle informazioni dal DTO
         Song s = new Song();
         if (song.getTitle() != null)
@@ -159,42 +161,37 @@ public class Song {
             s.setArtist(song.getArtist());
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
-        if (song.getComposer() != null)
-            s.setComposer(song.getComposer());
-        if (song.getFile() != null)
-            s.setFile(song.getFile());
-        if (song.getGenre() != null)
-            s.setGenre(song.getGenre());
-        if (song.getTrackNumber() != null)
-            s.setTrackNumber(song.getTrackNumber());
-        if (song.getYear() != null)
-            s.setYear(song.getYear());
         
+        System.out.println("BRANO: "+s.getTitle());
         
         /////////////////////////////////////////////////////////////////////////////////
         //se le informazioni primarie sono complete procede con la ricerca nel database
         if (s.getArtist() != "" && s.getTitle() != "" && s.getAlbum() != "") {
+            
+            System.out.println("Il brano dell'utente ha le tag artist-title-album complete");
             
             Song tmp= Song.load(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
             
             if (tmp == null) { 
                 //ricerca esterna
                     //da implementare
-                    System.out.println("Effettuata ricerca esterna senza risultati.");
+                    System.out.println("Il brano è nuvo per il database di Netmus e la ricerca esterna non ha dato risultati.");
                 //inserimento nel database
                 s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
                 return s;
             }
             else {
                 //aggiornamento tag mancanti nel database
-                if (tmp.getComposer() == "")
-                    tmp.setComposer(s.getComposer());
-                if (tmp.getGenre() == "")
-                    tmp.setGenre(s.getGenre());
-                if (tmp.getTrackNumber() == "")
-                    tmp.setTrackNumber(s.getTrackNumber());
-                if (tmp.getYear() == "")
-                    tmp.setYear(s.getYear());
+                if (tmp.getComposer() == "" && song.getComposer() != null)
+                    tmp.setComposer(song.getComposer());
+                if (tmp.getGenre() == "" && song.getGenre() != null)
+                    tmp.setGenre(song.getGenre());
+                if (tmp.getTrackNumber() == "" && song.getTrackNumber() != null)
+                    tmp.setTrackNumber(song.getTrackNumber());
+                if (tmp.getYear() == "" && song.getYear() != null)
+                    tmp.setYear(song.getYear());
+                System.out.println("Brano già presente in database, aggiornati eventuali campi vuoti dal DTO dell'utente");
                 return tmp;
             }
         }
@@ -204,6 +201,8 @@ public class Song {
         //Le informazioni primarie non sono complete però avendo titolo e album si può risalire all'artista 
         if (s.getTitle() != "" && s.getAlbum() != "") {
             
+            System.out.println("Il brano dell'utente ha le tag title-album ma è sprovvisto dell'artista");
+            
             List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("title", FilterOperator.EQUAL, s.getTitle())
             .addFilter("album", FilterOperator.EQUAL, s.getAlbum()).returnAll().now();
             
@@ -211,29 +210,33 @@ public class Song {
                 
                 //Assumiamo che non esistano due canzoni di artisti diversi con album e titolo uguali
                 Song s2 = possible_songs.get(0);
+                System.out.println("Trovato l'artista mancante nel DB: "+s2.getArtist());
 
                 //aggiornamento tag mancanti nel database
-                if (s2.getComposer() == "")
-                    s2.setComposer(s.getComposer());
-                if (s2.getGenre() == "")
-                    s2.setGenre(s.getGenre());
-                if (s2.getTrackNumber() == "")
-                    s2.setTrackNumber(s.getTrackNumber());
-                if (s2.getYear() == "")
-                    s2.setYear(s.getYear());
+                if (s2.getComposer() == "" && song.getComposer() != null)
+                    s2.setComposer(song.getComposer());
+                if (s2.getGenre() == "" && song.getGenre() != null)
+                    s2.setGenre(song.getGenre());
+                if (s2.getTrackNumber() == "" && song.getTrackNumber() != null)
+                    s2.setTrackNumber(song.getTrackNumber());
+                if (s2.getYear() == "" && song.getYear() != null)
+                    s2.setYear(song.getYear());
+                System.out.println("Salvato in DB con chiave: "+s2.getTitle()+SEPARATOR+s2.getArtist()+SEPARATOR+s2.getAlbum());
                 return s2;
             }
             else {
                 
-                //Ricerca esterna di possibili album da associare a questa canzone
+                //Ricerca esterna di possibili artisti da associare a questa canzone
                 //if (trovato_possibile_artista) {
                     //inserimento nel database
                     //s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
                     //return s;
                 //}
                 //else {
+                System.out.println("Impossibile trovare l'artista mancante da ricerca esterna o interna...");
                     s.setArtist(UNKNOWN_ARTIST);
                     s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
                     return s;
                 //}
             }
@@ -245,6 +248,8 @@ public class Song {
         //le possibilità da sottoporre all'utente
         if (s.getTitle() != "" && s.getArtist() != "") {
             
+            System.out.println("Il brano dell'utente ha le tag title-artist ma è sprovvisto dell'album");
+            
             List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("artist", FilterOperator.EQUAL, s.getArtist())
             .addFilter("title", FilterOperator.EQUAL, s.getTitle()).returnAll().now();
             
@@ -252,22 +257,31 @@ public class Song {
                 
                 //Sono presenti nel database delle canzoni che potrebbero coincidere con questa, differiscono
                 //solamente per il nome dell'album. L'eccezione lanciata contiene i possibili nomi di album.
+                System.out.println("Trovati album che coincidono con le info della canzone nel DB");
                 
                 //Prima di ritornare l'eccezione all'utente salva comunque il brano con alcun sconosciuto nel database
                 s.setAlbum(UNKNOWN_ALBUM);
                 possible_songs.add(s);
                 s.changeAlbum(s.getAlbum());
-                throw new Exception();
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "La canzone "+s.getTitle()+"è stata inserita nel database sprovvista del nome dell'album ma ci sono alcuni album che combaciano nel DB.");
+                for (Song tmp:possible_songs)
+                    e.getPossibleAlbums().add(tmp.getAlbum());
+                throw e;
                 
             }
             else {
                 
                 //Ricerca esterna di possibili album da associare a questa canzone
                 //if (trovati_possibili_album) {
-                    //s.setAlbum(UNKNOWN_ALBUM);
+                    s.setAlbum(UNKNOWN_ALBUM);
                     //possible_songs.add(s);
-                    //s.changeAlbum(s.getAlbum());
-                    //throw new Exception();
+                    s.changeAlbum(s.getAlbum());
+                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                    SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "La canzone "+s.getTitle()+"è stata inserita nel database sprovvista del nome dell'album.");
+                    //for (Song tmp:possible_songs)
+                    //    e.getPossibleAlbums().add(tmp.getTitle());
+                    throw e;
                 //}
                 
             }
@@ -279,6 +293,8 @@ public class Song {
         //le possibilità da sottoporre all'utente
         if (s.getAlbum() != "" && s.getArtist() != "") {
             
+            System.out.println("Il brano dell'utente ha le tag album-artist ma è sprovvisto di titolo");
+            
             List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("artist", FilterOperator.EQUAL, s.getArtist())
             .addFilter("album", FilterOperator.EQUAL, s.getAlbum()).returnAll().now();
             
@@ -286,29 +302,59 @@ public class Song {
                 
                 //Sono presenti nel database delle canzoni che potrebbero coincidere con questa, differiscono
                 //solamente per il nome dell'album. L'eccezione lanciata contiene i possibili nomi di album.
+                System.out.println("Trovati titoli possibili con le info della canzone nel DB");
                 
                 //Prima di ritornare l'eccezione all'utente salva comunque il brano con alcun sconosciuto nel database
                 s.setAlbum(UNKNOWN_TITLE);
                 possible_songs.add(s);
                 s.changeTitle(s.getTitle());
-                throw new Exception();
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                SongTitleMissingException e = new SongTitleMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "Una canzone di "+s.getArtist()+" è stata inserita nel database senza titolo.");
+                for (Song tmp:possible_songs)
+                    e.getPossibleTitles().add(tmp.getTitle());
+                throw e;
                 
             }
             else {
                 
                 //Ricerca esterna di possibili album da associare a questa canzone
                 //if (trovati_possibili_album) {
-                    //s.setAlbum(UNKNOWN_TITLE);
+                    s.setAlbum(UNKNOWN_TITLE);
                     //possible_songs.add(s);
-                    //s.changeTitle(s.getTitle());
-                    //throw new Exception();
+                    s.changeTitle(s.getTitle());
+                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                    SongTitleMissingException e = new SongTitleMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "Una canzone di "+s.getArtist()+" è stata inserita nel database senza titolo.");
+                    //for (Song tmp:possible_songs)
+                    //    e.getPossibleTitles().add(tmp.getTitle());
+                    throw e;
                 //}
                 
             }
         }
+        
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //Le informazioni primarie non sono complete, abbiamo a disposizione solo il titolo
+        if (s.getTitle() != "") {
+            
+            System.out.println("Il brano dell'utente ha solo il titolo");
+            
+            //Prima di ritornare l'eccezione all'utente salva comunque il brano con album e artista sconosciuti nel database
+            s.setAlbum(UNKNOWN_TITLE);
+            s.setArtist(UNKNOWN_ARTIST);
+            s.changeTitle(s.getTitle());
+            System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+            SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "Canzone "+s.getTitle()+" inserita senza altre informazioni");
+            throw e;
+        }
+        
+        
+        
+        
+        
         return null;
     }
-    */
+    
     
     public String getId() {
         return id;

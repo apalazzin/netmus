@@ -164,7 +164,7 @@ public class MusicLibrary {
             if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
             }
-        if (song.getTitle() != "" && song.getArtist() != "" && trovato == false) {
+        if (trovato == false) {
             //add songId to the list
             this.songList.add(new SongWithRating(song.getId()));
             
@@ -179,7 +179,6 @@ public class MusicLibrary {
                 this.updatePreferredArtist();
                 this.updatePreferredGenre();
             }
-            
             return true;
         }
         else return false;

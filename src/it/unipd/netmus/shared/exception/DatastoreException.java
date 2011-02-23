@@ -5,9 +5,13 @@ package it.unipd.netmus.shared.exception;
  *
  */
 @SuppressWarnings("serial")
-public class DatastoreException extends Exception {
+public class DatastoreException extends NetmusException {
     
     public DatastoreException() {
         super();
+    }
+    
+    public DatastoreException(String more_info) {
+        super(more_info);
     }
 }
