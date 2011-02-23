@@ -36,7 +36,7 @@ public class MusicLibrary {
         
         @SuppressWarnings("unused")
         public SongWithRating() {
-            this.songId = "";
+            this.songId = Song.SEPARATOR;
             this.rating = -1;
         }
         
@@ -161,10 +161,10 @@ public class MusicLibrary {
         song.update();
         boolean trovato = false;
         for (SongWithRating tmp:this.songList)
-            if (tmp.getSongId().equals(song.getId())) {
+            if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
             }
-        if (song.getTitle() != null && song.getArtist() != null && trovato == false) {
+        if (song.getTitle() != "" && song.getArtist() != "" && trovato == false) {
             //add songId to the list
             this.songList.add(new SongWithRating(song.getId()));
             
@@ -193,7 +193,7 @@ public class MusicLibrary {
         boolean trovato = false;
         SongWithRating saved_song = null;
         for (SongWithRating tmp:this.songList)
-            if (tmp.getSongId().equals(song.getId())) {
+            if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
                 saved_song = tmp;
             }
@@ -226,16 +226,23 @@ public class MusicLibrary {
     public void rateSong(Song song, int rating) {
         song.update();
         for (SongWithRating tmp:this.songList)
-            if (tmp.getSongId().equals(song.getId())) {
-                tmp.setRating(rating);
-                song.addRate(rating);
+            if (tmp.getSongId().equals(song.getId()) == true) {
+                if (tmp.getRating()>0) {
+                    int old_rating = tmp.getRating();
+                    tmp.setRating(rating);
+                    song.changeRate(old_rating, rating);
+                }
+                else {
+                    tmp.setRating(rating);
+                    song.addRate(rating);
+                }
             }
     }
     
     public int getSongRate(Song song) {
         song.update();
         for (SongWithRating tmp:this.songList)
-            if (tmp.getSongId().equals(song.getId()))
+            if (tmp.getSongId().equals(song.getId()) == true)
                 return tmp.getRating();
         return -1;
     }
@@ -248,11 +255,11 @@ public class MusicLibrary {
         List<Song> allSongs = this.allSongs();
         while (allSongs.size()>max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getGenre() != null) {
+            if (tmp.getGenre() != "") {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it:allSongs)
-                    if (it.getGenre() != null && !it.equals(tmp) && it.getGenre().equals(tmp.getGenre())) {
+                    if (it.getGenre() != "" && it.equals(tmp)==false && it.getGenre().equals(tmp.getGenre())==true ) {
                         count++;
                         toBeRemoved.add(it);
                     }
@@ -276,11 +283,11 @@ public class MusicLibrary {
         List<Song> allSongs = this.allSongs();
         while (allSongs.size()>max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getArtist() != null) {
+            if (tmp.getArtist() != "") {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it:allSongs)
-                    if (it.getArtist() != null && !it.equals(tmp) && it.getArtist().equals(tmp.getArtist())) {
+                    if (it.getArtist() != "" && it.equals(tmp)==false && it.getArtist().equals(tmp.getArtist())==true ) {
                         count++;
                         toBeRemoved.add(it);
                     }

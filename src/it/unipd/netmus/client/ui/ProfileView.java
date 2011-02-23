@@ -26,11 +26,11 @@ public interface ProfileView extends IsWidget {
         public abstract boolean equals(Object o);
     };
 
-    
    void setName(String profileName);
    void setPresenter(Presenter listener);
    void setNumeroBrani(int numero);
    void setUser(String username);
+   void setRating(int rating);
 
    //riempie il catalogo
    void paintCatalogo(List<String> lista_canzoni);
@@ -67,8 +67,9 @@ public interface ProfileView extends IsWidget {
    //Chiude la scheda della canzone
    void closeSong();
    //Imposta i campi della canzone nella scheda di dettaglio
-   void setSongFields(String autore, String titolo, String album, String genere,
-			String anno, String compositore, String traccia);
+   void setSongFields(String autore, String titolo, String album, String genere, String anno, String compositore, String traccia);
+   //Mostra il rating dato come input
+   void showStar(int index);
 
    
    public interface Presenter
@@ -93,6 +94,9 @@ public interface ProfileView extends IsWidget {
 
       //restituisce il summary delle canzoni
       void setSongs();
+      
+      //restituisce il rating della canzone selezionata
+      double loadRating(String artist, String title, String album);
 
       //restituisce il link youtube della canzone selezionata
       void playYouTube(String autore, String titolo, String album);
@@ -105,9 +109,12 @@ public interface ProfileView extends IsWidget {
 
       //aggiunge song alla playlist e restituisce true in caso di successo
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
-	
+      
       //Imposta i campi della canzone selezionata.
       void setSongFields(String autore, String titolo, String album);
+      
+      //attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
+      void rateSelectedSong(String artist, String title, String album, int rate);
 
    }
 
