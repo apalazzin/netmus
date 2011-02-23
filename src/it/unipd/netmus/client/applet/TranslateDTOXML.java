@@ -88,12 +88,19 @@ public class TranslateDTOXML {
 		return document.toString();
 	}
 	
+	//clear the filename path end extension
+	private String clearFileName(String filename) {
+	    int start = filename.lastIndexOf("/")+1;
+        int end = filename.lastIndexOf(".mp3");
+        return filename.substring(start, end);
+	}
+	
 	private SongDTO generateDTO(Element node){
 		SongDTO song = new SongDTO();
 		while (node.hasChildNodes()){
 			Element child = (Element) node.getFirstChild();
 			String name = child.getNodeName();
-			if (name.equals(FILE_NAME)) song.setFile(child.getFirstChild().getNodeValue());
+			if (name.equals(FILE_NAME)) song.setFile(clearFileName(child.getFirstChild().getNodeValue()));
 			else if (name.equals(ALBUMTITLE_NAME)) song.setAlbum(child.getFirstChild().getNodeValue());
 			else if (name.equals(AUTHORCOMPOSER_NAME)) song.setComposer(child.getFirstChild().getNodeValue());
 			else if (name.equals(LEADARTIST_NAME)) song.setArtist(child.getFirstChild().getNodeValue());
