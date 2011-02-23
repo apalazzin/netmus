@@ -428,8 +428,9 @@ public class ProfileActivity extends AbstractActivity implements
 		String anno ="valore-anno";
 		String compositore ="valore-compositore";
 		String traccia ="valore-traccia";
+		String cover = "images/test_cover.jpg"; //valore url cover
 		
-		clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia);
+		clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
 		
 	}
 
