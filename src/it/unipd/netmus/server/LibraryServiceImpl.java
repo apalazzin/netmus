@@ -22,7 +22,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryService {
     
-	public MusicLibraryDTO loadLibrary(String user,String password){
+	public MusicLibraryDTO loadLibrary(String user, String password){
 		return null;
 	}
 	
@@ -31,6 +31,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
 	
     @Override
     public void sendUserNewMusic(String user, List<SongDTO> new_songs) {
+        // dovremo tornare all'applet con la lista dei Song (o SummaryDTO per fargli scelgiere)
         
         UserAccount useraccount = UserAccount.load(user);
         
