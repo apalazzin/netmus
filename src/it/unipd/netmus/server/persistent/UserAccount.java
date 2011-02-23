@@ -11,14 +11,12 @@ import it.unipd.netmus.shared.UserSummaryDTO;
 import java.util.Date;
 import java.util.List;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Text;
 import com.google.code.twig.annotation.Child;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 import com.google.code.twig.annotation.Type;
-import com.reveregroup.gwt.imagepreloader.FitImage;
 
 
 /**
@@ -42,8 +40,6 @@ public class UserAccount {
    private String gender;
    
    private String nationality;
-   
-   @Type(Blob.class) private FitImage avatar;
 
    @Type(Text.class) private String aboutMe;
 
@@ -223,15 +219,6 @@ public class UserAccount {
 
    public void setNationality(String nationality) {
        this.nationality = nationality;
-       this.update();
-   }
-
-   public FitImage getAvatar() {
-       return avatar;
-   }
-
-   public void setAvatar(FitImage avatar) {
-       this.avatar = avatar;
        this.update();
    }
 

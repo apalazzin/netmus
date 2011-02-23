@@ -10,14 +10,27 @@ import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * @author ValterTexasGroup
@@ -29,15 +42,17 @@ public class AppletBar {
     private boolean visible = false;
     private AppletConstants constants = GWT.create(AppletConstants.class);
     private Label title = new Label(constants.title());
-    private Anchor onOff = new Anchor();
-    private Anchor rescan = new Anchor(); // VISIBILE FINITA LA SCANSIONE
-    private Anchor chooser = new Anchor();
+    private Label onOff = new Label();
+    private Button rescan = new Button(); // VISIBILE FINITA LA SCANSIONE
+    private HTMLPanel button_container = new HTMLPanel("");
+    private Button chooser = new Button();
     private TextBox status = new TextBox();
     private HTML applet = new HTML();
     private String user;
     private String original_user;
     private boolean state;
     private TranslateDTOXML translator = new TranslateDTOXML();
+    private HTMLPanel main = new HTMLPanel("");
     
     private LibraryServiceAsync libraryService = GWT.create(LibraryService.class);
     
@@ -60,34 +75,106 @@ public class AppletBar {
         
         makeNativeFunction(this);
 
-        title.setSize("150px", "14px");
+        main.setStyleName("applet_main");
+        button_container.setStyleName("applet_button_cnt");
         
         onOff.setSize("50px","14px");
+        onOff.setStyleName("applet_switch");
+        
         if (state) onOff.setText(constants.appletDisable());
         else onOff.setText(constants.appletEnable());
         
-        rescan.setSize("50px", "10px");
+        rescan.setStyleName("applet_rescan");
         rescan.setText(constants.rescan());
+        rescan.getElement().getStyle().setMarginLeft(30, Style.Unit.PX);
+        rescan.getElement().getStyle().setWidth(90, Style.Unit.PX);
         rescan.setVisible(false); // diventera' visibile a fine scansione di un dispositivo
-        
-        status.setSize("180px", "10px");
-        
-        chooser.setSize("90px", "10px");
+                
         chooser.setText(constants.chooser());
+        chooser.setStyleName("applet_bottone");
+        chooser.getElement().getStyle().setMarginLeft(30, Style.Unit.PX);
+        chooser.getElement().getStyle().setWidth(90, Style.Unit.PX);
+        
+        title.setStyleName("applet_title");
+        status.addStyleName("applet_status");
 
-        RootPanel.get("applet-bar").add(title,5,2);
-        RootPanel.get("applet-bar").add(onOff,145,2);    
-        RootPanel.get("applet-bar").add(status,195,2);
-        RootPanel.get("applet-bar").add(rescan,400,2);
-        RootPanel.get("applet-bar").add(chooser,460,2);
-        RootPanel.get("applet-bar").add(applet);
+        RootPanel.get("applet-bar").addDomHandler(new MouseOverHandler() {
+
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                if(DOM.getElementById("main_panel").getClientWidth()>805) {
+                    DOM.getElementById("main_panel").getStyle().setMarginRight(157, Style.Unit.PX);
+                    DOM.getElementById("applet-bar").getStyle().setWidth(140, Style.Unit.PX);
+                    status.getElement().getStyle().setProperty("MozTransform", "rotate(0deg)");
+                    status.getElement().getStyle().setProperty("WebkitTransform", "rotate(0deg)");
+                    status.getElement().getStyle().setProperty("Transform", "rotate(0deg)");
+                    status.getElement().getStyle().setMarginLeft(7, Style.Unit.PX);
+                    status.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
+                    status.getElement().getStyle().setWidth(120, Style.Unit.PX);
+                    button_container.getElement().getStyle().setOpacity(1);
+                    title.getElement().getStyle().setOpacity(1);
+                } else {
+                    
+                    DOM.getElementById("applet-bar").getStyle().setBackgroundColor("#fabebe");
+                }
+            }}, MouseOverEvent.getType());
+        
+
+        RootPanel.get("applet-bar").addDomHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                DOM.getElementById("applet-bar").getStyle().setBackgroundColor("#FFFFFF");
+                DOM.getElementById("main_panel").getStyle().setMarginRight(50, Style.Unit.PX);
+                DOM.getElementById("applet-bar").getStyle().setWidth(33, Style.Unit.PX);
+                status.getElement().getStyle().setProperty("MozTransform", "rotate(90deg)");
+                status.getElement().getStyle().setProperty("WebkitTransform", "rotate(90deg)");
+                status.getElement().getStyle().setProperty("Transform", "rotate(90deg)");
+                status.getElement().getStyle().setMarginLeft(-86, Style.Unit.PX);
+                status.getElement().getStyle().setMarginTop(60, Style.Unit.PX);
+                status.getElement().getStyle().setWidth(200, Style.Unit.PX);
+                button_container.getElement().getStyle().setOpacity(0);
+                title.getElement().getStyle().setOpacity(0);
+            }}, MouseOutEvent.getType());
+
+
+        
+        VerticalPanel tmp = new VerticalPanel();
+        
+        tmp.add(rescan);
+        tmp.add(chooser);
+        
+        button_container.add(tmp);
+        main.add(title);
+        main.add(status);
+        
+        main.add(button_container);
+        main.add(onOff);    
+        main.add(applet);
+        RootPanel.get("applet-bar").add(main);
+        
         
         onOff.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // send changeStatus signal
+                if(event.getRelativeElement().getStyle().getColor().equals("red")) {
+                    event.getRelativeElement().getStyle().setColor("#38D12F");
+                } else {
+                    event.getRelativeElement().getStyle().setColor("red");
+                }
+               
                 changeState();
             }
+        });
+        
+        onOff.addMouseOverHandler(new MouseOverHandler() {
+
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
+            }
+            
         });
         
         rescan.addClickHandler(new ClickHandler() {
