@@ -137,6 +137,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image star3;
    @UiField Image star4;
    @UiField Image star5;
+   @UiField Image starG1;
+   @UiField Image starG2;
+   @UiField Image starG3;
+   @UiField Image starG4;
+   @UiField Image starG5;
    @UiField Image chiudi_playlist;
    @UiField Image chiudi_song;
    @UiField Image logo_youtube;
@@ -282,11 +287,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         song_titolo.setText(selected_song.titolo);
 	         song_autore.setText(selected_song.autore);
 	         song_album.setText(selected_song.album);
+
+             global_rating = listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
+             showStar(rating);
 	         
 	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
 	         
-	         global_rating = listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
-	         showStar(rating);
 	      }
 	    });
 	    
@@ -1473,8 +1479,30 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_compositore.setText(compositore);
         song_traccia.setText(traccia);
         song_cover.setUrl(cover);
+        
+        if (global_rating > 0) 
+            starG1.setUrl("images/star.png");
+        else 
+            starG1.setUrl("images/starbw.png");
+        if (global_rating > 1) 
+            starG2.setUrl("images/star.png");
+        else 
+            starG2.setUrl("images/starbw.png");
+        if (global_rating > 2) 
+            starG3.setUrl("images/star.png");
+        else 
+            starG3.setUrl("images/starbw.png");
+        if (global_rating > 3) 
+            starG4.setUrl("images/star.png");
+        else 
+            starG4.setUrl("images/starbw.png");
+        if (global_rating > 4) 
+            starG5.setUrl("images/star.png");
+        else 
+            starG5.setUrl("images/starbw.png");
+    }
 	
-	}
+	
         
 }
 
