@@ -3,11 +3,13 @@
  */
 package it.unipd.netmus.server.persistent;
 
+import java.util.List;
+
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
-import it.unipd.netmus.shared.exception.DatastoreException;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 import com.google.code.twig.annotation.Type;
@@ -19,7 +21,7 @@ import com.reveregroup.gwt.imagepreloader.FitImage;
  *
  *PROCEDURA SUGGERTA PER INSERIRE O MODIFICARE UNA CANZONE NEL DATABASE 
  *
- * Song s = new Song().changeArtist("artist").changeTitle("title");
+ * Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle()).changeAlbum(song.getAlbum());
  * s.set_quello_che_vuoi   (per modificare gli altri attrobuti, 
  *          ATTENZIONE che se la canzone era già presente in database 
  *          potrebbe avere già delle informazioni).
@@ -39,18 +41,26 @@ import com.reveregroup.gwt.imagepreloader.FitImage;
 public class Song {
     
     static final String SEPARATOR = "-vt.g-";
+    
+    static final String UNKNOWN_ARTIST = "&unknartst";
+    
+    static final String UNKNOWN_TITLE = "&unknttl";
+    
+    static final String UNKNOWN_ALBUM = "&unknalbm";
 
     @Id private String id;
     
     @Index private String title;
     
-    @Index private String genre;
+    @Index private String album;
     
     @Index private String artist;
     
     @Index private int numOwners;
     
-    private String album;
+    @Index private double rating;
+    
+    @Index private String genre;
     
     @Type(Blob.class) private FitImage albumCover;
     
@@ -65,8 +75,6 @@ public class Song {
     private String youtube_code;
     
     private String playme_code;
-    
-    @Index private double rating;
     
     private int num_ratings;
     
@@ -88,13 +96,6 @@ public class Song {
         this.rating = 0;
     }
     
-    public void store() throws DatastoreException {
-        if (this.title == "" && this.artist == "")
-            throw new DatastoreException();
-        else
-            ODF.get().store().instance(this).ensureUniqueKey().now();
-    }
-    
     public void update() {
         ODF.get().storeOrUpdate(this);
     }
@@ -104,7 +105,7 @@ public class Song {
     }
     
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        return ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()).toLowerCase()).now();
+        return ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()+SEPARATOR+dto.getAlbum()).toLowerCase()).now();
     }
     
     public SongSummaryDTO toSummaryDTO() {
@@ -130,24 +131,184 @@ public class Song {
         return tmp;
     }
     
+    
+    //OLD VERSION
     public static Song storeOrUpdateFromDTO(SongDTO song) {
-        Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle());
+        Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle()).changeAlbum(song.getAlbum());
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
-        if (song.getAlbumCover() != null)
-            s.setAlbumCover(s.getAlbumCover());
         if (song.getComposer() != null)
-            s.setComposer(s.getComposer());
-        if (song.getFile() != null)
-            s.setFile(s.getFile());
+            s.setComposer(song.getComposer());
         if (song.getGenre() != null)
-            s.setGenre(s.getGenre());
+            s.setGenre(song.getGenre());
         if (song.getTrackNumber() != null)
-            s.setTrackNumber(s.getTrackNumber());
+            s.setTrackNumber(song.getTrackNumber());
         if (song.getYear() != null)
-            s.setYear(s.getYear());
+            s.setYear(song.getYear());
         return s;
     }
+    
+    //NEW VERSION IN COSTRUZIONE
+    /*
+    public static Song storeOrUpdateFromDTO(SongDTO song) throws Exception {
+        //prelievo delle informazioni dal DTO
+        Song s = new Song();
+        if (song.getTitle() != null)
+            s.setTitle(song.getTitle());
+        if (song.getArtist() != null)
+            s.setArtist(song.getArtist());
+        if (song.getAlbum() != null)
+            s.setAlbum(song.getAlbum());
+        if (song.getComposer() != null)
+            s.setComposer(song.getComposer());
+        if (song.getFile() != null)
+            s.setFile(song.getFile());
+        if (song.getGenre() != null)
+            s.setGenre(song.getGenre());
+        if (song.getTrackNumber() != null)
+            s.setTrackNumber(song.getTrackNumber());
+        if (song.getYear() != null)
+            s.setYear(song.getYear());
+        
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //se le informazioni primarie sono complete procede con la ricerca nel database
+        if (s.getArtist() != "" && s.getTitle() != "" && s.getAlbum() != "") {
+            
+            Song tmp= Song.load(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+            
+            if (tmp == null) { 
+                //ricerca esterna
+                    //da implementare
+                    System.out.println("Effettuata ricerca esterna senza risultati.");
+                //inserimento nel database
+                s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                return s;
+            }
+            else {
+                //aggiornamento tag mancanti nel database
+                if (tmp.getComposer() == "")
+                    tmp.setComposer(s.getComposer());
+                if (tmp.getGenre() == "")
+                    tmp.setGenre(s.getGenre());
+                if (tmp.getTrackNumber() == "")
+                    tmp.setTrackNumber(s.getTrackNumber());
+                if (tmp.getYear() == "")
+                    tmp.setYear(s.getYear());
+                return tmp;
+            }
+        }
+        
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //Le informazioni primarie non sono complete però avendo titolo e album si può risalire all'artista 
+        if (s.getTitle() != "" && s.getAlbum() != "") {
+            
+            List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("title", FilterOperator.EQUAL, s.getTitle())
+            .addFilter("album", FilterOperator.EQUAL, s.getAlbum()).returnAll().now();
+            
+            if (possible_songs.size()>0) { 
+                
+                //Assumiamo che non esistano due canzoni di artisti diversi con album e titolo uguali
+                Song s2 = possible_songs.get(0);
+
+                //aggiornamento tag mancanti nel database
+                if (s2.getComposer() == "")
+                    s2.setComposer(s.getComposer());
+                if (s2.getGenre() == "")
+                    s2.setGenre(s.getGenre());
+                if (s2.getTrackNumber() == "")
+                    s2.setTrackNumber(s.getTrackNumber());
+                if (s2.getYear() == "")
+                    s2.setYear(s.getYear());
+                return s2;
+            }
+            else {
+                
+                //Ricerca esterna di possibili album da associare a questa canzone
+                //if (trovato_possibile_artista) {
+                    //inserimento nel database
+                    //s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                    //return s;
+                //}
+                //else {
+                    s.setArtist(UNKNOWN_ARTIST);
+                    s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                    return s;
+                //}
+            }
+        }
+        
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
+        //le possibilità da sottoporre all'utente
+        if (s.getTitle() != "" && s.getArtist() != "") {
+            
+            List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("artist", FilterOperator.EQUAL, s.getArtist())
+            .addFilter("title", FilterOperator.EQUAL, s.getTitle()).returnAll().now();
+            
+            if (possible_songs.size()>0) { 
+                
+                //Sono presenti nel database delle canzoni che potrebbero coincidere con questa, differiscono
+                //solamente per il nome dell'album. L'eccezione lanciata contiene i possibili nomi di album.
+                
+                //Prima di ritornare l'eccezione all'utente salva comunque il brano con alcun sconosciuto nel database
+                s.setAlbum(UNKNOWN_ALBUM);
+                possible_songs.add(s);
+                s.changeAlbum(s.getAlbum());
+                throw new Exception();
+                
+            }
+            else {
+                
+                //Ricerca esterna di possibili album da associare a questa canzone
+                //if (trovati_possibili_album) {
+                    //s.setAlbum(UNKNOWN_ALBUM);
+                    //possible_songs.add(s);
+                    //s.changeAlbum(s.getAlbum());
+                    //throw new Exception();
+                //}
+                
+            }
+        }  
+            
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
+        //le possibilità da sottoporre all'utente
+        if (s.getAlbum() != "" && s.getArtist() != "") {
+            
+            List<Song> possible_songs= ODF.get().find().type(Song.class).addFilter("artist", FilterOperator.EQUAL, s.getArtist())
+            .addFilter("album", FilterOperator.EQUAL, s.getAlbum()).returnAll().now();
+            
+            if (possible_songs.size()>0) { 
+                
+                //Sono presenti nel database delle canzoni che potrebbero coincidere con questa, differiscono
+                //solamente per il nome dell'album. L'eccezione lanciata contiene i possibili nomi di album.
+                
+                //Prima di ritornare l'eccezione all'utente salva comunque il brano con alcun sconosciuto nel database
+                s.setAlbum(UNKNOWN_TITLE);
+                possible_songs.add(s);
+                s.changeTitle(s.getTitle());
+                throw new Exception();
+                
+            }
+            else {
+                
+                //Ricerca esterna di possibili album da associare a questa canzone
+                //if (trovati_possibili_album) {
+                    //s.setAlbum(UNKNOWN_TITLE);
+                    //possible_songs.add(s);
+                    //s.changeTitle(s.getTitle());
+                    //throw new Exception();
+                //}
+                
+            }
+        }
+        return null;
+    }
+    */
     
     public String getId() {
         return id;
@@ -157,16 +318,37 @@ public class Song {
         this.id = id.toLowerCase();
         this.update();
     }
+    
+    public Song changeTitle(String title) {
+        if (title != null && title.equals("")==false) {
+            Song.deleteSong(this);
+            this.setTitle(title);
+        
+            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            if (tmp == null) { 
+                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+                return this;
+            }
+            else {
+                return tmp;
+            }
+        }
+        else return this;
+    }
+    
+    private void setTitle(String title) {
+        this.title = title;
+    }
 
     public Song changeArtist(String artist) {
         if (artist != null && artist.equals("")==false) {
             Song.deleteSong(this);
-            this.artist = artist;
+            this.setArtist(artist);
         
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist);
+            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             
             if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist);
+                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
                 return this;
             }
             else {
@@ -176,6 +358,31 @@ public class Song {
         else return this;
     }
         
+    private void setArtist(String artist) {
+        this.artist = artist;
+    }
+    
+    public Song changeAlbum(String album) {
+        if (album != null && album.equals("")==false) {
+            Song.deleteSong(this);
+            this.setAlbum(album);
+        
+            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            if (tmp == null) { 
+                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+                return this;
+            }
+            else {
+                return tmp;
+            }
+        }
+        else return this;
+    }
+
+    private void setAlbum(String album) {
+        this.album = album;
+    }
+    
     public String getArtist() {
         return artist;
     }
@@ -202,33 +409,12 @@ public class Song {
         return numOwners;
     }
 
-    public Song changeTitle(String title) {
-        if (title != null && title.equals("")==false) {
-            Song.deleteSong(this);
-            this.title = title;
-        
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist);
-            if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist);
-                return this;
-            }
-            else {
-                return tmp;
-            }
-        }
-        else return this;
-    }
-
     public String getTitle() {
         return title;
     }
 
     public String getAlbum() {
         return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
     }
 
     public FitImage getAlbumCover() {

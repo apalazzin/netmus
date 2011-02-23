@@ -6,6 +6,7 @@ package it.unipd.netmus.server;
 import java.util.List;
 
 import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.server.persistent.DatastoreUtils;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.MusicLibraryDTO;
@@ -43,6 +44,14 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
     public MusicLibrarySummaryDTO getLibrary(String user) {
       
         UserAccount useraccount = UserAccount.load(user);
+        
+        /*System.out.println(DatastoreUtils.songsInDatastore()+" canzoni totali salvate nel datastore");
+        for (Song tmp:useraccount.getMusicLibrary().allSongs()) {
+            System.out.println(tmp.getId());
+            System.out.println(tmp.getTitle()+" "+tmp.getArtist()+" "+tmp.getAlbum());
+            System.out.println("");
+        }*/
+        
         return useraccount.getMusicLibrary().toMusicLibrarySummaryDTO();
     }
 
