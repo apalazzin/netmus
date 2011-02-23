@@ -3,6 +3,7 @@
  */
 package it.unipd.netmus.client.service;
 
+import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -12,5 +13,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface UsersServiceAsync {
-	public void loadProfile(String user,String password, AsyncCallback<UserDTO> callback);
+    void loadProfile(String user, AsyncCallback<UserCompleteDTO> callback);
 }

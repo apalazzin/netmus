@@ -89,7 +89,7 @@ public class Song {
     }
     
     public void store() throws DatastoreException {
-        if (this.title == null && this.artist == null)
+        if (this.title == "" && this.artist == "")
             throw new DatastoreException();
         else
             ODF.get().store().instance(this).ensureUniqueKey().now();
@@ -101,6 +101,10 @@ public class Song {
     
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
+    }
+    
+    public static Song loadFromDTO(SongSummaryDTO dto) {
+        return ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()).toLowerCase()).now();
     }
     
     public SongSummaryDTO toSummaryDTO() {
@@ -155,7 +159,7 @@ public class Song {
     }
 
     public Song changeArtist(String artist) {
-        if (artist != null && !artist.equals("")) {
+        if (artist != null && artist.equals("")==false) {
             Song.deleteSong(this);
             this.artist = artist;
         
@@ -185,13 +189,11 @@ public class Song {
     }
 
     void newOwner() {
-        System.out.println("Add owner to "+this.getTitle()+": "+this.getNumOwners());
         this.numOwners += 1;
         this.update();
     }
     
     void deleteOwner() {
-        System.out.println("Delete owner to "+this.getTitle()+": "+this.getNumOwners());
         this.numOwners -= 1;
         this.update();
     }
@@ -201,7 +203,7 @@ public class Song {
     }
 
     public Song changeTitle(String title) {
-        if (artist != null && !artist.equals("")) {
+        if (title != null && title.equals("")==false) {
             Song.deleteSong(this);
             this.title = title;
         
@@ -293,11 +295,17 @@ public class Song {
         return rating;
     }
 
-    public double addRate(int rate) {
+    public double addRate(int rating) {
         this.num_ratings++;
-        double tmp = this.rating = (this.rating + rate) / this.num_ratings;
+        this.rating = (this.rating + rating) / this.num_ratings;
         this.update();
-        return tmp;
+        return this.rating;
+    }
+    
+    public double changeRate(int old_rating, int rating) {
+        this.rating = ((this.rating * this.num_ratings) + rating - old_rating) / this.num_ratings;
+        this.update();
+        return this.rating;
     }
 
     public int getNumRatings() {

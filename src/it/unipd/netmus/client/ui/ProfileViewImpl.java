@@ -73,6 +73,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private String name;
    private int vertical_offset = 65;
    private int vertical_semioffset = 275;
+   private int rating;
    
    private CellTable<Song> lista_canzoni;
    
@@ -259,8 +260,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	    catalogo.setSelectionModel(selectionModel);
 	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 	      public void onSelectionChange(SelectionChangeEvent event) {
-	          
 	         setBranoCatalogo(selectionModel.getSelectedObject());
+	         listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
+	         showStar(rating);
 	      }
 	    });
 	    
@@ -394,17 +396,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOverRewind(MouseOverEvent e) {
       rewind.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
-
-
+   
    @UiHandler("star1")
    void handleMouseOverStar1(MouseOverEvent e) {
-
 	   star1.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 	   star1.setUrl("images/star.png");
    }
    @UiHandler("star1")
    void handleMouseOutStar1(MouseOutEvent e) {
 	   star1.setUrl("images/starbw.png");
+	   showStar(this.rating);
+   }
+   @UiHandler("star1")
+   void handleClickStar1(ClickEvent e) {
+       if (this.selected_song != null)
+           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 1);
    }
    @UiHandler("star2")
    void handleMouseOverStar2(MouseOverEvent e) {
@@ -416,6 +422,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOutStar2(MouseOutEvent e) {
 	   star1.setUrl("images/starbw.png");
 	   star2.setUrl("images/starbw.png");
+	   showStar(this.rating);
+   }
+   @UiHandler("star2")
+   void handleClickStar2(ClickEvent e) {
+       if (this.selected_song != null)
+           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 2);
    }
    @UiHandler("star3")
    void handleMouseOverStar3(MouseOverEvent e) {
@@ -429,6 +441,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   star1.setUrl("images/starbw.png");
 	   star2.setUrl("images/starbw.png");
 	   star3.setUrl("images/starbw.png");
+	   showStar(this.rating);
+   }
+   @UiHandler("star3")
+   void handleClickStar3(ClickEvent e) {
+       if (this.selected_song != null)
+           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 3);
    }
    @UiHandler("star4")
    void handleMouseOverStar4(MouseOverEvent e) {
@@ -444,6 +462,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   star2.setUrl("images/starbw.png");
 	   star3.setUrl("images/starbw.png");
 	   star4.setUrl("images/starbw.png");
+	   showStar(this.rating);
+   }
+   @UiHandler("star4")
+   void handleClickStar4(ClickEvent e) {
+       if (this.selected_song != null)
+           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 4);
    }
    @UiHandler("star5")
    void handleMouseOverStar5(MouseOverEvent e) {
@@ -461,6 +485,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	   star3.setUrl("images/starbw.png");
 	   star4.setUrl("images/starbw.png");
 	   star5.setUrl("images/starbw.png");
+	   showStar(this.rating);
+   }
+   @UiHandler("star5")
+   void handleClickStar5(ClickEvent e) {
+       if (this.selected_song != null)
+           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 5);
    }
 
    @UiHandler("chiudi_playlist")
@@ -544,6 +574,35 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void setNumeroBrani(int numero) {
 	   numero_brani.setText(String.valueOf(numero));
+   }
+
+   @Override
+   public void setRating(int rating) {
+       this.rating = rating;
+   }
+   
+   @Override
+   public void showStar(int index) {
+       if (index > 0) 
+           star1.setUrl("images/star.png");
+       else 
+           star1.setUrl("images/starbw.png");
+       if (index > 1) 
+           star2.setUrl("images/star.png");
+       else 
+           star2.setUrl("images/starbw.png");
+       if (index > 2) 
+           star3.setUrl("images/star.png");
+       else 
+           star3.setUrl("images/starbw.png");
+       if (index > 3) 
+           star4.setUrl("images/star.png");
+       else 
+           star4.setUrl("images/starbw.png");
+       if (index > 4) 
+           star5.setUrl("images/star.png");
+       else 
+           star5.setUrl("images/starbw.png");
    }
    
    //riempie la lista delle playlists
@@ -1304,9 +1363,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             
     }
+
         
-       
-   
 }
 
 

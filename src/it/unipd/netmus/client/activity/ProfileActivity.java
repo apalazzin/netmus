@@ -2,6 +2,7 @@ package it.unipd.netmus.client.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
@@ -12,10 +13,17 @@ import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
+import it.unipd.netmus.client.service.SongsService;
+import it.unipd.netmus.client.service.SongsServiceAsync;
+import it.unipd.netmus.client.service.UsersService;
+import it.unipd.netmus.client.service.UsersServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
+import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
+import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -37,6 +45,10 @@ public class ProfileActivity extends AbstractActivity implements
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
 	private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
+	private UsersServiceAsync usersServiceSvc = GWT.create(UsersService.class);
+	private SongsServiceAsync songsServiceSvc = GWT.create(SongsService.class);
+	
+	private UserCompleteDTO current_user;
 	
 	MyConstants myConstants = GWT.create(MyConstants.class);
 
@@ -75,6 +87,24 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setInfo(getSongInfo());
                 containerWidget.setWidget(profileView.asWidget());
                 profileView.setLayout();
+                
+                //inizializzazione dell'UserCompleteDTO mantenuto nell'activity
+                AsyncCallback<UserCompleteDTO> callback2 = new AsyncCallback<UserCompleteDTO>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        // TODO Auto-generated method stub
+                        
+                    }
+
+                    @Override
+                    public void onSuccess(UserCompleteDTO result) {
+                        // TODO Auto-generated method stub
+                        current_user = result;
+                    }
+                
+                };
+                usersServiceSvc.loadProfile(user, callback2);
                 
             }
             
@@ -351,6 +381,41 @@ public class ProfileActivity extends AbstractActivity implements
         
         // se l'inserimento della playlist nel DB ha successo 
         clientFactory.getProfileView().addToPlaylists(title);
+    }
+    
+    @Override
+    public void rateSelectedSong(final String artist, final String title, final String album, final int rate) {
+        
+        AsyncCallback<MusicLibraryDTO> callback = new AsyncCallback<MusicLibraryDTO>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(MusicLibraryDTO result) {
+                current_user.setMusicLibrary(result);
+                clientFactory.getProfileView().setRating(rate);
+                clientFactory.getProfileView().showStar(rate);
+            }
+            
+        };
+        songsServiceSvc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
+        
+    }
+
+    @Override
+    public double loadRating(String artist, String title, String album) {
+        
+        List<SongDTO> songs_dto = this.current_user.getMusicLibrary().getSongs();
+        for (SongDTO tmp:songs_dto) {
+            if (tmp.getArtist().equalsIgnoreCase(artist) && tmp.getTitle().equalsIgnoreCase(title) && tmp.getAlbum().equalsIgnoreCase(album)) {
+                clientFactory.getProfileView().setRating(tmp.getRatingForThisUser());
+                clientFactory.getProfileView().showStar(tmp.getRatingForThisUser());
+                return tmp.getRating();
+            }
+        }
+        return -1;
     }
 
 }
