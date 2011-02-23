@@ -109,6 +109,13 @@
 	
 	}
 
+.classificaG {
+	
+	margin-top: 2px;
+	
+	
+	}
+
 
 .catalogo {
 	
@@ -138,6 +145,10 @@
 	-o-transition: width 0.5s ease-in-out;
 	transition: width 0.5s ease-in-out;
 	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
 	
 	}
 
@@ -270,10 +281,6 @@
 	position: absolute;
 	bottom: 155px; 
 	left: 355px;
-	-webkit-transition: opacity 0.5s ease-in-out;
-	-moz-transition: opacity 0.5s ease-in-out;
-	-o-transition: opacity 0.5s ease-in-out;
-	transition: opacity 0.5s ease-in-out;	
 	
 	opacity: 0;
 	
@@ -292,10 +299,6 @@
 	position: absolute;
 	bottom: 143px; 
 	left: 355px;
-	-webkit-transition: opacity 0.5s ease-in-out;
-	-moz-transition: opacity 0.5s ease-in-out;
-	-o-transition: opacity 0.5s ease-in-out;
-	transition: opacity 0.5s ease-in-out;	
 	
 	width: 400px;
 	
@@ -460,6 +463,10 @@
 	margin-left: 18px;
 	float: left;
 	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
 	}
 
 
@@ -592,8 +599,28 @@
 	
 }
 
+
+.song_cover {
+	
+	float: left;
+	margin-right: 10%;
+	margin-left: 10%;
+	margin-bottom: 15px;
+	
+	margin-top:10px;	
+	border: 1px solid #37A6EB;
+	
+	-webkit-box-shadow: 2px 2px 4px #888888;
+	-moz-box-shadow: 2px 2px 4px #888888;
+	
+	width: 120px;
+	height: 120px;
+
+}
+
 .song_fields {
 	
+	float: left;
 	font-family: verdana;
 	font-size: 12px;
 	color: #333333;
@@ -611,6 +638,12 @@
 .star {
 	
 	height: 20px;
+		
+	}
+
+.starG {
+	
+	height: 14px;
 		
 	}
 
@@ -709,11 +742,32 @@
 	font-size: 13px;
 	font-weight: bold;
 	
-	margin-left: 10px;
-	margin-top: 45px;
+	width: auto;
+	top: 45px;
+	left: 10px;	
 	
 	}
+
+.utente {
 	
+	position: absolute;
+	color: #000000;
+	font-family: Verdana;
+	font-size: 13px;
+	font-weight: bold;
+	border: 0px solid #000000;
+	top:0px;
+	left: 10px;
+	opacity: 0;
+	
+		-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+	
+	}
+
+
 .youtube {
 	
 	

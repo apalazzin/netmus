@@ -72,7 +72,7 @@ public class AppletBar {
         
         status.setSize("180px", "10px");
         
-        chooser.setSize("70px", "10px");
+        chooser.setSize("90px", "10px");
         chooser.setText(constants.chooser());
 
         RootPanel.get("applet-bar").add(title,5,2);
