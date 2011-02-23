@@ -78,6 +78,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private int vertical_offset = 65;
    private int vertical_semioffset = 275;
    private int rating;
+   private double global_rating;
    
    private CellTable<Song> lista_canzoni;
    
@@ -284,7 +285,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         
 	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
 	         
-	         listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
+	         global_rating = listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
 	         showStar(rating);
 	      }
 	    });
