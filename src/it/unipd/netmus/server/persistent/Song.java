@@ -3,11 +3,14 @@
  */
 package it.unipd.netmus.server.persistent;
 
+import java.util.List;
+
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.exception.SongAlbumMissingException;
 import it.unipd.netmus.shared.exception.SongTitleMissingException;
 
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 
