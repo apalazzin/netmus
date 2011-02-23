@@ -79,6 +79,7 @@ public class ProfileActivity extends AbstractActivity implements
                 
                 clientFactory.getProfileView().setUser(user);                
                 final ProfileView profileView = clientFactory.getProfileView();
+                profileView.setUser(user);
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
                 setSongs();
@@ -160,29 +161,6 @@ public class ProfileActivity extends AbstractActivity implements
    
 	@Override
 	public void setUser() {
-	
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException) {
-                    logger.info("User not logged yet - Redirect to Login");
-                    goTo(new LoginPlace(""));
-                }
-            }
-
-            @Override
-            public void onSuccess(final String user) {
-                
-                clientFactory.getProfileView().setUser(user);
-                
-            }
-            
-        };
-	    
-        try { loginServiceSvc.getLoggedInUser(callback); }
-        catch(LoginException e) {
-        }
 
 	}
 	
