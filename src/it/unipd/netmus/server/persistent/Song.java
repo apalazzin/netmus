@@ -5,6 +5,7 @@ package it.unipd.netmus.server.persistent;
 
 import java.util.List;
 
+import it.unipd.netmus.server.utils.ExternalService;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.exception.SongAlbumMissingException;
@@ -159,6 +160,8 @@ public class Song {
             s.setArtist(song.getArtist());
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
+        //s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
+        s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         
         System.out.println("BRANO: "+s.getTitle());
         
@@ -171,9 +174,9 @@ public class Song {
             Song tmp= Song.load(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
             
             if (tmp == null) { 
-                //ricerca esterna
-                    //da implementare
-                    System.out.println("Il brano è nuvo per il database di Netmus e la ricerca esterna non ha dato risultati.");
+                
+                System.out.println("Il brano è nuvo per il database di Netmus");
+                    
                 //inserimento nel database
                 s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
                 System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
@@ -189,6 +192,10 @@ public class Song {
                     tmp.setTrackNumber(song.getTrackNumber());
                 if (tmp.getYear() == "" && song.getYear() != null)
                     tmp.setYear(song.getYear());
+                if (tmp.getYoutubeCode() == "")
+                    tmp.setYoutubeCode(s.getYoutubeCode());
+                //if (tmp.getAlbumCover() == "")
+                //    tmp.setAlbumCover(s.getAlbumCover());
                 System.out.println("Brano già presente in database, aggiornati eventuali campi vuoti dal DTO dell'utente");
                 return tmp;
             }
@@ -219,24 +226,19 @@ public class Song {
                     s2.setTrackNumber(song.getTrackNumber());
                 if (s2.getYear() == "" && song.getYear() != null)
                     s2.setYear(song.getYear());
+                if (s2.getYoutubeCode() == "")
+                    s2.setYoutubeCode(s.getYoutubeCode());
+                //if (s2.getAlbumCover() == "")
+                //    s2.setAlbumCover(s.getAlbumCover());
                 System.out.println("Salvato in DB con chiave: "+s2.getTitle()+SEPARATOR+s2.getArtist()+SEPARATOR+s2.getAlbum());
                 return s2;
             }
             else {
-                
-                //Ricerca esterna di possibili artisti da associare a questa canzone
-                //if (trovato_possibile_artista) {
-                    //inserimento nel database
-                    //s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-                    //return s;
-                //}
-                //else {
                 System.out.println("Impossibile trovare l'artista mancante da ricerca esterna o interna...");
-                    s.setArtist(UNKNOWN_ARTIST);
-                    s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-                    return s;
-                //}
+                s.setArtist(UNKNOWN_ARTIST);
+                s.setId(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                return s;
             }
         }
         
@@ -261,6 +263,7 @@ public class Song {
                 s.setAlbum(UNKNOWN_ALBUM);
                 possible_songs.add(s);
                 s.changeAlbum(s.getAlbum());
+                s.setAlbumCover("");
                 System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
                 SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "La canzone "+s.getTitle()+"è stata inserita nel database sprovvista del nome dell'album ma ci sono alcuni album che combaciano nel DB.");
                 for (Song tmp:possible_songs)
@@ -270,18 +273,32 @@ public class Song {
             }
             else {
                 
-                //Ricerca esterna di possibili album da associare a questa canzone
-                //if (trovati_possibili_album) {
-                    s.setAlbum(UNKNOWN_ALBUM);
-                    //possible_songs.add(s);
-                    s.changeAlbum(s.getAlbum());
-                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-                    SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "La canzone "+s.getTitle()+"è stata inserita nel database sprovvista del nome dell'album.");
-                    //for (Song tmp:possible_songs)
-                    //    e.getPossibleAlbums().add(tmp.getTitle());
-                    throw e;
-                //}
+                //Da verificare l'affidabilità di questa cosa
+                SongDTO tmp = ExternalService.getSongFromFileName(song.getFile());
                 
+                if (tmp != null && tmp.getAlbum() != "") {
+                    s.setAlbum(tmp.getAlbum());
+                    s.changeAlbum(s.getAlbum());
+                    if (song.getComposer() != null)
+                        s.setComposer(song.getComposer());
+                    if (song.getGenre() != null)
+                        s.setGenre(song.getGenre());
+                    if (song.getTrackNumber() != null)
+                        s.setTrackNumber(song.getTrackNumber());
+                    if (song.getYear() != null)
+                        s.setYear(song.getYear());
+                    if (s.getYoutubeCode() == "" && tmp.getYoutubeCode() != "")
+                        s.setYoutubeCode(tmp.getYoutubeCode());
+                    //if (s.getAlbumCover() == "" && tmp.getAlbumCover() != "")
+                    //    s.setAlbumCover(tmp.getAlbumCover());
+                }
+                else {
+                    s.setAlbum(UNKNOWN_ALBUM);
+                    s.changeAlbum(s.getAlbum());
+                    s.setAlbumCover("");
+                }
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                return s;
             }
         }  
             
@@ -314,18 +331,11 @@ public class Song {
                 
             }
             else {
-                
-                //Ricerca esterna di possibili album da associare a questa canzone
-                //if (trovati_possibili_album) {
-                    s.setAlbum(UNKNOWN_TITLE);
-                    //possible_songs.add(s);
-                    s.changeTitle(s.getTitle());
-                    System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-                    SongTitleMissingException e = new SongTitleMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "Una canzone di "+s.getArtist()+" è stata inserita nel database senza titolo.");
-                    //for (Song tmp:possible_songs)
-                    //    e.getPossibleTitles().add(tmp.getTitle());
-                    throw e;
-                //}
+            
+                s.setAlbum(UNKNOWN_TITLE);
+                s.changeTitle(s.getTitle());
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                return s;
                 
             }
         }
@@ -337,20 +347,21 @@ public class Song {
             
             System.out.println("Il brano dell'utente ha solo il titolo");
             
-            //Prima di ritornare l'eccezione all'utente salva comunque il brano con album e artista sconosciuti nel database
-            s.setAlbum(UNKNOWN_TITLE);
-            s.setArtist(UNKNOWN_ARTIST);
-            s.changeTitle(s.getTitle());
-            System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
-            SongAlbumMissingException e = new SongAlbumMissingException(s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum(), "Canzone "+s.getTitle()+" inserita senza altre informazioni");
-            throw e;
+            //Tentativo con ricerca esterna
+            SongDTO tmp = ExternalService.getSongFromFileName(song.getFile());
+            
+            if (tmp != null && tmp.getTitle() != "" && tmp.getArtist() != "")
+                storeOrUpdateFromDTO(tmp); //chiamata ricorsiva
+            else {
+                s.setAlbum(UNKNOWN_ALBUM);
+                s.setArtist(UNKNOWN_ARTIST);
+                s.changeTitle(s.getTitle());
+                System.out.println("Salvato in DB con chiave: "+s.getTitle()+SEPARATOR+s.getArtist()+SEPARATOR+s.getAlbum());
+                return s;
+            }
         }
-        
-        
-        
-        
-        
         return null;
+        
     }
     
     
@@ -364,20 +375,20 @@ public class Song {
     }
     
     public Song changeTitle(String title) {
-        if (title != null && title.equals("")==false) {
-            Song.deleteSong(this);
+        Song.deleteSong(this);
+        if (title != null && title.equals("")==false)
             this.setTitle(title);
+        else
+            this.setTitle(UNKNOWN_TITLE);
         
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-            if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-                return this;
-            }
-            else {
-                return tmp;
-            }
+        Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+        if (tmp == null) { 
+            this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            return this;
         }
-        else return this;
+        else {
+            return tmp;
+        }
     }
     
     private void setTitle(String title) {
@@ -385,21 +396,21 @@ public class Song {
     }
 
     public Song changeArtist(String artist) {
-        if (artist != null && artist.equals("")==false) {
-            Song.deleteSong(this);
+        Song.deleteSong(this);
+        if (artist != null && artist.equals("")==false)
             this.setArtist(artist);
+        else
+            this.setArtist(UNKNOWN_ARTIST);
         
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+        Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             
-            if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-                return this;
-            }
-            else {
-                return tmp;
-            }
+        if (tmp == null) { 
+            this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            return this;
         }
-        else return this;
+        else {
+            return tmp;
+        }
     }
         
     private void setArtist(String artist) {
@@ -407,9 +418,11 @@ public class Song {
     }
     
     public Song changeAlbum(String album) {
-        if (album != null && album.equals("")==false) {
-            Song.deleteSong(this);
+        Song.deleteSong(this);
+        if (album != null && album.equals("")==false)
             this.setAlbum(album);
+        else
+            this.setTitle(UNKNOWN_ALBUM);
         
             Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             if (tmp == null) { 
@@ -419,8 +432,6 @@ public class Song {
             else {
                 return tmp;
             }
-        }
-        else return this;
     }
 
     private void setAlbum(String album) {
