@@ -26,6 +26,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -118,6 +120,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel classifica;
    @UiField HTMLPanel info_youtube;
    @UiField HTMLPanel youtube_appendice;
+
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -139,6 +142,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image aggiungi_branoplaylist;
    @UiField Image rimuovi_branoplaylist;
    @UiField Image aggiungi_playlist;
+   @UiField Image song_cover;
    
    boolean playlist_opened; 
    boolean song_opened; 
@@ -385,13 +389,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("play_youtube")
    void handleClickPlayYoutube(ClickEvent e) {
-      listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
+       if(selected_song!=null) 
+           listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
    }
 
    @UiHandler("play_youtube")
    void handleMouseOverPlayYoutube(MouseOverEvent e) {
-      play_youtube.setUrl("images/pause.png");
-      play_youtube.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       if(selected_song!=null) {
+           play_youtube.setUrl("images/pause.png");
+           play_youtube.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       }
    }
 
    @UiHandler("play_youtube")
@@ -845,6 +852,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        youtube.getElement().getStyle().setLeft(5, Style.Unit.PX);
 
        vertical_semioffset = 400;
+       
+       setLayout();
+       
+       /*
        catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
        playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
        song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
@@ -852,6 +863,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
        playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
        song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+       
+       */
        
        play_youtube.getElement().getStyle().setOpacity(0);
    
@@ -1082,16 +1095,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
             
         //ridimensiono il layout in base alla dimensione della finestra del browser
-        left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
-        main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);              
-        catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-        playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-        playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-44, Style.Unit.PX);
-        song_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
-        
-        song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-        song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+            left_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
+            main_panel.getElement().getStyle().setHeight(Window.getClientHeight()-vertical_offset, Style.Unit.PX);
+            catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
 
+            playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+            catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+            playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+            playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-44, Style.Unit.PX);
+            song_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
+            
+            song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+            song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
     
         friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
         
@@ -1115,7 +1130,33 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
         }
         
-            
+        
+        Timer timersd = new Timer() {
+            public void run() {
+                
+                for(int k=12; k>0; k--) {
+                    
+                    System.out.println("k: " + utente.getElement().getClientWidth());
+
+                    if(utente.getElement().getClientWidth()<=160) {
+                        utente.getElement().getStyle().setTop(45, Style.Unit.PX);
+                        utente.getElement().getStyle().setLeft(10, Style.Unit.PX);
+                        utente.getElement().getStyle().setOpacity(1);
+                        break;    
+                    }
+                        
+                    else {
+                        utente.getElement().getStyle().setFontSize(k, Style.Unit.PX);
+                    }
+                }
+                                
+                
+                 
+            }
+        };
+        timersd.schedule(300);
+        
+        
         
         //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
         Window.addResizeHandler(new ResizeHandler() {
@@ -1131,7 +1172,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  catalogo_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
                  playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-44, Style.Unit.PX);
-                 song_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-44, Style.Unit.PX);
+                 song_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-22, Style.Unit.PX);
                  
                  song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
                  song_container.getElement().getStyle().setHeight(event.getHeight()-(vertical_semioffset), Style.Unit.PX);
@@ -1271,6 +1312,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
     
     
+    
+    
     private void addPlaylist() {
         
             final TextBox nome = new TextBox(); 
@@ -1362,7 +1405,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 	@Override
 	public void setSongFields(String autore, String titolo, String album,
-			String genere, String anno, String compositore, String traccia) {
+			String genere, String anno, String compositore, String traccia, String cover) {
 		
         song_titolo.setText(titolo);
         song_autore.setText(autore);
@@ -1371,6 +1414,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_anno.setText(anno);
         song_compositore.setText(compositore);
         song_traccia.setText(traccia);
+        song_cover.setUrl(cover);
 	
 	}
         
