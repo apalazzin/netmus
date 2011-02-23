@@ -17,11 +17,23 @@
 	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	margin-top: 20px;
-	margin-left: 220px;
-	margin-right: 30px;
+	margin-left: 215px;
+	margin-right: 50px;
 	margin-bottom: 20px;
 	
 	position: relative;
+	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+   	
+   		-webkit-transition: margin 0.3s ease-in-out;
+	-moz-transition: margin 0.3s ease-in-out;
+	-o-transition: margin 0.3s ease-in-out;
+	transition: margin 0.3s ease-in-out;
+   	
+	
 	
 }
 
@@ -225,7 +237,7 @@
 	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	margin-top: 20px;
-	margin-left: 20px;
+	margin-left: 15px;
 	margin-bottom: 20px;
 	
 	position: absolute;
@@ -616,6 +628,7 @@
 	width: 120px;
 	height: 120px;
 
+	
 }
 
 .song_fields {
@@ -637,7 +650,7 @@
 
 .star {
 	
-	height: 20px;
+	height: 18px;
 		
 	}
 
@@ -760,7 +773,7 @@
 	left: 10px;
 	opacity: 0;
 	
-		-webkit-transition: opacity 0.5s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
 	-moz-transition: opacity 0.5s ease-in-out;
 	-o-transition: opacity 0.5s ease-in-out;
 	transition: opacity 0.5s ease-in-out;

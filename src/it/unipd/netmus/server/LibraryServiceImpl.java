@@ -24,7 +24,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryService {
     
-	public MusicLibraryDTO loadLibrary(String user,String password){
+	public MusicLibraryDTO loadLibrary(String user, String password){
 		return null;
 	}
 	
@@ -33,6 +33,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
 	
     @Override
     public void sendUserNewMusic(String user, List<SongDTO> new_songs) {
+        // dovremo tornare all'applet con la lista dei Song (o SummaryDTO per fargli scelgiere)
         
         UserAccount useraccount = UserAccount.load(user);
         
@@ -60,12 +61,12 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
       
         UserAccount useraccount = UserAccount.load(user);
         
-        System.out.println(DatastoreUtils.songsInDatastore()+" canzoni totali salvate nel datastore");
+        /*System.out.println(DatastoreUtils.songsInDatastore()+" canzoni totali salvate nel datastore");
         for (Song tmp:useraccount.getMusicLibrary().allSongs()) {
             System.out.println(tmp.getId());
             System.out.println(tmp.getTitle()+" "+tmp.getArtist()+" "+tmp.getAlbum());
             System.out.println("");
-        }
+        }*/
         
         return useraccount.getMusicLibrary().toMusicLibrarySummaryDTO();
     }
