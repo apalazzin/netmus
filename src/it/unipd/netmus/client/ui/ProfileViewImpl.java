@@ -776,6 +776,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void setUser(String username) {
 	   utente.setText(username);
+
+       Timer timersd = new Timer() {
+           public void run() {
+               
+               for(int k=12; k>0; k--) {
+                   
+                   if(utente.getElement().getClientWidth()<=160) {
+                       utente.getElement().getStyle().setTop(45, Style.Unit.PX);
+                       utente.getElement().getStyle().setLeft(10, Style.Unit.PX);
+                       utente.getElement().getStyle().setOpacity(1);
+                       break;    
+                   }
+                       
+                   else {
+                       utente.getElement().getStyle().setFontSize(k, Style.Unit.PX);
+                   }
+               }
+                               
+               
+                
+           }
+       };
+       timersd.schedule(500);
 	
    }
 
@@ -1192,12 +1215,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
             playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-            
+
+            song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+            song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+
             playlist_contenuto.getElement().getStyle().setHeight(playlist_container.getElement().getClientHeight()-44, Style.Unit.PX);
             song_contenuto.getElement().getStyle().setHeight(song_container.getElement().getClientHeight()-22, Style.Unit.PX);
             
-            song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-            song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
     
         friends.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)-playlists.getOffsetHeight(),Style.Unit.PX);
         
@@ -1220,31 +1244,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             playlists.getElement().getStyle().setHeight((Window.getClientHeight()-vertical_offset-338)*0.6,Style.Unit.PX);
             
         }
-        
-        
-        Timer timersd = new Timer() {
-            public void run() {
-                
-                for(int k=12; k>0; k--) {
-                    
-                    if(utente.getElement().getClientWidth()<=160) {
-                        utente.getElement().getStyle().setTop(45, Style.Unit.PX);
-                        utente.getElement().getStyle().setLeft(10, Style.Unit.PX);
-                        utente.getElement().getStyle().setOpacity(1);
-                        break;    
-                    }
-                        
-                    else {
-                        utente.getElement().getStyle().setFontSize(k, Style.Unit.PX);
-                    }
-                }
-                                
-                
-                 
-            }
-        };
-        timersd.schedule(300);
-        
         
         
         //Imposta la dimensione delle componenti della view in base alla dimensione della finestra del browser quando viene ridimensionata
@@ -1500,6 +1499,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	public void setSongFields(String autore, String titolo, String album,
 			String genere, String anno, String compositore, String traccia, String cover) {
 		
+	    this.cover.setUrl(cover);
         song_titolo.setText(titolo);
         song_autore.setText(autore);
         song_album.setText(album);
@@ -1508,6 +1508,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_compositore.setText(compositore);
         song_traccia.setText(traccia);
         song_cover.setUrl(cover);
+        
         
         if (global_rating > 0) 
             starG1.setUrl("images/star.png");

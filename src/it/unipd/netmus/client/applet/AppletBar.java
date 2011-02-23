@@ -102,16 +102,21 @@ public class AppletBar {
 
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                DOM.getElementById("main_panel").getStyle().setMarginRight(152, Style.Unit.PX);
-                DOM.getElementById("applet-bar").getStyle().setWidth(140, Style.Unit.PX);
-                status.getElement().getStyle().setProperty("MozTransform", "rotate(0deg)");
-                status.getElement().getStyle().setProperty("WebkitTransform", "rotate(0deg)");
-                status.getElement().getStyle().setProperty("Transform", "rotate(0deg)");
-                status.getElement().getStyle().setMarginLeft(7, Style.Unit.PX);
-                status.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
-                status.getElement().getStyle().setWidth(120, Style.Unit.PX);
-                button_container.getElement().getStyle().setOpacity(1);
-                title.getElement().getStyle().setOpacity(1);
+                if(DOM.getElementById("main_panel").getClientWidth()>805) {
+                    DOM.getElementById("main_panel").getStyle().setMarginRight(157, Style.Unit.PX);
+                    DOM.getElementById("applet-bar").getStyle().setWidth(140, Style.Unit.PX);
+                    status.getElement().getStyle().setProperty("MozTransform", "rotate(0deg)");
+                    status.getElement().getStyle().setProperty("WebkitTransform", "rotate(0deg)");
+                    status.getElement().getStyle().setProperty("Transform", "rotate(0deg)");
+                    status.getElement().getStyle().setMarginLeft(7, Style.Unit.PX);
+                    status.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
+                    status.getElement().getStyle().setWidth(120, Style.Unit.PX);
+                    button_container.getElement().getStyle().setOpacity(1);
+                    title.getElement().getStyle().setOpacity(1);
+                } else {
+                    
+                    DOM.getElementById("applet-bar").getStyle().setBackgroundColor("#fabebe");
+                }
             }}, MouseOverEvent.getType());
         
 
@@ -119,7 +124,8 @@ public class AppletBar {
 
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                DOM.getElementById("main_panel").getStyle().setMarginRight(45, Style.Unit.PX);
+                DOM.getElementById("applet-bar").getStyle().setBackgroundColor("#FFFFFF");
+                DOM.getElementById("main_panel").getStyle().setMarginRight(50, Style.Unit.PX);
                 DOM.getElementById("applet-bar").getStyle().setWidth(33, Style.Unit.PX);
                 status.getElement().getStyle().setProperty("MozTransform", "rotate(90deg)");
                 status.getElement().getStyle().setProperty("WebkitTransform", "rotate(90deg)");
