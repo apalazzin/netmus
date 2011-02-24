@@ -35,19 +35,16 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
         // dovremo tornare all'applet con la lista dei Song (o SummaryDTO per fargli scelgiere)
         
         UserAccount useraccount = UserAccount.load(user);
-        
         for (SongDTO songDTO : new_songs){            
             try {
                 Song song = Song.storeOrUpdateFromDTO(songDTO);
                 if (song != null)
                     useraccount.getMusicLibrary().addSong(song, false);
             } catch (SongAlbumMissingException e) {
-                System.out.println(e.getMoreInfo());
                 Song song = Song.load(e.getSong_id());
                 if (song != null)
                     useraccount.getMusicLibrary().addSong(song, false);
             } catch (SongTitleMissingException e1) {
-                System.out.println(e1.getMoreInfo());
                 Song song = Song.load(e1.getSong_id());
                 if (song != null)
                     useraccount.getMusicLibrary().addSong(song, false);
