@@ -1644,7 +1644,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	public void setSongFields(String autore, String titolo, String album,
 			String genere, String anno, String compositore, String traccia, String cover) {
 		
-	    this.cover.setUrl(cover);
+	    
         song_titolo.setText(titolo);
         song_autore.setText(autore);
         song_album.setText(album);
@@ -1652,7 +1652,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_anno.setText(anno);
         song_compositore.setText(compositore);
         song_traccia.setText(traccia);
-        song_cover.setUrl(cover);
+        
+        if(!cover.equals("")) {
+            song_cover.setUrl(cover);
+            this.cover.setUrl(cover);
+        } else {
+            song_cover.setUrl("images/test_cover.jpg");
+            this.cover.setUrl("images/test_cover.jpg");
+        }
         
         showGlobalStar(global_rating);
 
