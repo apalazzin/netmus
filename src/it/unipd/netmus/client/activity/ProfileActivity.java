@@ -258,7 +258,8 @@ public class ProfileActivity extends AbstractActivity implements
         for(SongDTO song : songs) {
             if (song.getTitle().equals(titolo) && song.getArtist().equals(autore) && song.getAlbum().equals(album)) {
                 youTubeCode = song.getYoutubeCode();
-                if (youTubeCode != "") clientFactory.getProfileView().playYouTube(youTubeCode);
+                if (!youTubeCode.equals(""))
+                    clientFactory.getProfileView().playYouTube(youTubeCode);
                 return;
             }
         }
@@ -360,12 +361,13 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(MusicLibraryDTO result) {
                 current_user.setMusicLibrary(result);
-                clientFactory.getProfileView().setRating(rate);
-                clientFactory.getProfileView().showStar(rate);
             }
             
         };
         songsServiceSvc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
+        // sistemo subito il rating visivo poi arrivera' la library aggiornata
+        clientFactory.getProfileView().setRating(rate);
+        clientFactory.getProfileView().showStar(rate);
     }
 
     @Override
@@ -385,16 +387,26 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void setSongFields(String autore, String titolo, String album) {
 		
-		// imposta i campi dettagliati della canzone
-		// TODO Auto-generated method stub
-		String genere ="valore-genere";
-		String anno ="valore-anno";
-		String compositore ="valore-compositore";
-		String traccia ="valore-traccia";
-		String cover = "images/test_cover.jpg"; //valore url cover
-		
-		clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
-		
+	    List<SongDTO> songs = current_user.getMusicLibrary().getSongs();
+	    
+	    String genere ="----";
+        String anno ="----";
+        String compositore ="----";
+        String traccia ="----";
+        String cover = "images/test_cover.jpg";  // valore url cover - defautl (images/test_cover.jpg)
+        
+        for(SongDTO song : songs) {
+            if (song.getTitle().equals(titolo) && song.getArtist().equals(autore) && song.getAlbum().equals(album)) {
+                if (!song.getGenre().equals("")) genere = song.getGenre();
+                if (!song.getYear().equals("")) anno = song.getYear();
+                if (!song.getComposer().equals("")) compositore = song.getComposer();
+                if (!song.getTrackNumber().equals("")) traccia = song.getTrackNumber();
+                //if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
+                
+                clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
+                return;
+            }
+        }
 	}
 
 }

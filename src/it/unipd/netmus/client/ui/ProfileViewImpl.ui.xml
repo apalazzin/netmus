@@ -98,13 +98,13 @@
 						
 						
 						<g:HTMLPanel ui:field="song_fields" styleName="{style.song_fields}">
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Titolo:&nbsp;</g:Label><g:Label ui:field="song_titolo">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Autore:&nbsp;</g:Label><g:Label ui:field="song_autore">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Album:&nbsp;</g:Label><g:Label ui:field="song_album">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Genere:&nbsp;</g:Label><g:Label ui:field="song_genere">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_anno">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_compositore">Test</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_traccia">Test</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Titolo:&nbsp;</g:Label><g:Label ui:field="song_titolo"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Autore:&nbsp;</g:Label><g:Label ui:field="song_autore"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Album:&nbsp;</g:Label><g:Label ui:field="song_album"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Genere:&nbsp;</g:Label><g:Label ui:field="song_genere"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_anno"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_compositore"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_traccia"></g:Label></g:HorizontalPanel>
 						<g:HTMLPanel ui:field="classificaG" styleName="{style.classificaG}">
 							<span style="font-size: 12px; font-family: Verdana; margin-right: 15px;">Classifica:</span>
 							<g:Image ui:field="starG1" styleName="{style.starG}" url="images/starbw.png"/>

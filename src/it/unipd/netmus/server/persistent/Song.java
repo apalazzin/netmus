@@ -160,6 +160,15 @@ public class Song {
             s.setArtist(song.getArtist());
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
+        if (song.getGenre() != null)
+            s.setGenre(song.getGenre());
+        if (song.getYear() != null)
+            s.setYear(song.getYear());
+        if (song.getComposer() != null)
+            s.setComposer(song.getComposer());
+        if (song.getTrackNumber() != null)
+            s.setTrackNumber(song.getTrackNumber());
+        
         //s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
         s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         
