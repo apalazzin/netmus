@@ -124,7 +124,7 @@ public class Song {
         tmp.setGenre(this.genre);
         tmp.setTrackNumber(this.trackNumber);
         tmp.setYear(this.year); 
-        tmp.setAlbumCover(this.albumCover.toString());
+        tmp.setAlbumCover(this.albumCover);
         tmp.setNumOwners(this.numOwners);
         tmp.setYoutubeCode(this.youtube_code);
         tmp.setPlaymeCode(this.playme_code);
