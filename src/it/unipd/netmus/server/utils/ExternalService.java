@@ -6,6 +6,7 @@ package it.unipd.netmus.server.utils;
 import java.util.Collection;
 import java.util.Iterator;
 
+import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 import it.unipd.netmus.server.youtube.YouTubeManager;
@@ -25,6 +26,9 @@ final public class ExternalService {
     
     public static String getCoverImage(String keywords) {
         
+        // attivo il nuovo gestore di cache (x LAST FM)
+        Caller.getInstance().setCache(new AppEngineCache());
+        
         Collection<Track> search = Track.search(keywords,
         "33d9ef520018d87db5dff9ef74cc4904");
 
@@ -41,6 +45,9 @@ final public class ExternalService {
     }
     
     public static SongDTO getSongFromFileName(String filename) {
+        
+        // attivo il nuovo gestore di cache (x LAST FM)
+        Caller.getInstance().setCache(new AppEngineCache());
         
         Collection<Track> search = Track.search(filename,
         "33d9ef520018d87db5dff9ef74cc4904");
