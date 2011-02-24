@@ -329,16 +329,22 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void rateSelectedSong(final String artist, final String title, final String album, final int rate) {
         
-        AsyncCallback<MusicLibraryDTO> callback = new AsyncCallback<MusicLibraryDTO>() {
+        AsyncCallback<Double> callback = new AsyncCallback<Double>() {
 
             @Override
             public void onFailure(Throwable caught) {
             }
 
             @Override
-            public void onSuccess(MusicLibraryDTO result) {
-                current_user.setMusicLibrary(result);
-                
+            public void onSuccess(Double result) {
+                List<SongDTO> songs_dto = current_user.getMusicLibrary().getSongs();
+                for (SongDTO tmp:songs_dto) {
+                    if (tmp.getArtist().equalsIgnoreCase(artist) && tmp.getTitle().equalsIgnoreCase(title) && tmp.getAlbum().equalsIgnoreCase(album)) {
+                        tmp.setRatingForThisUser(rate);
+                        tmp.setRating(result);
+                        clientFactory.getProfileView().showGlobalStar(result);
+                    }
+                }
             }
             
         };
@@ -380,8 +386,8 @@ public class ProfileActivity extends AbstractActivity implements
                 if (!song.getYear().equals("")) anno = song.getYear();
                 if (!song.getComposer().equals("")) compositore = song.getComposer();
                 if (!song.getTrackNumber().equals("")) traccia = song.getTrackNumber();
-                if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
                 
+                if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
                 clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
                 return;
             }

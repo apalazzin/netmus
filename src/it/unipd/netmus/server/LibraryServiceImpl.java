@@ -9,7 +9,6 @@ import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.MusicLibraryDTO;
-import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.exception.SongAlbumMissingException;
 import it.unipd.netmus.shared.exception.SongTitleMissingException;
@@ -53,7 +52,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
     }
 
     @Override
-    public MusicLibrarySummaryDTO getLibrary(String user) {
+    public MusicLibraryDTO getLibrary(String user) {
       
         UserAccount useraccount = UserAccount.load(user);
         
@@ -64,7 +63,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
             System.out.println("");
         }*/
         
-        return useraccount.getMusicLibrary().toMusicLibrarySummaryDTO();
+        return useraccount.getMusicLibrary().toMusicLibraryDTO();
     }
 
 }

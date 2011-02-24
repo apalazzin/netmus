@@ -124,7 +124,7 @@ public class Song {
         tmp.setGenre(this.genre);
         tmp.setTrackNumber(this.trackNumber);
         tmp.setYear(this.year); 
-        tmp.setAlbumCover(this.albumCover.toString());
+        tmp.setAlbumCover(this.albumCover);
         tmp.setNumOwners(this.numOwners);
         tmp.setYoutubeCode(this.youtube_code);
         tmp.setPlaymeCode(this.playme_code);
@@ -162,8 +162,12 @@ public class Song {
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
         
-        s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
-        s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+        String cover = ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist());
+        String code = ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist());
+        if (cover != null)
+            s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
+        if (code != null)
+            s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         
         //System.out.println("BRANO: "+s.getTitle());
         

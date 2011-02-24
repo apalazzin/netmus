@@ -8,7 +8,6 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import it.unipd.netmus.shared.MusicLibraryDTO;
-import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 
 /**
@@ -24,6 +23,5 @@ public interface LibraryServiceAsync {
      * @param user
      * @param callback
      */
-    public void getLibrary(String user,
-            AsyncCallback<MusicLibrarySummaryDTO> callback);
+    void getLibrary(String user, AsyncCallback<MusicLibraryDTO> callback);
 }
