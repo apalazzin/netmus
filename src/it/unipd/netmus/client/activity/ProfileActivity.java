@@ -2,15 +2,14 @@ package it.unipd.netmus.client.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.applet.AppletBar;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
-import it.unipd.netmus.client.service.LibraryService;
-import it.unipd.netmus.client.service.LibraryServiceAsync;
+//import it.unipd.netmus.client.service.LibraryService;
+//import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
 import it.unipd.netmus.client.service.SongsService;
@@ -19,9 +18,7 @@ import it.unipd.netmus.client.service.UsersService;
 import it.unipd.netmus.client.service.UsersServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
-import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.shared.MusicLibraryDTO;
-import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
@@ -45,7 +42,7 @@ public class ProfileActivity extends AbstractActivity implements
 	private static Logger logger = Logger.getLogger("ProfileActivity");
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-	private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
+	//private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
 	private UsersServiceAsync usersServiceSvc = GWT.create(UsersService.class);
 	private SongsServiceAsync songsServiceSvc = GWT.create(SongsService.class);
 	
@@ -82,12 +79,7 @@ public class ProfileActivity extends AbstractActivity implements
                 final ProfileView profileView = clientFactory.getProfileView();
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
-                setSongs();
-                profileView.paintPlaylist(getPlaylistList());
-                setFriendList();
-                profileView.setInfo(getSongInfo());
-                containerWidget.setWidget(profileView.asWidget());
-                profileView.setLayout();
+                
                 
                 //inizializzazione dell'UserCompleteDTO mantenuto nell'activity
                 AsyncCallback<UserCompleteDTO> callback2 = new AsyncCallback<UserCompleteDTO>() {
@@ -102,12 +94,19 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(UserCompleteDTO result) {
                         // TODO Auto-generated method stub
                         current_user = result;
+                        setSongs();
+                        profileView.paintPlaylist(getPlaylistList());
+                        setFriendList();
+                        profileView.setInfo(getSongInfo());
+                        containerWidget.setWidget(profileView.asWidget());
+                        profileView.setLayout();
+
                     }
                 
                 };
                 usersServiceSvc.loadProfile(user, callback2);
-                //load the applet bar, if not active yet
                 
+                //load the applet bar, if not active yet
                 AppletBar.get(user,true).appletBarON();
             }
             
@@ -158,10 +157,9 @@ public class ProfileActivity extends AbstractActivity implements
       }
    }
    
-   
+    /*
 	@Override
 	public void setUser() {
-	
         AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
@@ -184,8 +182,7 @@ public class ProfileActivity extends AbstractActivity implements
         try { loginServiceSvc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
-
-	}
+	}*/
 	
 	
 	@Override
@@ -236,6 +233,7 @@ public class ProfileActivity extends AbstractActivity implements
 	public void setPlaylistSongs(String titoloPlaylist) {
 	   
 	    clientFactory.getProfileView().paintPlaylistSongs(getPlaylistSongs(titoloPlaylist));
+	    
 	}
     
     public List<String> getPlaylistSongs(String titoloPlaylist) {
@@ -267,50 +265,16 @@ public class ProfileActivity extends AbstractActivity implements
     
     
     public void setSongs() {
-        
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException) {
-                    logger.info("User not logged yet - Redirect to Login");
-                    goTo(new LoginPlace(""));
-                }
-            }
-
-            @Override
-            public void onSuccess(final String user) {
- 
-                AsyncCallback<MusicLibrarySummaryDTO> callback = new AsyncCallback<MusicLibrarySummaryDTO>() {
-        
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        logger.info("Problema richiesta catalogo");
-                    }
-        
-                    @Override
-                    public void onSuccess(MusicLibrarySummaryDTO user_library) {
                         
-                        clientFactory.getProfileView().paintCatalogo(getSongs(user_library));
-                        clientFactory.getProfileView().setNumeroBrani(user_library.getLibrarySize());
-                     
-                    }
-                };
-                
-                libraryServiceSvc.getLibrary(user,callback);
-            }
-        };
-        
-        try { loginServiceSvc.getLoggedInUser(callback); }
-        catch(LoginException e) {
-        }
+        clientFactory.getProfileView().paintCatalogo(getSongs(current_user.getMusicLibrary()));
+        clientFactory.getProfileView().setNumeroBrani(current_user.getMusicLibrary().getSongs().size());
         
     }
  
     
-    public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
+    public List<String> getSongs(MusicLibraryDTO user_library) {
 
-        List<SongSummaryDTO> library = user_library.getSongs();
+        List<SongDTO> library = user_library.getSongs();
         
         List<String> song_list = new ArrayList<String>();
         

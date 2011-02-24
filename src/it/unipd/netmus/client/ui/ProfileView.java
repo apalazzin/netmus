@@ -5,9 +5,6 @@ package it.unipd.netmus.client.ui;
 
 import java.util.List;
 
-import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -81,7 +78,7 @@ public interface ProfileView extends IsWidget {
       void goTo(Place place);
       
       //restituisce lo username dell'utente connesso.
-      void setUser();
+      //void setUser();
             
       //restituisce la lista dei titoli delle singole playlist dell'utente
       void setPlaylistList(); 
