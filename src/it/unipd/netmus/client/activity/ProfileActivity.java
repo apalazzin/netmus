@@ -19,6 +19,7 @@ import it.unipd.netmus.client.service.UsersService;
 import it.unipd.netmus.client.service.UsersServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
@@ -251,16 +252,17 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void playYouTube(String autore, String titolo, String album) {
         
-        clientFactory.getProfileView().playYouTube(getYouTubeLink());
+        List<SongDTO> songs = current_user.getMusicLibrary().getSongs(); 
+        String youTubeCode = "";
         
+        for(SongDTO song : songs) {
+            if (song.getTitle().equals(titolo) && song.getArtist().equals(autore) && song.getAlbum().equals(album)) {
+                youTubeCode = song.getYoutubeCode();
+                if (youTubeCode != "") clientFactory.getProfileView().playYouTube(youTubeCode);
+                return;
+            }
+        }
     }
-    
-    public String getYouTubeLink() {
-        // TODO Auto-generated method stub
-        return "yNBFkANEd5M";
-    	//return "UISQF9uHEv0";
-    }
-
     
     
     public void setSongs() {
@@ -364,7 +366,6 @@ public class ProfileActivity extends AbstractActivity implements
             
         };
         songsServiceSvc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
-        
     }
 
     @Override

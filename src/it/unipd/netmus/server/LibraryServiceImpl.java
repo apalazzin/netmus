@@ -64,7 +64,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
         /*System.out.println(DatastoreUtils.songsInDatastore()+" canzoni totali salvate nel datastore");
         for (Song tmp:useraccount.getMusicLibrary().allSongs()) {
             System.out.println(tmp.getId());
-            System.out.println(tmp.getTitle()+" "+tmp.getArtist()+" "+tmp.getAlbum()+" "+tmp.getYoutubeCode());
+            System.out.println(tmp.getTitle()+" "+tmp.getArtist()+" "+tmp.getAlbum());
             System.out.println("");
         }*/
         
