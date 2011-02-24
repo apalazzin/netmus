@@ -380,7 +380,7 @@ public class ProfileActivity extends AbstractActivity implements
                 if (!song.getYear().equals("")) anno = song.getYear();
                 if (!song.getComposer().equals("")) compositore = song.getComposer();
                 if (!song.getTrackNumber().equals("")) traccia = song.getTrackNumber();
-                //if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
+                if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
                 
                 clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
                 return;
