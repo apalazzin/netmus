@@ -952,61 +952,66 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public void playYouTube(final String link) {
        
-       
-       youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
-       youtube.getElement().getStyle().setWidth(335, Style.Unit.PX);
-       youtube.getElement().getStyle().setBottom(7, Style.Unit.PX);
-       youtube.getElement().getStyle().setLeft(5, Style.Unit.PX);
+       if (link.equals("")) {
+           return;
+       } else {
+           
+           youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
+           youtube.getElement().getStyle().setWidth(335, Style.Unit.PX);
+           youtube.getElement().getStyle().setBottom(7, Style.Unit.PX);
+           youtube.getElement().getStyle().setLeft(5, Style.Unit.PX);
 
-       vertical_semioffset = 400;
-       
-       setLayout();
-       
-       /*
-       catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-       playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
-       song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+           vertical_semioffset = 400;
+           
+           setLayout();
+           
+           /*
+           catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+           playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
+           song_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
 
-       catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-       playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-       song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+           catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+           playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+           song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+           
+           */
+           
+           play_youtube.getElement().getStyle().setOpacity(0);
        
-       */
-       
-       play_youtube.getElement().getStyle().setOpacity(0);
-   
 
-       logo_youtube.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-       logo_youtube.getElement().getStyle().setBottom(173, Style.Unit.PX);
-       logo_youtube.getElement().getStyle().setLeft(355, Style.Unit.PX);
+           logo_youtube.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+           logo_youtube.getElement().getStyle().setBottom(173, Style.Unit.PX);
+           logo_youtube.getElement().getStyle().setLeft(355, Style.Unit.PX);
 
-       
-       classifica.getElement().getStyle().setLeft(365, Style.Unit.PX);
-       
-       HTMLPanel player = new HTMLPanel("player");
-       player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-       player.getElement().getStyle().setTop(8, Style.Unit.PX);
-       player.getElement().getStyle().setLeft(5, Style.Unit.PX);
-       youtube.add(player);
-       
-       info_youtube.getElement().setInnerText(selected_song.titolo + ". " + selected_song.autore);
-       info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
-       
-       info_youtube_link.addClickHandler(new ClickHandler() {
+           
+           classifica.getElement().getStyle().setLeft(365, Style.Unit.PX);
+           
+           HTMLPanel player = new HTMLPanel("player");
+           player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+           player.getElement().getStyle().setTop(8, Style.Unit.PX);
+           player.getElement().getStyle().setLeft(5, Style.Unit.PX);
+           youtube.add(player);
+           
+           info_youtube.getElement().setInnerText(selected_song.titolo + ". " + selected_song.autore);
+           info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
+           
+           info_youtube_link.addClickHandler(new ClickHandler() {
 
-        @Override
-        public void onClick(ClickEvent event) {
-            Window.open("http://www.youtube.com/watch?v=" + link, "_blank", "");
-            
-        }});
-       
-       info_youtube.getElement().getStyle().setOpacity(1);
-       info_youtube_link.getElement().getStyle().setOpacity(1);
-       youtube_appendice.getElement().getStyle().setOpacity(1);
-       chiudi_youtube.getElement().getStyle().setOpacity(1);
+            @Override
+            public void onClick(ClickEvent event) {
+                Window.open("http://www.youtube.com/watch?v=" + link, "_blank", "");
+                
+            }});
+           
+           info_youtube.getElement().getStyle().setOpacity(1);
+           info_youtube_link.getElement().getStyle().setOpacity(1);
+           youtube_appendice.getElement().getStyle().setOpacity(1);
+           chiudi_youtube.getElement().getStyle().setOpacity(1);
 
+           
+           player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
+       }
        
-       player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
 
        
    }
