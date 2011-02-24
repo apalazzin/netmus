@@ -92,6 +92,8 @@ public class TranslateDTOXML {
 	private String clearFileName(String filename) {
 	    int start = filename.lastIndexOf("/")+1;
         int end = filename.lastIndexOf(".mp3");
+        if (end < 0)
+            end = filename.lastIndexOf(".MP3");
         return filename.substring(start, end);
 	}
 	
@@ -129,8 +131,8 @@ public class TranslateDTOXML {
 				root.removeChild(root.getFirstChild());
 			}
 			
-		} catch (DOMParseException e){}
-		
+		} catch (DOMParseException e){
+		}
 		return list;
 	}
 }
