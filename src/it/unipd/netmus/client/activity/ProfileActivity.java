@@ -361,6 +361,7 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(MusicLibraryDTO result) {
                 current_user.setMusicLibrary(result);
+                
             }
             
         };
@@ -368,6 +369,7 @@ public class ProfileActivity extends AbstractActivity implements
         // sistemo subito il rating visivo poi arrivera' la library aggiornata
         clientFactory.getProfileView().setRating(rate);
         clientFactory.getProfileView().showStar(rate);
+        
     }
 
     @Override

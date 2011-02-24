@@ -6,6 +6,7 @@ package it.unipd.netmus.client.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -36,6 +37,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -270,7 +272,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 		   }
 	   };
 	   //la rende ordinabile
-	   autoreColumn.setSortable(true);
+	   albumColumn.setSortable(true);
 	   // la aggiunge al catalogo
 	   catalogo.addColumn(albumColumn, "Album");
 	   
@@ -315,6 +317,70 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }
 
             }}, DoubleClickEvent.getType());
+	    
+	    
+	    
+	    List<Song> list = dataProvider_catalogo.getList();
+	    
+	    ListHandler<Song> columnSortHandler = new ListHandler<Song>(list);
+	    
+	        columnSortHandler.setComparator(autoreColumn,
+	            new Comparator<Song>() {
+	              public int compare(Song o1, Song o2) {
+	                if (o1 == o2) {
+	                  return 0;
+	                }
+
+	                // Compare the name columns.
+	                if (o1 != null) {
+	                  return (o2 != null) ? o1.autore.compareTo(o2.autore) : 1;
+	                }
+	                return -1;
+	              }
+	            });
+	       
+	        
+	        
+            columnSortHandler.setComparator(titoloColumn,
+                    new Comparator<Song>() {
+                      public int compare(Song o1, Song o2) {
+                        if (o1 == o2) {
+                          return 0;
+                        }
+
+                        // Compare the name columns.
+                        if (o1 != null) {
+                          return (o2 != null) ? o1.titolo.compareTo(o2.titolo) : 1;
+                        }
+                        return -1;
+                      }
+                    });
+            
+            
+            
+            columnSortHandler.setComparator(albumColumn,
+                    new Comparator<Song>() {
+                      public int compare(Song o1, Song o2) {
+                        if (o1 == o2) {
+                          return 0;
+                        }
+
+                        // Compare the name columns.
+                        if (o1 != null) {
+                          return (o2 != null) ? o1.album.compareTo(o2.album) : 1;
+                        }
+                        return -1;
+                      }
+                    });
+            
+            catalogo.addColumnSortHandler(columnSortHandler);	        
+
+	        
+	        // We know that the data is sorted alphabetically by default.
+	        catalogo.getColumnSortList().push(autoreColumn);
+
+	    
+	    
 	    
 	    
 	    dataProvider_catalogo.addDataDisplay(catalogo);
@@ -477,6 +543,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickStar1(ClickEvent e) {
        if (this.selected_song != null)
            listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 1);
+           
    }
    @UiHandler("star2")
    void handleMouseOverStar2(MouseOverEvent e) {
@@ -499,6 +566,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickStar2(ClickEvent e) {
        if (this.selected_song != null)
            listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 2);
+           
    }
    @UiHandler("star3")
    void handleMouseOverStar3(MouseOverEvent e) {
@@ -520,6 +588,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickStar3(ClickEvent e) {
        if (this.selected_song != null)
            listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 3);
+           
    }
    @UiHandler("star4")
    void handleMouseOverStar4(MouseOverEvent e) {
@@ -541,6 +610,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickStar4(ClickEvent e) {
        if (this.selected_song != null)
            listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 4);
+           
    }
    @UiHandler("star5")
    void handleMouseOverStar5(MouseOverEvent e) {
@@ -559,6 +629,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleClickStar5(ClickEvent e) {
        if (this.selected_song != null)
            listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 5);
+           
    }
 
    @UiHandler("chiudi_playlist")
@@ -673,6 +744,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            star5.setUrl("images/star.png");
        else 
            star5.setUrl("images/starbw.png");
+       
+
+       
    }
    
    //riempie la lista delle playlists
@@ -1524,27 +1598,38 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_traccia.setText(traccia);
         song_cover.setUrl(cover);
         
+        showGlobalStar(global_rating);
+
+    }
+
+
+
+
+    @Override
+    public void showGlobalStar(double index) {
         
-        if (global_rating > 0) 
+                
+        if (index > 0) 
             starG1.setUrl("images/star.png");
         else 
             starG1.setUrl("images/starbw.png");
-        if (global_rating > 1) 
+        if (index > 1) 
             starG2.setUrl("images/star.png");
         else 
             starG2.setUrl("images/starbw.png");
-        if (global_rating > 2) 
+        if (index > 2) 
             starG3.setUrl("images/star.png");
         else 
             starG3.setUrl("images/starbw.png");
-        if (global_rating > 3) 
+        if (index > 3) 
             starG4.setUrl("images/star.png");
         else 
             starG4.setUrl("images/starbw.png");
-        if (global_rating > 4) 
+        if (index > 4) 
             starG5.setUrl("images/star.png");
         else 
             starG5.setUrl("images/starbw.png");
+        
     }
 	
 	
