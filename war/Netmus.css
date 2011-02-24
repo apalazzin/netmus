@@ -32,18 +32,20 @@ div#applet-bar {
    	border-right: 0px solid#000000;
    	
 	background-color: #FFFFFF;
-
-	border-radius: 15px 0px 0px 15px;
-	-moz-border-radius:  15px, 0px, 0px, 15px;
-	-webkit-box-shadow: 4px 4px 10px #888888;
-	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	-webkit-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
 	-moz-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
 	-o-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-	transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out, background-color 0s ease-in-out;
 	
+	border-radius: 15px 0px 0px 15px;
+	-moz-border-radius-topleft:  15px;
+	-moz-border-radius-bottomleft:  15px;
 
+	-moz-border-radius:  15px, 0px, 0px, 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
 }
 
 div#application {
@@ -55,6 +57,7 @@ div#application {
    background-image: url('images/tribale.png');
    background-repeat: no-repeat;
    background-position: right top;
+   overflow: hidden;
 }
 
 h1 {
@@ -120,19 +123,25 @@ h1 {
 	height: 15px;
 	padding-top: 3px;
 	
-	font-size: 9px;
-	text-align: center;
+	color: #000000;
 	
+	font-size: 10px;
+	text-align: center;
 	
 	border: 1px solid #DCFFDC;
 	
 	background-color: #EFFFEF;
 
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-box-shadow: 0px 0px 6px #37A6EB;
-	-moz-box-shadow: 0px 0px 6px #37A6EB;
-	
+	 
+	margin-left:-86px;
+	margin-top: 60px;
+	margin-bottom: 10px;		
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+   	
+   		
 	 -webkit-transition: -webkit-transform 0.5s ease-in-out;
 	 -moz-transition: -moz-transform 0.5s ease-in-out;
 	 transition: transform 0.5s ease-in-out;
@@ -145,13 +154,11 @@ h1 {
 	 -webkit-transform: rotate(90deg);
 	 transform: rotate(90deg);
 	 
-	margin-left:-86px;
-	margin-top: 60px;
-	margin-bottom: 10px;		
-	-webkit-user-select: none;
-	-moz-user-select: none;
-   	-khtml-user-select: none;
-   	user-select: none;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 6px #37A6EB;
+	
+   	
 }
 
 
