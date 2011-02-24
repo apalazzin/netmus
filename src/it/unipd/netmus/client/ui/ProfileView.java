@@ -71,6 +71,8 @@ public interface ProfileView extends IsWidget {
 			String anno, String compositore, String traccia, String cover);
    //Mostra il rating dato come input
    void showStar(int index);
+ //Aggiorna il global rating
+   void showGlobalStar(double d);
 
    
    public interface Presenter
