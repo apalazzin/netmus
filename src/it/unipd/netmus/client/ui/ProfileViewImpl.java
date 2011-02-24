@@ -427,7 +427,53 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         }
 	       });
 	       
+	       
+           List<Song> listPl = dataProvider_playlist.getList();
+           
+           ListHandler<Song> columnPlSortHandler = new ListHandler<Song>(listPl);
+           
+               columnPlSortHandler.setComparator(titoloColumn2,
+                   new Comparator<Song>() {
+                     public int compare(Song o1, Song o2) {
+                       if (o1 == o2) {
+                         return 0;
+                       }
+
+                       // Compare the name columns.
+                       if (o1 != null) {
+                         return (o2 != null) ? o1.titolo.compareTo(o2.titolo) : 1;
+                       }
+                       return -1;
+                     }
+                   });
+               
+               columnPlSortHandler.setComparator(albumColumn2,
+                       new Comparator<Song>() {
+                         public int compare(Song o1, Song o2) {
+                           if (o1 == o2) {
+                             return 0;
+                           }
+
+                           // Compare the name columns.
+                           if (o1 != null) {
+                             return (o2 != null) ? o1.album.compareTo(o2.album) : 1;
+                           }
+                           return -1;
+                         }
+                       });
+   
+               lista_canzoni.addColumnSortHandler(columnPlSortHandler);           
+           
+               // We know that the data is sorted alphabetically by default.
+               lista_canzoni.getColumnSortList().push(titoloColumn2);
+               
 	       dataProvider_playlist.addDataDisplay(lista_canzoni);
+	               
+	            
+
+	       
+	       
+	       
 	       playlist_songs.add(lista_canzoni);
 	       
 	       HTMLPanel off = new HTMLPanel("");

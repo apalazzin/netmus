@@ -84,6 +84,7 @@ public class Song {
         this.id = SEPARATOR;
         this.numOwners = 0;
         this.album = "";
+        this.albumCover = "";
         this.artist = "";
         this.composer = "";
         this.file = "";
@@ -123,7 +124,7 @@ public class Song {
         tmp.setGenre(this.genre);
         tmp.setTrackNumber(this.trackNumber);
         tmp.setYear(this.year); 
-        //tmp.setAlbumCover(this.albumCover.toString());
+        tmp.setAlbumCover(this.albumCover.toString());
         tmp.setNumOwners(this.numOwners);
         tmp.setYoutubeCode(this.youtube_code);
         tmp.setPlaymeCode(this.playme_code);
@@ -161,8 +162,8 @@ public class Song {
         if (song.getAlbum() != null)
             s.setAlbum(song.getAlbum());
         
-        //s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
-        //s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+        s.setAlbumCover(ExternalService.getCoverImage(s.getTitle()+" "+s.getArtist()));
+        s.setYoutubeCode(ExternalService.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         
         //System.out.println("BRANO: "+s.getTitle());
         
@@ -202,10 +203,10 @@ public class Song {
                     tmp.setTrackNumber(song.getTrackNumber());
                 if (tmp.getYear() == "" && song.getYear() != null)
                     tmp.setYear(song.getYear());
-                //if (tmp.getYoutubeCode() == "")
-                //    tmp.setYoutubeCode(s.getYoutubeCode());
-                //if (tmp.getAlbumCover() == "")
-                //    tmp.setAlbumCover(s.getAlbumCover());
+                if (tmp.getYoutubeCode() == "")
+                    tmp.setYoutubeCode(s.getYoutubeCode());
+                if (tmp.getAlbumCover() == "")
+                    tmp.setAlbumCover(s.getAlbumCover());
                 //System.out.println("Brano già presente in database, aggiornati eventuali campi vuoti dal DTO dell'utente");
                 return tmp;
             }
@@ -236,10 +237,10 @@ public class Song {
                     s2.setTrackNumber(song.getTrackNumber());
                 if (s2.getYear() == "" && song.getYear() != null)
                     s2.setYear(song.getYear());
-                //if (s2.getYoutubeCode() == "")
-                //    s2.setYoutubeCode(s.getYoutubeCode());
-                //if (s2.getAlbumCover() == "")
-                //    s2.setAlbumCover(s.getAlbumCover());
+                if (s2.getYoutubeCode() == "")
+                    s2.setYoutubeCode(s.getYoutubeCode());
+                if (s2.getAlbumCover() == "")
+                    s2.setAlbumCover(s.getAlbumCover());
                 //System.out.println("Salvato in DB con chiave: "+s2.getTitle()+SEPARATOR+s2.getArtist()+SEPARATOR+s2.getAlbum());
                 return s2;
             }
