@@ -1652,8 +1652,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         song_anno.setText(anno);
         song_compositore.setText(compositore);
         song_traccia.setText(traccia);
-        song_cover.setUrl(cover);
         
+        if(!cover.equals(""))
+            song_cover.setUrl(cover);
+        else
+            song_cover.setUrl("");
+            
         showGlobalStar(global_rating);
 
     }
