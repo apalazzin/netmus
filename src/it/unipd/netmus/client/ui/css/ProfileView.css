@@ -10,11 +10,6 @@
 	border: 2px solid #AAAAAA;
 	
 	background-color: #FFFFFF;
-
-	border-radius: 15px;
-	-moz-border-radius: 15px;
-	-webkit-box-shadow: 4px 4px 10px #888888;
-	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	margin-top: 20px;
 	margin-left: 215px;
@@ -28,11 +23,16 @@
    	-khtml-user-select: none;
    	user-select: none;
    	
-   		-webkit-transition: margin 0.3s ease-in-out;
+   	-webkit-transition: margin 0.3s ease-in-out;
 	-moz-transition: margin 0.3s ease-in-out;
 	-o-transition: margin 0.3s ease-in-out;
 	transition: margin 0.3s ease-in-out;
    	
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	
 }
@@ -230,11 +230,6 @@
 	border: 2px solid #AAAAAA;
 	
 	background-color: #FFFFFF;
-
-	border-radius: 15px;
-	-moz-border-radius: 15px;
-	-webkit-box-shadow: 4px 4px 10px #888888;
-	-moz-box-shadow: 4px 4px 10px #888888;
 	
 	margin-top: 20px;
 	margin-left: 15px;
@@ -246,6 +241,12 @@
 	left: 0px;
 	
 	text-align: left;
+	
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
 }
 
 
@@ -275,15 +276,14 @@
 	
 	background-color: #EFFFEF;
 
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-box-shadow: 0px 0px 6px #37A6EB;
-	-moz-box-shadow: 0px 0px 6px #37A6EB;
-	
 	top: 35px;
 	left: 250px;
 	position: absolute;
 			
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 6px #37A6EB;
+	-moz-box-shadow: 0px 0px 6px #37A6EB;
 	
 }
 
@@ -794,21 +794,19 @@
 	border: 2px solid #CCCCCC;
 	
 	background-color: #F0F0F0;
-
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-box-shadow: 0px 0px 2px #EEEEEE;
-	-moz-box-shadow: 0px 0px 2px #EEEEEE;
 	
 	bottom: 22px;
 	left: 25px;
 	position: absolute;
 	
-	
 	-webkit-box-shadow: 2px 2px 4px #888888;
 	-moz-box-shadow: 2px 2px 4px #888888;
 	box-shadow: 2px 2px 4px #888888;
-	
+
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 2px #EEEEEE;
+	-moz-box-shadow: 0px 0px 2px #EEEEEE;
 	
 	}
 

@@ -75,6 +75,9 @@ public class AppletBar {
         
         makeNativeFunction(this);
 
+
+        RootPanel.get("applet-bar").setStyleName("applet-bar");
+
         main.setStyleName("applet_main");
         button_container.setStyleName("applet_button_cnt");
         
@@ -111,6 +114,7 @@ public class AppletBar {
                     status.getElement().getStyle().setMarginLeft(7, Style.Unit.PX);
                     status.getElement().getStyle().setMarginTop(15, Style.Unit.PX);
                     status.getElement().getStyle().setWidth(120, Style.Unit.PX);
+                    
                     button_container.getElement().getStyle().setOpacity(1);
                     title.getElement().getStyle().setOpacity(1);
                 } else {
