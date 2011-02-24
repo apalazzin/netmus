@@ -115,6 +115,9 @@ public interface ProfileView extends IsWidget {
       
       //attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
       void rateSelectedSong(String artist, String title, String album, int rate);
+      
+      //Elimina la playlist
+      void delPlaylist(String text);
 
    }
 

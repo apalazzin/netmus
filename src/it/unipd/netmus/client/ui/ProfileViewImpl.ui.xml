@@ -79,6 +79,7 @@
 					</g:HTMLPanel>
 					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
 					<g:Label ui:field="titolo_playlist" styleName="{style.title_playlist}"></g:Label>
+					<g:Image ui:field="elimina_playlist" styleName="{style.elimina_playlist}" url="images/cross_red.png"></g:Image>
 					<g:Image ui:field="chiudi_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>			
 					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
 					<g:HorizontalPanel>

@@ -193,6 +193,7 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 	
 	public String[] getPlaylistList() {
+	    //RESTITUISCNE LA LISTA DI PLAYLIST DELL'UTENTE
 		// TODO Auto-generated method stub
 		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock","Casa", "Vacanze"};
 		return playlists;
@@ -309,9 +310,21 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void addPlaylist(String title) {
         
-        // se l'inserimento della playlist nel DB ha successo 
-        clientFactory.getProfileView().addToPlaylists(title);
+        // se l'inserimento della playlist nel DB ha successo ridisegna la lista PLaylist aggiornata 
+        
+        clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+        //clientFactory.getProfileView().addToPlaylists(title);
     }
+    
+    @Override
+    public void delPlaylist(String title) {
+        
+        // se la rimozione della playlist dall DB ha successo ridisegna la lista PLaylist aggiornata 
+        
+        clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+        //clientFactory.getProfileView().addToPlaylists(title);
+    }
+
     
     @Override
     public void rateSelectedSong(final String artist, final String title, final String album, final int rate) {

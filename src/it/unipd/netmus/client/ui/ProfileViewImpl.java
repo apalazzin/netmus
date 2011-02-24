@@ -152,6 +152,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image rimuovi_branoplaylist;
    @UiField Image aggiungi_playlist;
    @UiField Image song_cover;
+   @UiField Image elimina_playlist;
    
    boolean playlist_opened; 
    boolean song_opened; 
@@ -678,6 +679,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
    }
 
+   @UiHandler("elimina_playlist")
+   void handleClickEliminaPlaylist(ClickEvent e) {
+      closePlaylist();
+      listener.delPlaylist(titolo_playlist.getText());
+   }
+
    @UiHandler("chiudi_playlist")
    void handleClickChiudiPlaylist(ClickEvent e) {
       closePlaylist();
@@ -799,6 +806,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void paintPlaylist(String[] lista) {
 	          
+       Arrays.sort(lista);
+       
+       playlists.clear();
 	   for(int k=0; k< lista.length; k++) {
 
 		   	final Label tmpTxt = new Label(lista[k]);
