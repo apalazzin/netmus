@@ -26,55 +26,63 @@ final public class ExternalService {
     
     public static String getCoverImage(String keywords) {
         
-        // attivo il nuovo gestore di cache (x LAST FM)
-        Caller.getInstance().setCache(new AppEngineCache());
-        
-        Collection<Track> search = Track.search(keywords,
-        "33d9ef520018d87db5dff9ef74cc4904");
+        try {
+         // attivo il nuovo gestore di cache (x LAST FM)
+            Caller.getInstance().setCache(new AppEngineCache());
+            
+            Collection<Track> search = Track.search(keywords,
+            "33d9ef520018d87db5dff9ef74cc4904");
 
-        Iterator<Track> it = search.iterator();
-        Track t;
-        if (it.hasNext())
-            t = (Track) it.next();
-        else t = null;
-        
-        if (t==null)
+            Iterator<Track> it = search.iterator();
+            Track t;
+            if (it.hasNext())
+                t = (Track) it.next();
+            else t = null;
+            
+            if (t==null)
+                return "";
+            else
+                return t.getImageURL(ImageSize.EXTRALARGE);
+        } catch (Exception e) {
             return "";
-        else
-            return t.getImageURL(ImageSize.EXTRALARGE);
+        }
     }
     
     public static SongDTO getSongFromFileName(String filename) {
         
-        // attivo il nuovo gestore di cache (x LAST FM)
-        Caller.getInstance().setCache(new AppEngineCache());
-        
-        Collection<Track> search = Track.search(filename,
-        "33d9ef520018d87db5dff9ef74cc4904");
-        
-        Iterator<Track> it = search.iterator();
-        Track t;
-        if (it.hasNext())
-            t = (Track) it.next();
-        else t = null;
-        
-        
-        if (t==null)
-            return null;
-        else {
-            SongDTO song = new SongDTO();
-            song.setTitle(t.getName());
-            song.setArtist(t.getArtist());
-            song.setAlbum(t.getAlbum());
-            song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
+        try {
+         // attivo il nuovo gestore di cache (x LAST FM)
+            Caller.getInstance().setCache(new AppEngineCache());
             
-            if (song.getTitle() != null && song.getArtist() != null) {
-                String keywords = song.getTitle()+ " " +song.getArtist();
+            Collection<Track> search = Track.search(filename,
+            "33d9ef520018d87db5dff9ef74cc4904");
+            
+            Iterator<Track> it = search.iterator();
+            Track t;
+            if (it.hasNext())
+                t = (Track) it.next();
+            else t = null;
+            
+            
+            if (t==null)
+                return null;
+            else {
+                SongDTO song = new SongDTO();
+                song.setTitle(t.getName());
+                song.setArtist(t.getArtist());
+                song.setAlbum(t.getAlbum());
+                song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
                 
-                song.setYoutubeCode(getYouTubeCode(keywords));
+                if (song.getTitle() != null && song.getArtist() != null) {
+                    String keywords = song.getTitle()+ " " +song.getArtist();
+                    
+                    song.setYoutubeCode(getYouTubeCode(keywords));
+                }
+                
+                return song;
             }
-            
-            return song;
+        } catch (Exception e) {
+            return null;
         }
     }
 }
