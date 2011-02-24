@@ -102,7 +102,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label song_anno;
    @UiField Label song_compositore;
    @UiField Label song_traccia;
-   
+
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
    @UiField HTMLPanel catalogo_container;
@@ -950,7 +950,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    
-   public void playYouTube(String link) {
+   public void playYouTube(final String link) {
        
        
        youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
@@ -989,6 +989,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        player.getElement().getStyle().setLeft(5, Style.Unit.PX);
        youtube.add(player);
        
+       info_youtube.getElement().setInnerText(selected_song.titolo + ". " + selected_song.autore);
+       info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
+       
+       info_youtube_link.addClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            Window.open("http://www.youtube.com/watch?v=" + link, "_blank", "");
+            
+        }});
        
        info_youtube.getElement().getStyle().setOpacity(1);
        info_youtube_link.getElement().getStyle().setOpacity(1);
