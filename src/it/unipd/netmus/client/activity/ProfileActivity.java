@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.applet.AppletBar;
+import it.unipd.netmus.client.event.DeviceScannedEvent;
+import it.unipd.netmus.client.event.DeviceScannedEventHandler;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LibraryService;
@@ -80,6 +82,15 @@ public class ProfileActivity extends AbstractActivity implements
                 
                 clientFactory.getProfileView().setUser(user);                
                 final ProfileView profileView = clientFactory.getProfileView();
+                
+                clientFactory.getEventBus().addHandler(DeviceScannedEvent.TYPE, new DeviceScannedEventHandler() {
+                    
+                    @Override
+                    public void onScanDevice(DeviceScannedEvent event) {
+                        setSongs();
+                        profileView.paintPlaylist(getPlaylistList());                    }
+                });
+                
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
                 

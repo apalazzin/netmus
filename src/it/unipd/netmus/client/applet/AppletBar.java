@@ -5,32 +5,32 @@ package it.unipd.netmus.client.applet;
 
 import java.util.List;
 
+import it.unipd.netmus.client.ClientFactory;
+import it.unipd.netmus.client.event.DeviceScannedEvent;
+import it.unipd.netmus.client.place.ProfilePlace;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 
 /**
  * @author ValterTexasGroup
@@ -53,6 +53,7 @@ public class AppletBar {
     private boolean state;
     private TranslateDTOXML translator = new TranslateDTOXML();
     private HTMLPanel main = new HTMLPanel("");
+    ClientFactory client_factory = GWT.create(ClientFactory.class);
     
     private LibraryServiceAsync libraryService = GWT.create(LibraryService.class);
     
@@ -304,6 +305,7 @@ public class AppletBar {
             public void onSuccess(Void result) {
                 showStatus("Sent to Server");
                 System.out.println("OK");
+                client_factory.getEventBus().fireEvent(new DeviceScannedEvent());
             }
         };
         
