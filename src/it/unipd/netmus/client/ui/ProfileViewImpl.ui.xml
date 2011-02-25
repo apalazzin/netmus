@@ -147,7 +147,7 @@
 				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
 				
-				<span style="position: absolute; top: -20px; left: 0px; font-size: 11px; font-family: Verdana; font-weight: bold; width: 150px;">Classifica:</span>
+				<span style="position: absolute; top: -20px; left: 0px; font-size: 11px; font-family: Verdana; font-weight: bold; width: 150px;">Il tuo voto:</span>
 				<div style="position: absolute; bottom: -3px; left: 0px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
 				
 				</g:HTMLPanel>
@@ -164,14 +164,62 @@
 			</g:HTMLPanel>
 	
 			   	<g:HTMLPanel ui:field="edit_profile" styleName="{style.edit_profile}">
+				<g:Image ui:field="edit_profile_chiudi" styleName="{style.edit_profile_chiudi}" url="images/cross_red.png"/>
+				<g:Image ui:field="edit_profile_logo" styleName="{style.edit_profile_logo}" url="images/logo_netmus.png"/>
 			   	
-			   	<g:VerticalPanel ui:field="edit_Profile_v">
+			   	<g:HorizontalPanel styleName="{style.edit_profile_top}">
+			   		<g:HorizontalPanel styleName="{style.edit_profile_user}">
+			   			<g:Label styleName="{style.edit_profile_labelu}">giovytr#trezzi.net</g:Label>			   		
+			   		</g:HorizontalPanel>
+			   	</g:HorizontalPanel>
+			   	
+				<g:HorizontalPanel styleName="{style.edit_profile_checkC}">
+			   		<g:Image ui:field="edit_profile_check" styleName="{style.edit_profile_check}" url="images/check_green.png"/>
+			   		<g:Button styleName="{style.edit_profile_checkT}">Salva le modifiche.</g:Button>
+			   	</g:HorizontalPanel>
+			   		
+			   		
+			   		<g:HTMLPanel styleName="{style.edit_profile_left}">
+			   		<g:VerticalPanel ui:field="edit_profile_vl">
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Password:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nickname:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nome:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Cognome:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nazionalità:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Sesso:</g:Label></g:HorizontalPanel>
+			   		</g:VerticalPanel>
+			   		</g:HTMLPanel>
+			   		
+			   		<g:HTMLPanel styleName="{style.edit_profile_right}">
+			   		<g:VerticalPanel ui:field="edit_profile_vr">
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">########</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">yoller</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Giovanni</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Trezzi</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Italy</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Maschio</g:Label></g:HorizontalPanel>
+			   		</g:VerticalPanel>
+			   		</g:HTMLPanel>
+
+
+			   		<g:HTMLPanel styleName="{style.edit_profile_conferma}">
+			   		<g:VerticalPanel ui:field="edit_profile_vc">
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}">
+				   			<g:Label styleName="{style.edit_profile_label}"> Conferma:&nbsp;&nbsp;&nbsp;</g:Label>
+				   			<g:Label styleName="{style.edit_profile_labelf}">########</g:Label>
+				   		</g:HorizontalPanel>
+				   	</g:VerticalPanel>
+			   		</g:HTMLPanel>
+
+			   	
+					<g:HTMLPanel ui:field="edit_profile_about" styleName="{style.edit_profile_about}">
+			   		<g:VerticalPanel >
+			   		<g:Label styleName="{style.edit_profile_label}">Inforamzioni su di me:</g:Label>
+			   		<g:HTMLPanel styleName="{style.edit_profile_aboutT}">Clicca qui per inserie le tue informazioni.</g:HTMLPanel>
+			   		</g:VerticalPanel>
+					</g:HTMLPanel>			   	
 			   	
 			   	
-			   	
-			   	
-			   	
-			   	</g:VerticalPanel>
 				
 				</g:HTMLPanel>
    	

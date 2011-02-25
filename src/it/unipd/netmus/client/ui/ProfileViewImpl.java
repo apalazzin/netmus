@@ -124,6 +124,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel classifica;
    @UiField HTMLPanel info_youtube;
    @UiField HTMLPanel youtube_appendice;
+   @UiField HTMLPanel edit_profile;
 
    
    @UiField Image play;
@@ -153,6 +154,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image aggiungi_playlist;
    @UiField Image song_cover;
    @UiField Image elimina_playlist;
+   @UiField Image edit_profile_chiudi;
+   
    
    boolean playlist_opened; 
    boolean song_opened; 
@@ -233,6 +236,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public ProfileViewImpl() {
 
+       
+       
 	   //costruisco la componente widget x il catalogo delle canzoni
 	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
 	   catalogo.setWidth("100%", true);
@@ -751,6 +756,35 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       aggiungi_playlist.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
+   @UiHandler("edit_profile_chiudi")
+   void handleMouseEditProfileChiudi(ClickEvent e) {
+      edit_profile.getElement().getStyle().setOpacity(0);
+      Timer timerHidden = new Timer() {
+          public void run() {
+              edit_profile.getElement().getStyle().setDisplay(Style.Display.NONE);  
+          }     
+      };
+      timerHidden.schedule(200);
+   }
+
+   @UiHandler("edit_profile_chiudi")
+   void handleMouseOverEditProfileChiudi(MouseOverEvent e) {
+       edit_profile_chiudi.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    }
+   
+   
+   @UiHandler("account_button")
+   void handleMouseAccountButton(ClickEvent e) {
+      edit_profile.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+      edit_profile.getElement().getStyle().setOpacity(1);    
+   }
+
+   @UiHandler("account_button")
+   void handleMouseOverAccountButton(MouseOverEvent e) {
+       account_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    }
+
+
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -843,7 +877,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 public void onMouseOver(MouseOverEvent event) {                    
                       event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
                       event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
-                } });
+                } }); 
 			
 	         wrapper.addMouseOutHandler( new MouseOutHandler(){
 	                @Override
@@ -916,6 +950,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                        utente.getElement().getStyle().setTop(45, Style.Unit.PX);
                        utente.getElement().getStyle().setLeft(10, Style.Unit.PX);
                        utente.getElement().getStyle().setOpacity(1);
+                       utente.getElement().getStyle().setOpacity(1);
+                       utente.getElement().getStyle().setOpacity(1);
+                       utente.getElement().getStyle().setOpacity(1);
                        break;    
                    }
                        
@@ -928,7 +965,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
            }
        };
-       timersd.schedule(500);
+       timersd.schedule(100);
 	
    }
 
