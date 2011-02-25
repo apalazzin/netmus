@@ -87,8 +87,29 @@ public class ProfileActivity extends AbstractActivity implements
                     
                     @Override
                     public void onScanDevice(DeviceScannedEvent event) {
-                        setSongs();
-                        profileView.paintPlaylist(getPlaylistList());                    }
+                        
+                        
+                        AsyncCallback<UserCompleteDTO> callbackUpdateUser = new AsyncCallback<UserCompleteDTO>() {
+
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                // TODO Auto-generated method stub
+                                
+                            }
+
+                            @Override
+                            public void onSuccess(UserCompleteDTO result) {
+                                
+                                current_user = result;
+                                setSongs();
+                                profileView.paintPlaylist(getPlaylistList()); 
+                                
+                            }
+                        
+                        };
+                        usersServiceSvc.loadProfile(user, callbackUpdateUser);
+
+                    }
                 });
                 
                 profileView.setName(name);
