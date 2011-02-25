@@ -8,4 +8,13 @@ public interface AppletConstants extends Constants {
 	String rescan();
 	String title();
 	String chooser();
+    String xmlParsing();
+    String xmlParsingErroor();
+    String sendingErroor();
+    String sentToServer();
+    String pleaseWait();
+    String appletON();
+    String appletOFF();
+    String noNewFiles();
+    String deviceRemoved();
 }
