@@ -1,12 +1,8 @@
 package it.unipd.netmus.client.mvp;
 
 import it.unipd.netmus.client.ClientFactory;
-import it.unipd.netmus.client.activity.EditSongsActivity;
-import it.unipd.netmus.client.activity.EditUserActivity;
 import it.unipd.netmus.client.activity.LoginActivity;
 import it.unipd.netmus.client.activity.ProfileActivity;
-import it.unipd.netmus.client.place.EditSongsPlace;
-import it.unipd.netmus.client.place.EditUserPlace;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
 
@@ -42,10 +38,6 @@ public class NetmusActivityMapper implements ActivityMapper {
 			return new LoginActivity((LoginPlace) place, clientFactory);
 		else if (place instanceof ProfilePlace)
 			return new ProfileActivity((ProfilePlace) place, clientFactory);
-		else if (place instanceof EditUserPlace)
-         return new EditUserActivity((EditUserPlace) place, clientFactory);
-		else if (place instanceof EditSongsPlace)
-         return new EditSongsActivity((EditSongsPlace) place, clientFactory);
 
 		return null;
 	}

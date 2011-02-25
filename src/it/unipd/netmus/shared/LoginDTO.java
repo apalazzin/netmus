@@ -3,12 +3,15 @@
  */
 package it.unipd.netmus.shared;
 
+import java.io.Serializable;
+
 /**
  * @author ValterTexasGroup
  *
  */
+
 @SuppressWarnings("serial")
-public class LoginDTO implements GenericDTO {
+public class LoginDTO implements Serializable {
 
 	  private String user;
 	  private String passwordHash;

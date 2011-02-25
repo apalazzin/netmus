@@ -1,6 +1,7 @@
 package it.unipd.netmus.client.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -8,14 +9,14 @@ import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.applet.AppletBar;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
-//import it.unipd.netmus.client.service.LibraryService;
-//import it.unipd.netmus.client.service.LibraryServiceAsync;
+import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
-import it.unipd.netmus.client.service.SongsService;
-import it.unipd.netmus.client.service.SongsServiceAsync;
-import it.unipd.netmus.client.service.UsersService;
-import it.unipd.netmus.client.service.UsersServiceAsync;
+import it.unipd.netmus.client.service.SongService;
+import it.unipd.netmus.client.service.SongServiceAsync;
+import it.unipd.netmus.client.service.UserService;
+import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
 import it.unipd.netmus.shared.MusicLibraryDTO;
@@ -39,12 +40,14 @@ public class ProfileActivity extends AbstractActivity implements
 
 	private String name;
 	
+	private boolean isOwner;
+	
 	private static Logger logger = Logger.getLogger("ProfileActivity");
 	
 	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-	//private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
-	private UsersServiceAsync usersServiceSvc = GWT.create(UsersService.class);
-	private SongsServiceAsync songsServiceSvc = GWT.create(SongsService.class);
+	private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
+	private UserServiceAsync usersServiceSvc = GWT.create(UserService.class);
+	private SongServiceAsync songsServiceSvc = GWT.create(SongService.class);
 	
 	private UserCompleteDTO current_user;
 	
@@ -156,34 +159,7 @@ public class ProfileActivity extends AbstractActivity implements
       } catch (Exception e) {
       }
    }
-   
-    /*
-	@Override
-	public void setUser() {
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException) {
-                    logger.info("User not logged yet - Redirect to Login");
-                    goTo(new LoginPlace(""));
-                }
-            }
-
-            @Override
-            public void onSuccess(final String user) {
-                
-                clientFactory.getProfileView().setUser(user);
-                
-            }
-            
-        };
-	    
-        try { loginServiceSvc.getLoggedInUser(callback); }
-        catch(LoginException e) {
-        }
-	}*/
-	
 	
 	@Override
 	public void setPlaylistList() {
@@ -306,6 +282,20 @@ public class ProfileActivity extends AbstractActivity implements
        clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
         
     }
+    
+    @Override
+    public void moveUpInPLaylist(String playlist, String autore, String titolo, String album) {
+        
+        //scambia la canzone sleezionata con quella precedente e aggiorna la vista
+        
+    }
+    
+    @Override
+    public void moveDownInPLaylist(String playlist, String autore, String titolo, String album) {
+        
+      //scambia la canzone sleezionata con quella successiva e aggiorna la vista
+        
+    }
 
     @Override
     public void addPlaylist(String title) {
@@ -317,17 +307,21 @@ public class ProfileActivity extends AbstractActivity implements
     }
     
     @Override
-    public void delPlaylist(String title) {
+    public void deletePlaylist(String playlist_name) {
         
         // se la rimozione della playlist dall DB ha successo ridisegna la lista PLaylist aggiornata 
         
         clientFactory.getProfileView().paintPlaylist(getPlaylistList());
         //clientFactory.getProfileView().addToPlaylists(title);
+        
     }
-
     
     @Override
-    public void rateSelectedSong(final String artist, final String title, final String album, final int rate) {
+    public void rateSong(final String artist, final String title, final String album, final int rate) {
+        
+        // sistemo subito il rating visivo poi arrivera' la library aggiornata
+        clientFactory.getProfileView().setRating(rate);
+        clientFactory.getProfileView().showStar(rate);
         
         AsyncCallback<Double> callback = new AsyncCallback<Double>() {
 
@@ -349,14 +343,11 @@ public class ProfileActivity extends AbstractActivity implements
             
         };
         songsServiceSvc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
-        // sistemo subito il rating visivo poi arrivera' la library aggiornata
-        clientFactory.getProfileView().setRating(rate);
-        clientFactory.getProfileView().showStar(rate);
         
     }
 
     @Override
-    public double loadRating(String artist, String title, String album) {
+    public double setRating(String artist, String title, String album) {
         
         List<SongDTO> songs_dto = this.current_user.getMusicLibrary().getSongs();
         for (SongDTO tmp:songs_dto) {
@@ -393,5 +384,59 @@ public class ProfileActivity extends AbstractActivity implements
             }
         }
 	}
+
+    @Override
+    public void viewOtherLibrary(String user) {
+        //Controlla che l'utente desiderato abbia un profilo pubblico verso l'utente attualmente autenticato
+        //Se ha i permessi accedi al catalogo
+        goTo(new ProfilePlace(user));
+    }
+
+    @Override
+    public void deleteSong(String song_id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void exportPDF(String user) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void editProfileView(String user) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void editProfile(String user, String nick_name, String first_name,
+            String last_name, String gender, String nationality,
+            String aboutMe, Date bithDate) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void editSongTitle(String new_title, String old_title,
+            String artist, String album) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void editSongAlbum(String new_album, String old_album,
+            String artist, String title) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void editSongArtist(String new_artist, String old_artist,
+            String title, String album) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

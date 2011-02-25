@@ -13,7 +13,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  *
  */
 @RemoteServiceRelativePath("songsService")
-public interface SongsService extends RemoteService {
+public interface SongService extends RemoteService {
     
     double rateSong(String user, SongSummaryDTO song, int rating);
+    
+    boolean editSong(String user, String artist, String title, String album);
+    
+    boolean deleteSong(String user, String artist, String title, String album);
 }

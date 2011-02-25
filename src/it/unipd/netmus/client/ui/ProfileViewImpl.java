@@ -294,7 +294,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         play.setUrl("images/play.png");
              play_youtube.setUrl("images/play.png");
 
-             global_rating = listener.loadRating(selected_song.autore,selected_song.titolo,selected_song.album);
+             global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
              showStar(rating);
 	         
 	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
@@ -589,7 +589,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("star1")
    void handleClickStar1(ClickEvent e) {
        if (this.selected_song != null)
-           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 1);
+           listener.rateSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 1);
            
    }
    @UiHandler("star2")
@@ -612,7 +612,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("star2")
    void handleClickStar2(ClickEvent e) {
        if (this.selected_song != null)
-           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 2);
+           listener.rateSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 2);
            
    }
    @UiHandler("star3")
@@ -634,7 +634,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("star3")
    void handleClickStar3(ClickEvent e) {
        if (this.selected_song != null)
-           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 3);
+           listener.rateSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 3);
            
    }
    @UiHandler("star4")
@@ -656,7 +656,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("star4")
    void handleClickStar4(ClickEvent e) {
        if (this.selected_song != null)
-           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 4);
+           listener.rateSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 4);
            
    }
    @UiHandler("star5")
@@ -675,14 +675,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("star5")
    void handleClickStar5(ClickEvent e) {
        if (this.selected_song != null)
-           listener.rateSelectedSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 5);
+           listener.rateSong(this.selected_song.autore,this.selected_song.titolo,this.selected_song.album, 5);
            
    }
 
    @UiHandler("elimina_playlist")
    void handleClickEliminaPlaylist(ClickEvent e) {
       closePlaylist();
-      listener.delPlaylist(titolo_playlist.getText());
+      listener.deletePlaylist(titolo_playlist.getText());
    }
 
    @UiHandler("chiudi_playlist")

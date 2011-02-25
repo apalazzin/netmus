@@ -3,12 +3,14 @@
  */
 package it.unipd.netmus.shared;
 
+import java.io.Serializable;
+
 /**
  * @author ValterTexasGroup
  *
  */
 @SuppressWarnings("serial")
-public class SongSummaryDTO implements GenericDTO {
+public class SongSummaryDTO implements Serializable {
 	
 	private String artist;
 	private String title;

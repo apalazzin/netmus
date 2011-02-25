@@ -10,8 +10,6 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
-import it.unipd.netmus.shared.exception.RegistrationException;
-import it.unipd.netmus.shared.exception.WrongLoginException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -24,7 +22,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
    
 	@Override
-	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
+	public LoginDTO insertRegistration(LoginDTO login) throws IllegalStateException {
 		
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
@@ -40,12 +38,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		//find user in the database
 	    String username = login.getUser();
 	    if (username==null || username.equals(""))
-	        throw new WrongLoginException("User empty");
+	        throw new LoginException("User empty");
 		UserAccount userAccount = UserAccount.load(login.getUser());
 
 		if (userAccount == null) {
 			//user not found in the database
-			throw new WrongLoginException("User don't exists");
+			throw new LoginException("User don't exists");
 		}
 		else {
 			if (BCrypt.checkpw(login.getPassword(), userAccount.getPassword())) {
@@ -53,7 +51,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 				return userAccount;
 			}
 			else
-			    throw new WrongLoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
+			    throw new LoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
 		}
 	}
 

@@ -7,7 +7,6 @@ import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
-import it.unipd.netmus.shared.exception.DatastoreException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,61 +25,23 @@ public class MusicLibrary {
 	
 	@Index private List<SongWithRating> songList;
 	
-	//---------------------------------------------------
-    //gestione RATINGS
-    static private class SongWithRating {
-
-        private String songId;
-        
-        private int rating;
-        
-        @SuppressWarnings("unused")
-        public SongWithRating() {
-            this.songId = Song.SEPARATOR;
-            this.rating = -1;
-        }
-        
-        public SongWithRating(String songId) {
-            this.songId = songId;
-            this.rating = -1;
-            this.update();
-        }
-        
-        void update() {
-            ODF.get().storeOrUpdate(this);
-        }
-
-        public String getSongId() {
-            return songId;
-        }
-
-        public void setRating(int rating) {
-            this.rating = rating;
-            this.update();
-        }
-
-        public int getRating() {
-            return rating;
-        }
-    }
-	//---------------------------------------------------
+	
     //dati statistici salvati nel database
+	
     private int numSongs;
     
     private String preferredArtist;
     
     private String preferredGenre;
-    
-    private int numPlaylists;
-	//---------------------------------------------------
+
     //gestione PLAYLISTS
+    
     @Index private List<Playlist> playlists;
-    //---------------------------------------------------
+
     
 	public MusicLibrary() {
 	    this.songList = new ArrayList<SongWithRating>();
 	    this.playlists = new ArrayList<Playlist>();
-	    this.numPlaylists = 0;
 	    this.numSongs = 0;
 	    this.preferredArtist = "";
 	    this.preferredGenre = "";
@@ -90,7 +51,6 @@ public class MusicLibrary {
 	    this.owner = owner;
 	    this.songList = new ArrayList<SongWithRating>();
 	    this.playlists = new ArrayList<Playlist>();
-	    this.numPlaylists = 0;
 	    this.numSongs = 0;
 	    this.preferredArtist = "";
 	    this.preferredGenre = "";
@@ -100,7 +60,7 @@ public class MusicLibrary {
 	    List<SongSummaryDTO> list = new ArrayList<SongSummaryDTO>();
 	    for (Song tmp:this.allSongs()) 
 	        list.add(tmp.toSummaryDTO());
-	    return new MusicLibrarySummaryDTO(this.owner.toUserSummaryDTO(), list);
+	    return new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list);
 	}
 	
 	public MusicLibraryDTO toMusicLibraryDTO() {
@@ -110,7 +70,7 @@ public class MusicLibrary {
 	        tmp2.setRatingForThisUser(this.getSongRate(tmp));
 	        list.add(tmp2);
 	    }
-	    return new MusicLibraryDTO(this.owner.toUserSummaryDTO(), list);
+	    return new MusicLibraryDTO(this.owner.toUserDTO(), list);
 	}
 	
 	public void store() {
@@ -150,10 +110,6 @@ public class MusicLibrary {
     private void setPreferredGenre(String preferredGenre) {
         this.preferredGenre = preferredGenre;
         this.update();
-    }
-
-    public int getNumPlaylists() {
-        return numPlaylists;
     }
 
     public boolean addSong(Song song, boolean update) {
@@ -316,31 +272,35 @@ public class MusicLibrary {
 
     static void deleteMusicLibrary(MusicLibrary ml) {
         ODF.get().storeOrUpdate(ml);
+        for (SongWithRating tmp:ml.songList)
+            SongWithRating.deleteSongWithRating(tmp);
+        for (Playlist tmp:ml.playlists)
+            Playlist.deletePlaylist(tmp);
         ODF.get().delete(ml);
     }
     
     
     
     //Playlist's methods
-    public void addPlaylist(String playlistName) throws DatastoreException {
+    public boolean addPlaylist(String playlistName) {
         if (this.getPlaylist(playlistName) == null) {
             Playlist tmp = new Playlist(playlistName);
             this.playlists.add(tmp);
-            this.numPlaylists++;
             this.update();
+            return true;
         }
-        else throw new DatastoreException();
+        else return false;
     }
     
-    public void removePlaylist(String playlistName) throws DatastoreException {
+    public boolean removePlaylist(String playlistName) {
         Playlist playlist = this.getPlaylist(playlistName);
         if (playlist != null) {
             this.playlists.remove(playlist);
             Playlist.deletePlaylist(playlist);
-            this.numPlaylists--;
             this.update();
+            return true;
         }
-        else throw new DatastoreException();
+        else return false;
     }
 
     private Playlist getPlaylist(String playlistName) {
@@ -417,7 +377,9 @@ public class MusicLibrary {
     }
     
     
-    //NESTED CLASS: PLAYLIST, IT'S NECESSARY FOR IMPLEMENTATION WITH TWIG-PERIST  
+    
+    //---------------------------------------------------//
+    //----------Classe per gestire PLAILISTS-------------//
     static private class Playlist {
         
         @Id private String name;
@@ -478,4 +440,50 @@ public class MusicLibrary {
         }
     }
 
+    
+    
+    //---------------------------------------------------//
+    //----------classe per gestione RATINGS--------------//
+    static private class SongWithRating {
+
+        private String songId;
+        
+        private int rating;
+        
+        @SuppressWarnings("unused")
+        public SongWithRating() {
+            this.songId = Song.SEPARATOR;
+            this.rating = -1;
+        }
+        
+        public SongWithRating(String songId) {
+            this.songId = songId;
+            this.rating = -1;
+            this.update();
+        }
+        
+        void update() {
+            ODF.get().storeOrUpdate(this);
+        }
+
+        public String getSongId() {
+            return songId;
+        }
+
+        public void setRating(int rating) {
+            this.rating = rating;
+            this.update();
+        }
+
+        public int getRating() {
+            return rating;
+        }
+        
+        static void deleteSongWithRating(SongWithRating s) {
+            ODF.get().storeOrUpdate(s);
+            ODF.get().delete(s);
+        }
+    }
+    //---------------------------------------------------
+    
 }

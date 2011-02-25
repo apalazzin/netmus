@@ -26,7 +26,7 @@
   
   <servlet>
     <servlet-name>songsService</servlet-name>
-    <servlet-class>it.unipd.netmus.server.SongsServiceImpl</servlet-class>
+    <servlet-class>it.unipd.netmus.server.SongServiceImpl</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>songsService</servlet-name>
@@ -35,7 +35,7 @@
   
   <servlet>
     <servlet-name>usersService</servlet-name>
-    <servlet-class>it.unipd.netmus.server.UsersServiceImpl</servlet-class>
+    <servlet-class>it.unipd.netmus.server.UserServiceImpl</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>usersService</servlet-name>

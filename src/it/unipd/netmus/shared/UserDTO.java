@@ -3,27 +3,29 @@
  */
 package it.unipd.netmus.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author ValterTexasGroup
  *
  */
+
 @SuppressWarnings("serial")
-public class UserDTO extends UserSummaryDTO {
-	
+public class UserDTO implements Serializable {
+    
+    private String user_name;
+    private String nick_name;
 	private String firstName;
 	private String lastName;
 	private String gender;
 	private String nationality;
 	private String aboutMe;
 	private Date birthDate;
-	private Date registrationDate;
-	private Date lastLogin;
-	private Date lastImport;
+    private Date last_session_id;
+    private boolean is_google_user;
 	
     public UserDTO() {
-        super();
     }
 
     public String getFirstName() {
@@ -74,27 +76,35 @@ public class UserDTO extends UserSummaryDTO {
         this.birthDate = birthDate;
     }
 
-    public Date getRegistrationDate() {
-        return registrationDate;
+    public String getUser() {
+        return user_name;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setUser(String user_name) {
+        this.user_name = user_name;
     }
 
-    public Date getLastLogin() {
-        return lastLogin;
+    public String getNickName() {
+        return nick_name;
     }
 
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
+    public void setNickName(String nick_name) {
+        this.nick_name = nick_name;
     }
 
-    public Date getLastImport() {
-        return lastImport;
+    public Date getLastSessionId() {
+        return last_session_id;
     }
 
-    public void setLastImport(Date lastImport) {
-        this.lastImport = lastImport;
+    public void setLastSessionId(Date last_session_id) {
+        this.last_session_id = last_session_id;
+    }
+
+    public boolean isGoogleUser() {
+        return is_google_user;
+    }
+
+    public void setIsGoogleUser(boolean is_google_user) {
+        this.is_google_user = is_google_user;
     }
 }

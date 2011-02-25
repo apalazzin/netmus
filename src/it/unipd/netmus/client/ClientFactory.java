@@ -1,7 +1,5 @@
 package it.unipd.netmus.client;
 
-import it.unipd.netmus.client.ui.EditSongsView;
-import it.unipd.netmus.client.ui.EditUserView;
 import it.unipd.netmus.client.ui.LoginView;
 import it.unipd.netmus.client.ui.ProfileView;
 import com.google.gwt.event.shared.EventBus;
@@ -13,6 +11,4 @@ public interface ClientFactory
 	PlaceController getPlaceController();
 	LoginView getLoginView();
 	ProfileView getProfileView();
-	EditUserView getEditUserView();
-	EditSongsView getEditSongsView();
 }

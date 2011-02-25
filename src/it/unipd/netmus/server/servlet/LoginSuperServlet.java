@@ -21,7 +21,6 @@ public abstract class LoginSuperServlet extends HttpServlet {
       StringBuffer requestURL = request.getRequestURL();
       String callbackURL = requestURL.toString();
       callbackURL += "callback";
-      // System.out.println("callback url: " + callbackURL);
       return callbackURL;
     }
 

@@ -10,6 +10,6 @@ import it.unipd.netmus.client.place.*;
  * annotation or by extending PlaceHistoryMapperWithFactory and creating a
  * separate TokenizerFactory.
  */
-@WithTokenizers( { LoginPlace.Tokenizer.class, ProfilePlace.Tokenizer.class, EditUserPlace.Tokenizer.class, EditSongsPlace.Tokenizer.class })
+@WithTokenizers( { LoginPlace.Tokenizer.class, ProfilePlace.Tokenizer.class })
 public interface NetmusPlaceHistoryMapper extends PlaceHistoryMapper {
 }

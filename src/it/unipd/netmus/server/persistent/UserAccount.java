@@ -6,7 +6,6 @@ package it.unipd.netmus.server.persistent;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
-import it.unipd.netmus.shared.UserSummaryDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -45,12 +44,6 @@ public class UserAccount {
 
    private Date birthDate;
    
-   private Date registrationDate;
-   
-   private Date lastLogin;
-   
-   private Date lastImport;
-   
    @Index private String lastSessionId;
    
    private boolean isGoogleUser;
@@ -62,14 +55,11 @@ public class UserAccount {
        this.firstName = "";
        this.gender = "";
        this.isGoogleUser = false;
-       this.lastImport = new Date(0);
-       this.lastLogin = new Date(0);
        this.lastName = "";
        this.lastSessionId = "";
        this.nationality = "";
        this.nickName = "";
        this.passwordHash = "";
-       this.registrationDate = new Date(0);
        this.user = "";
    }
    
@@ -82,13 +72,10 @@ public class UserAccount {
        this.birthDate = new Date(0);
        this.firstName = "";
        this.gender = "";
-       this.lastImport = new Date(0);
-       this.lastLogin = new Date(0);
        this.lastName = "";
        this.lastSessionId = "";
        this.nationality = "";
        this.nickName = "";
-       this.registrationDate = new Date(0);
        this.store();
    }
    
@@ -110,28 +97,17 @@ public class UserAccount {
        return tmp;
    }
    
-   public UserSummaryDTO toUserSummaryDTO() {
-       UserSummaryDTO tmp = new UserSummaryDTO();
-       tmp.setUser(this.user);
-       tmp.setNickName(this.nickName);
-       //tmp.setAvatar(this.avatar);
-       return tmp;
-   }
-   
    public UserDTO toUserDTO() {
        UserDTO tmp = new UserDTO();
        tmp.setUser(this.user);
        tmp.setNickName(this.nickName);
-       //tmp.setAvatar(this.avatar);
        tmp.setAboutMe(this.aboutMe);
        tmp.setBirthDate(this.birthDate);
        tmp.setFirstName(this.firstName);
        tmp.setGender(this.gender);
-       tmp.setLastImport(this.lastImport);
-       tmp.setLastLogin(this.lastLogin);
        tmp.setLastName(this.lastName);
        tmp.setNationality(this.nationality);
-       tmp.setRegistrationDate(this.registrationDate);
+       tmp.setIsGoogleUser(this.isGoogleUser);
        return tmp;
    }
    
@@ -139,16 +115,13 @@ public class UserAccount {
        UserCompleteDTO tmp = new UserCompleteDTO();
        tmp.setUser(this.user);
        tmp.setNickName(this.nickName);
-       //tmp.setAvatar(this.avatar);
        tmp.setAboutMe(this.aboutMe);
        tmp.setBirthDate(this.birthDate);
        tmp.setFirstName(this.firstName);
        tmp.setGender(this.gender);
-       tmp.setLastImport(this.lastImport);
-       tmp.setLastLogin(this.lastLogin);
        tmp.setLastName(this.lastName);
        tmp.setNationality(this.nationality);
-       tmp.setRegistrationDate(this.registrationDate);
+       tmp.setIsGoogleUser(this.isGoogleUser);
        tmp.setMusicLibrary(this.musicLibrary.toMusicLibraryDTO());
        return tmp;
    }
@@ -237,33 +210,6 @@ public class UserAccount {
 
    public void setBirthDate(Date birthDate) {
        this.birthDate = birthDate;
-       this.update();
-   }
-
-   public Date getRegistrationDate() {
-       return registrationDate;
-   }
-
-   public void setRegistrationDate(Date registrationDate) {
-       this.registrationDate = registrationDate;
-       this.update();
-   }
-
-   public Date getLastLogin() {
-       return lastLogin;
-   }
-
-   public void setLastLogin(Date lastLogin) {
-       this.lastLogin = lastLogin;
-       this.update();
-   }
-
-   public Date getLastImport() {
-       return lastImport;
-   }
-
-   public void setLastImport(Date lastImport) {
-       this.lastImport = lastImport;
        this.update();
    }
 

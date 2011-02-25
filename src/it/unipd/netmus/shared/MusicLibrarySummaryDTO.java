@@ -12,23 +12,23 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MusicLibrarySummaryDTO implements Serializable {
     
-    private UserSummaryDTO owner;
+    private UserDTO owner;
     
     private List<SongSummaryDTO> songs;
     
     public MusicLibrarySummaryDTO() {
     }
     
-    public MusicLibrarySummaryDTO(UserSummaryDTO user, List<SongSummaryDTO> s){
+    public MusicLibrarySummaryDTO(UserDTO user, List<SongSummaryDTO> s){
         setOwner(user);
         setSongs(s);
     }
 
-    public void setOwner(UserSummaryDTO owner) {
+    public void setOwner(UserDTO owner) {
         this.owner = owner;
     }
 
-    public UserSummaryDTO getOwner() {
+    public UserDTO getOwner() {
         return owner;
     }
 

@@ -25,11 +25,7 @@ import com.google.appengine.api.datastore.Text;
 
 import de.umass.lastfm.cache.Cache;
 
-/**
- * This Cache implementation can be used on the Google App Engine servers.
- * Note that this is only experimental, please report any errors 
- * @author Janni Kovacs
- */
+
 public class AppEngineCache extends Cache {
 
         private static final String KIND = "lfm_cache";

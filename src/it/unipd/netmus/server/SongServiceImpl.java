@@ -3,7 +3,7 @@
  */
 package it.unipd.netmus.server;
 
-import it.unipd.netmus.client.service.SongsService;
+import it.unipd.netmus.client.service.SongService;
 import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
@@ -16,17 +16,31 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  *
  */
 @SuppressWarnings("serial")
-public class SongsServiceImpl extends RemoteServiceServlet implements
-      SongsService {
+public class SongServiceImpl extends RemoteServiceServlet implements
+      SongService {
 
     @Override
     public double rateSong(String user, SongSummaryDTO song, int rating) {
         UserAccount userAccount = UserAccount.load(user);
         MusicLibrary library = userAccount.getMusicLibrary();
         library.rateSong(Song.loadFromDTO(song), rating);
-        System.out.println("Rating della canzone: "+Song.loadFromDTO(song).getRatingDouble());
-        System.out.println("Rating dato da questo utente alla canzone: "+library.getSongRate(Song.loadFromDTO(song)));
         return Song.loadFromDTO(song).getRatingDouble();
+        
+        
+    }
+
+    @Override
+    public boolean editSong(String user, String artist, String title,
+            String album) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean deleteSong(String user, String artist, String title,
+            String album) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

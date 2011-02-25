@@ -26,8 +26,6 @@ public class SongDTO extends SongSummaryDTO {
 	
 	private String youtube_code;
 	
-	private String playme_code;
-	
 	private double rating;
 	
 	private int num_ratings;
@@ -91,14 +89,6 @@ public class SongDTO extends SongSummaryDTO {
 
     public String getYoutubeCode() {
         return youtube_code;
-    }
-
-    public void setPlaymeCode(String playme_code) {
-        this.playme_code = playme_code;
-    }
-
-    public String getPlaymeCode() {
-        return playme_code;
     }
 
     public void setRating(double rating) {
