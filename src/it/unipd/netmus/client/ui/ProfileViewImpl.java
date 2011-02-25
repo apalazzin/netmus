@@ -1122,6 +1122,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            player.getElement().getStyle().setLeft(5, Style.Unit.PX);
            youtube.add(player);
            
+           player.getElement().getStyle().setZIndex(3);
+           
            info_youtube.getElement().setInnerText(selected_song.titolo + ". " + selected_song.autore);
            info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
            
@@ -1139,7 +1141,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            chiudi_youtube.getElement().getStyle().setOpacity(1);
 
            
-           player.getElement().setInnerHTML("<iframe title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
+           player.getElement().setInnerHTML("<iframe style=\"z-index: 3;\" title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
        }
        
 

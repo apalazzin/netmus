@@ -217,6 +217,52 @@
 }
 
 
+.edit_profile {
+	
+	
+	
+	width: 600px;
+	height: 70%;
+	
+	min-height: 450px;      	
+	
+	border: 2px solid #AAAAAA;
+	
+	background: rgba(153, 153, 153, 0.70);
+	
+	display: hidden;
+	
+	position: absolute;
+	
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	
+	margin: auto;
+	
+	z-index: 10;  
+		
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+   	
+   	-webkit-transition: margin 0.3s ease-in-out;
+	-moz-transition: margin 0.3s ease-in-out;
+	-o-transition: margin 0.3s ease-in-out;
+	transition: margin 0.3s ease-in-out;
+   	
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
+	
+}
+
+
 .elimina_playlist {
 	
 	position: absolute;
@@ -801,6 +847,7 @@
 	font-size: 11px;
 	text-align: center;
 	
+	z-index: 3;
 	
 	border: 2px solid #CCCCCC;
 	
