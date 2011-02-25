@@ -39,16 +39,16 @@ final class AppletConnector {
     x.@it.unipd.netmus.client.applet.AppletBar::translateXML(Ljava/lang/String;)(result);
     };
     $wnd.scanStatus = function (actual, total) {
-    x.@it.unipd.netmus.client.applet.AppletBarView::scanningStatus(II)(actual, total);
+    @it.unipd.netmus.client.applet.AppletBarView::scanningStatus(II)(actual, total);
     };
     $wnd.showStatus = function (s) {
-    x.@it.unipd.netmus.client.applet.AppletBarView::showStatus(Ljava/lang/String;)(s);
+    @it.unipd.netmus.client.applet.AppletBarView::showStatus(Ljava/lang/String;)(s);
     };
     $wnd.rescanVisible = function () {
-    x.@it.unipd.netmus.client.applet.AppletBarView::rescanVisible()();
+    @it.unipd.netmus.client.applet.AppletBarView::rescanVisible()();
     };
     $wnd.rescanNotVisible = function () {
-    x.@it.unipd.netmus.client.applet.AppletBarView::rescanNotVisible()();
+    @it.unipd.netmus.client.applet.AppletBarView::rescanNotVisible()();
     };
     }-*/;
     
