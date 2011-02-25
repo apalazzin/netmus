@@ -66,7 +66,6 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
 	    
-
 		AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
@@ -84,50 +83,33 @@ public class ProfileActivity extends AbstractActivity implements
                 final ProfileView profileView = clientFactory.getProfileView();
                 
                 clientFactory.getEventBus().addHandler(DeviceScannedEvent.TYPE, new DeviceScannedEventHandler() {
-                    
                     @Override
                     public void onScanDevice(DeviceScannedEvent event) {
-                        
-                        
                         AsyncCallback<UserCompleteDTO> callbackUpdateUser = new AsyncCallback<UserCompleteDTO>() {
-
                             @Override
                             public void onFailure(Throwable caught) {
-                                // TODO Auto-generated method stub
-                                
                             }
-
                             @Override
                             public void onSuccess(UserCompleteDTO result) {
-                                
                                 current_user = result;
                                 setSongs();
-                                profileView.paintPlaylist(getPlaylistList()); 
-                                
+                                profileView.paintPlaylist(getPlaylistList());   
                             }
-                        
                         };
                         usersServiceSvc.loadProfile(user, callbackUpdateUser);
-
                     }
                 });
                 
                 profileView.setName(name);
                 profileView.setPresenter(ProfileActivity.this);
                 
-                
                 //inizializzazione dell'UserCompleteDTO mantenuto nell'activity
                 AsyncCallback<UserCompleteDTO> callback2 = new AsyncCallback<UserCompleteDTO>() {
-
                     @Override
                     public void onFailure(Throwable caught) {
-                        // TODO Auto-generated method stub
-                        
                     }
-
                     @Override
                     public void onSuccess(UserCompleteDTO result) {
-                        // TODO Auto-generated method stub
                         current_user = result;
                         setSongs();
                         profileView.paintPlaylist(getPlaylistList());
@@ -135,14 +117,12 @@ public class ProfileActivity extends AbstractActivity implements
                         profileView.setInfo(getSongInfo());
                         containerWidget.setWidget(profileView.asWidget());
                         profileView.setLayout();
-
                     }
-                
                 };
                 usersServiceSvc.loadProfile(user, callback2);
                 
                 //load the applet bar, if not active yet
-                AppletBar.get(user,true).appletBarON();
+                AppletBar.get(user).appletBarON();
             }
             
         };
@@ -162,42 +142,39 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 
 
-   @Override
-   public void logout() {
+    @Override
+    public void logout() {
+       
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+             logger.info("Logout Error");
+            }
+            @Override
+            public void onSuccess(String user) {
+                logger.info("Logout user: "+user);
+            
+                // remove the session cookie
+                Cookies.removeCookie("user");
+                Cookies.removeCookie("sid");
+            
+                // hide and disable the applet
+                AppletBar.get(user).appletBarOFF();
+            
+                goTo(new LoginPlace(""));
+            }
+        };
       
-      AsyncCallback<String> callback = new AsyncCallback<String>() {
-         @Override
-         public void onFailure(Throwable caught) {
-            logger.info("Logout Error");
-         }
-
-         @Override
-         public void onSuccess(String user) {
-            logger.info("Logout user: "+user);
-            
-            // remove the session cookie
-            Cookies.removeCookie("user");
-            Cookies.removeCookie("sid");
-            
-            // hide and disable the applet
-            AppletBar.get(user,true).appletBarOFF();
-            
-            goTo(new LoginPlace(""));
-         }
-      };
-      
-      try {
-         loginServiceSvc.logout(callback);
-      } catch (Exception e) {
-      }
-   }
+        try {
+            loginServiceSvc.logout(callback);
+        } catch (Exception e) {}
+    }
 
 	
 	@Override
 	public void setPlaylistList() {
 	    
 	    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
-	    
 	}
 	
 	public String[] getPlaylistList() {
@@ -205,9 +182,7 @@ public class ProfileActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock","Casa", "Vacanze"};
 		return playlists;
-		
 	}
-
 	
 	
 	@Override
@@ -224,7 +199,6 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 
 	
-	
 	@Override
 	public void setSongInfo() {
 	    
@@ -236,7 +210,6 @@ public class ProfileActivity extends AbstractActivity implements
 		return "Nessun brano in ascolto.";
 	}
 
-	
 	
 	@Override
 	public void setPlaylistSongs(String titoloPlaylist) {
@@ -254,7 +227,6 @@ public class ProfileActivity extends AbstractActivity implements
         
     }
 
-    
     
     @Override
     public void playYouTube(String autore, String titolo, String album) {
@@ -297,7 +269,6 @@ public class ProfileActivity extends AbstractActivity implements
         return song_list;
     }
 
-    
     
     @Override
     public void addToPLaylist(String playlist, String autore, String titolo, String album) {
