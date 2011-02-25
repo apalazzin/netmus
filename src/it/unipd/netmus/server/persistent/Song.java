@@ -129,12 +129,19 @@ public class Song {
         //prelievo delle informazioni dal DTO
         Song s = new Song().changeAlbum(song.getAlbum()).changeArtist(song.getArtist()).changeTitle(song.getTitle());
         
-        String cover = Utils.getCoverImage(s.getTitle()+" "+s.getArtist());
-        String code = Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist());
-        if (cover != null)
+        if (s.getAlbumCover().equals("")) {
             s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-        if (code != null)
+        }
+        if (s.getYoutubeCode().equals("")) {
             s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+        }
+        
+//        String cover = Utils.getCoverImage(s.getTitle()+" "+s.getArtist());
+//        String code = Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist());
+//        if (cover != null)
+//            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+//        if (code != null)
+//            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         
         //System.out.println("BRANO: "+s.getTitle());
         
@@ -147,10 +154,11 @@ public class Song {
             s.setTrackNumber(song.getTrackNumber());
         if (s.getYear() == "" && song.getYear() != null)
             s.setYear(song.getYear());
-        if (s.getYoutubeCode() == "")
-            s.setYoutubeCode(s.getYoutubeCode());
-        if (s.getAlbumCover() == "")
-            s.setAlbumCover(s.getAlbumCover());
+//        if (s.getYoutubeCode() == "")
+//            s.setYoutubeCode(s.getYoutubeCode());
+//        if (s.getAlbumCover() == "")
+//            s.setAlbumCover(s.getAlbumCover());
+        
     
         /////////////////////////////////////////////////////////////////////////////////
         //se le informazioni primarie sono complete procede con la ricerca nel database
