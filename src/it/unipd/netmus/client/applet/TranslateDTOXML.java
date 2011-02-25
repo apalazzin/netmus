@@ -102,7 +102,9 @@ public class TranslateDTOXML {
 		while (node.hasChildNodes()){
 			Element child = (Element) node.getFirstChild();
 			String name = child.getNodeName();
-			if (name.equals(FILE_NAME)) song.setFile(clearFileName(child.getFirstChild().getNodeValue()));
+			//System.out.println(child.getFirstChild().getNodeValue());
+			//if (name.equals(FILE_NAME)) song.setFile(clearFileName(child.getFirstChild().getNodeValue()));
+			if (name.equals(FILE_NAME)) song.setFile(child.getFirstChild().getNodeValue());
 			else if (name.equals(ALBUMTITLE_NAME)) song.setAlbum(child.getFirstChild().getNodeValue());
 			else if (name.equals(AUTHORCOMPOSER_NAME)) song.setComposer(child.getFirstChild().getNodeValue());
 			else if (name.equals(LEADARTIST_NAME)) song.setArtist(child.getFirstChild().getNodeValue());
