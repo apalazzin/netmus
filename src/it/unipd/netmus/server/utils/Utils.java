@@ -42,8 +42,11 @@ public final class Utils {
             
             if (t==null)
                 return "";
-            else
-                return t.getImageURL(ImageSize.EXTRALARGE);
+            else {
+                if (t.getImageURL(ImageSize.EXTRALARGE) != null)
+                    return t.getImageURL(ImageSize.EXTRALARGE);
+                else return "";
+            }
         } catch (Exception e) {
             return "";
         }
