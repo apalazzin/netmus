@@ -169,13 +169,13 @@
 			   	
 			   	<g:HorizontalPanel styleName="{style.edit_profile_top}">
 			   		<g:HorizontalPanel styleName="{style.edit_profile_user}">
-			   			<g:Label styleName="{style.edit_profile_labelu}">giovytr#trezzi.net</g:Label>			   		
+			   			<g:Label ui:field="edit_profile_utente" styleName="{style.edit_profile_labelu}">giovytr#trezzi.net</g:Label>			   		
 			   		</g:HorizontalPanel>
 			   	</g:HorizontalPanel>
 			   	
 				<g:HorizontalPanel styleName="{style.edit_profile_checkC}">
-			   		<g:Image ui:field="edit_profile_check" styleName="{style.edit_profile_check}" url="images/check_green.png"/>
-			   		<g:Button styleName="{style.edit_profile_checkT}">Salva le modifiche.</g:Button>
+			   		<g:Image ui:field="edit_profile_checkImg" styleName="{style.edit_profile_check}" url="images/check_green.png"/>
+			   		<g:Button ui:field="edit_profile_check" styleName="{style.edit_profile_checkT}">Salva le modifiche.</g:Button>
 			   	</g:HorizontalPanel>
 			   		
 			   		
@@ -192,12 +192,12 @@
 			   		
 			   		<g:HTMLPanel styleName="{style.edit_profile_right}">
 			   		<g:VerticalPanel ui:field="edit_profile_vr">
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">########</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">yoller</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Giovanni</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Trezzi</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Italy</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_labelf}">Maschio</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_password" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_nickname" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_name" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_surname" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_nationality" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_gender" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
 			   		</g:VerticalPanel>
 			   		</g:HTMLPanel>
 
@@ -205,18 +205,18 @@
 			   		<g:HTMLPanel styleName="{style.edit_profile_conferma}">
 			   		<g:VerticalPanel ui:field="edit_profile_vc">
 				   		<g:HorizontalPanel styleName="{style.edit_profile_row}">
-				   			<g:Label styleName="{style.edit_profile_label}"> Conferma:&nbsp;&nbsp;&nbsp;</g:Label>
-				   			<g:Label styleName="{style.edit_profile_labelf}">########</g:Label>
+				   			<g:Label ui:field="edit_profile_labelCpassword" styleName="{style.edit_profile_label}"> Conferma:&nbsp;&nbsp;&nbsp;</g:Label>
+				   			<g:Label  ui:field="edit_profile_cpassword" styleName="{style.edit_profile_labelf}"></g:Label>
 				   		</g:HorizontalPanel>
 				   	</g:VerticalPanel>
 			   		</g:HTMLPanel>
 
 			   	
 					<g:HTMLPanel ui:field="edit_profile_about" styleName="{style.edit_profile_about}">
-			   		<g:VerticalPanel >
-			   		<g:Label styleName="{style.edit_profile_label}">Inforamzioni su di me:</g:Label>
-			   		<g:HTMLPanel styleName="{style.edit_profile_aboutT}">Clicca qui per inserie le tue informazioni.</g:HTMLPanel>
-			   		</g:VerticalPanel>
+			   			<g:VerticalPanel >
+			   			<g:Label styleName="{style.edit_profile_label}">Inforamzioni su di me:</g:Label>
+			   			<g:HTMLPanel  ui:field="edit_profile_aboutme" styleName="{style.edit_profile_aboutT}"></g:HTMLPanel>
+			   			</g:VerticalPanel>
 					</g:HTMLPanel>			   	
 			   	
 			   	
