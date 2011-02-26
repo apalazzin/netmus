@@ -13,6 +13,8 @@ import java.util.Stack;
 import it.unipd.netmus.client.place.LoginPlace;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -42,14 +44,21 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InsertPanel.ForIsWidget;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -62,6 +71,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+
 
 /**
  * @author smile
@@ -81,6 +91,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private int vertical_semioffset = 275;
    private int rating;
    private double global_rating;
+   private String password;
+   private String cpassword;
    
    private CellTable<Song> lista_canzoni;
    
@@ -104,7 +116,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label song_anno;
    @UiField Label song_compositore;
    @UiField Label song_traccia;
-
+   @UiField Label edit_profile_password;
+   @UiField Label edit_profile_cpassword;
+   @UiField Label edit_profile_nickname;
+   @UiField Label edit_profile_name;
+   @UiField Label edit_profile_surname;
+   @UiField Label edit_profile_nationality;
+   @UiField Label edit_profile_gender;
+   @UiField Label edit_profile_labelCpassword;   
+   @UiField Label edit_profile_utente;
+   
    @UiField(provided=true) CellTable<Song> catalogo; 
    @UiField HTMLPanel container;
    @UiField HTMLPanel catalogo_container;
@@ -125,6 +146,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel info_youtube;
    @UiField HTMLPanel youtube_appendice;
    @UiField HTMLPanel edit_profile;
+   @UiField HTMLPanel edit_profile_aboutme;
 
    
    @UiField Image play;
@@ -155,8 +177,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image song_cover;
    @UiField Image elimina_playlist;
    @UiField Image edit_profile_chiudi;
+   @UiField Image edit_profile_checkImg;
    
-   
+   @UiField Button edit_profile_check;
+
+   @UiField VerticalPanel edit_profile_vc;
+
    boolean playlist_opened; 
    boolean song_opened; 
    
@@ -784,7 +810,51 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        account_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
 
+ 
 
+   @UiHandler("edit_profile_nickname")
+   void handleMouseOverEditProfileNickname(MouseOverEvent e) {
+      edit_profile_nickname.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   @UiHandler("edit_profile_name")
+   void handleMouseOverEditProfileName(MouseOverEvent e) {
+      edit_profile_name.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }   
+   
+   @UiHandler("edit_profile_surname")
+   void handleMouseOverEditProfileSurname(MouseOverEvent e) {
+      edit_profile_surname.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   @UiHandler("edit_profile_nationality")
+   void handleMouseOverEditProfileNationality(MouseOverEvent e) {
+      edit_profile_nationality.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   
+   @UiHandler("edit_profile_gender")
+   void handleMouseOverEditProfileGender(MouseOverEvent e) {
+      edit_profile_gender.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   
+
+   @UiHandler("edit_profile_password")
+   void handleMouseOverEditProfilePassword(MouseOverEvent e) {
+      edit_profile_password.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   
+   @UiHandler("edit_profile_cpassword")
+   void handleMouseOverEditProfileCPassword(MouseOverEvent e) {
+      edit_profile_cpassword.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   @UiHandler("edit_profile_check")
+   void handleMouseEditProfileCheck(ClickEvent e) {
+      
+       listener.updateProfile(edit_profile_password.getText(), edit_profile_nickname.getText(), edit_profile_name.getText(), edit_profile_surname.getText(),
+               edit_profile_nationality.getText(), edit_profile_gender.getText(), edit_profile_aboutme.getElement().getInnerHTML());
+       
+   }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -965,7 +1035,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
            }
        };
-       timersd.schedule(100);
+       timersd.schedule(600);
 	
    }
 
@@ -1731,6 +1801,221 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             starG5.setUrl("images/star.png");
         else 
             starG5.setUrl("images/starbw.png");
+        
+    }
+
+
+    ClickHandler MyClickEditProfileHandler = new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            
+            final Label label = (Label) event.getSource();
+            
+            final TextBox nome = new TextBox();
+            nome.setValue(label.getText());
+            nome.getElement().getStyle().setWidth(50, Style.Unit.PCT);
+            
+           ((HorizontalPanel) label.getParent()).add(nome);
+           nome.setFocus(true);
+           label.setVisible(false);
+           
+           nome.addKeyDownHandler(new KeyDownHandler(){
+
+               @Override
+               public void onKeyDown(KeyDownEvent event) {
+
+                   if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    
+                       label.setText(nome.getValue());
+                       nome.removeFromParent();
+                       label.setVisible(true);
+                       if(password.equals(cpassword)) {
+                           edit_profile_check.getElement().getStyle().setOpacity(1);
+                           edit_profile_check.setEnabled(true);
+                           edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                       }                   
+                   }
+               }
+             });       
+            
+           nome.addBlurHandler(new BlurHandler(){
+
+               @Override
+               public void onBlur(BlurEvent event) {
+                   
+                   label.setText(nome.getValue());
+                   nome.removeFromParent();
+                   label.setVisible(true);
+                   if(password.equals(cpassword)) {
+                       edit_profile_check.getElement().getStyle().setOpacity(1);
+                       edit_profile_check.setEnabled(true);
+                       edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                   }
+               }
+           });
+        }
+    };
+    
+    ClickHandler MyClickEditProfilePasswordHandler = new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            
+            edit_profile_vc.setVisible(true);
+            final Label label = (Label) event.getSource();
+            
+            final PasswordTextBox nome = new PasswordTextBox(); 
+            nome.getElement().getStyle().setWidth(65, Style.Unit.PCT);
+            
+           ((HorizontalPanel) label.getParent()).add(nome);
+           nome.setFocus(true);
+           label.setVisible(false);
+           
+           nome.addKeyDownHandler(new KeyDownHandler(){
+
+               @Override
+               public void onKeyDown(KeyDownEvent event) {
+
+                   if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                       label.setText("#######");
+                       if(label.getTitle().equals("password"))
+                       password = nome.getValue();
+                       else if(label.getTitle().equals("cpassword"))
+                       cpassword = nome.getValue();    
+                       nome.removeFromParent();
+                       label.setVisible(true);
+                       if(password.equals(cpassword)) {
+                           edit_profile_check.getElement().getStyle().setOpacity(1);
+                           edit_profile_check.setEnabled(true);
+                           edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                           edit_profile_labelCpassword.getElement().getStyle().setColor("#FFFFFF");
+                       }
+                       else {
+                           edit_profile_checkImg.getElement().getStyle().setOpacity(0);
+                           edit_profile_check.getElement().getStyle().setOpacity(0.5);
+                           edit_profile_check.setEnabled(false);
+                           edit_profile_labelCpassword.getElement().getStyle().setColor("#FF0000");
+                       }
+                   }
+               }
+             });
+           
+           nome.addBlurHandler(new BlurHandler(){
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                label.setText("#######");
+                if(label.getTitle().equals("password"))
+                password = nome.getValue();
+                else if(label.getTitle().equals("cpassword"))
+                cpassword = nome.getValue();    
+                nome.removeFromParent();
+                label.setVisible(true);
+                if(password.equals(cpassword)) {
+                    edit_profile_check.getElement().getStyle().setOpacity(1);
+                    edit_profile_check.setEnabled(true);
+                    edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                    edit_profile_labelCpassword.getElement().getStyle().setColor("#FFFFFF");
+                }
+                else {
+                    edit_profile_checkImg.getElement().getStyle().setOpacity(0);
+                    edit_profile_check.getElement().getStyle().setOpacity(0.5);
+                    edit_profile_check.setEnabled(false);
+                    edit_profile_labelCpassword.getElement().getStyle().setColor("#FF0000");
+                }
+            }
+
+           });
+        }
+    };
+    
+    
+
+    @Override
+    public void showEditProfile(String nickname, String name, String surname,
+            String nationality, String gender, String aboutme) {
+        
+        password = "";
+        cpassword = "";
+        
+        edit_profile_utente.setText(utente.getText());
+        edit_profile_checkImg.getElement().getStyle().setOpacity(0);
+        edit_profile_check.getElement().getStyle().setOpacity(0.5);
+        edit_profile_check.setEnabled(false);
+               
+        edit_profile_nickname.setText(nickname);
+        edit_profile_name.setText(name);
+        edit_profile_surname.setText(surname);
+        edit_profile_nationality.setText(nationality);
+        edit_profile_gender.setText(gender);
+        edit_profile_aboutme.getElement().setInnerHTML(aboutme);
+        
+        edit_profile_vc.setVisible(false);
+        
+        edit_profile_password.setTitle("password");
+        edit_profile_cpassword.setTitle("cpassword");
+        
+        edit_profile_password.addClickHandler(MyClickEditProfilePasswordHandler);
+        edit_profile_cpassword.addClickHandler(MyClickEditProfilePasswordHandler);
+        edit_profile_nickname.addClickHandler(MyClickEditProfileHandler);
+        edit_profile_name.addClickHandler(MyClickEditProfileHandler);
+        edit_profile_surname.addClickHandler(MyClickEditProfileHandler);
+        edit_profile_nationality.addClickHandler(MyClickEditProfileHandler);
+        edit_profile_gender.addClickHandler(MyClickEditProfileHandler);
+        edit_profile_aboutme.addDomHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                
+                final HTMLPanel about = (HTMLPanel) event.getSource();
+                
+                final TextArea nome = new TextArea(); 
+                nome.getElement().getStyle().setWidth(575, Style.Unit.PX);
+                nome.getElement().getStyle().setHeight(115, Style.Unit.PX);
+                nome.getElement().getStyle().setProperty("resize", "none");
+                nome.setValue(about.getElement().getInnerHTML());
+               ((VerticalPanel)about.getParent()).add(nome);
+               nome.setFocus(true);
+               about.setVisible(false);
+               
+               nome.addKeyDownHandler(new KeyDownHandler(){
+
+                   @Override
+                   public void onKeyDown(KeyDownEvent event) {
+
+                       if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                        
+                           about.getElement().setInnerHTML(nome.getValue());
+                           nome.removeFromParent();
+                           about.setVisible(true);
+                           if(password.equals(cpassword)) {
+                               edit_profile_check.getElement().getStyle().setOpacity(1);
+                               edit_profile_check.setEnabled(true);
+                               edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                           }
+                       }
+                   }
+                 });       
+                
+               nome.addBlurHandler(new BlurHandler(){
+
+                   @Override
+                   public void onBlur(BlurEvent event) {
+                       
+                       about.getElement().setInnerHTML(nome.getValue());
+                       nome.removeFromParent();
+                       about.setVisible(true);
+                       if(password.equals(cpassword)) {
+                           edit_profile_check.getElement().getStyle().setOpacity(1);
+                           edit_profile_check.setEnabled(true);
+                           edit_profile_checkImg.getElement().getStyle().setOpacity(1);
+                       }
+                   }
+               });
+               
+            }   }, ClickEvent.getType());
+        //addClickHandler(MyClickEditProfileHandler);
         
     }
 	

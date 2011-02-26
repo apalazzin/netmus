@@ -115,8 +115,12 @@ public class ProfileActivity extends AbstractActivity implements
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();
                         profileView.setInfo(getSongInfo());
+                        
+                        profileView.showEditProfile("yoller", "Giovanni", "Trezzi", "Italy", "Maschio", "Clicca qui per inserire le tue informazioni.");
+                        
                         containerWidget.setWidget(profileView.asWidget());
                         profileView.setLayout();
+
                     }
                 };
                 usersServiceSvc.loadProfile(user, callback2);
@@ -440,6 +444,15 @@ public class ProfileActivity extends AbstractActivity implements
             String title, String album) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void updateProfile(String password, String namenickname,
+            String name, String surname, String nationality, String gender,
+            String aboutme) {
+        // TODO Auto-generated method stub
+        //una volta aggiornati i dati utente reimposta la editprofile sulla view
+        clientFactory.getProfileView().showEditProfile("yoller", "Giovanni", "Trezzi", "Italy", "Maschio", "Clicca qui per inserire le tue informazioni.");
     }
 
 }
