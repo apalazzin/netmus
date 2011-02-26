@@ -71,6 +71,8 @@ public interface ProfileView extends IsWidget {
    void showStar(int index);
    //Aggiorna il global rating
    void showGlobalStar(double d);
+   //aggiorna carica dati dell'EditProifle
+   void showEditProfile(String nickname, String name, String surname, String nationality, String gender, String aboutme);
    
    public interface Presenter
    {
@@ -146,6 +148,10 @@ public interface ProfileView extends IsWidget {
       
       //Salva il nome dell'artista che è stato modificato dall'utente
       void editSongArtist(String new_artist, String old_artist, String title, String album);
+
+      //Aggiorna i dati dell'utente
+      void updateProfile(String password, String nickname, String name, String surname, String nationality, String gender, String aboutme);
+
       
    }
 
