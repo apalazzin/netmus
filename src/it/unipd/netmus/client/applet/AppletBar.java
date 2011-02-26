@@ -101,12 +101,12 @@ public class AppletBar {
         AppletBarView.showStatus(constants.xmlParsing());
         List<SongDTO> new_songs = translator.XMLToDTO(result);
         if (new_songs == null)
-            AppletBarView.showStatus(constants.xmlParsingErroor());
+            AppletBarView.showStatus(constants.xmlParsingError());
         
         AsyncCallback<Void> callback = new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable caught) {
-                AppletBarView.showStatus(constants.sendingErroor());
+                AppletBarView.showStatus(constants.sendingError());
                 System.err.println(caught.toString());
             }
             @Override
