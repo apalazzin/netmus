@@ -8,6 +8,7 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -16,6 +17,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -41,7 +43,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    private Presenter listener;
    private LoginType type;
    
-   @UiField Label login;
+   @UiField Button login;
    @UiField Label account;
    @UiField Label register;
    @UiField Label error;
@@ -61,7 +63,7 @@ public class LoginViewImpl extends Composite implements LoginView {
       //localizzazione
       login.setText(myConstants.loginLabel());
       register.setText(myConstants.registerSwitchLabel());
-      account.setText(myConstants.accountGoogle());
+      account.setText(myConstants.accountNetmus());
       check_netmus.setValue(true);
       
       Timer timerMain = new Timer() {
@@ -195,14 +197,27 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("check_google")
    void handleClickGoogle(ClickEvent e) {
 
+       Timer timerLoginLabel = new Timer() {
+           public void run() {
+               login.setText(myConstants.accountGoogleLogin());
+           }
+       };
+       timerLoginLabel.schedule(400);
+       
+       login.setWidth("424px");
 	   account.setText(myConstants.accountGoogle());
 	   type = LoginType.GOOGLELOGIN;
 	   
 	   if(check_netmus.getValue()) {
-		   
+	       
+	       
+		   DOM.getElementById("labels").getStyle().setOpacity(0);
 		   check_netmus.setValue(false);
 		   user.setEnabled(false);
+		   user.getElement().getStyle().setOpacity(0);
 		   password.setEnabled(false);
+           password.getElement().getStyle().setOpacity(0);
+
 	   }
      
    }
@@ -210,14 +225,27 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiHandler("check_netmus")
    void handleClickNetmus(ClickEvent e) {
 	   
+       login.setText("Login");
+       login.setWidth("80px");
+       
 	   account.setText(myConstants.accountNetmus());
 	   type = LoginType.NETMUSLOGIN;
 	   
 	   if(check_google.getValue()) {
+
+	       Timer timerLoginLabel = new Timer() {
+	           public void run() {
+	               DOM.getElementById("labels").getStyle().setOpacity(1);
+	               check_google.setValue(false);
+	               user.setEnabled(true);
+	               user.getElement().getStyle().setOpacity(1);
+	               password.setEnabled(true);
+	               password.getElement().getStyle().setOpacity(1);
+	           }
+	       };
+	       timerLoginLabel.schedule(400);
+	       
 		   
-		   check_google.setValue(false);
-		   user.setEnabled(true);
-           password.setEnabled(true);
 		   
 	   }
      

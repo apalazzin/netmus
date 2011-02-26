@@ -530,7 +530,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 */   
    @UiHandler("logout")
    void handleClickLogout(ClickEvent e) {
-      listener.logout();
+      closeSong();
+      closePlaylist();
+      listener.logout();      
    }
    
    @UiHandler("play")
@@ -1248,7 +1250,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            chiudi_youtube.getElement().getStyle().setOpacity(1);
 
            
-           player.getElement().setInnerHTML("<iframe style=\"z-index: 3;\" title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1\" frameborder=\"0\" allowfullscreen></iframe>");
+           player.getElement().setInnerHTML("<iframe style=\"z-index: 3;\" title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1&ap=%2526fmt%3D18&iv_load_policy=3\" frameborder=\"0\" allowfullscreen></iframe>");
        }
        
 
