@@ -61,20 +61,22 @@
 
 .login {
 
-	float: right;
+	position: absolute;
+	top: 42px;
+	right: 30px;
 	color: #37A6EB;
 	font-family: Verdana;
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: bold;
 	text-align: center;
-	width: 50px;
-	border: 0px solid #FF0000;
+	width: 80px;
 	margin-left: 5px;
 	
-	-webkit-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
-	-moz-transition: opacity 0.2s ease, height 1s ease-in-out;
-	-o-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
-	transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	
+	-webkit-transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
+	-moz-transition: opacity 0.2s ease, width 0.5s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
+	transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
 	
 	
 }
