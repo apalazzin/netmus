@@ -1424,7 +1424,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void setLayout() {
         
         
-            if(Window.getClientWidth()<1200) {
+            if(Window.getClientWidth()<1270) {
                 
                 search.getElement().getStyle().setOpacity(0);
                 social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
@@ -1549,7 +1549,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  
 
                  
-                 if(event.getWidth()<1200) {
+                 if(event.getWidth()<1270) {
                      
                      search.getElement().getStyle().setOpacity(0);
                      social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
