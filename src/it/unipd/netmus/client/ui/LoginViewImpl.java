@@ -125,6 +125,24 @@ public class LoginViewImpl extends Composite implements LoginView {
 		  
 		  type = LoginType.NETMUSREGISTRATION;
 		  
+	       login.setText("Login");
+	       login.setWidth("80px");
+	       
+           
+           Timer timerLoginGLabel = new Timer() {
+               public void run() {
+                   DOM.getElementById("labels").getStyle().setOpacity(1);
+                   check_google.setValue(false);
+                   user.setEnabled(true);
+                   user.getElement().getStyle().setOpacity(1);
+                   password.setEnabled(true);
+                   password.getElement().getStyle().setOpacity(1);
+                   }
+
+               };
+               
+          timerLoginGLabel.schedule(400);
+          
 	      DOM.getElementById("password_check").setInnerHTML(myConstants.passwordCheck());
 
 		  
