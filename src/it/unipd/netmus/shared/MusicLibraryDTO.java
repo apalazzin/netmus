@@ -4,6 +4,7 @@
 package it.unipd.netmus.shared;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 /**
  * @author ValterTexasGroup
@@ -16,12 +17,15 @@ public class MusicLibraryDTO implements Serializable {
 	
 	private List<SongDTO> songs;
 	
+	private List<String> playlists;
+	
 	public MusicLibraryDTO() {
 	}
 	
-	public MusicLibraryDTO(UserDTO user, List<SongDTO> s){
+	public MusicLibraryDTO(UserDTO user, List<SongDTO> songs, List<String> playlists){
 		setOwner(user);
-		setSongs(s);
+		setSongs(songs);
+		setPlaylists(playlists);
 	}
 
     public void setOwner(UserDTO owner) {
@@ -38,5 +42,23 @@ public class MusicLibraryDTO implements Serializable {
 
     public List<SongDTO> getSongs() {
         return songs;
+    }
+
+    public void setPlaylists(List<String> playlists) {
+        this.playlists = playlists;
+    }
+
+    public List<String> getPlaylists() {
+        return playlists;
+    }
+    
+    public void addPlaylist(String playlist_name) {
+        playlists.add(playlist_name);
+    }
+    
+    public void removePlaylist(String playlist_name) {
+        if (playlists.contains(playlist_name)) {
+            playlists.remove(playlist_name);
+        }
     }
 }
