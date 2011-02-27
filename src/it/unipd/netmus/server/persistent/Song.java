@@ -90,8 +90,7 @@ public class Song {
     }
     
     public static Song load(String id) {
-        Song tmp = ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
-        return tmp;
+        return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
     }
     
     public static Song loadFromDTO(SongSummaryDTO dto) {
