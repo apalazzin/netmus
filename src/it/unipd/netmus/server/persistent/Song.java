@@ -129,12 +129,14 @@ public class Song {
         //prelievo delle informazioni dal DTO
         Song s = new Song().changeAlbum(song.getAlbum()).changeArtist(song.getArtist()).changeTitle(song.getTitle());
         
-        if (s.getAlbumCover().equals("")) {
-            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-        }
+        
         if (s.getYoutubeCode().equals("")) {
             s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
         }
+        if (s.getAlbumCover().equals("")) {
+            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+        }
+        
         
 //        String cover = Utils.getCoverImage(s.getTitle()+" "+s.getArtist());
 //        String code = Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist());
