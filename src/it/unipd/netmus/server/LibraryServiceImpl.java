@@ -31,7 +31,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
         
         for (SongDTO songDTO : new_songs) {            
             Song song = Song.storeOrUpdateFromDTO(songDTO);
-            if (song.getAlbum() != "" || song.getArtist() != "" || song.getTitle() != "")
+            if (song != null)
                 useraccount.getMusicLibrary().addSong(song, false);
         }
     }
