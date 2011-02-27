@@ -715,8 +715,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("elimina_playlist")
    void handleClickEliminaPlaylist(ClickEvent e) {
-      closePlaylist();
       listener.deletePlaylist(titolo_playlist.getText());
+      closePlaylist();
    }
 
    @UiHandler("chiudi_playlist")
