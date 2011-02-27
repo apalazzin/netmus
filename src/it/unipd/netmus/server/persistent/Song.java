@@ -37,12 +37,6 @@ import com.google.code.twig.annotation.Index;
 public class Song {
     
     static final String SEPARATOR = "-vt.g-";
-    
-    static final String UNKNOWN_ARTIST = "&unknartst";
-    
-    static final String UNKNOWN_TITLE = "&unknttl";
-    
-    static final String UNKNOWN_ALBUM = "&unknalbm";
 
     @Id private String id;
     
@@ -138,16 +132,6 @@ public class Song {
         }
         
         
-//        String cover = Utils.getCoverImage(s.getTitle()+" "+s.getArtist());
-//        String code = Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist());
-//        if (cover != null)
-//            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-//        if (code != null)
-//            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-        
-        //System.out.println("BRANO: "+s.getTitle());
-        
-        
         if (s.getComposer() == "" && song.getComposer() != null)
             s.setComposer(song.getComposer());
         if (s.getGenre() == "" && song.getGenre() != null)
@@ -155,58 +139,86 @@ public class Song {
         if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
             s.setTrackNumber(song.getTrackNumber());
         if (s.getYear() == "" && song.getYear() != null)
-            s.setYear(song.getYear());
-//        if (s.getYoutubeCode() == "")
-//            s.setYoutubeCode(s.getYoutubeCode());
-//        if (s.getAlbumCover() == "")
-//            s.setAlbumCover(s.getAlbumCover());
-        
+            s.setYear(song.getYear());      
     
         /////////////////////////////////////////////////////////////////////////////////
-        //se le informazioni primarie sono complete procede con la ricerca nel database
+        //INFORMAZIONI PRIMARIE COMPLETE
         if (song.getArtist() != "" && song.getTitle() != "" && song.getAlbum() != "") {
-            //System.out.println("Il brano dell'utente ha le tag artist-title-album complete");
-        }
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete però avendo titolo e album si può risalire all'artista 
-        if (s.getTitle() != "" && s.getAlbum() != "") {
-     
-            //System.out.println("Il brano dell'utente ha solo le tag title-album");
             
+            //prelievo delle informazioni da servizi esterni
+            if (s.getYoutubeCode().equals("")) {
+                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+            }
+            if (s.getAlbumCover().equals("")) {
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+            } 
+            
+            return s;
+        }
+        
+        /////////////////////////////////////////////////////////////////////////////////
+        //MANCA L'ARTISTA 
+        if (s.getTitle() != "" && s.getAlbum() != "") {
+            
+            //prelievo delle informazioni da servizi esterni
+            if (s.getYoutubeCode().equals("")) {
+                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getAlbum()));
+            }  
+            if (s.getAlbumCover().equals("")) {
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getAlbum()));
+            }
+            
+            return s;
         }
         
         
         /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
-        //le possibilità da sottoporre all'utente
+        //MANCA L'ALBUM
         if (s.getTitle() != "" && s.getArtist() != "") {
             
-            //System.out.println("Il brano dell'utente ha solo le tag artist-title");
+            //prelievo delle informazioni da servizi esterni
+            if (s.getYoutubeCode().equals("")) {
+                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+            }
+            if (s.getAlbumCover().equals("")) {
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+            }
             
+            return s;
         } 
             
         
         /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
-        //le possibilità da sottoporre all'utente
+        //MANCA IL TITOLO
         if (s.getAlbum() != "" && s.getArtist() != "") {
             
-            //System.out.println("Il brano dell'utente ha solo le tag artist-album");
+            //prelievo delle informazioni da servizi esterni
+            if (s.getAlbumCover().equals("")) {
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+            } 
             
+            return s;
         }
         
         
         /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, abbiamo a disposizione solo il titolo
+        //MANCANO SIA L'ARTISTA CHE L'ALBUM
         if (s.getTitle() != "") {
             
-            //System.out.println("Il brano dell'utente ha solo le tag title");
+            //prelievo delle informazioni da servizi esterni
+            if (s.getAlbumCover().equals("")) {
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+            }
+            if (s.getYoutubeCode().equals("")) {
+                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+            }  
             
+            return s;
         }
         
-        
-        return s;
+        /////////////////////////////////////////////////////////////////////////////////
+        //MANCANO TUTTE LE INFORMAZIONI PRIMARIE
+        return null;
         
     }
     
@@ -221,11 +233,18 @@ public class Song {
     }
     
     public Song changeTitle(String title) {
-        Song.deleteSong(this);
+        
+        ODF.get().update(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+        
         if (title != null && title.equals("")==false)
             this.title = title;
         else
-            this.title = UNKNOWN_TITLE;
+            this.title = "";
         
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
         if (tmp == null) { 
@@ -238,11 +257,18 @@ public class Song {
     }
 
     public Song changeArtist(String artist) {
-        Song.deleteSong(this);
+        
+        ODF.get().update(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+        
         if (artist != null && artist.equals("")==false)
             this.artist = artist;
         else
-            this.artist = UNKNOWN_ARTIST;
+            this.artist = "";
         
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             
@@ -256,11 +282,18 @@ public class Song {
     }
     
     public Song changeAlbum(String album) {
-        Song.deleteSong(this);
+        
+        ODF.get().storeOrUpdate(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+        
         if (album != null && album.equals("")==false)
             this.album = album;
         else
-            this.album = UNKNOWN_ALBUM;
+            this.album = "";
         
             Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             if (tmp == null) { 
