@@ -192,12 +192,12 @@ public class Song {
         //MANCA IL TITOLO
         if (s.getAlbum() != "" && s.getArtist() != "") {
             
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-            } 
-            
-            return s;
+//            //prelievo delle informazioni da servizi esterni
+//            if (s.getAlbumCover().equals("")) {
+//                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+//            } 
+//            
+            return null;
         }
         
         
@@ -205,15 +205,22 @@ public class Song {
         //MANCANO SIA L'ARTISTA CHE L'ALBUM
         if (s.getTitle() != "") {
             
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-            }
-            if (s.getYoutubeCode().equals("")) {
-                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-            }  
+            SongDTO new_song = Utils.getSongFromFileName(s.getTitle());
             
-            return s;
+            if (new_song == null) {
+                return null;
+            }
+            else {
+                s = new Song().changeAlbum(new_song.getAlbum()).changeArtist(new_song.getArtist()).changeTitle(new_song.getTitle());
+                //prelievo delle informazioni da servizi esterni
+                if (s.getYoutubeCode().equals("")) {
+                    s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                } 
+                if (s.getAlbumCover().equals("")) {
+                    s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                }
+                return s;
+            }
         }
         
         /////////////////////////////////////////////////////////////////////////////////
