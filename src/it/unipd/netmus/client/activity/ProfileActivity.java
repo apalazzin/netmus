@@ -398,9 +398,10 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     @Override
-    public void deleteSong(String song_id) {
+    public void deleteSong(String autore, String titolo, String album) {
         // TODO Auto-generated method stub
-        
+        // una volta eliminata dal database la elimino anche sulla view
+        clientFactory.getProfileView().deleteSong(autore, titolo, album);
     }
 
     @Override

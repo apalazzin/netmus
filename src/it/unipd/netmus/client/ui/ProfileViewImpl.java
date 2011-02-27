@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -179,6 +180,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image aggiungi_playlist;
    @UiField Image song_cover;
    @UiField Image elimina_playlist;
+   @UiField Image elimina_song;
    @UiField Image edit_profile_chiudi;
    @UiField Image edit_profile_checkImg;
    
@@ -355,6 +357,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
             }}, DoubleClickEvent.getType());
 	    
+	    
+	       catalogo.addHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                
+                if(event.getNativeKeyCode() == KeyCodes.KEY_DELETE) {
+                    
+                   listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
+                    
+                }
+                
+            }
+
+	            }, KeyUpEvent.getType());
 	    
 	    
 	    List<Song> list = dataProvider_catalogo.getList();
@@ -891,6 +908,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
 
    }
+   
+   
+   @UiHandler("elimina_song")
+   void handleMouseClickEliminaSong(ClickEvent e) {
+       listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
+   }
+
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -2065,6 +2089,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
     }
 	
+    public void deleteSong(String autore, String titolo, String album) {
+       
+        Song canzone = new Song(autore, titolo, album);
+        
+        dataProvider_catalogo.getList().remove(canzone);
+        canzoni_catalogo.remove(canzone);
+        closeSong();
+    }
 	
         
 }

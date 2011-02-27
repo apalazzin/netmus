@@ -125,6 +125,7 @@
 				</g:HTMLPanel>
 					
 					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="titolo_song" styleName="{style.title_song}"></g:Label></div>
+					<g:Image ui:field="elimina_song" styleName="{style.elimina_song}" url="images/cross_red.png"></g:Image>
 					<g:Image ui:field="chiudi_song" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>					
 					
 				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>	

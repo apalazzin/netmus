@@ -72,7 +72,9 @@ public interface ProfileView extends IsWidget {
    void showGlobalStar(double d);
    //aggiorna carica dati dell'EditProifle
    void showEditProfile(String nickname, String name, String surname, String nationality, String gender, String aboutme);
-   
+   //elimina la canzone dal catalogo
+   void deleteSong(String autore, String titolo, String album);
+
    public interface Presenter
    {
       void logout();
@@ -127,7 +129,7 @@ public interface ProfileView extends IsWidget {
       void viewOtherLibrary(String user);
       
       //Elimina la canzone
-      void deleteSong(String song_id);
+      void deleteSong(String autore, String titolo, String album);
       
       //Esporta la lista delle canzoni in pdf
       void exportPDF(String user);
@@ -149,5 +151,6 @@ public interface ProfileView extends IsWidget {
       void editSongArtist(String new_artist, String old_artist, String title, String album);
 
    }
+
 
 }
