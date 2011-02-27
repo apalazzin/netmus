@@ -15,6 +15,7 @@ import it.unipd.netmus.client.place.LoginPlace;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -22,6 +23,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -61,6 +63,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -183,8 +186,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiField VerticalPanel edit_profile_vc;
 
+   @UiField TextBox search_box;
+
    boolean playlist_opened; 
-   boolean song_opened; 
+   boolean song_opened;
    
    Song selected_song;
    Song selected_song_playlist;
@@ -501,10 +506,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
 	       dataProvider_playlist.addDataDisplay(lista_canzoni);
 	               
-	            
-
-	       
-	       
 	       
 	       playlist_songs.add(lista_canzoni);
 	       
@@ -852,10 +853,43 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("edit_profile_check")
    void handleMouseEditProfileCheck(ClickEvent e) {
-      
+        
        listener.editProfile(edit_profile_utente.getText(), edit_profile_nickname.getText(), edit_profile_name.getText(), edit_profile_surname.getText(),
                edit_profile_gender.getText(), edit_profile_nationality.getText(), edit_profile_aboutme.getElement().getInnerHTML(),password);
        
+   }
+   
+   @UiHandler("search_box")
+   void handleChangeValueSearchBox(KeyUpEvent e) {
+       
+       
+       dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
+       
+       if(!((TextBox)e.getSource()).getValue().equals("")) {
+           List<Song> canzoni_ricerca = new ArrayList<Song>();
+           for (int j=0; j<canzoni_catalogo.size(); j++) {
+           
+               if((canzoni_catalogo.get(j).titolo.toLowerCase()).indexOf(((TextBox)e.getSource()).getValue().toLowerCase())>=0 ||
+                       (canzoni_catalogo.get(j).autore.toLowerCase()).indexOf(((TextBox)e.getSource()).getValue().toLowerCase())>=0 ||
+                           (canzoni_catalogo.get(j).album.toLowerCase()).indexOf(((TextBox)e.getSource()).getValue().toLowerCase())>=0 ) {
+                   
+                 canzoni_ricerca.add(canzoni_catalogo.get(j));
+                   
+               } 
+               
+           }
+           
+           for (Song song : canzoni_ricerca) {
+               dataProvider_catalogo.getList().add(song);
+           }
+           
+       } else {
+           
+           for (Song song : canzoni_catalogo) {
+               dataProvider_catalogo.getList().add(song);
+           }
+       }
+
    }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////

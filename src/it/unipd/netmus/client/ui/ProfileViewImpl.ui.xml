@@ -62,7 +62,7 @@
 				<g:HTMLPanel ui:field="info" styleName="{style.info}">Nessun brano in ascolto.</g:HTMLPanel>
 			
 				<g:HTMLPanel ui:field="search" styleName="{style.search}">
-				<input type="search" style="width: 150px"></input>
+				<g:TextBox ui:field="search_box" styleName="{style.search_box}"></g:TextBox>
 				<img src="images/magnifier.jpg" style="float: right; height: 20px; margin-left: 0px;" />
 				</g:HTMLPanel>
 				
