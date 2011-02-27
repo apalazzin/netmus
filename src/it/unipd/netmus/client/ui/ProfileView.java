@@ -86,9 +86,6 @@ public interface ProfileView extends IsWidget {
 
       //restituisce il titolo della canzone in ascolto
       void setSongInfo(); 
-      
-      //restituisce le canzoni con i relativi album data una data playlist
-      void setPlaylistSongs(String titoloPlaylist);
 
       //restituisce il summary delle canzoni
       void setSongs();
@@ -116,6 +113,9 @@ public interface ProfileView extends IsWidget {
       
       //Elimina la playlist
       void deletePlaylist(String playlist_name);
+      
+      //Aggiorna la lista di canzoni della playlist
+      void setPlaylistSongs(String titoloPlaylist);
 
       //Spasta in basso la canzone della playlist selezionata
       void moveDownInPLaylist(String playlist, String autore, String titolo, String album);
