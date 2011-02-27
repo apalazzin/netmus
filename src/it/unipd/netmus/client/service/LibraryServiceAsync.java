@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import it.unipd.netmus.shared.SongDTO;
+import it.unipd.netmus.shared.SongSummaryDTO;
 
 /**
  * @author ValterTexasGroup
@@ -21,6 +22,8 @@ public interface LibraryServiceAsync {
 
     void removePlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
+    
+    void getPlaylist(String user, String playlist_name, AsyncCallback<List<SongSummaryDTO>> callback);
 
     void addSongToPlaylist(String user, String playlist_name, String song_id,
             AsyncCallback<Boolean> callback);
