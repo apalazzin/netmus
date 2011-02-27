@@ -7,6 +7,7 @@ import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import com.google.appengine.api.datastore.Transaction;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 
@@ -89,11 +90,21 @@ public class Song {
     }
     
     public static Song load(String id) {
-        return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
+        Song tmp = ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
+        return tmp;
     }
     
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        return ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()+SEPARATOR+dto.getAlbum()).toLowerCase()).now();
+        Transaction tx = ODF.get().beginTransaction();
+        try {
+            Song tmp = ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()+SEPARATOR+dto.getAlbum()).toLowerCase()).now();
+            tx.commit();
+            return tmp;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
     }
     
     public SongSummaryDTO toSummaryDTO() {
@@ -119,97 +130,143 @@ public class Song {
     }
     
     public static Song storeOrUpdateFromDTO(SongDTO song) {
-        
-        //prelievo delle informazioni dal DTO
-        Song s = new Song().changeAlbum(song.getAlbum()).changeArtist(song.getArtist()).changeTitle(song.getTitle());
-        if (s.getComposer() == "" && song.getComposer() != null)
-            s.setComposer(song.getComposer());
-        if (s.getGenre() == "" && song.getGenre() != null)
-            s.setGenre(song.getGenre());
-        if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
-            s.setTrackNumber(song.getTrackNumber());
-        if (s.getYear() == "" && song.getYear() != null)
-            s.setYear(song.getYear());      
-    
-        /////////////////////////////////////////////////////////////////////////////////
-        //INFORMAZIONI PRIMARIE COMPLETE
-        if (song.getArtist() != "" && song.getTitle() != "" && song.getAlbum() != "") {
-            
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-            }
-            if (s.getYoutubeCode().equals("")) {
-                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-            }  
-            
-            return s;
+
+        if (song != null) {
+            if (song.getTitle() == null)
+                song.setTitle("");
+            if (song.getArtist() == null)
+                song.setArtist("");
+            if (song.getAlbum() == null)
+                song.setAlbum("");
         }
         
-        /////////////////////////////////////////////////////////////////////////////////
-        //MANCA L'ARTISTA 
-        if (s.getTitle() != "" && s.getAlbum() != "") {
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try { 
+            Song s = load(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
             
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
+            if (s == null) {
+                s = new Song();
+                s.setAlbum(song.getAlbum());
+                s.setTitle(song.getTitle());
+                s.setArtist(song.getArtist());
+                s.setId(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
+                if (song.getComposer() != null)
+                    s.setComposer(song.getComposer());
+                if (song.getGenre() != null)
+                    s.setGenre(song.getGenre());
+                if (song.getTrackNumber() != null)
+                    s.setTrackNumber(song.getTrackNumber());
+                if (song.getYear() != null)
+                    s.setYear(song.getYear()); 
                 s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-            }
-            if (s.getYoutubeCode().equals("")) {
                 s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-            }  
-            
-            return s;
-        }
-        
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //MANCA L'ALBUM
-        if (s.getTitle() != "" && s.getArtist() != "") {
-            
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                s.update();
+                tx.commit();
+                return s;
             }
-            if (s.getYoutubeCode().equals("")) {
-                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-            }  
             
-            return s;
-        } 
+            else {
+           
+                //inserimento delle informazioni prese dal DTO
+                if (s.getComposer() == "" && song.getComposer() != null)
+                    s.setComposer(song.getComposer());
+                if (s.getGenre() == "" && song.getGenre() != null)
+                    s.setGenre(song.getGenre());
+                if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
+                    s.setTrackNumber(song.getTrackNumber());
+                if (s.getYear() == "" && song.getYear() != null)
+                    s.setYear(song.getYear());      
+
+                /////////////////////////////////////////////////////////////////////////////////
+                //INFORMAZIONI PRIMARIE COMPLETE
+                if (song.getArtist() != "" && song.getTitle() != "" && song.getAlbum() != "") {
+                
+                    //prelievo delle informazioni da servizi esterni
+                    if (s.getAlbumCover().equals("")) {
+                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                    }
+                    if (s.getYoutubeCode().equals("")) {
+                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                    }  
+                    tx.commit();
+                    return s;
+                }
             
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //MANCA IL TITOLO
-        if (s.getAlbum() != "" && s.getArtist() != "") {
+                /////////////////////////////////////////////////////////////////////////////////
+                //MANCA L'ARTISTA 
+                if (s.getTitle() != "" && s.getAlbum() != "") {
+                
+                    //prelievo delle informazioni da servizi esterni
+                    if (s.getAlbumCover().equals("")) {
+                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                    }
+                    if (s.getYoutubeCode().equals("")) {
+                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                    }  
+                    
+                    tx.commit();
+                    return s;
+                }
             
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-            } 
             
-            return s;
-        }
-        
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //MANCANO SIA L'ARTISTA CHE L'ALBUM
-        if (s.getTitle() != "") {
+                /////////////////////////////////////////////////////////////////////////////////
+                //MANCA L'ALBUM
+                if (s.getTitle() != "" && s.getArtist() != "") {
+                
+                    //prelievo delle informazioni da servizi esterni
+                    if (s.getAlbumCover().equals("")) {
+                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                    }
+                    if (s.getYoutubeCode().equals("")) {
+                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                    }  
+                    
+                    tx.commit();
+                    return s;
+                } 
+                
             
-            //prelievo delle informazioni da servizi esterni
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                /////////////////////////////////////////////////////////////////////////////////
+                //MANCA IL TITOLO
+                if (s.getAlbum() != "" && s.getArtist() != "") {
+                
+                    //prelievo delle informazioni da servizi esterni
+                    if (s.getAlbumCover().equals("")) {
+                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                    } 
+                    
+                    tx.commit();
+                    return s;
+                }
+            
+            
+                /////////////////////////////////////////////////////////////////////////////////
+                //MANCANO SIA L'ARTISTA CHE L'ALBUM
+                if (s.getTitle() != "") {
+                
+                    //prelievo delle informazioni da servizi esterni
+                    if (s.getAlbumCover().equals("")) {
+                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                    }
+                    if (s.getYoutubeCode().equals("")) {
+                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                    }  
+                    
+                    tx.commit();
+                    return s;
+                }
+            
+                /////////////////////////////////////////////////////////////////////////////////
+                //MANCANO TUTTE LE INFORMAZIONI PRIMARIE
+                tx.commit();
+                return null;
             }
-            if (s.getYoutubeCode().equals("")) {
-                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-            }  
-            
-            return s;
         }
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //MANCANO TUTTE LE INFORMAZIONI PRIMARIE
-        return null;
-        
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
     }
     
     
@@ -230,7 +287,7 @@ public class Song {
         else {
             this.deleteOwner();
         }
-        
+    
         if (title != null && title.equals("")==false)
             this.title = title;
         else
@@ -244,6 +301,7 @@ public class Song {
         else {
             return tmp;
         }
+
     }
 
     public Song changeArtist(String artist) {
@@ -254,14 +312,14 @@ public class Song {
         else {
             this.deleteOwner();
         }
-        
+    
         if (artist != null && artist.equals("")==false)
             this.artist = artist;
         else
             this.artist = "";
-        
+    
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-            
+        
         if (tmp == null) { 
             this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             return this;
@@ -269,6 +327,7 @@ public class Song {
         else {
             return tmp;
         }
+
     }
     
     public Song changeAlbum(String album) {
@@ -279,22 +338,35 @@ public class Song {
         else {
             this.deleteOwner();
         }
-        
+
         if (album != null && album.equals("")==false)
             this.album = album;
         else
             this.album = "";
-        
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-            if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-                return this;
-            }
-            else {
-                return tmp;
-            }
+
+        Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+        if (tmp == null) { 
+            this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            return this;
+        }
+        else {
+            return tmp;
+        }
+            
     }
     
+    private void setTitle(String title) {
+        this.title = title;
+    }
+
+    private void setAlbum(String album) {
+        this.album = album;
+    }
+
+    private void setArtist(String artist) {
+        this.artist = artist;
+    }
+
     public String getArtist() {
         return artist;
     }
@@ -386,16 +458,37 @@ public class Song {
     }
 
     public double addRate(int rating) {
-        this.num_ratings++;
-        this.rating = (this.rating + rating) / this.num_ratings;
-        this.update();
-        return this.rating;
+        
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try {
+            this.num_ratings++;
+            this.rating = (this.rating + rating) / this.num_ratings;
+            this.update();
+            tx.commit();
+            return this.rating;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
+        
     }
     
     public double changeRate(int old_rating, int rating) {
-        this.rating = ((this.rating * this.num_ratings) + rating - old_rating) / this.num_ratings;
-        this.update();
-        return this.rating;
+        
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try {
+            this.rating = ((this.rating * this.num_ratings) + rating - old_rating) / this.num_ratings;
+            this.update();
+            tx.commit();
+            return this.rating;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
     }
 
     public int getNumRatings() {

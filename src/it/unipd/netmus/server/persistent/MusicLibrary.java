@@ -116,7 +116,6 @@ public class MusicLibrary {
 
     public boolean addSong(Song song, boolean update) {
         
-        //System.out.println(song.getTitle() + "intrata in addSong.");
         song.update();
         boolean trovato = false;
         for (SongWithRating tmp:this.songList)
@@ -124,14 +123,11 @@ public class MusicLibrary {
                 trovato = true;
             }
         if (trovato == false) {
-            //System.out.println(song.getTitle() + "non trovato nel catalogo.");
             //add songId to the list
             this.songList.add(new SongWithRating(song.getId()));
-            //System.out.println(new SongWithRating(song.getId()).getSongId() + "aggiounto al catalogo.");
             
             //update song's attributes
             song.newOwner();
-            //System.out.println(song.getTitle() + "ha "+song.getNumOwners()+" possessori");
             
             //increment the counter
             this.setNumSongs(numSongs+1);
@@ -143,7 +139,7 @@ public class MusicLibrary {
             }
             return true;
         }
-        else {/*System.out.println(song.getTitle() + "trovato già nel catalogo."); */return false;}
+        else return false;
     }
         
     
@@ -412,8 +408,7 @@ public class MusicLibrary {
         }
         
         boolean addSong(String songId) {
-            if (songsList.indexOf(songId)<0) {
-                songsList.add(songId);
+            if (songsList.add(songId)) {
                 this.update();
                 return true;
             }
