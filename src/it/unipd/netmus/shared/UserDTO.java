@@ -5,6 +5,7 @@ package it.unipd.netmus.shared;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ValterTexasGroup
@@ -25,6 +26,8 @@ public class UserDTO implements Serializable {
     private Date last_session_id;
     private boolean is_google_user;
     private String new_password;
+    private boolean is_public_profile;
+    private List<String> allowed_users;
 	
     public UserDTO() {
     }
@@ -115,5 +118,21 @@ public class UserDTO implements Serializable {
 
     public String getNewPassword() {
         return new_password;
+    }
+
+    public void setPublicProfile(boolean is_public_profile) {
+        this.is_public_profile = is_public_profile;
+    }
+
+    public boolean isPublicProfile() {
+        return is_public_profile;
+    }
+
+    public void setAllowedUsers(List<String> allowed_users) {
+        this.allowed_users = allowed_users;
+    }
+
+    public List<String> getAllowedUsers() {
+        return allowed_users;
     }
 }

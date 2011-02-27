@@ -140,6 +140,9 @@ public class Song {
                 song.setAlbum("");
         }
         
+        if (song.getTitle().equals("") && (song.getArtist().equals("") || song.getAlbum().equals("")))
+            return null;
+        
         Transaction tx = ODF.get().beginTransaction();
         
         try { 
@@ -176,91 +179,17 @@ public class Song {
                 if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
                     s.setTrackNumber(song.getTrackNumber());
                 if (s.getYear() == "" && song.getYear() != null)
-                    s.setYear(song.getYear());      
-
-                /////////////////////////////////////////////////////////////////////////////////
-                //INFORMAZIONI PRIMARIE COMPLETE
-                if (song.getArtist() != "" && song.getTitle() != "" && song.getAlbum() != "") {
+                    s.setYear(song.getYear());   
                 
-                    //prelievo delle informazioni da servizi esterni
-                    if (s.getAlbumCover().equals("")) {
-                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                    }
-                    if (s.getYoutubeCode().equals("")) {
-                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-                    }  
-                    tx.commit();
-                    return s;
+                //prelievo delle informazioni da servizi esterni
+                if (s.getAlbumCover().equals("")) {
+                    s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
                 }
-            
-                /////////////////////////////////////////////////////////////////////////////////
-                //MANCA L'ARTISTA 
-                if (s.getTitle() != "" && s.getAlbum() != "") {
-                
-                    //prelievo delle informazioni da servizi esterni
-                    if (s.getAlbumCover().equals("")) {
-                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                    }
-                    if (s.getYoutubeCode().equals("")) {
-                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-                    }  
-                    
-                    tx.commit();
-                    return s;
-                }
-            
-            
-                /////////////////////////////////////////////////////////////////////////////////
-                //MANCA L'ALBUM
-                if (s.getTitle() != "" && s.getArtist() != "") {
-                
-                    //prelievo delle informazioni da servizi esterni
-                    if (s.getAlbumCover().equals("")) {
-                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                    }
-                    if (s.getYoutubeCode().equals("")) {
-                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-                    }  
-                    
-                    tx.commit();
-                    return s;
-                } 
-                
-            
-                /////////////////////////////////////////////////////////////////////////////////
-                //MANCA IL TITOLO
-                if (s.getAlbum() != "" && s.getArtist() != "") {
-                
-                    //prelievo delle informazioni da servizi esterni
-                    if (s.getAlbumCover().equals("")) {
-                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                    } 
-                    
-                    tx.commit();
-                    return s;
-                }
-            
-            
-                /////////////////////////////////////////////////////////////////////////////////
-                //MANCANO SIA L'ARTISTA CHE L'ALBUM
-                if (s.getTitle() != "") {
-                
-                    //prelievo delle informazioni da servizi esterni
-                    if (s.getAlbumCover().equals("")) {
-                        s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                    }
-                    if (s.getYoutubeCode().equals("")) {
-                        s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-                    }  
-                    
-                    tx.commit();
-                    return s;
-                }
-            
-                /////////////////////////////////////////////////////////////////////////////////
-                //MANCANO TUTTE LE INFORMAZIONI PRIMARIE
+                if (s.getYoutubeCode().equals("")) {
+                    s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                }  
                 tx.commit();
-                return null;
+                return s;
             }
         }
         finally {
