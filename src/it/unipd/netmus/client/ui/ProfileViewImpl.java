@@ -853,8 +853,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("edit_profile_check")
    void handleMouseEditProfileCheck(ClickEvent e) {
       
-       listener.updateProfile(edit_profile_password.getText(), edit_profile_nickname.getText(), edit_profile_name.getText(), edit_profile_surname.getText(),
-               edit_profile_nationality.getText(), edit_profile_gender.getText(), edit_profile_aboutme.getElement().getInnerHTML());
+       listener.editProfile(edit_profile_utente.getText(), edit_profile_nickname.getText(), edit_profile_name.getText(), edit_profile_surname.getText(),
+               edit_profile_gender.getText(), edit_profile_nationality.getText(), edit_profile_aboutme.getElement().getInnerHTML(),password);
        
    }
 ///////////////////////////////////////////////////////

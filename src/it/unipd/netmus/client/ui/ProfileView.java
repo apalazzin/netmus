@@ -3,7 +3,6 @@
  */
 package it.unipd.netmus.client.ui;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
@@ -138,7 +137,7 @@ public interface ProfileView extends IsWidget {
       
       //Invia i dati modficati quando viene premuti il pulsante salva
       void editProfile(String user, String nick_name, String first_name, String last_name
-              , String gender, String nationality, String aboutMe, Date bithDate);
+              , String gender, String nationality, String aboutMe, String password);
       
       //Salva il titolo della canzone che è stato modificato dall'utente
       void editSongTitle(String new_title, String old_title, String artist, String album);
@@ -149,10 +148,6 @@ public interface ProfileView extends IsWidget {
       //Salva il nome dell'artista che è stato modificato dall'utente
       void editSongArtist(String new_artist, String old_artist, String title, String album);
 
-      //Aggiorna i dati dell'utente
-      void updateProfile(String password, String nickname, String name, String surname, String nationality, String gender, String aboutme);
-
-      
    }
 
 }

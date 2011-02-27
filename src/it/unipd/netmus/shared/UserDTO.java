@@ -16,32 +16,33 @@ public class UserDTO implements Serializable {
     
     private String user_name;
     private String nick_name;
-	private String firstName;
-	private String lastName;
+	private String first_name;
+	private String last_name;
 	private String gender;
 	private String nationality;
-	private String aboutMe;
-	private Date birthDate;
+	private String about_me;
+	private Date birth_date;
     private Date last_session_id;
     private boolean is_google_user;
+    private String new_password;
 	
     public UserDTO() {
     }
 
     public String getFirstName() {
-        return firstName;
+        return first_name;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.first_name = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return last_name;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.last_name = lastName;
     }
 
     public String getGender() {
@@ -61,19 +62,19 @@ public class UserDTO implements Serializable {
     }
 
     public String getAboutMe() {
-        return aboutMe;
+        return about_me;
     }
 
     public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
+        this.about_me = aboutMe;
     }
 
     public Date getBirthDate() {
-        return birthDate;
+        return birth_date;
     }
 
     public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+        this.birth_date = birthDate;
     }
 
     public String getUser() {
@@ -106,5 +107,13 @@ public class UserDTO implements Serializable {
 
     public void setIsGoogleUser(boolean is_google_user) {
         this.is_google_user = is_google_user;
+    }
+
+    public void setNewPassword(String new_password) {
+        this.new_password = new_password;
+    }
+
+    public String getNewPassword() {
+        return new_password;
     }
 }

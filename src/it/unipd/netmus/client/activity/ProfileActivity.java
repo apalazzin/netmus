@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -115,8 +114,7 @@ public class ProfileActivity extends AbstractActivity implements
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();
                         profileView.setInfo(getSongInfo());
-                        
-                        profileView.showEditProfile("yoller", "Giovanni", "Trezzi", "Italy", "Maschio", "Clicca qui per inserire le tue informazioni.");
+                        editProfileView(user);
                         
                         containerWidget.setWidget(profileView.asWidget());
                         profileView.setLayout();
@@ -413,16 +411,49 @@ public class ProfileActivity extends AbstractActivity implements
 
     @Override
     public void editProfileView(String user) {
-        // TODO Auto-generated method stub
         
+        String nickname = current_user.getNickName();
+        String firstname = current_user.getFirstName();
+        String lastname = current_user.getLastName();
+        String nationality = current_user.getNationality();
+        String gender = current_user.getGender();
+        String aboutme = current_user.getAboutMe();
+        
+        clientFactory.getProfileView().showEditProfile(nickname, firstname, lastname, nationality, gender, aboutme);
     }
 
     @Override
     public void editProfile(String user, String nick_name, String first_name,
             String last_name, String gender, String nationality,
-            String aboutMe, Date bithDate) {
-        // TODO Auto-generated method stub
+            String aboutMe, String password) {
         
+        UserCompleteDTO new_user_data = new UserCompleteDTO();
+        
+        new_user_data.setNickName(nick_name);
+        new_user_data.setFirstName(first_name);
+        new_user_data.setLastName(last_name);
+        new_user_data.setGender(gender);
+        new_user_data.setNationality(nationality);
+        new_user_data.setAboutMe(aboutMe);
+        new_user_data.setNewPassword(password);
+        
+        current_user.setNickName(nick_name);
+        current_user.setFirstName(first_name);
+        current_user.setLastName(last_name);
+        current_user.setGender(gender);
+        current_user.setNationality(nationality);
+        current_user.setAboutMe(aboutMe);
+        
+        clientFactory.getProfileView().showEditProfile(nick_name, first_name, last_name, nationality, gender, aboutMe);
+        
+        usersServiceSvc.editProfile(user, new_user_data, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            public void onSuccess(Boolean result) {
+                System.out.println("Profilo utente aggiornato");
+            }
+        });
     }
 
     @Override
@@ -444,15 +475,6 @@ public class ProfileActivity extends AbstractActivity implements
             String title, String album) {
         // TODO Auto-generated method stub
         
-    }
-
-    @Override
-    public void updateProfile(String password, String namenickname,
-            String name, String surname, String nationality, String gender,
-            String aboutme) {
-        // TODO Auto-generated method stub
-        //una volta aggiornati i dati utente reimposta la editprofile sulla view
-        clientFactory.getProfileView().showEditProfile("yoller", "Giovanni", "Trezzi", "Italy", "Maschio", "Clicca qui per inserire le tue informazioni.");
     }
 
 }
