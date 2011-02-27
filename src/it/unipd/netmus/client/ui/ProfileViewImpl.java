@@ -1318,7 +1318,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            chiudi_youtube.getElement().getStyle().setOpacity(1);
 
            
-           player.getElement().setInnerHTML("<iframe style=\"z-index: 3;\" title=\"YouTube video player\" width=\"325\" height=\"200\" src=\"http://www.youtube.com/embed/" + link + "?autoplay=1&ap=%2526fmt%3D18&iv_load_policy=3\" frameborder=\"0\" allowfullscreen></iframe>");
+           player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
+                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
+                   		"<param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.youtube.com/v/" + link
+                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
+                   		"allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
+
+           
+           
+           DOM.getElementById("youtube_player").getStyle().setHeight(200, Style.Unit.PX);
+           DOM.getElementById("youtube_player").getStyle().setWidth(325, Style.Unit.PX);
        }
        
 
