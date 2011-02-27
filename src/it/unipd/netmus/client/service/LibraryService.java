@@ -5,6 +5,7 @@ package it.unipd.netmus.client.service;
 
 import java.util.List;
 import it.unipd.netmus.shared.SongDTO;
+import it.unipd.netmus.shared.SongSummaryDTO;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -24,6 +25,8 @@ public interface LibraryService extends RemoteService {
 	public boolean addPlaylist(String user, String playlist_name);
 	
 	public boolean removePlaylist(String user, String playlist_name);
+	
+	public List<SongSummaryDTO> getPlaylist(String user, String playlist_name);
 	
 	public boolean addSongToPlaylist(String user, String playlist_name, String song_id);
 	

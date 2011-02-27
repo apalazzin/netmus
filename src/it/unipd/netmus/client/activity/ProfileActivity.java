@@ -1,6 +1,7 @@
 package it.unipd.netmus.client.activity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -179,11 +180,17 @@ public class ProfileActivity extends AbstractActivity implements
 	    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
 	}
 	
+	/**
+	 * 
+	 * @return the array that contains the playlist's name list
+	 */
 	public String[] getPlaylistList() {
-	    //RESTITUISCNE LA LISTA DI PLAYLIST DELL'UTENTE
-		// TODO Auto-generated method stub
-		String[] playlists = {"Casa", "Vacanze", "Tokio Hotel", "Rock","Casa", "Vacanze"};
-		return playlists;
+	    
+	    List<String> playlists = current_user.getMusicLibrary().getPlaylists();
+	    String[] playlist_array = new String[playlists.size()];
+	    playlist_array = playlists.toArray(playlist_array);
+	    
+		return playlist_array;
 	}
 	
 	
@@ -214,14 +221,31 @@ public class ProfileActivity extends AbstractActivity implements
 
 	
 	@Override
-	public void setPlaylistSongs(String titoloPlaylist) {
-	   
-	    clientFactory.getProfileView().paintPlaylistSongs(getPlaylistSongs(titoloPlaylist));
-	    
+	public void setPlaylistSongs(String titoloPlaylist) {  
+	    getPlaylistSongs(titoloPlaylist);
 	}
     
-    public List<String> getPlaylistSongs(String titoloPlaylist) {
-        // TODO Auto-generated method stub
+    public List<String> getPlaylistSongs(String playlist_name) {
+        
+        libraryServiceSvc.getPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<List<SongSummaryDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(List<SongSummaryDTO> playlist_songs) {
+                
+                List<String> song_list = new ArrayList<String>();
+                Iterator<SongSummaryDTO> it = playlist_songs.iterator();
+                while(it.hasNext()) {
+                    SongSummaryDTO song = it.next();
+                    song_list.add(song.getArtist());
+                    song_list.add(song.getTitle());
+                    song_list.add(song.getAlbum());
+                }
+                clientFactory.getProfileView().paintPlaylistSongs(song_list);
+            }
+        });
+        
         List<String> lista_canzoni = new ArrayList<String>();
         
         //RIEMPIRE LA LISTA CON LA SEQUENZA: autore1, titolo1, album1, autore2, titolo2, album2, autoreN, titoloN, albumN,...
@@ -273,19 +297,35 @@ public class ProfileActivity extends AbstractActivity implements
 
     
     @Override
-    public void addToPLaylist(String playlist, String autore, String titolo, String album) {
+    public void addToPLaylist(String playlist, final String autore, final String titolo, final String album) {
         
-        //se l'inserimento nella Playlist nel DB ha successo
-        clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
-        
+        String song_id = titolo+"-vt.g-"+autore+"-vt.g-"+album; song_id = song_id.toLowerCase();
+        libraryServiceSvc.addSongToPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) 
+                    clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
+            }
+        });        
     }
 
     @Override
-    public void removeFromPLaylist(String playlist, String autore, String titolo, String album) {
+    public void removeFromPLaylist(String playlist, final String autore, final String titolo, final String album) {
 
-      //se la rimozione dalla Playlist nel DB ha successo
-       clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
-        
+        String song_id = titolo+"-vt.g-"+autore+"-vt.g-"+album; song_id = song_id.toLowerCase();
+        libraryServiceSvc.removeSongFromPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result)
+                    clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
+            }
+        });        
     }
     
     @Override
@@ -302,23 +342,46 @@ public class ProfileActivity extends AbstractActivity implements
         
     }
 
+    /**
+     * Inserisce nel DB la nuova playlist creata dall'utente, se ha un nome non gia' occupato, ed aggiorna la grafica se ha successo
+     */
     @Override
-    public void addPlaylist(String title) {
+    public void addPlaylist(final String playlist_name) {
         
-        // se l'inserimento della playlist nel DB ha successo ridisegna la lista PLaylist aggiornata 
-        
-        clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+        libraryServiceSvc.addPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    current_user.getMusicLibrary().addPlaylist(playlist_name);
+                    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+                }
+            }
+        });
         //clientFactory.getProfileView().addToPlaylists(title);
     }
     
+    /**
+     * Rimuove dal DB una playlist, e se ha successo, aggiorna la grafica.
+     */
     @Override
-    public void deletePlaylist(String playlist_name) {
+    public void deletePlaylist(final String playlist_name) {
         
-        // se la rimozione della playlist dall DB ha successo ridisegna la lista PLaylist aggiornata 
-        
-        clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+        libraryServiceSvc.removePlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    current_user.getMusicLibrary().removePlaylist(playlist_name);
+                    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+                }
+            }
+        });
         //clientFactory.getProfileView().addToPlaylists(title);
-        
     }
     
     @Override
@@ -398,10 +461,19 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     @Override
-    public void deleteSong(String autore, String titolo, String album) {
-        // TODO Auto-generated method stub
-        // una volta eliminata dal database la elimino anche sulla view
-        clientFactory.getProfileView().deleteSong(autore, titolo, album);
+    public void deleteSong(final String autore, final String titolo, final String album) {
+        
+        songsServiceSvc.deleteSong(current_user.getUser(), autore, titolo, album, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                // una volta eliminata dal database la elimino anche sulla view
+                if (result) 
+                    clientFactory.getProfileView().deleteSong(autore, titolo, album);
+            }
+        });
     }
 
     @Override

@@ -732,8 +732,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("elimina_playlist")
    void handleClickEliminaPlaylist(ClickEvent e) {
-      closePlaylist();
       listener.deletePlaylist(titolo_playlist.getText());
+      closePlaylist();
    }
 
    @UiHandler("chiudi_playlist")
@@ -1324,10 +1324,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                    + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
                    		"allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
 
-           
-           
-           DOM.getElementById("youtube_player").getStyle().setHeight(200, Style.Unit.PX);
-           DOM.getElementById("youtube_player").getStyle().setWidth(325, Style.Unit.PX);
        }
        
 

@@ -70,7 +70,9 @@ public class MusicLibrary {
 	        tmp2.setRatingForThisUser(this.getSongRate(tmp));
 	        list.add(tmp2);
 	    }
-	    return new MusicLibraryDTO(this.owner.toUserDTO(), list);
+	    
+	    List<String> playlists = this.getPlaylists();
+	    return new MusicLibraryDTO(this.owner.toUserDTO(), list, playlists);
 	}
 	
 	public void store() {
@@ -337,7 +339,7 @@ public class MusicLibrary {
     }
     
     public List<String> getPlaylistSongNames(String playlistName) {
-        for (Playlist tmp:this.playlists) {
+        for (Playlist tmp : this.playlists) {
             if (tmp.getName().equalsIgnoreCase(playlistName))
                 return tmp.getSongs();
         }
@@ -348,7 +350,7 @@ public class MusicLibrary {
         Playlist tmp = this.getPlaylist(playlistName);
         if (tmp != null) {
             boolean trovato = false;
-            for (SongWithRating tmp2:this.songList)
+            for (SongWithRating tmp2 : this.songList)
                 if (tmp2.getSongId().equals(songId)) {
                     trovato = true;
                 }
