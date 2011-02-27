@@ -39,8 +39,12 @@ public class SongServiceImpl extends RemoteServiceServlet implements
     @Override
     public boolean deleteSong(String user, String artist, String title,
             String album) {
-        // TODO Auto-generated method stub
-        return false;
+        
+        UserAccount useraccount = UserAccount.load(user);
+        String song_id = title+"-vt.g-"+artist+"-vt.g-"+album; song_id = song_id.toLowerCase();
+        Song song = Song.load(song_id);
+        
+        return useraccount.getMusicLibrary().removeSong(song, true);
     }
 
 }

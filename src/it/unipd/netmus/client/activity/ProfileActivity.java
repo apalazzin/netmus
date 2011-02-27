@@ -306,7 +306,8 @@ public class ProfileActivity extends AbstractActivity implements
             }
             @Override
             public void onSuccess(Boolean result) {
-                clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
+                if (result) 
+                    clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
             }
         });        
     }
@@ -321,7 +322,8 @@ public class ProfileActivity extends AbstractActivity implements
             }
             @Override
             public void onSuccess(Boolean result) {
-                clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
+                if (result)
+                    clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
             }
         });        
     }
@@ -352,7 +354,7 @@ public class ProfileActivity extends AbstractActivity implements
             }
             @Override
             public void onSuccess(Boolean result) {
-                if (result==true) {
+                if (result) {
                     current_user.getMusicLibrary().addPlaylist(playlist_name);
                     clientFactory.getProfileView().paintPlaylist(getPlaylistList());
                 }
@@ -373,7 +375,7 @@ public class ProfileActivity extends AbstractActivity implements
             }
             @Override
             public void onSuccess(Boolean result) {
-                if (result==true) {
+                if (result) {
                     current_user.getMusicLibrary().removePlaylist(playlist_name);
                     clientFactory.getProfileView().paintPlaylist(getPlaylistList());
                 }
@@ -459,10 +461,19 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     @Override
-    public void deleteSong(String autore, String titolo, String album) {
-        // TODO Auto-generated method stub
-        // una volta eliminata dal database la elimino anche sulla view
-        clientFactory.getProfileView().deleteSong(autore, titolo, album);
+    public void deleteSong(final String autore, final String titolo, final String album) {
+        
+        songsServiceSvc.deleteSong(current_user.getUser(), autore, titolo, album, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                // una volta eliminata dal database la elimino anche sulla view
+                if (result) 
+                    clientFactory.getProfileView().deleteSong(autore, titolo, album);
+            }
+        });
     }
 
     @Override
