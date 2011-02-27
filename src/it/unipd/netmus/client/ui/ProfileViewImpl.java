@@ -975,6 +975,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 			tmpPnl.add(tmpImg);
 			tmpPnl.add(tmpTxt);
 
+			if(k%2>0)
+		         wrapper.getElement().getStyle().setBackgroundColor("#F5F5F5");
 			wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
 			wrapper.getElement().getStyle().setProperty("outline", "0");
 			wrapper.addMouseOverHandler( new MouseOverHandler(){
@@ -985,11 +987,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                       event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
                 } }); 
 			
-	         wrapper.addMouseOutHandler( new MouseOutHandler(){
-	                @Override
-	                public void onMouseOut(MouseOutEvent event) {
-	                      event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
-	                } });
+			if(k%2>0) {
+    	         wrapper.addMouseOutHandler( new MouseOutHandler(){
+    	                @Override
+    	                public void onMouseOut(MouseOutEvent event) {
+    	                    event.getRelativeElement().getStyle().setBackgroundColor("#F5F5F5");
+    	                } });
+			} else {
+			    wrapper.addMouseOutHandler( new MouseOutHandler(){
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                            event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
+                    } });
+			}
 
 	          wrapper.addClickHandler(new ClickHandler() { 
 	                @Override
