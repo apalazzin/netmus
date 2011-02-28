@@ -10,29 +10,29 @@ import com.google.gwt.place.shared.PlaceController;
 
 public class ClientFactoryImpl implements ClientFactory
 {
-	private static final EventBus eventBus = new SimpleEventBus();
-	private static final PlaceController placeController = new PlaceController(eventBus);
-	private static final LoginView loginView = new LoginViewImpl();
-	private static final ProfileView profileView = new ProfileViewImpl();
+	private static final EventBus event_bus = new SimpleEventBus();
+	private static final PlaceController place_controller = new PlaceController(event_bus);
+	private static final LoginView login_view = new LoginViewImpl();
+	private static final ProfileView profile_view = new ProfileViewImpl();
 
    @Override
    public EventBus getEventBus() {
-      return eventBus;
+      return event_bus;
    }
 
    @Override
    public PlaceController getPlaceController() {
-      return placeController;
+      return place_controller;
    }
 
    @Override
    public LoginView getLoginView() {
-      return loginView;
+      return login_view;
    }
 
    @Override
    public ProfileView getProfileView() {
-      return profileView;
+      return profile_view;
    }
 
 }

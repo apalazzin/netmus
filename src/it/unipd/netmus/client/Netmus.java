@@ -28,10 +28,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class Netmus implements EntryPoint {
 
-   private Place defaultPlace = new LoginPlace("");
-   private SimplePanel appWidget = new SimplePanel();
-   private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-   
+   private Place default_place = new LoginPlace("");
+   private SimplePanel app_widget = new SimplePanel();
+   private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
+
+   /**
+    * ---
+    */
    @Override
    public void onModuleLoad() {
       
@@ -64,13 +67,15 @@ public class Netmus implements EntryPoint {
       };
       
       try {
-          loginServiceSvc.restartSession(user, session_id, callback);
+          login_service_svc.restartSession(user, session_id, callback);
       } catch (Exception e) {
           e.printStackTrace();
       }
    }
    
-   
+   /**
+    * ---
+    */
    private void startNetmus() {
        
        // Create ClientFactory using deferred binding so we can replace with different impls in gwt.xml
@@ -81,17 +86,17 @@ public class Netmus implements EntryPoint {
        // Start ActivityManager for the main widget with our ActivityMapper
        ActivityMapper activityMapper = new NetmusActivityMapper(clientFactory);
        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-       activityManager.setDisplay(appWidget);
+       activityManager.setDisplay(app_widget);
 
        // Start PlaceHistoryHandler with our PlaceHistoryMapper
        NetmusPlaceHistoryMapper historyMapper= GWT.create(NetmusPlaceHistoryMapper.class);
        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-       historyHandler.register(placeController, eventBus, defaultPlace);
+       historyHandler.register(placeController, eventBus, default_place);
 
        RootPanel.get().setStyleName( "gwt-root" );
        // applet e' la barra applet, resta inizialmente invisibile e vuota
        RootPanel.get("applet-bar").setVisible(false);
-       RootPanel.get("application").add(appWidget);
+       RootPanel.get("application").add(app_widget);
       
        // Goes to place represented on URL or default place
        historyHandler.handleCurrentHistory();
