@@ -21,6 +21,8 @@ import com.google.code.twig.annotation.Type;
 /**
  * @author ValterTexasGroup
  * 
+ * Tipo, obiettivo e funzione del componente:
+ * 
  * UserAccount utilizza il design pattern DAO poichè contiene tutte le
  * informazioni relative ad un utente così come viene salvato all'interno del
  * Datastore. La classe è implementata come POJO poichè twig-persist lo

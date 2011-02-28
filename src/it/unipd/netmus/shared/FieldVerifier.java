@@ -1,5 +1,17 @@
 package it.unipd.netmus.shared;
 
+/**
+ * @author ValterTexasGroup
+ *
+ *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Questa semplice classe contiene i metodi statici necessari a validare con livello di 
+ *sicurezza accetabile i dati inseriti dall'utente, si rende fondamentale nelle operazioni 
+ *di autenticazione e registrazione.
+ *
+ *
+ */
 
 public class FieldVerifier {
     

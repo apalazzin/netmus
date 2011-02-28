@@ -39,6 +39,8 @@ import com.google.code.twig.annotation.Index;
 
 /**
  * 
+ * Tipo, obiettivo e funzione del componente:
+ * 
  * Contiene le informazioni relative ad un brano musicale, in particolare ogni canzone è 
  * identificata da una chiave univoca composta dal titolo, un separatore di default, l'artista 
  * e l'album disposte nell'ordine titolo-sep-artista-sep-album. Dei brani condivisi da più 

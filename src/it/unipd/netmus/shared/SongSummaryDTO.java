@@ -8,6 +8,15 @@ import java.io.Serializable;
 /**
  * @author ValterTexasGroup
  *
+ *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Come tutte le altri classi di questo package questa classe permette lo scambio di 
+ *informazioni tra client e server all'interno delle chiamate RPC.
+ *Contiene e rappresenta i dati più comunemente utilizzati di un brano, ovvero 
+ *quelli che vengono visualizzati in una playlist all'interno di un profilo.
+ *
+ *
  */
 @SuppressWarnings("serial")
 public class SongSummaryDTO implements Serializable {

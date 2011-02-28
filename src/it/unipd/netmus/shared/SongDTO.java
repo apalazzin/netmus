@@ -6,6 +6,13 @@ package it.unipd.netmus.shared;
 /**
  * @author ValterTexasGroup
  *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Come tutte le altri classi di questo package questa classe permette lo scambio di 
+ *informazioni tra client e server all'interno delle chiamate RPC.
+ *Contiene e rappresenta tutti i dati di un brano musicale nel sistema Netmus.
+ *
+ *
  */
 @SuppressWarnings("serial")
 public class SongDTO extends SongSummaryDTO {

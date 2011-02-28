@@ -18,6 +18,8 @@ import com.google.code.twig.annotation.Parent;
 /**
  * @author ValterTexasGroup
  *
+ * Tipo, obiettivo e funzione del componente:
+ * 
  * MusicLibrary contiene tutte le informazioni relative ad un catalogo multimediale, ovvero il 
  * proprietario e la lista delle canzoni. La funzione principale però è quella di fornire 
  * dei servizi comodi ed efficenti per la gestione del catalogostesso e le entità interne 
