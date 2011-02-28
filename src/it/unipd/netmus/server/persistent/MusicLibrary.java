@@ -18,7 +18,14 @@ import com.google.code.twig.annotation.Parent;
 /**
  * @author ValterTexasGroup
  *
+ * MusicLibrary contiene tutte le informazioni relative ad un catalogo multimediale, ovvero il 
+ * proprietario e la lista delle canzoni. La funzione principale però è quella di fornire 
+ * dei servizi comodi ed efficenti per la gestione del catalogostesso e le entità interne 
+ * ad esso associate. La lista di brani è mantenutacome lista di codici identificativi (strighe) 
+ * per una questione di efficenza con twig-persist.
+ *
  */
+
 public class MusicLibrary {
 	
 	@Id @Parent private UserAccount owner;
@@ -117,11 +124,20 @@ public class MusicLibrary {
         this.preferred_genre = preferred_genre;
         this.update();
     }
+    
 
+    /**
+     * 
+     * Associa una canzone data in input alla libreria aggiungendola in coda. Ritorna true se
+     * l'inserimento ha avuto successo, false altrimenti.
+     * 
+     */
     public boolean addSong(Song song, boolean update) {
         
         song.update();
         boolean trovato = false;
+        
+        //find sond in the library
         for (SongWithRating tmp:this.song_list)
             if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
@@ -147,7 +163,12 @@ public class MusicLibrary {
     }
         
     
-    
+    /**
+     * 
+     * Rimuove una canzone data in input dalla libreria, la canzone rimossa rimane in database 
+     * anche se non posseduta da alcun utente. Ritorna true se la rimozione ha avuto successo, 
+     * false altriementi.
+     */
     public boolean removeSong(Song song, boolean update) {
         
         song.update();
@@ -184,6 +205,15 @@ public class MusicLibrary {
         else return false;
     }
      
+    
+    /**
+     * 
+     * Assegna il voto alla canzone dati in input. Il voto è personale dell'utente che possiede 
+     * la libreria ed è unico, quindi sovrascrive la votazione precendete. Oltre ad aggiornare 
+     * il voto del'utente in MusicLibrary questo metodo aggiorna anche la media totale dei 
+     * voti in Song.
+     * 
+     */
     public void rateSong(Song song, int rating) {
         song.update();
         for (SongWithRating tmp:this.song_list)
@@ -208,6 +238,14 @@ public class MusicLibrary {
         return -1;
     }
     
+    
+    /**
+     * 
+     * Calcola e salva il nome del genere musicale più ricorrente nella libreria. 
+     * Ha visibilità privata poichè deve essere utilizzato solo quando necessario 
+     * all'interno del metodo addSong.
+     * --DA TESTARE--
+     */
     private void updatePreferredGenre() {
         String topGenre = "";
         int max = 0;
@@ -236,6 +274,14 @@ public class MusicLibrary {
         this.setPreferredGenre(topGenre);
     }
     
+    
+    /**
+     * 
+     * Calcola e salva il nome del artista più ricorrente nella libreria. Ha visibilità 
+     * privata poichè deve essere utilizzato solo quando necessario all'interno del metodo addSong().
+     * --DA TESTARE--
+     * 
+     */
     private void updatePreferredArtist() {
         String topArtist = "";
         int max = 0;

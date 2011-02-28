@@ -36,6 +36,21 @@ import com.google.code.twig.annotation.Index;
  *
  */
 
+
+/**
+ * 
+ * Contiene le informazioni relative ad un brano musicale, in particolare ogni canzone è 
+ * identificata da una chiave univoca composta dal titolo, un separatore di default, l'artista 
+ * e l'album disposte nell'ordine titolo-sep-artista-sep-album. Dei brani condivisi da più 
+ * utenti viene salvata una sola copia per ottimizzare la quantità di spazio utilizzato.
+ * La logica di salvataggio delle canzoni implementata prevede che nei tag estratti sia 
+ * presente almeno il titolo altrimenti il brano non verrà mantenuto nel Datastore. 
+ * Al primo inserimento di una canzone qesta classe si occupa anche di reperire informazioni 
+ * aggiuntive dai servizi esterni Youtube e Last.fm quali link per copertine e video in streaming.
+ * 
+ */
+
+
 public class Song {
     
     static final String SEPARATOR = "-vt.g-";
@@ -129,6 +144,12 @@ public class Song {
         return tmp;
     }
     
+    
+    /**
+     * 
+     * Recupera le informazioni da un oggetto SongDTO e le salva nel modo più opportuno nel Datastore.
+     * 
+     */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
 //        if (song != null) {
@@ -140,15 +161,18 @@ public class Song {
 //                song.setAlbum("");
 //        }
         
+        //Se la canzone non ha almeno il titolo non viene inserita nel database e ritorna un riferimento null
         if (song.getTitle().equals("") && (song.getArtist().equals("") || song.getAlbum().equals("")))
             return null;
         
 //        Transaction tx = ODF.get().beginTransaction();
         
 //        try { 
+            //Ricerca e caricamento della canzone se già presente nel Datastore
             Song s = load(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
             
             if (s == null) {
+                //La canzone non è presente nel Datastore
                 s = new Song();
                 s.setAlbum(song.getAlbum());
                 s.setTitle(song.getTitle());
@@ -170,7 +194,7 @@ public class Song {
             }
             
             else {
-           
+                //La canzone è presente nel Datastore.
                 //inserimento delle informazioni prese dal DTO
                 if (s.getComposer().equals("") && song.getComposer() != null)
                     s.setComposer(song.getComposer());
@@ -210,6 +234,8 @@ public class Song {
     
     public Song changeTitle(String title) {
         
+        //Se la canzone precedente alla modifica non ha altri utenti che la possiedono viene
+        //cancellata dal Datastore perchè probabilmente contiene informazioni errate o incomplete.
         ODF.get().update(this);
         if (this.num_owners == 0)
             Song.deleteSong(this);
@@ -224,10 +250,12 @@ public class Song {
         
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
         if (tmp == null) { 
+            //La canzone non è presente nel Datastore.
             this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             return this;
         }
         else {
+            //La canzone è presente nel Datastore.
             return tmp;
         }
 
@@ -235,6 +263,8 @@ public class Song {
 
     public Song changeArtist(String artist) {
         
+        //Se la canzone precedente alla modifica non ha altri utenti che la possiedono viene
+        //cancellata dal Datastore perchè probabilmente contiene informazioni errate o incomplete.
         ODF.get().update(this);
         if (this.num_owners == 0)
             Song.deleteSong(this);
@@ -250,10 +280,12 @@ public class Song {
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
         
         if (tmp == null) { 
+            //La canzone non è presente nel Datastore.
             this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             return this;
         }
         else {
+            //La canzone è presente nel Datastore.
             return tmp;
         }
 
@@ -261,6 +293,8 @@ public class Song {
     
     public Song changeAlbum(String album) {
         
+        //Se la canzone precedente alla modifica non ha altri utenti che la possiedono viene
+        //cancellata dal Datastore perchè probabilmente contiene informazioni errate o incomplete.
         ODF.get().storeOrUpdate(this);
         if (this.num_owners == 0)
             Song.deleteSong(this);
@@ -275,10 +309,12 @@ public class Song {
 
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
         if (tmp == null) { 
+            //La canzone non è presente nel Datastore.
             this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             return this;
         }
         else {
+            //La canzone è presente nel Datastore.
             return tmp;
         }
             
@@ -386,6 +422,14 @@ public class Song {
         return rating;
     }
 
+    
+    /**
+     * 
+     * Aggiunge la votazione data in input alla canzone aggiornando nel modo appropriato gli 
+     * attributi rating e num_ratings. Questo metodo, poichè gli stessi dati possono essere 
+     * acceduti concorrentemente, viene eseguito all'interno di una tranzazione.
+     * 
+     */
     public double addRate(int rating) {
         
         Transaction tx = ODF.get().beginTransaction();
@@ -404,6 +448,14 @@ public class Song {
         
     }
     
+    
+    /**
+     * 
+     * Permette ad ogni utente di modificare la propria votazione su questo brano dando
+     * in input il voto precendete e quello nuovo. Questo metodo, poiché gli stessi dati
+     * possono essere acceduti concorrentemente, viene eseguito all'interno di una tranzazione.
+     * 
+     */
     public double changeRate(int old_rating, int rating) {
         
         Transaction tx = ODF.get().beginTransaction();
