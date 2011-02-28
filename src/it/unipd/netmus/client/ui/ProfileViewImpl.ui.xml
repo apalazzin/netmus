@@ -47,6 +47,8 @@
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
 	
 				<g:Image ui:field="play" url="images/playoff.png" styleName="{style.play}"> </g:Image>
+				<g:Image ui:field="forwardF" url="images/fwoff.png" styleName="{style.fwF}"> </g:Image>
+				<g:Image ui:field="rewindF" url="images/rwoff.png" styleName="{style.rwF}"> </g:Image>
 				<g:Image ui:field="forward" url="images/fwoff.png" styleName="{style.fw}"> </g:Image>
 				<g:Image ui:field="rewind" url="images/rwoff.png" styleName="{style.rw}"> </g:Image>
 	

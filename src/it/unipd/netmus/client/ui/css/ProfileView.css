@@ -558,9 +558,18 @@ height: 30px;
 	top: 30px;
 	left: 145px;
 	width: 40px;
-	
+	z-index: 2;	
 }
 
+
+.fwF {
+		
+	position: absolute;
+	top: 30px;
+	left: 145px;
+	width: 40px;
+	z-index: 1;	
+}
 
 .info {
 
@@ -801,8 +810,17 @@ height: 30px;
 	top: 30px;
 	left: 100px;
 	width: 40px;
+	z-index: 2;
 }
 
+.rwF {
+		
+	position: absolute;
+	top: 30px;
+	left: 100px;
+	width: 40px;
+	z-index: 1;
+}
 
 .search {
 	
@@ -913,7 +931,6 @@ height: 30px;
 	width: 100%;
 	opacity: 0;
 	overflow: auto;
-	padding-left: px;
 	
 	-webkit-transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
 	-moz-transition: width 0.5s ease-in-out, opacity 0.2s ease-in-out;
