@@ -29,13 +29,13 @@ public class UserAccount {
    
    @Child private MusicLibrary musicLibrary;
    
-   private String passwordHash;
+   private String password_hash;
    
-   private String firstName;
+   private String first_name;
    
-   private String lastName;
+   private String last_name;
    
-   private String nickName;
+   private String nick_name;
    
    private String gender;
    
@@ -45,26 +45,26 @@ public class UserAccount {
    
    private List<String> allowed_users;
 
-   @Type(Text.class) private String aboutMe;
+   @Type(Text.class) private String about_me;
 
-   private Date birthDate;
+   private Date birth_date;
    
-   @Index private String lastSessionId;
+   @Index private String last_session_id;
    
-   private boolean isGoogleUser;
+   private boolean is_google_user;
    
    public UserAccount() {
        this.musicLibrary = new MusicLibrary(this);
-       this.aboutMe = "";
-       this.birthDate = new Date(0);
-       this.firstName = "";
+       this.about_me = "";
+       this.birth_date = new Date(0);
+       this.first_name = "";
        this.gender = "";
-       this.isGoogleUser = false;
-       this.lastName = "";
-       this.lastSessionId = "";
+       this.is_google_user = false;
+       this.last_name = "";
+       this.last_session_id = "";
        this.nationality = "";
-       this.nickName = "";
-       this.passwordHash = "";
+       this.nick_name = "";
+       this.password_hash = "";
        this.user = "";
        this.is_public_profile = true;
        this.allowed_users = new ArrayList<String>();
@@ -73,16 +73,16 @@ public class UserAccount {
    public UserAccount(String user, String passwordHash) { 
        musicLibrary = new MusicLibrary(this);
        this.user = user;
-       this.passwordHash = passwordHash;
-       this.isGoogleUser = false;
-       this.aboutMe = "";
-       this.birthDate = new Date(0);
-       this.firstName = "";
+       this.password_hash = passwordHash;
+       this.is_google_user = false;
+       this.about_me = "";
+       this.birth_date = new Date(0);
+       this.first_name = "";
        this.gender = "";
-       this.lastName = "";
-       this.lastSessionId = "";
+       this.last_name = "";
+       this.last_session_id = "";
        this.nationality = "";
-       this.nickName = "";
+       this.nick_name = "";
        this.is_public_profile = true;
        this.allowed_users = new ArrayList<String>();
        this.store();
@@ -101,22 +101,22 @@ public class UserAccount {
    }
    
    public LoginDTO toLoginDTO() {
-       LoginDTO tmp = new LoginDTO(this.user, this.passwordHash);
-       tmp.setLastSessionId(this.lastSessionId);
+       LoginDTO tmp = new LoginDTO(this.user, this.password_hash);
+       tmp.setLastSessionId(this.last_session_id);
        return tmp;
    }
    
    public UserDTO toUserDTO() {
        UserDTO tmp = new UserDTO();
        tmp.setUser(this.user);
-       tmp.setNickName(this.nickName);
-       tmp.setAboutMe(this.aboutMe);
-       tmp.setBirthDate(this.birthDate);
-       tmp.setFirstName(this.firstName);
+       tmp.setNickName(this.nick_name);
+       tmp.setAboutMe(this.about_me);
+       tmp.setBirthDate(this.birth_date);
+       tmp.setFirstName(this.first_name);
        tmp.setGender(this.gender);
-       tmp.setLastName(this.lastName);
+       tmp.setLastName(this.last_name);
        tmp.setNationality(this.nationality);
-       tmp.setIsGoogleUser(this.isGoogleUser);
+       tmp.setIsGoogleUser(this.is_google_user);
        tmp.setPublicProfile(this.is_public_profile);
        tmp.setAllowedUsers(this.allowed_users);
        return tmp;
@@ -125,14 +125,14 @@ public class UserAccount {
    public UserCompleteDTO toUserCompleteDTO() {
        UserCompleteDTO tmp = new UserCompleteDTO();
        tmp.setUser(this.user);
-       tmp.setNickName(this.nickName);
-       tmp.setAboutMe(this.aboutMe);
-       tmp.setBirthDate(this.birthDate);
-       tmp.setFirstName(this.firstName);
+       tmp.setNickName(this.nick_name);
+       tmp.setAboutMe(this.about_me);
+       tmp.setBirthDate(this.birth_date);
+       tmp.setFirstName(this.first_name);
        tmp.setGender(this.gender);
-       tmp.setLastName(this.lastName);
+       tmp.setLastName(this.last_name);
        tmp.setNationality(this.nationality);
-       tmp.setIsGoogleUser(this.isGoogleUser);
+       tmp.setIsGoogleUser(this.is_google_user);
        tmp.setPublicProfile(this.is_public_profile);
        tmp.setAllowedUsers(this.allowed_users);
        tmp.setMusicLibrary(this.musicLibrary.toMusicLibraryDTO());
@@ -155,38 +155,38 @@ public class UserAccount {
    }
 
    public String getPassword() {
-       return passwordHash;
+       return password_hash;
    }
 
    public void setPassword(String passwordHash) {
-       this.passwordHash = passwordHash;
+       this.password_hash = passwordHash;
        this.update();
    }
 
    public String getFirstName() {
-       return firstName;
+       return first_name;
    }
 
    public void setFirstName(String firstName) {
-       this.firstName = firstName;
+       this.first_name = firstName;
        this.update();
    }
 
    public String getLastName() {
-       return lastName;
+       return last_name;
    }
 
    public void setLastName(String lastName) {
-       this.lastName = lastName;
+       this.last_name = lastName;
        this.update();
    }
 
    public String getNickName() {
-       return nickName;
+       return nick_name;
    }
 
    public void setNickName(String nickName) {
-       this.nickName = nickName;
+       this.nick_name = nickName;
        this.update();
    }
 
@@ -209,39 +209,39 @@ public class UserAccount {
    }
 
    public String getAboutMe() {
-       return aboutMe;
+       return about_me;
    }
 
    public void setAboutMe(String aboutMe) {
-       this.aboutMe = aboutMe;
+       this.about_me = aboutMe;
        this.update();
    }
 
    public Date getBirthDate() {
-       return birthDate;
+       return birth_date;
    }
 
    public void setBirthDate(Date birthDate) {
-       this.birthDate = birthDate;
+       this.birth_date = birthDate;
        this.update();
    }
 
    public void setLastSessionId(String lastSessionId) {
-       this.lastSessionId = lastSessionId;
+       this.last_session_id = lastSessionId;
        this.update();
    }
 
    public String getLastSessionId() {
-       return lastSessionId;
+       return last_session_id;
    }
    
    public void setGoogleUser(boolean isGoogleUser) {
-       this.isGoogleUser = isGoogleUser;
+       this.is_google_user = isGoogleUser;
        this.update();
    }
 
    public boolean isGoogleUser() {
-       return isGoogleUser;
+       return is_google_user;
    }
    
    public void setPublicProfile(boolean is_public_profile) {

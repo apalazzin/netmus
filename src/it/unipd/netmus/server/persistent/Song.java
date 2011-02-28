@@ -47,19 +47,19 @@ public class Song {
     
     @Index private String artist;
     
-    @Index private int numOwners;
+    @Index private int num_owners;
     
     @Index private double rating;
     
     @Index private String genre;
     
-    private String albumCover;
+    private String album_cover;
     
     private String year;
     
     private String composer;
     
-    private String trackNumber;
+    private String track_number;
     
     private String file;
     
@@ -70,15 +70,15 @@ public class Song {
     
     public Song() {
         this.id = SEPARATOR;
-        this.numOwners = 0;
+        this.num_owners = 0;
         this.album = "";
-        this.albumCover = "";
+        this.album_cover = "";
         this.artist = "";
         this.composer = "";
         this.file = "";
         this.genre = "";
         this.title = "";
-        this.trackNumber = "";
+        this.track_number = "";
         this.year = "";
         this.youtube_code = "";
         this.num_ratings = 0;
@@ -118,10 +118,10 @@ public class Song {
         tmp.setComposer(this.composer);
         tmp.setFile(this.file);
         tmp.setGenre(this.genre);
-        tmp.setTrackNumber(this.trackNumber);
+        tmp.setTrackNumber(this.track_number);
         tmp.setYear(this.year); 
-        tmp.setAlbumCover(this.albumCover);
-        tmp.setNumOwners(this.numOwners);
+        tmp.setAlbumCover(this.album_cover);
+        tmp.setNumOwners(this.num_owners);
         tmp.setYoutubeCode(this.youtube_code);
         tmp.setNumRatings(this.num_ratings);
         tmp.setRating(this.rating);
@@ -130,21 +130,21 @@ public class Song {
     
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
-        if (song != null) {
-            if (song.getTitle() == null)
-                song.setTitle("");
-            if (song.getArtist() == null)
-                song.setArtist("");
-            if (song.getAlbum() == null)
-                song.setAlbum("");
-        }
+//        if (song != null) {
+//            if (song.getTitle() == null)
+//                song.setTitle("");
+//            if (song.getArtist() == null)
+//                song.setArtist("");
+//            if (song.getAlbum() == null)
+//                song.setAlbum("");
+//        }
         
         if (song.getTitle().equals("") && (song.getArtist().equals("") || song.getAlbum().equals("")))
             return null;
         
-        Transaction tx = ODF.get().beginTransaction();
+//        Transaction tx = ODF.get().beginTransaction();
         
-        try { 
+//        try { 
             Song s = load(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
             
             if (s == null) {
@@ -161,10 +161,10 @@ public class Song {
                     s.setTrackNumber(song.getTrackNumber());
                 if (song.getYear() != null)
                     s.setYear(song.getYear()); 
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
                 s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
                 s.update();
-                tx.commit();
+//                tx.commit();
                 return s;
             }
             
@@ -181,20 +181,20 @@ public class Song {
                     s.setYear(song.getYear());   
                 
                 //prelievo delle informazioni da servizi esterni
-                if (s.getAlbumCover().equals("")) {
-                    s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-                }
                 if (s.getYoutubeCode().equals("")) {
                     s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
                 }  
-                tx.commit();
+                if (s.getAlbumCover().equals("")) {
+                    s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                }
+//                tx.commit();
                 return s;
             }
-        }
-        finally {
-            if (tx.isActive())
-                tx.rollback();
-        }
+//        }
+//        finally {
+//            if (tx.isActive())
+//                tx.rollback();
+//        }
     }
     
     
@@ -210,7 +210,7 @@ public class Song {
     public Song changeTitle(String title) {
         
         ODF.get().update(this);
-        if (this.numOwners == 0)
+        if (this.num_owners == 0)
             Song.deleteSong(this);
         else {
             this.deleteOwner();
@@ -235,7 +235,7 @@ public class Song {
     public Song changeArtist(String artist) {
         
         ODF.get().update(this);
-        if (this.numOwners == 0)
+        if (this.num_owners == 0)
             Song.deleteSong(this);
         else {
             this.deleteOwner();
@@ -261,7 +261,7 @@ public class Song {
     public Song changeAlbum(String album) {
         
         ODF.get().storeOrUpdate(this);
-        if (this.numOwners == 0)
+        if (this.num_owners == 0)
             Song.deleteSong(this);
         else {
             this.deleteOwner();
@@ -308,17 +308,17 @@ public class Song {
     }
 
     void newOwner() {
-        this.numOwners += 1;
+        this.num_owners += 1;
         this.update();
     }
     
     void deleteOwner() {
-        this.numOwners -= 1;
+        this.num_owners -= 1;
         this.update();
     }
 
     public int getNumOwners() {
-        return numOwners;
+        return num_owners;
     }
 
     public String getTitle() {
@@ -330,11 +330,11 @@ public class Song {
     }
 
     public String getAlbumCover() {
-        return albumCover;
+        return album_cover;
     }
 
     public void setAlbumCover(String albumCover) {
-        this.albumCover = albumCover;
+        this.album_cover = albumCover;
     }
 
     public String getYear() {
@@ -354,11 +354,11 @@ public class Song {
     }
 
     public String getTrackNumber() {
-        return trackNumber;
+        return track_number;
     }
 
     public void setTrackNumber(String trackNumber) {
-        this.trackNumber = trackNumber;
+        this.track_number = trackNumber;
     }
 
     public String getFile() {
