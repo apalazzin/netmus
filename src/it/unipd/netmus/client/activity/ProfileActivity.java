@@ -3,7 +3,6 @@ package it.unipd.netmus.client.activity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.applet.AppletBar;
@@ -38,40 +37,37 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class ProfileActivity extends AbstractActivity implements
 		ProfileView.Presenter {
 
-	private ClientFactory clientFactory;
+	private ClientFactory client_factory;
 
 	private String name;
 	
-	private boolean isOwner;
+	private boolean is_owner;
 	
-	private static Logger logger = Logger.getLogger("ProfileActivity");
-	
-	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-	private LibraryServiceAsync libraryServiceSvc = GWT.create(LibraryService.class);
-	private UserServiceAsync usersServiceSvc = GWT.create(UserService.class);
-	private SongServiceAsync songsServiceSvc = GWT.create(SongService.class);
+	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
+	private LibraryServiceAsync library_service_svc = GWT.create(LibraryService.class);
+	private UserServiceAsync user_service_svc = GWT.create(UserService.class);
+	private SongServiceAsync song_service_svc = GWT.create(SongService.class);
 	
 	private UserCompleteDTO current_user;
 	
-	MyConstants myConstants = GWT.create(MyConstants.class);
+	MyConstants my_constants = GWT.create(MyConstants.class);
 
-	public ProfileActivity(ProfilePlace place, ClientFactory clientFactory) {
+	public ProfileActivity(ProfilePlace place, ClientFactory client_factory) {
 		this.name = place.getProfileName();
-		this.clientFactory = clientFactory;
+		this.client_factory = client_factory;
 	}
 
 	/**
 	 * Invoked by the ActivityManager to start a new Activity
 	 */
 	@Override
-	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
+	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
 	    
 		AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
-                    logger.info("User not logged yet - Redirect to Login");
                     goTo(new LoginPlace(""));
                 }
             }
@@ -79,10 +75,10 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(final String user) {
                 
-                clientFactory.getProfileView().setUser(user);                
-                final ProfileView profileView = clientFactory.getProfileView();
+                client_factory.getProfileView().setUser(user);                
+                final ProfileView profileView = client_factory.getProfileView();
                 
-                clientFactory.getEventBus().addHandler(DeviceScannedEvent.TYPE, new DeviceScannedEventHandler() {
+                client_factory.getEventBus().addHandler(DeviceScannedEvent.TYPE, new DeviceScannedEventHandler() {
                     @Override
                     public void onScanDevice(DeviceScannedEvent event) {
                         AsyncCallback<UserCompleteDTO> callbackUpdateUser = new AsyncCallback<UserCompleteDTO>() {
@@ -96,7 +92,7 @@ public class ProfileActivity extends AbstractActivity implements
                                 profileView.paintPlaylist(getPlaylistList());   
                             }
                         };
-                        usersServiceSvc.loadProfile(user, callbackUpdateUser);
+                        user_service_svc.loadProfile(user, callbackUpdateUser);
                     }
                 });
                 
@@ -117,12 +113,12 @@ public class ProfileActivity extends AbstractActivity implements
                         profileView.setInfo(getSongInfo());
                         editProfileView(user);
                         
-                        containerWidget.setWidget(profileView.asWidget());
+                        container_widget.setWidget(profileView.asWidget());
                         profileView.setLayout();
 
                     }
                 };
-                usersServiceSvc.loadProfile(user, callback2);
+                user_service_svc.loadProfile(user, callback2);
                 
                 //load the applet bar, if not active yet
                 AppletBar.get(user).appletBarON();
@@ -130,7 +126,7 @@ public class ProfileActivity extends AbstractActivity implements
             
         };
 	    
-        try { loginServiceSvc.getLoggedInUser(callback); }
+        try { login_service_svc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
                
@@ -141,7 +137,7 @@ public class ProfileActivity extends AbstractActivity implements
 	 * Navigate to a new Place in the browser
 	 */
 	public void goTo(Place place) {
-		clientFactory.getPlaceController().goTo(place);
+		client_factory.getPlaceController().goTo(place);
 	}
 
 
@@ -151,11 +147,9 @@ public class ProfileActivity extends AbstractActivity implements
         AsyncCallback<String> callback = new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
-             logger.info("Logout Error");
             }
             @Override
             public void onSuccess(String user) {
-                logger.info("Logout user: "+user);
             
                 // remove the session cookie
                 Cookies.removeCookie("user");
@@ -169,7 +163,7 @@ public class ProfileActivity extends AbstractActivity implements
         };
       
         try {
-            loginServiceSvc.logout(callback);
+            login_service_svc.logout(callback);
         } catch (Exception e) {}
     }
 
@@ -177,7 +171,7 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void setPlaylistList() {
 	    
-	    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+	    client_factory.getProfileView().paintPlaylist(getPlaylistList());
 	}
 	
 	/**
@@ -197,7 +191,7 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void setFriendList() {
 	    
-	    clientFactory.getProfileView().paintFriendlist(getFriendList());
+	    client_factory.getProfileView().paintFriendlist(getFriendList());
 	    
 	}
 	
@@ -211,7 +205,7 @@ public class ProfileActivity extends AbstractActivity implements
 	@Override
 	public void setSongInfo() {
 	    
-	    clientFactory.getProfileView().setInfo(getSongInfo());
+	    client_factory.getProfileView().setInfo(getSongInfo());
 	}
 	
 	public String getSongInfo() {
@@ -221,13 +215,13 @@ public class ProfileActivity extends AbstractActivity implements
 
 	
 	@Override
-	public void setPlaylistSongs(String titoloPlaylist) {  
-	    getPlaylistSongs(titoloPlaylist);
+	public void setPlaylistSongs(String titolo_playlist) {  
+	    getPlaylistSongs(titolo_playlist);
 	}
     
     public List<String> getPlaylistSongs(String playlist_name) {
         
-        libraryServiceSvc.getPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<List<SongSummaryDTO>>() {
+        library_service_svc.getPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<List<SongSummaryDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
             }
@@ -242,7 +236,7 @@ public class ProfileActivity extends AbstractActivity implements
                     song_list.add(song.getTitle());
                     song_list.add(song.getAlbum());
                 }
-                clientFactory.getProfileView().paintPlaylistSongs(song_list);
+                client_factory.getProfileView().paintPlaylistSongs(song_list);
             }
         });
         
@@ -264,7 +258,7 @@ public class ProfileActivity extends AbstractActivity implements
             if (song.getTitle().equals(titolo) && song.getArtist().equals(autore) && song.getAlbum().equals(album)) {
                 youTubeCode = song.getYoutubeCode();
                 if (!youTubeCode.equals(""))
-                    clientFactory.getProfileView().playYouTube(youTubeCode);
+                    client_factory.getProfileView().playYouTube(youTubeCode);
                 return;
             }
         }
@@ -273,8 +267,8 @@ public class ProfileActivity extends AbstractActivity implements
     
     public void setSongs() {
                         
-        clientFactory.getProfileView().paintCatalogo(getSongs(current_user.getMusicLibrary()));
-        clientFactory.getProfileView().setNumeroBrani(current_user.getMusicLibrary().getSongs().size());
+        client_factory.getProfileView().paintCatalogo(getSongs(current_user.getMusicLibrary()));
+        client_factory.getProfileView().setNumeroBrani(current_user.getMusicLibrary().getSongs().size());
         
     }
  
@@ -300,14 +294,14 @@ public class ProfileActivity extends AbstractActivity implements
     public void addToPLaylist(String playlist, final String autore, final String titolo, final String album) {
         
         String song_id = titolo+"-vt.g-"+autore+"-vt.g-"+album; song_id = song_id.toLowerCase();
-        libraryServiceSvc.addSongToPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
+        library_service_svc.addSongToPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
             @Override
             public void onSuccess(Boolean result) {
                 if (result) 
-                    clientFactory.getProfileView().addToPLaylist(autore, titolo, album);
+                    client_factory.getProfileView().addToPLaylist(autore, titolo, album);
             }
         });        
     }
@@ -316,14 +310,14 @@ public class ProfileActivity extends AbstractActivity implements
     public void removeFromPLaylist(String playlist, final String autore, final String titolo, final String album) {
 
         String song_id = titolo+"-vt.g-"+autore+"-vt.g-"+album; song_id = song_id.toLowerCase();
-        libraryServiceSvc.removeSongFromPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
+        library_service_svc.removeSongFromPlaylist(current_user.getUser(), playlist, song_id, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
             @Override
             public void onSuccess(Boolean result) {
                 if (result)
-                    clientFactory.getProfileView().removeFromPlaylist(autore, titolo, album);
+                    client_factory.getProfileView().removeFromPlaylist(autore, titolo, album);
             }
         });        
     }
@@ -348,7 +342,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void addPlaylist(final String playlist_name) {
         
-        libraryServiceSvc.addPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
+        library_service_svc.addPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
@@ -356,7 +350,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onSuccess(Boolean result) {
                 if (result) {
                     current_user.getMusicLibrary().addPlaylist(playlist_name);
-                    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+                    client_factory.getProfileView().paintPlaylist(getPlaylistList());
                 }
             }
         });
@@ -369,7 +363,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void deletePlaylist(final String playlist_name) {
         
-        libraryServiceSvc.removePlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
+        library_service_svc.removePlaylist(current_user.getUser(), playlist_name, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
@@ -377,7 +371,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onSuccess(Boolean result) {
                 if (result) {
                     current_user.getMusicLibrary().removePlaylist(playlist_name);
-                    clientFactory.getProfileView().paintPlaylist(getPlaylistList());
+                    client_factory.getProfileView().paintPlaylist(getPlaylistList());
                 }
             }
         });
@@ -388,8 +382,8 @@ public class ProfileActivity extends AbstractActivity implements
     public void rateSong(final String artist, final String title, final String album, final int rate) {
         
         // sistemo subito il rating visivo poi arrivera' la library aggiornata
-        clientFactory.getProfileView().setRating(rate);
-        clientFactory.getProfileView().showStar(rate);
+        client_factory.getProfileView().setRating(rate);
+        client_factory.getProfileView().showStar(rate);
         
         AsyncCallback<Double> callback = new AsyncCallback<Double>() {
 
@@ -404,13 +398,13 @@ public class ProfileActivity extends AbstractActivity implements
                     if (tmp.getArtist().equalsIgnoreCase(artist) && tmp.getTitle().equalsIgnoreCase(title) && tmp.getAlbum().equalsIgnoreCase(album)) {
                         tmp.setRatingForThisUser(rate);
                         tmp.setRating(result);
-                        clientFactory.getProfileView().showGlobalStar(result);
+                        client_factory.getProfileView().showGlobalStar(result);
                     }
                 }
             }
             
         };
-        songsServiceSvc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
+        song_service_svc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
         
     }
 
@@ -420,8 +414,8 @@ public class ProfileActivity extends AbstractActivity implements
         List<SongDTO> songs_dto = this.current_user.getMusicLibrary().getSongs();
         for (SongDTO tmp:songs_dto) {
             if (tmp.getArtist().equalsIgnoreCase(artist) && tmp.getTitle().equalsIgnoreCase(title) && tmp.getAlbum().equalsIgnoreCase(album)) {
-                clientFactory.getProfileView().setRating(tmp.getRatingForThisUser());
-                clientFactory.getProfileView().showStar(tmp.getRatingForThisUser());
+                client_factory.getProfileView().setRating(tmp.getRatingForThisUser());
+                client_factory.getProfileView().showStar(tmp.getRatingForThisUser());
                 return tmp.getRating();
             }
         }
@@ -447,7 +441,7 @@ public class ProfileActivity extends AbstractActivity implements
                 if (!song.getTrackNumber().equals("")) traccia = song.getTrackNumber();
                 
                 if (!song.getAlbumCover().equals("")) cover = song.getAlbumCover();
-                clientFactory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
+                client_factory.getProfileView().setSongFields(autore, titolo, album, genere, anno, compositore, traccia, cover);
                 return;
             }
         }
@@ -463,7 +457,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void deleteSong(final String autore, final String titolo, final String album) {
         
-        songsServiceSvc.deleteSong(current_user.getUser(), autore, titolo, album, new AsyncCallback<Boolean>() {
+        song_service_svc.deleteSong(current_user.getUser(), autore, titolo, album, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
@@ -471,7 +465,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onSuccess(Boolean result) {
                 // una volta eliminata dal database la elimino anche sulla view
                 if (result) 
-                    clientFactory.getProfileView().deleteSong(autore, titolo, album);
+                    client_factory.getProfileView().deleteSong(autore, titolo, album);
             }
         });
     }
@@ -492,7 +486,7 @@ public class ProfileActivity extends AbstractActivity implements
         String gender = current_user.getGender();
         String aboutme = current_user.getAboutMe();
         
-        clientFactory.getProfileView().showEditProfile(nickname, firstname, lastname, nationality, gender, aboutme);
+        client_factory.getProfileView().showEditProfile(nickname, firstname, lastname, nationality, gender, aboutme);
     }
 
     @Override
@@ -517,9 +511,9 @@ public class ProfileActivity extends AbstractActivity implements
         current_user.setNationality(nationality);
         current_user.setAboutMe(aboutMe);
         
-        clientFactory.getProfileView().showEditProfile(nick_name, first_name, last_name, nationality, gender, aboutMe);
+        client_factory.getProfileView().showEditProfile(nick_name, first_name, last_name, nationality, gender, aboutMe);
         
-        usersServiceSvc.editProfile(user, new_user_data, new AsyncCallback<Boolean>() {
+        user_service_svc.editProfile(user, new_user_data, new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
             }
