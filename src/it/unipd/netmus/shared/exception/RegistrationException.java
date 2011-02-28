@@ -14,8 +14,8 @@ public class RegistrationException extends NetmusException {
 		super();
 	}
 	
-	public RegistrationException(String moreInfo) {
-		super(moreInfo);
+	public RegistrationException(String more_info) {
+		super(more_info);
 	}
 
 }

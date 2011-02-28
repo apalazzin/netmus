@@ -4,7 +4,7 @@
 package it.unipd.netmus.shared;
 
 import java.io.Serializable;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author ValterTexasGroup
@@ -20,6 +20,8 @@ public class MusicLibraryDTO implements Serializable {
 	private List<String> playlists;
 	
 	public MusicLibraryDTO() {
+        this.owner = new UserDTO();
+        this.songs = new ArrayList<SongDTO>();
 	}
 	
 	public MusicLibraryDTO(UserDTO user, List<SongDTO> songs, List<String> playlists){

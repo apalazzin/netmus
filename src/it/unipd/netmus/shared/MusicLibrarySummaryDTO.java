@@ -4,6 +4,7 @@
 package it.unipd.netmus.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author ValterTexasGroup
@@ -16,12 +17,17 @@ public class MusicLibrarySummaryDTO implements Serializable {
     
     private List<SongSummaryDTO> songs;
     
+    private List<String> playlists;
+    
     public MusicLibrarySummaryDTO() {
+        this.owner = new UserDTO();
+        this.songs = new ArrayList<SongSummaryDTO>();
     }
     
-    public MusicLibrarySummaryDTO(UserDTO user, List<SongSummaryDTO> s){
+    public MusicLibrarySummaryDTO(UserDTO user, List<SongSummaryDTO> s, List<String> playlists){
         setOwner(user);
         setSongs(s);
+        setPlaylists(playlists);
     }
 
     public void setOwner(UserDTO owner) {
@@ -42,5 +48,13 @@ public class MusicLibrarySummaryDTO implements Serializable {
     
     public int getLibrarySize() {
         return songs.size();
+    }
+
+    public void setPlaylists(List<String> playlists) {
+        this.playlists = playlists;
+    }
+
+    public List<String> getPlaylists() {
+        return playlists;
     }
 }

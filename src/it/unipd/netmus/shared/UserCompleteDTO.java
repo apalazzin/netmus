@@ -10,17 +10,17 @@ package it.unipd.netmus.shared;
 @SuppressWarnings("serial")
 public class UserCompleteDTO extends UserDTO {
 
-	private MusicLibraryDTO musicLibrary;
+	private MusicLibraryDTO music_library;
 
     public UserCompleteDTO() {
         super();
     }
     
     public MusicLibraryDTO getMusicLibrary() {
-        return musicLibrary;
+        return music_library;
     }
 
-    public void setMusicLibrary(MusicLibraryDTO musicLibrary) {
-        this.musicLibrary = musicLibrary;
+    public void setMusicLibrary(MusicLibraryDTO music_library) {
+        this.music_library = music_library;
     }
 }

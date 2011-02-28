@@ -17,6 +17,9 @@ public class SongSummaryDTO implements Serializable {
 	private String album;
 	
 	public SongSummaryDTO(){
+	    this.artist = "";
+	    this.title = "";
+	    this.album = "";
 	}
 	
 	public SongSummaryDTO(String artist, String title, String album){

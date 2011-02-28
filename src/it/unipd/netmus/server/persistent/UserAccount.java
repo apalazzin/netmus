@@ -8,7 +8,6 @@ import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -27,7 +26,7 @@ public class UserAccount {
    
    @Id private String user;
    
-   @Child private MusicLibrary musicLibrary;
+   @Child private MusicLibrary music_library;
    
    private String password_hash;
    
@@ -46,17 +45,14 @@ public class UserAccount {
    private List<String> allowed_users;
 
    @Type(Text.class) private String about_me;
-
-   private Date birth_date;
    
    @Index private String last_session_id;
    
    private boolean is_google_user;
    
    public UserAccount() {
-       this.musicLibrary = new MusicLibrary(this);
+       this.music_library = new MusicLibrary(this);
        this.about_me = "";
-       this.birth_date = new Date(0);
        this.first_name = "";
        this.gender = "";
        this.is_google_user = false;
@@ -70,13 +66,12 @@ public class UserAccount {
        this.allowed_users = new ArrayList<String>();
    }
    
-   public UserAccount(String user, String passwordHash) { 
-       musicLibrary = new MusicLibrary(this);
+   public UserAccount(String user, String password_hash) { 
+       music_library = new MusicLibrary(this);
        this.user = user;
-       this.password_hash = passwordHash;
+       this.password_hash = password_hash;
        this.is_google_user = false;
        this.about_me = "";
-       this.birth_date = new Date(0);
        this.first_name = "";
        this.gender = "";
        this.last_name = "";
@@ -111,12 +106,10 @@ public class UserAccount {
        tmp.setUser(this.user);
        tmp.setNickName(this.nick_name);
        tmp.setAboutMe(this.about_me);
-       tmp.setBirthDate(this.birth_date);
        tmp.setFirstName(this.first_name);
        tmp.setGender(this.gender);
        tmp.setLastName(this.last_name);
        tmp.setNationality(this.nationality);
-       tmp.setIsGoogleUser(this.is_google_user);
        tmp.setPublicProfile(this.is_public_profile);
        tmp.setAllowedUsers(this.allowed_users);
        return tmp;
@@ -127,21 +120,19 @@ public class UserAccount {
        tmp.setUser(this.user);
        tmp.setNickName(this.nick_name);
        tmp.setAboutMe(this.about_me);
-       tmp.setBirthDate(this.birth_date);
        tmp.setFirstName(this.first_name);
        tmp.setGender(this.gender);
        tmp.setLastName(this.last_name);
        tmp.setNationality(this.nationality);
-       tmp.setIsGoogleUser(this.is_google_user);
        tmp.setPublicProfile(this.is_public_profile);
        tmp.setAllowedUsers(this.allowed_users);
-       tmp.setMusicLibrary(this.musicLibrary.toMusicLibraryDTO());
+       tmp.setMusicLibrary(this.music_library.toMusicLibraryDTO());
        return tmp;
    }
    
-   public static UserAccount findSessionUser(String sessionId) {
+   public static UserAccount findSessionUser(String session_id) {
        return ODF.get().find().type(UserAccount.class)
-       .addFilter("lastSessionId", FilterOperator.EQUAL, sessionId)
+       .addFilter("lastSessionId", FilterOperator.EQUAL, session_id)
        .returnUnique()
        .now();
    }
@@ -151,15 +142,15 @@ public class UserAccount {
    }
 
    public MusicLibrary getMusicLibrary() {
-       return musicLibrary;
+       return music_library;
    }
 
    public String getPassword() {
        return password_hash;
    }
 
-   public void setPassword(String passwordHash) {
-       this.password_hash = passwordHash;
+   public void setPassword(String password_hash) {
+       this.password_hash = password_hash;
        this.update();
    }
 
@@ -167,8 +158,8 @@ public class UserAccount {
        return first_name;
    }
 
-   public void setFirstName(String firstName) {
-       this.first_name = firstName;
+   public void setFirstName(String first_name) {
+       this.first_name = first_name;
        this.update();
    }
 
@@ -176,8 +167,8 @@ public class UserAccount {
        return last_name;
    }
 
-   public void setLastName(String lastName) {
-       this.last_name = lastName;
+   public void setLastName(String last_name) {
+       this.last_name = last_name;
        this.update();
    }
 
@@ -185,8 +176,8 @@ public class UserAccount {
        return nick_name;
    }
 
-   public void setNickName(String nickName) {
-       this.nick_name = nickName;
+   public void setNickName(String nick_name) {
+       this.nick_name = nick_name;
        this.update();
    }
 
@@ -212,22 +203,13 @@ public class UserAccount {
        return about_me;
    }
 
-   public void setAboutMe(String aboutMe) {
-       this.about_me = aboutMe;
+   public void setAboutMe(String about_me) {
+       this.about_me = about_me;
        this.update();
    }
 
-   public Date getBirthDate() {
-       return birth_date;
-   }
-
-   public void setBirthDate(Date birthDate) {
-       this.birth_date = birthDate;
-       this.update();
-   }
-
-   public void setLastSessionId(String lastSessionId) {
-       this.last_session_id = lastSessionId;
+   public void setLastSessionId(String last_session_id) {
+       this.last_session_id = last_session_id;
        this.update();
    }
 
@@ -235,8 +217,8 @@ public class UserAccount {
        return last_session_id;
    }
    
-   public void setGoogleUser(boolean isGoogleUser) {
-       this.is_google_user = isGoogleUser;
+   public void setGoogleUser(boolean is_uoogle_user) {
+       this.is_google_user = is_uoogle_user;
        this.update();
    }
 
@@ -252,8 +234,8 @@ public class UserAccount {
        return is_public_profile;
    }
 
-   public void setAllowedUsers(List<String> allowedUsers) {
-       this.allowed_users = allowedUsers;
+   public void setAllowedUsers(List<String> allowed_users) {
+       this.allowed_users = allowed_users;
    }
 
    public List<String> getAllowedUsers() {

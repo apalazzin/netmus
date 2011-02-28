@@ -4,7 +4,7 @@
 package it.unipd.netmus.shared;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,30 +22,37 @@ public class UserDTO implements Serializable {
 	private String gender;
 	private String nationality;
 	private String about_me;
-	private Date birth_date;
-    private Date last_session_id;
-    private boolean is_google_user;
     private String new_password;
     private boolean is_public_profile;
     private List<String> allowed_users;
 	
     public UserDTO() {
+        this.user_name = "";
+        this.nick_name = "";
+        this.first_name = "";
+        this.last_name = "";
+        this.gender = "";
+        this.nationality = "";
+        this.about_me = "";
+        this.new_password = "";
+        this.is_public_profile = true;
+        this.allowed_users = new ArrayList<String>();
     }
 
     public String getFirstName() {
         return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.first_name = firstName;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
     }
 
     public String getLastName() {
         return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.last_name = lastName;
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getGender() {
@@ -68,16 +75,8 @@ public class UserDTO implements Serializable {
         return about_me;
     }
 
-    public void setAboutMe(String aboutMe) {
-        this.about_me = aboutMe;
-    }
-
-    public Date getBirthDate() {
-        return birth_date;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birth_date = birthDate;
+    public void setAboutMe(String about_me) {
+        this.about_me = about_me;
     }
 
     public String getUser() {
@@ -94,22 +93,6 @@ public class UserDTO implements Serializable {
 
     public void setNickName(String nick_name) {
         this.nick_name = nick_name;
-    }
-
-    public Date getLastSessionId() {
-        return last_session_id;
-    }
-
-    public void setLastSessionId(Date last_session_id) {
-        this.last_session_id = last_session_id;
-    }
-
-    public boolean isGoogleUser() {
-        return is_google_user;
-    }
-
-    public void setIsGoogleUser(boolean is_google_user) {
-        this.is_google_user = is_google_user;
     }
 
     public void setNewPassword(String new_password) {

@@ -16,13 +16,13 @@ public class SongDTO extends SongSummaryDTO {
 	
 	private String genre;
 	
-	private String trackNumber;
+	private String track_number;
 	
 	private String file;
 	
-	private String albumCover;
+	private String album_cover;
 	
-	private int numOwners;
+	private int num_owners;
 	
 	private String youtube_code;
 	
@@ -33,7 +33,20 @@ public class SongDTO extends SongSummaryDTO {
 	private int rating_for_this_user;
 	
 	//costruttore di default
-	public SongDTO(){}
+	public SongDTO() {
+	    super();
+	    this.year = "";
+	    this.composer = "";
+	    this.genre = "";
+	    this.track_number = "";
+	    this.file = "";
+	    this.album_cover = "";
+	    this.num_owners = 0;
+	    this.youtube_code = "";
+	    this.rating = -1;
+	    this.num_ratings = 0;
+	    this.rating_for_this_user = -1;
+	}
 	
 	public String getYear() {
 		return year;
@@ -54,10 +67,10 @@ public class SongDTO extends SongSummaryDTO {
 		this.genre = genre;
 	}
 	public String getTrackNumber() {
-		return trackNumber;
+		return track_number;
 	}
-	public void setTrackNumber(String trackNumber) {
-		this.trackNumber = trackNumber;
+	public void setTrackNumber(String track_number) {
+		this.track_number = track_number;
 	}
 
 	public String getFile() {
@@ -67,20 +80,20 @@ public class SongDTO extends SongSummaryDTO {
 		this.file = file;
 	}
 
-    public void setAlbumCover(String albumCover) {
-        this.albumCover = albumCover;
+    public void setAlbumCover(String album_cover) {
+        this.album_cover = album_cover;
     }
 
     public String getAlbumCover() {
-        return albumCover;
+        return album_cover;
     }
 
-    public void setNumOwners(int numOwners) {
-        this.numOwners = numOwners;
+    public void setNumOwners(int num_owners) {
+        this.num_owners = num_owners;
     }
 
     public int getNumOwners() {
-        return numOwners;
+        return num_owners;
     }
 
     public void setYoutubeCode(String youtube_code) {

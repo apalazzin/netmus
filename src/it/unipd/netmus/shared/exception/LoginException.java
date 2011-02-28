@@ -14,8 +14,8 @@ public class LoginException extends NetmusException {
 		super();
 	}
 	
-	public LoginException(String moreInfo) {
-		super(moreInfo);
+	public LoginException(String more_info) {
+		super(more_info);
 	}
 
 }

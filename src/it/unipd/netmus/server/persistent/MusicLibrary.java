@@ -23,16 +23,16 @@ public class MusicLibrary {
 	
 	@Id @Parent private UserAccount owner;
 	
-	@Index private List<SongWithRating> songList;
+	@Index private List<SongWithRating> song_list;
 	
 	
     //dati statistici salvati nel database
 	
-    private int numSongs;
+    private int num_songs;
     
-    private String preferredArtist;
+    private String preferred_artist;
     
-    private String preferredGenre;
+    private String preferred_genre;
 
     //gestione PLAYLISTS
     
@@ -40,35 +40,39 @@ public class MusicLibrary {
 
     
 	public MusicLibrary() {
-	    this.songList = new ArrayList<SongWithRating>();
+	    this.song_list = new ArrayList<SongWithRating>();
 	    this.playlists = new ArrayList<Playlist>();
-	    this.numSongs = 0;
-	    this.preferredArtist = "";
-	    this.preferredGenre = "";
+	    this.num_songs = 0;
+	    this.preferred_artist = "";
+	    this.preferred_genre = "";
 	}
 	
 	public MusicLibrary(UserAccount owner) {
 	    this.owner = owner;
-	    this.songList = new ArrayList<SongWithRating>();
+	    this.song_list = new ArrayList<SongWithRating>();
 	    this.playlists = new ArrayList<Playlist>();
-	    this.numSongs = 0;
-	    this.preferredArtist = "";
-	    this.preferredGenre = "";
+	    this.num_songs = 0;
+	    this.preferred_artist = "";
+	    this.preferred_genre = "";
 	}
 	
 	public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
 	    List<SongSummaryDTO> list = new ArrayList<SongSummaryDTO>();
 	    for (Song tmp:this.allSongs()) 
 	        list.add(tmp.toSummaryDTO());
-	    return new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list);
+	    
+	    List<String> playlists = this.getPlaylists();
+	    return new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list, playlists);
 	}
 	
 	public MusicLibraryDTO toMusicLibraryDTO() {
 	    List<SongDTO> list = new ArrayList<SongDTO>();
 	    for (Song tmp:this.allSongs()) {
-	        SongDTO tmp2 = tmp.toSongDTO();
-	        tmp2.setRatingForThisUser(this.getSongRate(tmp));
-	        list.add(tmp2);
+	        if (tmp != null) {
+	            SongDTO tmp2 = tmp.toSongDTO();
+	            tmp2.setRatingForThisUser(this.getSongRate(tmp));
+	            list.add(tmp2);
+	        }
 	    }
 	    
 	    List<String> playlists = this.getPlaylists();
@@ -88,29 +92,29 @@ public class MusicLibrary {
     }
     
     public int getNumSongs() {
-        return numSongs;
+        return num_songs;
     }
 
-    private void setNumSongs(int numSongs) {
-        this.numSongs = numSongs;
+    private void setNumSongs(int num_songs) {
+        this.num_songs = num_songs;
         this.update();
     }
 
     public String getPreferredArtist() {
-        return preferredArtist;
+        return preferred_artist;
     }
 
-    private void setPreferredArtist(String preferredArtist) {
-        this.preferredArtist = preferredArtist;
+    private void setPreferredArtist(String preferred_artist) {
+        this.preferred_artist = preferred_artist;
         this.update();
     }
 
     public String getPreferredGenre() {
-        return preferredGenre;
+        return preferred_genre;
     }
 
-    private void setPreferredGenre(String preferredGenre) {
-        this.preferredGenre = preferredGenre;
+    private void setPreferredGenre(String preferred_genre) {
+        this.preferred_genre = preferred_genre;
         this.update();
     }
 
@@ -118,19 +122,19 @@ public class MusicLibrary {
         
         song.update();
         boolean trovato = false;
-        for (SongWithRating tmp:this.songList)
+        for (SongWithRating tmp:this.song_list)
             if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
             }
         if (trovato == false) {
             //add songId to the list
-            this.songList.add(new SongWithRating(song.getId()));
+            this.song_list.add(new SongWithRating(song.getId()));
             
             //update song's attributes
             song.newOwner();
             
             //increment the counter
-            this.setNumSongs(numSongs+1);
+            this.setNumSongs(num_songs+1);
             
             //update statistic fields
             if (update == true) {
@@ -149,14 +153,14 @@ public class MusicLibrary {
         song.update();
         boolean trovato = false;
         SongWithRating saved_song = null;
-        for (SongWithRating tmp:this.songList)
+        for (SongWithRating tmp:this.song_list)
             if (tmp.getSongId().equals(song.getId()) == true) {
                 trovato = true;
                 saved_song = tmp;
             }
         if (trovato == true) {
             //remove songId to the list
-            this.songList.remove(saved_song);
+            this.song_list.remove(saved_song);
             
             //update song's attributes and delete it form database if necessary
             song.deleteOwner();
@@ -167,7 +171,7 @@ public class MusicLibrary {
             }
             
             //increment the counter
-            this.setNumSongs(numSongs-1);
+            this.setNumSongs(num_songs-1);
             
             //update statistic fields
             if (update == true) {
@@ -182,7 +186,7 @@ public class MusicLibrary {
      
     public void rateSong(Song song, int rating) {
         song.update();
-        for (SongWithRating tmp:this.songList)
+        for (SongWithRating tmp:this.song_list)
             if (tmp.getSongId().equals(song.getId()) == true) {
                 if (tmp.getRating()>0) {
                     int old_rating = tmp.getRating();
@@ -198,7 +202,7 @@ public class MusicLibrary {
     
     public int getSongRate(Song song) {
         song.update();
-        for (SongWithRating tmp:this.songList)
+        for (SongWithRating tmp:this.song_list)
             if (tmp.getSongId().equals(song.getId()) == true)
                 return tmp.getRating();
         return -1;
@@ -262,7 +266,7 @@ public class MusicLibrary {
     
     public List<Song> allSongs() {
         ArrayList<Song> lista = new ArrayList<Song>();
-        for (SongWithRating tmp:this.songList) {
+        for (SongWithRating tmp:this.song_list) {
             lista.add(ODF.get().load().type(Song.class).id(tmp.getSongId()).now());
         }
         return lista;
@@ -270,7 +274,7 @@ public class MusicLibrary {
 
     static void deleteMusicLibrary(MusicLibrary ml) {
         ODF.get().storeOrUpdate(ml);
-        for (SongWithRating tmp:ml.songList)
+        for (SongWithRating tmp:ml.song_list)
             SongWithRating.deleteSongWithRating(tmp);
         for (Playlist tmp:ml.playlists)
             Playlist.deletePlaylist(tmp);
@@ -280,9 +284,9 @@ public class MusicLibrary {
     
     
     //Playlist's methods
-    public boolean addPlaylist(String playlistName) {
-        if (this.getPlaylist(playlistName) == null) {
-            Playlist tmp = new Playlist(playlistName);
+    public boolean addPlaylist(String playlist_name) {
+        if (this.getPlaylist(playlist_name) == null) {
+            Playlist tmp = new Playlist(playlist_name);
             this.playlists.add(tmp);
             this.update();
             return true;
@@ -290,8 +294,8 @@ public class MusicLibrary {
         else return false;
     }
     
-    public boolean removePlaylist(String playlistName) {
-        Playlist playlist = this.getPlaylist(playlistName);
+    public boolean removePlaylist(String playlist_name) {
+        Playlist playlist = this.getPlaylist(playlist_name);
         if (playlist != null) {
             this.playlists.remove(playlist);
             Playlist.deletePlaylist(playlist);
@@ -301,10 +305,10 @@ public class MusicLibrary {
         else return false;
     }
 
-    private Playlist getPlaylist(String playlistName) {
+    private Playlist getPlaylist(String playlist_name) {
         for (int i=0; i<this.playlists.size(); i++) {
             Playlist tmp = this.playlists.get(i);
-            if (tmp.getName().equalsIgnoreCase(playlistName))
+            if (tmp.getName().equalsIgnoreCase(playlist_name))
                 return tmp;
         }
         return null;
@@ -320,9 +324,9 @@ public class MusicLibrary {
     
     
     //Playlist's songs methods
-    public List<Song> getPlaylistSongs(String playlistName) {
+    public List<Song> getPlaylistSongs(String playlist_name) {
         for (Playlist tmp:this.playlists) {
-            if (tmp.getName().equalsIgnoreCase(playlistName)) {
+            if (tmp.getName().equalsIgnoreCase(playlist_name)) {
                 List<String> songNames = tmp.getSongs();
                 List<Song> songs = new ArrayList<Song>();
                 for (String tmp2:songNames) {
@@ -334,42 +338,42 @@ public class MusicLibrary {
         return null;
     }
     
-    public List<String> getPlaylistSongNames(String playlistName) {
+    public List<String> getPlaylistSongNames(String playlist_name) {
         for (Playlist tmp : this.playlists) {
-            if (tmp.getName().equalsIgnoreCase(playlistName))
+            if (tmp.getName().equalsIgnoreCase(playlist_name))
                 return tmp.getSongs();
         }
         return null;
     }
     
-    public boolean addSongToPlaylist(String playlistName, String songId) {
-        Playlist tmp = this.getPlaylist(playlistName);
+    public boolean addSongToPlaylist(String playlist_name, String song_id) {
+        Playlist tmp = this.getPlaylist(playlist_name);
         if (tmp != null) {
             boolean trovato = false;
-            for (SongWithRating tmp2 : this.songList)
-                if (tmp2.getSongId().equals(songId)) {
+            for (SongWithRating tmp2 : this.song_list)
+                if (tmp2.getSongId().equals(song_id)) {
                     trovato = true;
                 }
             if (trovato == true) {
-                return tmp.addSong(songId);
+                return tmp.addSong(song_id);
             }
             else return false;
         }
         else return false;
     }
     
-    public boolean moveSongInPlaylist(String playlistName, int from, int to) {
-        Playlist tmp = this.getPlaylist(playlistName);
+    public boolean moveSongInPlaylist(String playlist_name, int from, int to) {
+        Playlist tmp = this.getPlaylist(playlist_name);
         if (tmp != null) {
             return tmp.moveSong(from, to);
         }
         else return false;
     }
     
-    public boolean removeSongFromPlaylist(String playlistName, String songId) {
-        Playlist tmp = this.getPlaylist(playlistName);
+    public boolean removeSongFromPlaylist(String playlist_name, String song_id) {
+        Playlist tmp = this.getPlaylist(playlist_name);
         if (tmp != null) {
-            return tmp.removeSong(songId);
+            return tmp.removeSong(song_id);
         }
         else return false;
     }
@@ -382,17 +386,17 @@ public class MusicLibrary {
         
         @Id private String name;
         
-        private List<String> songsList;
+        private List<String> songs_list;
 
         @SuppressWarnings("unused")
         Playlist() {
-            this.songsList = new ArrayList<String>();
+            this.songs_list = new ArrayList<String>();
             this.name = "";
         }
         
         Playlist(String name) {
             this.name = name;
-            this.songsList = new ArrayList<String>();
+            this.songs_list = new ArrayList<String>();
         }
         
         void update() {
@@ -404,27 +408,27 @@ public class MusicLibrary {
         }
         
         List<String> getSongs() {
-            return this.songsList;
+            return this.songs_list;
         }
         
-        boolean addSong(String songId) {
-            if (songsList.add(songId)) {
+        boolean addSong(String song_id) {
+            if (songs_list.add(song_id)) {
                 this.update();
                 return true;
             }
             else return false;
         }
         
-        boolean removeSong(String songId) {
-            boolean tmp = songsList.remove(songId);
+        boolean removeSong(String song_id) {
+            boolean tmp = songs_list.remove(song_id);
             this.update();
             return tmp;
         }
         
         boolean moveSong(int from, int to) {
-            if (from >=0 && from<songsList.size() && to>=0 && to<songsList.size() && to != from) {
-                String tmp = songsList.remove(from);
-                songsList.add(to, tmp);
+            if (from >=0 && from<songs_list.size() && to>=0 && to<songs_list.size() && to != from) {
+                String tmp = songs_list.remove(from);
+                songs_list.add(to, tmp);
                 this.update();
                 return true;
             }
@@ -443,18 +447,18 @@ public class MusicLibrary {
     //----------classe per gestione RATINGS--------------//
     static private class SongWithRating {
 
-        private String songId;
+        private String song_id;
         
         private int rating;
         
         @SuppressWarnings("unused")
         public SongWithRating() {
-            this.songId = Song.SEPARATOR;
+            this.song_id = Song.SEPARATOR;
             this.rating = -1;
         }
         
-        public SongWithRating(String songId) {
-            this.songId = songId;
+        public SongWithRating(String song_id) {
+            this.song_id = song_id;
             this.rating = -1;
             this.update();
         }
@@ -464,7 +468,7 @@ public class MusicLibrary {
         }
 
         public String getSongId() {
-            return songId;
+            return song_id;
         }
 
         public void setRating(int rating) {

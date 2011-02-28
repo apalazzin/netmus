@@ -10,6 +10,7 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
+import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -22,12 +23,17 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
    
 	@Override
-	public LoginDTO insertRegistration(LoginDTO login) throws IllegalStateException {
+	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
 		
 	    String passwordHash = BCrypt.hashpw(login.getPassword(), BCrypt.gensalt());
 		
         //create new user in the database
-        new UserAccount(login.getUser(), passwordHash);
+	    try {
+	        new UserAccount(login.getUser(), passwordHash);
+	    }
+	    catch (Exception e) {
+	        throw new RegistrationException();
+	    }
         
         return login;
 
@@ -51,7 +57,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 				return userAccount;
 			}
 			else
-			    throw new LoginException("pass inserita: "+login.getPassword()+" - pass salvata: "+userAccount.getPassword());
+			    throw new LoginException();
 		}
 	}
 

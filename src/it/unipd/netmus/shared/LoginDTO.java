@@ -14,16 +14,16 @@ import java.io.Serializable;
 public class LoginDTO implements Serializable {
 
 	  private String user;
-	  private String passwordHash;
-	  private String lastSessionId;
+	  private String password_hash;
+	  private String last_session_id;
 	  
 	  public LoginDTO(){
 		  
 	  }
 	  
-	  public LoginDTO(String user, String passwordHash) {
+	  public LoginDTO(String user, String password_hash) {
 		  setUser(user);
-		  setPassword(passwordHash);
+		  setPassword(password_hash);
 	  }
 	  
 	  public void setUser(String user) {
@@ -34,19 +34,19 @@ public class LoginDTO implements Serializable {
 		  return user;
 	  }
 	  
-	  public void setPassword(String passwordHash) {
-		  this.passwordHash = passwordHash;
+	  public void setPassword(String password_hash) {
+		  this.password_hash = password_hash;
 	  }
 	  
 	  public String getPassword() {
-		  return passwordHash;
+		  return password_hash;
 	  }
 
-	  public void setLastSessionId(String lastSessionId) {
-	      this.lastSessionId = lastSessionId;
+	  public void setLastSessionId(String last_session_id) {
+	      this.last_session_id = last_session_id;
 	  }
 
 	  public String getLastSessionId() {
-	      return lastSessionId;
+	      return last_session_id;
 	  }
 }

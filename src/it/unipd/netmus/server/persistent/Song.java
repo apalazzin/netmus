@@ -35,6 +35,7 @@ import com.google.code.twig.annotation.Index;
  *
  *
  */
+
 public class Song {
     
     static final String SEPARATOR = "-vt.g-";
@@ -153,13 +154,13 @@ public class Song {
                 s.setTitle(song.getTitle());
                 s.setArtist(song.getArtist());
                 s.setId(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
-                if (song.getComposer() != null)
+                if (!song.getComposer().equals(""))
                     s.setComposer(song.getComposer());
-                if (song.getGenre() != null)
+                if (!song.getGenre().equals(""))
                     s.setGenre(song.getGenre());
-                if (song.getTrackNumber() != null)
+                if (!song.getTrackNumber().equals(""))
                     s.setTrackNumber(song.getTrackNumber());
-                if (song.getYear() != null)
+                if (!song.getYear().equals(""))
                     s.setYear(song.getYear()); 
                 s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
                 s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
@@ -171,13 +172,13 @@ public class Song {
             else {
            
                 //inserimento delle informazioni prese dal DTO
-                if (s.getComposer() == "" && song.getComposer() != null)
+                if (s.getComposer().equals("") && song.getComposer() != null)
                     s.setComposer(song.getComposer());
-                if (s.getGenre() == "" && song.getGenre() != null)
+                if (s.getGenre().equals("") && song.getGenre() != null)
                     s.setGenre(song.getGenre());
-                if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
+                if (s.getTrackNumber().equals("") && song.getTrackNumber() != null)
                     s.setTrackNumber(song.getTrackNumber());
-                if (s.getYear() == "" && song.getYear() != null)
+                if (s.getYear().equals("") && song.getYear() != null)
                     s.setYear(song.getYear());   
                 
                 //prelievo delle informazioni da servizi esterni
@@ -333,8 +334,8 @@ public class Song {
         return album_cover;
     }
 
-    public void setAlbumCover(String albumCover) {
-        this.album_cover = albumCover;
+    public void setAlbumCover(String album_cover) {
+        this.album_cover = album_cover;
     }
 
     public String getYear() {
@@ -357,8 +358,8 @@ public class Song {
         return track_number;
     }
 
-    public void setTrackNumber(String trackNumber) {
-        this.track_number = trackNumber;
+    public void setTrackNumber(String track_number) {
+        this.track_number = track_number;
     }
 
     public String getFile() {

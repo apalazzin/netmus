@@ -12,12 +12,12 @@ import com.google.code.twig.annotation.AnnotationObjectDatastore;
  */
 final class ODF {
    
-	private static final ObjectDatastore datastoreIstance = new AnnotationObjectDatastore(false);
+	private static final ObjectDatastore datastore_istance = new AnnotationObjectDatastore(false);
 
 	private ODF() {
 	}
 
 	public static ObjectDatastore get() {
-		return datastoreIstance;
+		return datastore_istance;
 	}
 }

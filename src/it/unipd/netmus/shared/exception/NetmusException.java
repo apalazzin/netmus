@@ -9,7 +9,7 @@ package it.unipd.netmus.shared.exception;
  */
 @SuppressWarnings("serial")
 public class NetmusException extends Exception {
-	private String moreInfo;
+	private String more_info;
 	
 	public NetmusException() {
 		super();
@@ -17,10 +17,10 @@ public class NetmusException extends Exception {
 	
 	public NetmusException(String moreInfo) {
 		super();
-		this.moreInfo = moreInfo;
+		this.more_info = moreInfo;
 	}
 
 	public String getMoreInfo() {
-		return moreInfo;
+		return more_info;
 	}
 }
