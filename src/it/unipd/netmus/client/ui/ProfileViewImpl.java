@@ -16,6 +16,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -38,6 +39,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -45,6 +47,7 @@ import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -99,6 +102,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private String cpassword;
    
    private CellTable<Song> lista_canzoni;
+   
+   
+   private HandlerRegistration rm_link;
+   private HandlerRegistration rm_fw;
+   private HandlerRegistration rm_rw;
    
    //elementi uiBinder
 
@@ -193,11 +201,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    boolean playlist_opened; 
    boolean song_opened;
    
+   int youtube_status=0;
+   int last_selected = 0;
+   int playing = 0;
+   
    Song selected_song;
    Song selected_song_playlist;
+   Song played_song;
    
    List<Song> canzoni_catalogo = new ArrayList<Song>();
    List<Song> canzoni_playlist = new ArrayList<Song>();
+   List<Song> player_playlist = new ArrayList<Song>();
    
    ListDataProvider<Song> dataProvider_playlist = new ListDataProvider<Song>();
    ListDataProvider<Song> dataProvider_catalogo = new ListDataProvider<Song>();
@@ -269,8 +283,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public ProfileViewImpl() {
 
-       
-       
+       youTubeListener();
+       youtube_status = 0;
 	   //costruisco la componente widget x il catalogo delle canzoni
 	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
 	   catalogo.setWidth("100%", true);
@@ -329,13 +343,34 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	         song_autore.setText(selected_song.autore);
 	         song_album.setText(selected_song.album);
 	         
-	         play.setUrl("images/play.png");
+	         
+	         
+	         if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+	             play.setUrl("images/pause.png");
+	             youtube_status = 1;
+	             last_selected=0;
+	         }
+	         else if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+                 play.setUrl("images/play.png");
+                 youtube_status = -1;
+                 last_selected=0;
+             }
+
+	         else {
+	             play.setUrl("images/play.png");
+	             if(youtube_status!=0&&youtube_status==1)
+	                 youtube_status = 2;
+	             else if(youtube_status!=0&&youtube_status==-1)
+	                 youtube_status = 3;
+	             last_selected=0;
+	         }
              play_youtube.setUrl("images/play.png");
 
              global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
              showStar(rating);
 	         
 	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
+	         
 	         
 	      }
 	    });
@@ -477,7 +512,31 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       selectionModel2.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 	         public void onSelectionChange(SelectionChangeEvent event) {
 	             
-	           setBranoPlaylist(selectionModel2.getSelectedObject());	           
+	           setBranoPlaylist(selectionModel2.getSelectedObject());
+	           
+	           
+	             
+	             if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+	                 play.setUrl("images/pause.png");
+	                 youtube_status = 1;
+	                 last_selected=1;
+	             }
+	             else if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+	                 play.setUrl("images/play.png");
+	                 youtube_status = -1;
+	                 last_selected=1;
+	             }
+
+	             else {
+	                 play.setUrl("images/play.png");
+	                 if(youtube_status!=0&&youtube_status==1)
+	                     youtube_status = 2;
+	                 else if(youtube_status!=0&&youtube_status==-1)
+	                     youtube_status = 3;
+	                 last_selected=1;
+	             }
+	             play_youtube.setUrl("images/play.png");
+	           
 	         }
 	       });
 	       
@@ -530,10 +589,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 	       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
 	       playlist_songs.add(off);	   
 	       main_panel.getElement().setId("main_panel");
+	       
+	       
 
    }
  
-   
    
    
 ///////////////////////////////////////////////////////
@@ -553,24 +613,146 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       listener.logout();      
    }
    
+
+   @UiHandler("play")
+   void handleClickPlay(ClickEvent e) {
+       
+       if(youtube_status==0 && last_selected==0) {
+           if(selected_song!=null){ 
+               play.setUrl("images/pause.png");
+               played_song = selected_song;
+               playing=0;
+               listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
+               
+           }
+       }
+       
+       else if(youtube_status==0 && last_selected==1) {
+           if(selected_song_playlist!=null){ 
+               play.setUrl("images/pause.png");
+               played_song = selected_song_playlist;
+               playing=1;
+               player_playlist = new ArrayList<Song>(dataProvider_playlist.getList());
+               listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
+               
+           }
+       }
+       
+       else if(youtube_status==1) {
+           pausePlayer();
+           youtube_status=-1;
+           play.setUrl("images/play.png");
+       }
+              
+       else if(youtube_status==-1) {
+           playPlayer();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+       }
+
+       else if((youtube_status==2||youtube_status==3) && last_selected==0) {
+           closeYouTube();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+           played_song = selected_song;
+           playing=0;
+           listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
+           setFwRw();
+       }
+
+       else if((youtube_status==2||youtube_status==3) && last_selected==1) {
+           closeYouTube();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+           played_song = selected_song_playlist;
+           playing=1;
+           player_playlist =  new ArrayList<Song>(dataProvider_playlist.getList());
+           listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
+           setFwRw();
+       }
+
+   }    
+    
+   private static native void playPlayer() /*-{ 
+   
+   $doc.getElementById('youtube_player').playVideo();
+
+    }-*/;
+   
+   private static native void pausePlayer() /*-{ 
+        
+     $doc.getElementById('youtube_player').pauseVideo();   
+
+      }-*/;
+
+   
+   
+
    @UiHandler("play")
    void handleMouseOverPlay(MouseOverEvent e) {
-      if(selected_song!=null) {
-          play.setUrl("images/pause.png");
           play.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-      }
    }
    @UiHandler("play")
    void handleMouseOutPlay(MouseOutEvent e) {
-       if(selected_song!=null) {
-           play.setUrl("images/play.png");
-       }
+       
    }
    
    @UiHandler("play_youtube")
    void handleClickPlayYoutube(ClickEvent e) {
-       if(selected_song!=null) 
+       if(youtube_status==0 && last_selected==0) {
+           if(selected_song!=null){ 
+               play.setUrl("images/pause.png");
+               played_song = selected_song;
+               playing=0;
+               listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
+               
+           }
+       }
+       
+       else if(youtube_status==0 && last_selected==1) {
+           if(selected_song_playlist!=null){ 
+               play.setUrl("images/pause.png");
+               played_song = selected_song_playlist;
+               playing=1;
+               player_playlist = new ArrayList<Song>(dataProvider_playlist.getList());
+               listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
+               
+           }
+       }
+       
+       else if(youtube_status==1) {
+           pausePlayer();
+           youtube_status=-1;
+           play.setUrl("images/play.png");
+       }
+              
+       else if(youtube_status==-1) {
+           playPlayer();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+       }
+
+       else if((youtube_status==2||youtube_status==3) && last_selected==0) {
+           closeYouTube();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+           played_song = selected_song;
+           playing=0;
            listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
+           setFwRw();
+       }
+
+       else if((youtube_status==2||youtube_status==3) && last_selected==1) {
+           closeYouTube();
+           youtube_status=1;
+           play.setUrl("images/pause.png");
+           played_song = selected_song_playlist;
+           playing=1;
+           player_playlist =  new ArrayList<Song>(dataProvider_playlist.getList());
+           listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
+           setFwRw();
+       }
+
    }
 
    @UiHandler("play_youtube")
@@ -1256,13 +1438,210 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       
    }
 
-   
-   public void playYouTube(final String link) {
+   private void setFwRw() {
        
-       if (link.equals("")) {
-           return;
+      
+       
+       if(playing==0){
+
+           if(dataProvider_catalogo.getList().indexOf((played_song))+1<dataProvider_catalogo.getList().size()) {
+               if(rm_fw!=null) rm_fw.removeHandler();    
+               forward.setVisible(true);
+               forward.setUrl("images/fw.png");
+               rm_fw = forward.addClickHandler(new ClickHandler(){
+    
+                @Override
+                public void onClick(ClickEvent event) {
+                    
+                    playNext();
+                    
+                    
+                }});
+           } else {
+               
+               forward.setUrl("images/fwoff.png");
+               forward.setVisible(false);
+           }
+           
+           if(dataProvider_catalogo.getList().indexOf(played_song)-1>=0) {
+               if(rm_rw!=null) rm_rw.removeHandler();               
+               rewind.setVisible(true);
+               rewind.setUrl("images/rw.png");
+               rm_rw = rewind.addClickHandler(new ClickHandler(){
+                   
+                   @Override
+                   public void onClick(ClickEvent event) {
+                       
+                       playPrev();
+                       
+                   }});
+           } else {
+               rewind.setUrl("images/rwoff.png");
+               rewind.setVisible(false);
+           }
+     
+           
+       } else if(playing==1) {
+                 
+           if(player_playlist.indexOf((played_song))+1<player_playlist.size()) {
+               if(rm_fw!=null) rm_fw.removeHandler();    
+               forward.setVisible(true);
+               forward.setUrl("images/fw.png");
+               rm_fw = forward.addClickHandler(new ClickHandler(){
+    
+                @Override
+                public void onClick(ClickEvent event) {
+                    
+                    playNext();
+                    
+                    
+                }});
+           } else {
+               
+               forward.setUrl("images/fwoff.png");
+               forward.setVisible(false);
+           }
+           
+           if(player_playlist.indexOf(played_song)-1>=0) {
+               if(rm_rw!=null) rm_rw.removeHandler();               
+               rewind.setVisible(true);
+               rewind.setUrl("images/rw.png");
+               rm_rw = rewind.addClickHandler(new ClickHandler(){
+                   
+                   @Override
+                   public void onClick(ClickEvent event) {
+                       
+                       playPrev();
+                       
+                   }});
+           } else {
+               rewind.setUrl("images/rwoff.png");
+               rewind.setVisible(false);
+           }
+     
+       }
+       
+   }
+   
+
+   
+   private void playNext() {
+       
+       if(playing==0) {
+           
+           Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
+                      
+           closeYouTube();
+           youtube_status=1;
+           played_song = to_play;
+           playing=0;
+           listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
+           setFwRw();
+           
        } else {
            
+           Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
+           
+           closeYouTube();
+           youtube_status=1;
+           played_song = to_play;
+           playing=1;
+           listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
+           setFwRw();
+       }
+   }
+   
+   private void playPrev() {
+       
+      if(playing==0) {
+           
+          Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)-1);
+                      
+           closeYouTube();
+           youtube_status=1;
+           played_song = to_play;
+           playing=0;
+           listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
+           setFwRw();
+           
+       } else {
+           
+           Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)-1);
+           
+           closeYouTube();
+           youtube_status=1;
+           played_song = to_play;
+           playing=1;
+           listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
+           setFwRw();
+           
+       }
+       
+   }
+   
+   public void youTubeChange(int s) {
+
+       if(s==2)
+           youtube_status = -1;
+       else if(s==1) {
+           youtube_status = 1;
+           setFwRw();
+       }
+       else if(s==0)    {
+           
+           if(playing==0){
+               
+               Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
+               
+               closeYouTube();
+               youtube_status=1;
+               played_song = to_play;
+               playing=0;
+               listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);                
+               setFwRw();
+               
+           } else if(playing==1) {
+
+               Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
+               
+               closeYouTube();
+               youtube_status=1;
+               played_song = to_play;
+               playing=1;
+               listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
+               
+           }
+               
+           
+       }
+           
+    }
+   
+   public native void youTubeListener() /*-{
+       
+       var _this = this;
+       
+       $wnd.youTubeChange = function(s) {
+          _this.@it.unipd.netmus.client.ui.ProfileViewImpl::youTubeChange(I)(s);
+       }
+   
+   }-*/;
+
+
+   public void playYouTube(final String link) {
+       
+       
+       if (link.equals("")) {
+           
+           System.out.println("link mancante");
+           closeYouTube();
+           
+           
+       } else {
+           
+           
+           
+           youtube_status = 1;
            youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
            youtube.getElement().getStyle().setWidth(335, Style.Unit.PX);
            youtube.getElement().getStyle().setBottom(7, Style.Unit.PX);
@@ -1293,6 +1672,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            classifica.getElement().getStyle().setLeft(365, Style.Unit.PX);
            
+           
            HTMLPanel player = new HTMLPanel("player");
            player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
            player.getElement().getStyle().setTop(8, Style.Unit.PX);
@@ -1301,16 +1681,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            player.getElement().getStyle().setZIndex(3);
            
-           info_youtube.getElement().setInnerText(selected_song.titolo + ". " + selected_song.autore);
+           info_youtube.getElement().setInnerText(played_song.titolo + ". " + played_song.autore);
+           
            info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
            
-           info_youtube_link.addClickHandler(new ClickHandler() {
+           if(rm_link!=null) rm_link.removeHandler();
+           
+           rm_link = info_youtube_link.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 Window.open("http://www.youtube.com/watch?v=" + link, "_blank", "");
                 
             }});
+           
+           info_youtube.setVisible(true);
+           info_youtube_link.setVisible(true);
+           youtube_appendice.setVisible(true);
+           chiudi_youtube.setVisible(true);
            
            info_youtube.getElement().getStyle().setOpacity(1);
            info_youtube_link.getElement().getStyle().setOpacity(1);
@@ -1319,19 +1707,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            
            player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
-                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
-                   		"<param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"http://www.youtube.com/v/" + link
-                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
+                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
+                   		"<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
+                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
                    		"allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
-
+           
+           
+            
        }
-       
 
        
    }
 
    public void closeYouTube() {
        
+       youtube_status = 0;
        youtube.getElement().getStyle().setHeight(60, Style.Unit.PX);
        youtube.getElement().getStyle().setWidth(200, Style.Unit.PX);
        youtube.getElement().getStyle().setBottom(22, Style.Unit.PX);
@@ -1358,7 +1748,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        info_youtube_link.getElement().getStyle().setOpacity(0);
        youtube_appendice.getElement().getStyle().setOpacity(0);
        chiudi_youtube.getElement().getStyle().setOpacity(0);
-       
+
+       info_youtube.setVisible(false);
+       info_youtube_link.setVisible(false);
+       youtube_appendice.setVisible(false);
+       chiudi_youtube.setVisible(false);
+
        classifica.getElement().getStyle().setLeft(265, Style.Unit.PX);
        
        youtube.getWidget(6).removeFromParent();
