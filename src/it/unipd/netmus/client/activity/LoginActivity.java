@@ -1,8 +1,6 @@
 package it.unipd.netmus.client.activity;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
@@ -29,30 +27,28 @@ public class LoginActivity extends AbstractActivity implements
 	LoginView.Presenter {
 	// Used to obtain views, eventBus, placeController
 	// Alternatively, could be injected via GIN
-	private ClientFactory clientFactory;
+	private ClientFactory client_factory;
 	private String user;
 	private String password;
 	private String error;
-	private LoginType loginType;
+	private LoginType login_type;
 	
-	private static Logger logger = Logger.getLogger("LoginActivity");
-	
-	private LoginServiceAsync loginServiceSvc = GWT.create(LoginService.class);
-	MyConstants myConstants = GWT.create(MyConstants.class);
+	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
+	MyConstants my_constants = GWT.create(MyConstants.class);
 	
 	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
 		this.user = place.getLoginName();
 		this.password = place.getPassword();
 		this.error = place.getError();
-		this.loginType = place.getLoginType();
-		this.clientFactory = clientFactory;
+		this.login_type = place.getLoginType();
+		this.client_factory = clientFactory;
 	}
 
 	/**
 	* Invoked by the ActivityManager to start a new Activity
 	*/
 	@Override
-	public void start(final AcceptsOneWidget containerWidget, EventBus eventBus) {
+	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
 	    
 	    
 	    
@@ -62,25 +58,24 @@ public class LoginActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
                     // user not logged yet - show loginView
-                    LoginView loginView = clientFactory.getLoginView();
+                    LoginView loginView = client_factory.getLoginView();
                     loginView.setError(error);
-                    loginView.setLoginType(loginType);
+                    loginView.setLoginType(login_type);
                     loginView.setPassword(password);
                     loginView.setUser(user);
                     loginView.setPresenter(LoginActivity.this);
-                    containerWidget.setWidget(loginView.asWidget());
+                    container_widget.setWidget(loginView.asWidget());
                     
                 }
             }
 
             @Override
             public void onSuccess(String result) {
-                logger.info("User '"+result+"' Logged - Redirect to Profile");
                 goTo(new ProfilePlace(result));
             }
         };
         
-        try { loginServiceSvc.getLoggedInUser(callback); }
+        try { login_service_svc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
 		
@@ -90,7 +85,7 @@ public class LoginActivity extends AbstractActivity implements
 	* Navigate to a new Place in the browser
 	*/
 	public void goTo(Place place) {
-		clientFactory.getPlaceController().goTo(place);
+		client_factory.getPlaceController().goTo(place);
 	}
 
     @Override
@@ -104,19 +99,15 @@ public class LoginActivity extends AbstractActivity implements
             
           public void onFailure(Throwable caught) {
               if (caught instanceof LoginException) {
-                  logger.log(Level.INFO, ((LoginException)caught).getMoreInfo());
-                  goTo(new LoginPlace(username,pass, myConstants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
+                  goTo(new LoginPlace(username,pass, my_constants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
               }
               else {
-                  logger.log(Level.INFO, ("Impossibile connettersi al database"));
-                  goTo(new LoginPlace(username,pass, myConstants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
+                  goTo(new LoginPlace(username,pass, my_constants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
               }
           }
           
           @Override
-          public void onSuccess(String session_id) {
-              logger.log(Level.INFO, username+" "+ myConstants.infoCorrectLogin());
-              
+          public void onSuccess(String session_id) {              
               // create the cookie for this session
               final long DURATION = 1000 * 60 * 60 * 24;
               Date expires = new Date(System.currentTimeMillis() + DURATION);
@@ -129,7 +120,7 @@ public class LoginActivity extends AbstractActivity implements
 
         // Make the call to send login info.
         try {
-            loginServiceSvc.startLogin(login, callback);
+            login_service_svc.startLogin(login, callback);
         } catch (Exception e) {}
 
     }
@@ -147,29 +138,27 @@ public class LoginActivity extends AbstractActivity implements
         LoginDTO login = new LoginDTO(user,password);;
         
         if (!FieldVerifier.isValidPassword(password))
-            goTo( new LoginPlace(username,pass, myConstants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+            goTo( new LoginPlace(username,pass, my_constants.errorPassword() ,LoginType.NETMUSREGISTRATION));
         else if (!FieldVerifier.isValidEmail(username))
-            goTo( new LoginPlace(username,pass, myConstants.errorEmail() ,LoginType.NETMUSREGISTRATION));
+            goTo( new LoginPlace(username,pass, my_constants.errorEmail() ,LoginType.NETMUSREGISTRATION));
         else if (!password.equals(confirmPassword))
-            goTo( new LoginPlace(username,pass, myConstants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
+            goTo( new LoginPlace(username,pass, my_constants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
         else {
             
             // Set up the callback object.
             AsyncCallback<LoginDTO> callback = new AsyncCallback<LoginDTO>() {
             
                 public void onFailure(Throwable caught) {
-                    logger.log(Level.INFO, "");
-                    goTo(new LoginPlace(username,pass, myConstants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
+                    goTo(new LoginPlace(username,pass, my_constants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
                 }
 
                 @Override
                 public void onSuccess(LoginDTO result) {
                     
                     //Reimposta la login
-                    LoginView loginView = clientFactory.getLoginView();
+                    LoginView loginView = client_factory.getLoginView();
                     loginView.setLayout();
                     
-                    logger.log(Level.INFO, myConstants.infoUserInsertDb() + username);
                     try {
                         sendLogin(result.getUser(), result.getPassword());
                     } catch (LoginException e) {
@@ -182,7 +171,7 @@ public class LoginActivity extends AbstractActivity implements
             
             // Make the call to send login info.
             try {
-                loginServiceSvc.insertRegistration(login, callback);
+                login_service_svc.insertRegistration(login, callback);
             } catch (RegistrationException e) {
                 //exception alredy cought in method onFailure
                 e.printStackTrace();
