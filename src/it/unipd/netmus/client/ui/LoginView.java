@@ -17,13 +17,38 @@ import com.google.gwt.user.client.ui.IsWidget;
  *
  */
 public interface LoginView extends IsWidget {
-   
+	/**
+	 *Questo metodo viene usato da
+	 *LoginActivity per impostare una sua istanza come implementazione
+	 *del presenter di LoginView.
+	 */ 
    void setPresenter(Presenter listener);
+	/**
+	 *Questo metodo viene usato da
+	 *LoginActivity per impostare l'username inserito nel precedente
+	 *tentativo di login o registrazione.
+	 */ 
    void setUser(String user);
+	/**
+	 *Questo metodo viene usato da
+	 *LoginActivity per impostare la password inserita nel precedente
+	 *tentativo di login o registrazione.
+	 */ 
    void setPassword(String passwordHash);
+	/**
+	 *Questo metodo viene usato da
+	 *LoginActivity per impostare il testo di un errore occorso nel
+	 *precedente tentativo di login o registrazione.
+	 */ 
    void setError(String error);
+	/**
+	 *Serve ad impostare il tipo di login o
+	 *registrazione che si sta effettuando
+	 */ 
    void setLoginType(LoginType loginType);
-   //aggiusta il layout all'avvio
+   	/**
+   	 *Aggiusta il layout all'avvio
+   	 */
    void setLayout();
    
    public interface Presenter

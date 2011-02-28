@@ -22,134 +22,227 @@ public interface ProfileView extends IsWidget {
         @Override
         public abstract boolean equals(Object o);
     };
-
+    /**
+     *Questo metodo viene usato da ProfileActivity per fornire il
+	 *nome del profilo alla crezione della ProfileView.
+     */
    void setName(String profileName);
+   /**
+    *Questo metodo viene usato da ProfileActivity per impostare una
+    *sua istanza come implementazione del presenter di ProfileView.
+    */
    void setPresenter(Presenter listener);
+   /**
+    *Questo metodo viene usato da ProfileActivity per fornire il
+    *numero di brani alla crezione della ProfileView.
+    */
    void setNumeroBrani(int numero);
+   /**
+    *Questo metodo viene usato daProfileActivity per fornire l’username
+    *dell’utente alla crezione della ProfileView.
+    */
    void setUser(String username);
+   /**
+    *Imposta il rating personale dell’utente.
+    */   
    void setRating(int rating);
-
-   //riempie il catalogo
+   /**
+    *Riempie il catalogo
+    */
    void paintCatalogo(List<String> lista_canzoni);
-   //riempie la lista delle playlist
+   /**
+    *Riempie la lista delle playlist
+    */
    void paintPlaylist(String[] lista);
-   // riempie la singola playlist delle sue canzoni
+   /**
+    * Riempie la singola playlist delle sue canzoni
+    */
    void paintPlaylistSongs(List<String> lista);
-   //riempie la lista dei contatti
+   /**
+    *Riempie la lista dei contatti
+    */
    void paintFriendlist(String[] lista);
-   //imposta la finestra informativa
+   /**
+    *Imposta la finestra informativa
+    */
    void setInfo(String testo);
-   //visualizza la playlist scelta
+   /**
+    *Visualizza la playlist scelta
+    */
    void viewPlaylist(String playlist_name);
-   //chiude il gestore della playlist
+   /**
+    *Chiude il gestore della playlist
+    */
    void closePlaylist();
-   //apre il player youtube sulla relativa canzone
+   /**
+    * Apre il player youtube sulla relativa canzone
+    */  
    void playYouTube(String titolo);
-   //chiude il player youtube
+   /**
+    * Chiude il player youtube
+    */   
    void closeYouTube();
-   //imposta il brano selezionato sul catalogo
+   /**
+    * Imposta il brano selezionato sul catalogo
+    */   
    void setBranoCatalogo(Song selezione);
-   //imposta il brano selezionato sulla playlist
+   /**
+    * Imposta il brano selezionato sulla playlist
+    */  
    void setBranoPlaylist(Song selezione);
-   //aggiungi il brano del catalogo alla playlist 
+   /**
+    * Aggiungi il brano del catalogo alla playlist
+    */    
    void addToPLaylist(String autore, String titolo, String album);
-   //rimuovi il brano dalla playlist
+   /**
+    * Rimuovi il brano dalla playlist
+    */   
    void removeFromPlaylist(String autore, String titolo, String album);
-   //inizializza il layout
+   /**
+    * Inizializza il layout
+    */
    void setLayout();
-   //Aggiunge una nuova playlist
+   /**
+    *Aggiunge una nuova playlist
+    */  
    void addToPlaylists(String titolo);
-   //Visulaizza la scheda della canzone
+   /**
+    * Visualizza la scheda della canzone
+    */
    void viewSong(Song song);
-   //Chiude la scheda della canzone
+   /**
+    * Chiude la scheda della canzone
+    */
    void closeSong();
-   //Imposta i campi della canzone nella scheda di dettaglio
+   /**
+    * Imposta i campi della canzone nella scheda di dettaglio
+    */
    void setSongFields(String autore, String titolo, String album, String genere,
 			String anno, String compositore, String traccia, String cover);
-   //Mostra il rating dato come input
+   /**
+    * Mostra il rating dato come input
+    */
    void showStar(int index);
-   //Aggiorna il global rating
+   /**
+    * Aggiorna il global rating
+    */   
    void showGlobalStar(double d);
-   //aggiorna carica dati dell'EditProifle
+   /**
+    * Aggiorna carica dati dell'EditProifle
+    */   
    void showEditProfile(String nickname, String name, String surname, String nationality, String gender, String aboutme);
-   //elimina la canzone dal catalogo
+   /**
+    * Elimina la canzone dal catalogo
+    */
    void deleteSong(String autore, String titolo, String album);
 
    public interface Presenter
    {
+	    /**
+	     *Effettua il logout dell'utente, facendo scadere la sessione ed eliminando
+	     *i cookies relativi ad essa, comunicando con il LoginService implementato nel server.
+	     */
       void logout();
+      /**
+       	*Permette di spostarsi in un place differente anche relativo ad un'altra view. Ad esempio per
+       	*tornare alla pagina di LoginView se l'utente non è autenticato. Verrà
+       	*quindi chiamato nel metodo start se un utente tenta di accedere al
+       	*ProfileView senza essere autenticato.
+        */
       void goTo(Place place);
-      
-      //restituisce la lista dei titoli delle singole playlist dell'utente
+      /**
+       *Restituisce la lista dei titoli delle singole playlist dell'utente
+       */      
       void setPlaylistList(); 
-
-      //restituisce la lista degli utenti affini su Netmus
+      /**
+       *Restituisce la lista degli utenti affini su Netmus
+       */
       void setFriendList(); 
-
-      //restituisce il titolo della canzone in ascolto
+      /**
+       *Restituisce il titolo della canzone in ascolto
+       */
       void setSongInfo(); 
-
-      //restituisce il summary delle canzoni
+      /**
+       *Restituisce il summary delle canzoni
+       */
       void setSongs();
-      
-      //restituisce il rating della canzone selezionata
+      /**
+       *Restituisce il rating della canzone selezionata
+       */      
       double setRating(String artist, String title, String album);
-
-      //restituisce il link youtube della canzone selezionata
+      /**
+       *Restituisce il link youtube della canzone selezionata
+       */
       void playYouTube(String autore, String titolo, String album);
-
-      //Aggiunge una nuova Playlist
+      /**
+       *Aggiunge una nuova Playlist
+       */
       void addPlaylist(String title);
-
-      //aggiunge song alla playlist e restituisce true in caso di successo
-      void addToPLaylist(String playlist, String autore, String titolo, String album);
-
-      //aggiunge song alla playlist e restituisce true in caso di successo
+      /**
+       *Aggiunge song alla playlist e restituisce true in caso di successo
+       */
+     void addToPLaylist(String playlist, String autore, String titolo, String album);
+      /**
+       *Aggiunge song alla playlist e restituisce true in caso di successo
+       */
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
-      
-      //Imposta i campi della canzone selezionata.
+      /**
+       *Imposta i campi della canzone selezionata.
+       */      
       void setSongFields(String autore, String titolo, String album);
-      
-      //attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
+      /**
+       *Attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
+       */      
       void rateSong(String artist, String title, String album, int rate);
-      
-      //Elimina la playlist
+      /**
+       *Elimina la playlist
+       */      
       void deletePlaylist(String playlist_name);
-      
-      //Aggiorna la lista di canzoni della playlist
+      /**
+       *Aggiorna la lista di canzoni della playlist
+       */      
       void setPlaylistSongs(String titoloPlaylist);
-
-      //Spasta in basso la canzone della playlist selezionata
+      /**
+       *Sposta in basso la canzone della playlist selezionata
+       */
       void moveDownInPLaylist(String playlist, String autore, String titolo, String album);
-      
-      //Spasta in basso la canzone della playlist selezionata
+      /**
+       *Sposta in basso la canzone della playlist selezionata
+       */      
       void moveUpInPLaylist(String playlist, String autore, String titolo, String album);
-      
-      //Controlla i permessi ed avvia la visualizzazione del profilo dell'utente in input
+      /**
+       *Controlla i permessi ed avvia la visualizzazione del profilo dell'utente in input
+       */      
       void viewOtherLibrary(String user);
-      
-      //Elimina la canzone
+      /**
+       *Elimina la canzone
+       */      
       void deleteSong(String autore, String titolo, String album);
-      
-      //Esporta la lista delle canzoni in pdf
+      /**
+       *Esporta la lista delle canzoni in pdf
+       */      
       void exportPDF(String user);
-      
-      //Apre la sezione di visualizzazione/modifica del profilo personale
+      /**
+       *Apre la sezione di visualizzazione/modifica del profilo personale
+       */      
       void editProfileView(String user);
-      
-      //Invia i dati modficati quando viene premuti il pulsante salva
+      /**
+       *Invia i dati modficati quando viene premuti il pulsante salva
+       */      
       void editProfile(String user, String nick_name, String first_name, String last_name
               , String gender, String nationality, String aboutMe, String password);
-      
-      //Salva il titolo della canzone che è stato modificato dall'utente
+      /**
+       *Salva il titolo della canzone che è stato modificato dall'utente
+       */      
       void editSongTitle(String new_title, String old_title, String artist, String album);
-      
-      //Salva il nome dell'album che è stato modificato dall'utente
+      /**
+       *Salva il nome dell'album che è stato modificato dall'utente
+       */      
       void editSongAlbum(String new_album, String old_album, String artist, String title);
-      
-      //Salva il nome dell'artista che è stato modificato dall'utente
+      /**
+       *Salva il nome dell'artista che è stato modificato dall'utente
+       */      
       void editSongArtist(String new_artist, String old_artist, String title, String album);
-
    }
 
 }
