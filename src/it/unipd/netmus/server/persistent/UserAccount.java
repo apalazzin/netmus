@@ -20,8 +20,16 @@ import com.google.code.twig.annotation.Type;
 
 /**
  * @author ValterTexasGroup
+ * 
+ * UserAccount utilizza il design pattern DAO poichè contiene tutte le
+ * informazioni relative ad un utente così come viene salvato all'interno del
+ * Datastore. La classe è implementata come POJO poichè twig-persist lo
+ * supporta senza bisogno di configurazioni aggiuntive. Vengono usate solamente
+ * le annotazioni @Key e @Index per gestire l'indicizzazione
+ * deigli oggetti nel datastore.
  *
  */
+
 public class UserAccount {
    
    @Id private String user;
@@ -129,7 +137,14 @@ public class UserAccount {
        tmp.setMusicLibrary(this.music_library.toMusicLibraryDTO());
        return tmp;
    }
+
    
+   /**
+    * 
+    * Cerca nel database e ritorna i dati realivi ad un utente che come last_session_id 
+    * ha l'id di sessione HTTP dato in input.
+    *
+    */
    public static UserAccount findSessionUser(String session_id) {
        return ODF.get().find().type(UserAccount.class)
        .addFilter("lastSessionId", FilterOperator.EQUAL, session_id)
