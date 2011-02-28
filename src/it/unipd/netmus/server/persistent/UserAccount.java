@@ -7,6 +7,7 @@ import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class UserAccount {
    private String gender;
    
    private String nationality;
+   
+   private boolean is_public_profile;
+   
+   private List<String> allowed_users;
 
    @Type(Text.class) private String aboutMe;
 
@@ -61,6 +66,8 @@ public class UserAccount {
        this.nickName = "";
        this.passwordHash = "";
        this.user = "";
+       this.is_public_profile = true;
+       this.allowed_users = new ArrayList<String>();
    }
    
    public UserAccount(String user, String passwordHash) { 
@@ -76,6 +83,8 @@ public class UserAccount {
        this.lastSessionId = "";
        this.nationality = "";
        this.nickName = "";
+       this.is_public_profile = true;
+       this.allowed_users = new ArrayList<String>();
        this.store();
    }
    
@@ -108,6 +117,8 @@ public class UserAccount {
        tmp.setLastName(this.lastName);
        tmp.setNationality(this.nationality);
        tmp.setIsGoogleUser(this.isGoogleUser);
+       tmp.setPublicProfile(this.is_public_profile);
+       tmp.setAllowedUsers(this.allowed_users);
        return tmp;
    }
    
@@ -122,6 +133,8 @@ public class UserAccount {
        tmp.setLastName(this.lastName);
        tmp.setNationality(this.nationality);
        tmp.setIsGoogleUser(this.isGoogleUser);
+       tmp.setPublicProfile(this.is_public_profile);
+       tmp.setAllowedUsers(this.allowed_users);
        tmp.setMusicLibrary(this.musicLibrary.toMusicLibraryDTO());
        return tmp;
    }
@@ -231,7 +244,23 @@ public class UserAccount {
        return isGoogleUser;
    }
    
-   public static void deleteUser(UserAccount user) {
+   public void setPublicProfile(boolean is_public_profile) {
+    this.is_public_profile = is_public_profile;
+   }
+
+   public boolean isPublicProfile() {
+       return is_public_profile;
+   }
+
+   public void setAllowedUsers(List<String> allowedUsers) {
+       this.allowed_users = allowedUsers;
+   }
+
+   public List<String> getAllowedUsers() {
+       return allowed_users;
+   }
+
+public static void deleteUser(UserAccount user) {
        ODF.get().storeOrUpdate(user);
        
        List<Song> songsList = user.getMusicLibrary().allSongs();

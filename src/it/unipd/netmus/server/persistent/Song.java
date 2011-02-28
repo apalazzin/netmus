@@ -7,6 +7,7 @@ import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import com.google.appengine.api.datastore.Transaction;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 
@@ -37,12 +38,6 @@ import com.google.code.twig.annotation.Index;
 public class Song {
     
     static final String SEPARATOR = "-vt.g-";
-    
-    static final String UNKNOWN_ARTIST = "&unknartst";
-    
-    static final String UNKNOWN_TITLE = "&unknttl";
-    
-    static final String UNKNOWN_ALBUM = "&unknalbm";
 
     @Id private String id;
     
@@ -99,7 +94,16 @@ public class Song {
     }
     
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        return ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()+SEPARATOR+dto.getAlbum()).toLowerCase()).now();
+        Transaction tx = ODF.get().beginTransaction();
+        try {
+            Song tmp = ODF.get().load().type(Song.class).id((dto.getTitle()+SEPARATOR+dto.getArtist()+SEPARATOR+dto.getAlbum()).toLowerCase()).now();
+            tx.commit();
+            return tmp;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
     }
     
     public SongSummaryDTO toSummaryDTO() {
@@ -125,87 +129,72 @@ public class Song {
     }
     
     public static Song storeOrUpdateFromDTO(SongDTO song) {
-        
-        //prelievo delle informazioni dal DTO
-        Song s = new Song().changeAlbum(song.getAlbum()).changeArtist(song.getArtist()).changeTitle(song.getTitle());
-        
-        if (s.getAlbumCover().equals("")) {
-            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-        }
-        if (s.getYoutubeCode().equals("")) {
-            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-        }
-        
-//        String cover = Utils.getCoverImage(s.getTitle()+" "+s.getArtist());
-//        String code = Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist());
-//        if (cover != null)
-//            s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
-//        if (code != null)
-//            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
-        
-        //System.out.println("BRANO: "+s.getTitle());
-        
-        
-        if (s.getComposer() == "" && song.getComposer() != null)
-            s.setComposer(song.getComposer());
-        if (s.getGenre() == "" && song.getGenre() != null)
-            s.setGenre(song.getGenre());
-        if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
-            s.setTrackNumber(song.getTrackNumber());
-        if (s.getYear() == "" && song.getYear() != null)
-            s.setYear(song.getYear());
-//        if (s.getYoutubeCode() == "")
-//            s.setYoutubeCode(s.getYoutubeCode());
-//        if (s.getAlbumCover() == "")
-//            s.setAlbumCover(s.getAlbumCover());
-        
-    
-        /////////////////////////////////////////////////////////////////////////////////
-        //se le informazioni primarie sono complete procede con la ricerca nel database
-        if (song.getArtist() != "" && song.getTitle() != "" && song.getAlbum() != "") {
-            //System.out.println("Il brano dell'utente ha le tag artist-title-album complete");
+
+        if (song != null) {
+            if (song.getTitle() == null)
+                song.setTitle("");
+            if (song.getArtist() == null)
+                song.setArtist("");
+            if (song.getAlbum() == null)
+                song.setAlbum("");
         }
         
-        /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete però avendo titolo e album si può risalire all'artista 
-        if (s.getTitle() != "" && s.getAlbum() != "") {
-     
-            //System.out.println("Il brano dell'utente ha solo le tag title-album");
+        if (song.getTitle().equals("") && (song.getArtist().equals("") || song.getAlbum().equals("")))
+            return null;
+        
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try { 
+            Song s = load(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
             
+            if (s == null) {
+                s = new Song();
+                s.setAlbum(song.getAlbum());
+                s.setTitle(song.getTitle());
+                s.setArtist(song.getArtist());
+                s.setId(song.getTitle()+SEPARATOR+song.getArtist()+SEPARATOR+song.getAlbum());
+                if (song.getComposer() != null)
+                    s.setComposer(song.getComposer());
+                if (song.getGenre() != null)
+                    s.setGenre(song.getGenre());
+                if (song.getTrackNumber() != null)
+                    s.setTrackNumber(song.getTrackNumber());
+                if (song.getYear() != null)
+                    s.setYear(song.getYear()); 
+                s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                s.update();
+                tx.commit();
+                return s;
+            }
+            
+            else {
+           
+                //inserimento delle informazioni prese dal DTO
+                if (s.getComposer() == "" && song.getComposer() != null)
+                    s.setComposer(song.getComposer());
+                if (s.getGenre() == "" && song.getGenre() != null)
+                    s.setGenre(song.getGenre());
+                if (s.getTrackNumber() == "" && song.getTrackNumber() != null)
+                    s.setTrackNumber(song.getTrackNumber());
+                if (s.getYear() == "" && song.getYear() != null)
+                    s.setYear(song.getYear());   
+                
+                //prelievo delle informazioni da servizi esterni
+                if (s.getAlbumCover().equals("")) {
+                    s.setAlbumCover(Utils.getCoverImage(s.getTitle()+" "+s.getArtist()));
+                }
+                if (s.getYoutubeCode().equals("")) {
+                    s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle()+" "+s.getArtist()));
+                }  
+                tx.commit();
+                return s;
+            }
         }
-        
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
-        //le possibilità da sottoporre all'utente
-        if (s.getTitle() != "" && s.getArtist() != "") {
-            
-            //System.out.println("Il brano dell'utente ha solo le tag artist-title");
-            
-        } 
-            
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, sarà lanciata un'apposita eccezione che contiene 
-        //le possibilità da sottoporre all'utente
-        if (s.getAlbum() != "" && s.getArtist() != "") {
-            
-            //System.out.println("Il brano dell'utente ha solo le tag artist-album");
-            
+        finally {
+            if (tx.isActive())
+                tx.rollback();
         }
-        
-        
-        /////////////////////////////////////////////////////////////////////////////////
-        //Le informazioni primarie non sono complete, abbiamo a disposizione solo il titolo
-        if (s.getTitle() != "") {
-            
-            //System.out.println("Il brano dell'utente ha solo le tag title");
-            
-        }
-        
-        
-        return s;
-        
     }
     
     
@@ -219,11 +208,18 @@ public class Song {
     }
     
     public Song changeTitle(String title) {
-        Song.deleteSong(this);
+        
+        ODF.get().update(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+    
         if (title != null && title.equals("")==false)
             this.title = title;
         else
-            this.title = UNKNOWN_TITLE;
+            this.title = "";
         
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
         if (tmp == null) { 
@@ -233,17 +229,25 @@ public class Song {
         else {
             return tmp;
         }
+
     }
 
     public Song changeArtist(String artist) {
-        Song.deleteSong(this);
+        
+        ODF.get().update(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+    
         if (artist != null && artist.equals("")==false)
             this.artist = artist;
         else
-            this.artist = UNKNOWN_ARTIST;
-        
+            this.artist = "";
+    
         Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-            
+        
         if (tmp == null) { 
             this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
             return this;
@@ -251,25 +255,46 @@ public class Song {
         else {
             return tmp;
         }
+
     }
     
     public Song changeAlbum(String album) {
-        Song.deleteSong(this);
+        
+        ODF.get().storeOrUpdate(this);
+        if (this.numOwners == 0)
+            Song.deleteSong(this);
+        else {
+            this.deleteOwner();
+        }
+
         if (album != null && album.equals("")==false)
             this.album = album;
         else
-            this.album = UNKNOWN_ALBUM;
-        
-            Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-            if (tmp == null) { 
-                this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
-                return this;
-            }
-            else {
-                return tmp;
-            }
+            this.album = "";
+
+        Song tmp= Song.load(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+        if (tmp == null) { 
+            this.setId(this.title+SEPARATOR+this.artist+SEPARATOR+this.album);
+            return this;
+        }
+        else {
+            return tmp;
+        }
+            
     }
     
+    private void setTitle(String title) {
+        this.title = title;
+    }
+
+    private void setAlbum(String album) {
+        this.album = album;
+    }
+
+    private void setArtist(String artist) {
+        this.artist = artist;
+    }
+
     public String getArtist() {
         return artist;
     }
@@ -361,16 +386,37 @@ public class Song {
     }
 
     public double addRate(int rating) {
-        this.num_ratings++;
-        this.rating = (this.rating + rating) / this.num_ratings;
-        this.update();
-        return this.rating;
+        
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try {
+            this.num_ratings++;
+            this.rating = (this.rating + rating) / this.num_ratings;
+            this.update();
+            tx.commit();
+            return this.rating;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
+        
     }
     
     public double changeRate(int old_rating, int rating) {
-        this.rating = ((this.rating * this.num_ratings) + rating - old_rating) / this.num_ratings;
-        this.update();
-        return this.rating;
+        
+        Transaction tx = ODF.get().beginTransaction();
+        
+        try {
+            this.rating = ((this.rating * this.num_ratings) + rating - old_rating) / this.num_ratings;
+            this.update();
+            tx.commit();
+            return this.rating;
+        }
+        finally {
+            if (tx.isActive())
+                tx.rollback();
+        }
     }
 
     public int getNumRatings() {
