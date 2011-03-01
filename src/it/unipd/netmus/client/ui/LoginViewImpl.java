@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.client.ui;
 
 import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
