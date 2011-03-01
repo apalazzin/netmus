@@ -6,8 +6,19 @@ package it.unipd.netmus.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author ValterTexasGroup
+ *
+ *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Come tutte le altri classi di questo package questa classe permette lo scambio di 
+ *informazioni tra client e server all'interno delle chiamate RPC.
+ *Contiene le informazioni relative ad un catalogo multimediale compresa 
+ *la lista di canzoni di cui è composto. Le canzoni presenti nella lista sono 
+ *incapsulate in oggetti di tipo SongDTO.
+ *
  *
  */
 @SuppressWarnings("serial")

@@ -10,6 +10,15 @@ import java.util.List;
 /**
  * @author ValterTexasGroup
  *
+ *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Come tutte le altri classi di questo package questa classe permette lo scambio di 
+ *informazioni tra client e server all'interno delle chiamate RPC.
+ *Contiene e rappresenta la maggior parte dei dati di un utente, più precisamente 
+ *quelli che ci si aspetta che ogni utente abbia inserito.
+ *
+ *
  */
 
 @SuppressWarnings("serial")

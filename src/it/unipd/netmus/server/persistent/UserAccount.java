@@ -19,7 +19,14 @@ import com.google.code.twig.annotation.Type;
 
 
 /**
- * @author ValterTexasGroup
+ *
+ * Nome: UserAccount.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+ *
+ * 
+ * Tipo, obiettivo e funzione del componente:
  * 
  * UserAccount utilizza il design pattern DAO poichè contiene tutte le
  * informazioni relative ad un utente così come viene salvato all'interno del
@@ -257,6 +264,13 @@ public class UserAccount {
        return allowed_users;
    }
 
+   
+/**
+ * 
+ * Rimuove completamente dal database la canzone. Viene utilizzato solo nei casi di provata
+ * incompletezza o scorrettezza di una canzone.
+ *
+ */   
 public static void deleteUser(UserAccount user) {
        ODF.get().storeOrUpdate(user);
        

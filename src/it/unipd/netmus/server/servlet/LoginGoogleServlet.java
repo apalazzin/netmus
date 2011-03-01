@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server.servlet;
 
 import java.io.IOException;
@@ -12,12 +9,18 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * @author ValterTexasGroup
- *
+ * Nome: LoginGoogleServlet.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
  */
 @SuppressWarnings("serial")
 public class LoginGoogleServlet extends LoginSuperServlet {
 
+    /**
+     * Crea ed invia una richiesta al servizio di login Google per fargli mostrare
+     * la pagina di login predefinita per i Google Account.
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String callbackURL = buildCallBackURL(request);
         UserService userService = UserServiceFactory.getUserService();

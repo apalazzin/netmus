@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server.utils;
 
 import it.unipd.netmus.server.youtube.YouTubeManager;
@@ -14,17 +11,28 @@ import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 
 /**
- * @author ValterTexasGroup
- *
+ * Nome: Utils.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
  */
 public final class Utils {
 
-    // ritorna stringa vuota se non trova nulla, se no ritorna il codice del video
+    /**
+     * Grazie a YouTubeManager restituisce la prima occorrenza di una ricerca su
+     * YouTube per pertinenza alla keyword in ingresso (autore titolo). Se la 
+     * ricerca non produce risultati restituisce stringa vuota.
+     */
     public static String getYouTubeCode(String keywords) {
         
         return YouTubeManager.getSearchResult(keywords);
     }
     
+    /**
+     * Questo metodo attiva la cache di Last.fm per AppEngine ed esegue una
+     * ricerca esterna, con keyword artista e album, per recuperare l’url della 
+     * copertina dell’album relativo ad un brano, in formato JPG.
+     */
     public static String getCoverImage(String keywords) {
         
         try {
@@ -52,6 +60,11 @@ public final class Utils {
         }
     }
     
+    /**
+     * Con questo metodo andremo a provare a recuperare informazioni ulteriori di
+     * un brano che non ha info nel tag, usando come keyword il nome del file stesso. 
+     * Se verrà trovato qualcosa si proverà a proporlo all’utente. In uscita restituirà un SongDTO.
+     */
     public static SongDTO getSongFromFileName(String filename) {
         
         try {

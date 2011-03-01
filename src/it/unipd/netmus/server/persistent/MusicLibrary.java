@@ -16,8 +16,14 @@ import com.google.code.twig.annotation.Index;
 import com.google.code.twig.annotation.Parent;
 
 /**
- * @author ValterTexasGroup
+ * Nome: MusicLibrary.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
  *
+ *
+ * Tipo, obiettivo e funzione del componente:
+ * 
  * MusicLibrary contiene tutte le informazioni relative ad un catalogo multimediale, ovvero il 
  * proprietario e la lista delle canzoni. La funzione principale però è quella di fornire 
  * dei servizi comodi ed efficenti per la gestione del catalogostesso e le entità interne 
