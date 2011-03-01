@@ -1,19 +1,20 @@
-/**
- * 
- */
 package it.unipd.netmus.server.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
- * @author ValterTexasGroup
- *
+ * Nome: ServletUtils.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
  */
+
 public class ServletUtils {
     
     /**
-     * NOT UNIT TESTED Returns the base url (e.g, <tt>http://myhost:8080/myapp</tt>) suitable for using in a base tag or building
-     * reliable urls.
+     * Questo metodo deve tornare l’indirizzo di base dell’applicazione, a seconda
+     * di dove è hostato il progetto e da che porta viene acceduto.
      */
     public static String getBaseUrl(HttpServletRequest request) {
       if ((request.getServerPort() == 80) || (request.getServerPort() == 443))
