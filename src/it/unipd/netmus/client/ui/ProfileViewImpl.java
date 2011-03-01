@@ -2469,6 +2469,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
     public void deleteSong(String autore, String titolo, String album) {
        
+        numero_brani.setText((new Integer(Integer.parseInt(numero_brani.getText())-1)).toString());
+        
         Song canzone = new Song(autore, titolo, album);
         
         dataProvider_catalogo.getList().remove(canzone);
