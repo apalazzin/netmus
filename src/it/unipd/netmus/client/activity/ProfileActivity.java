@@ -271,11 +271,7 @@ public class ProfileActivity extends AbstractActivity implements
         // TODO Auto-generated method stub
         String[] friends = { "Alberto Palazzin", "Andrea Mandolo",
                 "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato", "Alberto Palazzin", "Andrea Mandolo",
-                "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato", "Alberto Palazzin", "Andrea Mandolo",
-                "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato" };
+                "Simone Daminato", "Giovanni Trezzi"};
         return friends;
     }
 
