@@ -10,9 +10,12 @@ import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: LibraryServiceAsync.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
+
 public interface LibraryServiceAsync {
 	
     public void sendUserNewMusic(String user, List<SongDTO> new_songs,AsyncCallback<Void> callback);

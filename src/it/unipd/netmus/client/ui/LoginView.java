@@ -11,11 +11,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
- * 
- * 
- * @author ValterTexasGroup
- *
- */
+ * Nome: LoginView.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+*/
 public interface LoginView extends IsWidget {
 	/**
 	 *Questo metodo viene usato da
@@ -58,10 +58,5 @@ public interface LoginView extends IsWidget {
       void sendGoogleLogin(String user, String password) throws LoginException;
       void sendRegistration(String login, String password, String confirmPassword) throws RegistrationException;
       enum LoginType {NETMUSLOGIN, NETMUSREGISTRATION, GOOGLELOGIN}
-    /**
-     * @param user
-     * @param password
-     * @throws LoginException
-     */
    }
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.client.ui;
 
 import java.util.List;
@@ -9,11 +6,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
- * 
- * 
- * @author ValterTexasGroup
- *
- */
+ * Nome: ProfileView.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+*/
 public interface ProfileView extends IsWidget {
    
     //classe interna che rappresenta un brano
@@ -183,7 +180,7 @@ public interface ProfileView extends IsWidget {
        */
      void addToPLaylist(String playlist, String autore, String titolo, String album);
       /**
-       *Aggiunge song alla playlist e restituisce true in caso di successo
+       *Rimuovi il brano dalla playlist.
        */
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
       /**
@@ -207,7 +204,7 @@ public interface ProfileView extends IsWidget {
        */
       void moveDownInPLaylist(String playlist, String autore, String titolo, String album);
       /**
-       *Sposta in basso la canzone della playlist selezionata
+       *Sposta in alto la canzone della playlist selezionata
        */      
       void moveUpInPLaylist(String playlist, String autore, String titolo, String album);
       /**

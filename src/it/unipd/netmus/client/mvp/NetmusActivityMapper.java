@@ -10,27 +10,24 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-
+/**
+ * Nome: NetmusActivityMapper.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public class NetmusActivityMapper implements ActivityMapper {
 
 	private ClientFactory clientFactory;
 
-	/**
-	 * AppActivityMapper associates each Place with its corresponding
-	 * {@link Activity}
-	 * 
-	 * @param clientFactory
-	 *            Factory to be passed to activities
-	 */
 	public NetmusActivityMapper(ClientFactory clientFactory) {
 		super();
 		this.clientFactory = clientFactory;
 	}
 
-	/**
-	 * Map each Place to its corresponding Activity. This would be a great use
-	 * for GIN.
-	 */
+    /**
+     * Activity & Mappa e istanzia l'activity adeguata in base al tipo del place dato in input.
+     */
 	@Override
 	public Activity getActivity(Place place) {
 		// This is begging for GIN
