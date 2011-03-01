@@ -12,9 +12,11 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: UserService.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 @RemoteServiceRelativePath("usersService")
 public interface UserService extends RemoteService {
     

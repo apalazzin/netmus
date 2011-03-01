@@ -15,9 +15,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: AppletBar.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 18 Febbraio 2011
+*/
 public class AppletBar {
 	
 	static AppletBar APPLET_BAR = null; // oggetto istanza statico per SINGLETON
@@ -29,8 +31,10 @@ public class AppletBar {
     private static AppletConstants constants = GWT.create(AppletConstants.class);
     
     private TranslateDTOXML translator = new TranslateDTOXML();
-    
-    // getter per questa classe che utilizza il patter SINGLETON
+    /**
+     *Se non esiste già, crea una nuova istanza di AppletBar e la salva nel relativo campo statico.
+     *Restituisce l'istanza dopo aver aggiornato l'utente.
+     */
     public static AppletBar get(String user) {
         if (APPLET_BAR == null)
             APPLET_BAR = new AppletBar(user);
@@ -38,13 +42,16 @@ public class AppletBar {
             APPLET_BAR.setUser(user);
         return APPLET_BAR;
     }
-    
-    // memorizzo username dell'utente loggato
+    /**
+     * Aggiorna l'attributo user.
+    */
     private void setUser(String user) {
         this.user = user;
     }
     
-    // costruttore privato (SINGLETON)
+    /**
+    * costruttore privato
+	*/
     private AppletBar(String user) {
     	this.user=user;
     	// pubblico i metodi nativi per renderli invocabili dall'applet
@@ -53,7 +60,9 @@ public class AppletBar {
         AppletBarView.createView();
     }
     
-    // carico l'applet e rendo visibile la barra
+    /**
+     * Crea il menù laterale.
+     */
     public void appletBarON() {
         if (!visible) {
             visible = true;
@@ -61,7 +70,9 @@ public class AppletBar {
         }
     }
     
-    // spengo l'applet e rendo invisibile la barra
+    /**
+     * Elimina il Menù laterale
+     */
     public void appletBarOFF() {
         if (visible) {
             visible = false;
@@ -72,7 +83,9 @@ public class AppletBar {
     
     // --- METODI PER LA LOGICA DI COMUNICAZIONE TRA VIEW E APPLET ---
     
-    // metodo per far attivare/disattivare la ricerca automatica dei dispositivi
+    /**
+     * Attiva/disattiva la scansione automatica, e aggiorna view e applet di conseguenza.
+     */
     void changeState() {
         state = !state;
         if (state)
@@ -82,20 +95,28 @@ public class AppletBar {
         AppletConnector.setState(state); // cambio dello stato dentro l'applet
     }
     
-    // avvisa applet di fare una scansione completa del dispositivo inserito
-    // ignorando il vecchio file di log che escludeva i file gia' scansionati
+    /**
+     * Indica all'applet di riscansionare l'ultimo device.
+     */
     void reScanAll() {
         AppletConnector.sendRescan();
     }
-    
+    /**
+     * Indica all'applet di effettuare una scansione manuale.
+     */
     void showChooser() {
         AppletConnector.showChooser();
     }
-    
+    /**
+     * Inizializza l'applet.
+     */
     void sendStarts() {
         AppletConnector.sendStartsJSNI(user,state);
     }
-
+    /**
+     * Dall'XML ricevuto dall'applet estrae le canzoni e le invia al server.
+     * @param result
+     */
     void translateXML(String result) {
         
         AppletBarView.showStatus(constants.xmlParsing());

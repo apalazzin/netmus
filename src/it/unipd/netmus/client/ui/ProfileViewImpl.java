@@ -81,9 +81,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 /**
- * @author smile
- *
- */
+ * Nome: ProfileViewImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+*/
 public class ProfileViewImpl extends Composite implements ProfileView {
 
    private static ProfileViewImplUiBinder uiBinder = GWT.create(ProfileViewImplUiBinder.class);

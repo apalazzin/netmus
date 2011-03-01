@@ -34,36 +34,44 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+
+/**
+ * Nome: ProfileActivity.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
+
 public class ProfileActivity extends AbstractActivity implements
-		ProfileView.Presenter {
+        ProfileView.Presenter {
 
-	private ClientFactory client_factory;
+    private ClientFactory client_factory;
 
-	private String name;
-	
-	private boolean is_owner;
-	
-	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
-	private LibraryServiceAsync library_service_svc = GWT.create(LibraryService.class);
-	private UserServiceAsync user_service_svc = GWT.create(UserService.class);
-	private SongServiceAsync song_service_svc = GWT.create(SongService.class);
-	
-	private UserCompleteDTO current_user;
-	
-	MyConstants my_constants = GWT.create(MyConstants.class);
+    private String name;
+    
+    private boolean is_owner;
+    
+    private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
+    private LibraryServiceAsync library_service_svc = GWT.create(LibraryService.class);
+    private UserServiceAsync user_service_svc = GWT.create(UserService.class);
+    private SongServiceAsync song_service_svc = GWT.create(SongService.class);
+    
+    private UserCompleteDTO current_user;
+    
+    MyConstants my_constants = GWT.create(MyConstants.class);
 
-	public ProfileActivity(ProfilePlace place, ClientFactory client_factory) {
-		this.name = place.getProfileName();
-		this.client_factory = client_factory;
-	}
+    public ProfileActivity(ProfilePlace place, ClientFactory client_factory) {
+        this.name = place.getProfileName();
+        this.client_factory = client_factory;
+    }
 
-	/**
-	 * Invoked by the ActivityManager to start a new Activity
-	 */
-	@Override
-	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
-	    
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
+    /**
+     * Invocato da ActivityManager per avviare effettivamente una nuova ProfileActivity.
+     */
+    @Override
+    public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
+        
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -125,22 +133,28 @@ public class ProfileActivity extends AbstractActivity implements
             }
             
         };
-	    
+        
         try { login_service_svc.getLoggedInUser(callback); }
         catch(LoginException e) {
         }
                
                 
-	}
+    }
 
-	/**
-	 * Navigate to a new Place in the browser
-	 */
-	public void goTo(Place place) {
-		client_factory.getPlaceController().goTo(place);
-	}
+    /**
+       *Permette di spostarsi in un place differente anche relativo ad un'altra view. Ad esempio per
+       *tornare alla pagina di LoginView se l'utente non è autenticato. Verrà
+       *quindi chiamato nel metodo start se un utente tenta di accedere al
+       *ProfileView senza essere autenticato.
+    */
+    public void goTo(Place place) {
+        client_factory.getPlaceController().goTo(place);
+    }
 
-
+    /**
+     *Effettua il logout dell'utente, facendo scadere la sessione ed eliminando
+     *i cookies relativi ad essa, comunicando con il LoginService implementato nel server.
+     */
     @Override
     public void logout() {
        
@@ -167,58 +181,76 @@ public class ProfileActivity extends AbstractActivity implements
         } catch (Exception e) {}
     }
 
-	
-	@Override
-	public void setPlaylistList() {
-	    
-	    client_factory.getProfileView().paintPlaylist(getPlaylistList());
-	}
-	
-	/**
-	 * 
-	 * @return the array that contains the playlist's name list
-	 */
-	public String[] getPlaylistList() {
-	    
-	    List<String> playlists = current_user.getMusicLibrary().getPlaylists();
-	    String[] playlist_array = new String[playlists.size()];
-	    playlist_array = playlists.toArray(playlist_array);
-	    
-		return playlist_array;
-	}
-	
-	
-	@Override
-	public void setFriendList() {
-	    
-	    client_factory.getProfileView().paintFriendlist(getFriendList());
-	    
-	}
-	
-	public String[] getFriendList() {
-		// TODO Auto-generated method stub
-		String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
-		return friends;
-	}
-
-	
-	@Override
-	public void setSongInfo() {
-	    
-	    client_factory.getProfileView().setInfo(getSongInfo());
-	}
-	
-	public String getSongInfo() {
-		// TODO Auto-generated method stub
-		return "Nessun brano in ascolto.";
-	}
-
-	
-	@Override
-	public void setPlaylistSongs(String titolo_playlist) {  
-	    getPlaylistSongs(titolo_playlist);
-	}
+    /**
+     *Deve andare ad invocare il metodo paintPlaylist di ProfileView per 
+     *andare a graficare la lista delle playlist generata da getPlaylistList.
+     */
+    @Override
+    public void setPlaylistList() {
+        
+        client_factory.getProfileView().paintPlaylist(getPlaylistList());
+    }
+    /**
+     *Crea e restituisce un'array contenente la lista di playlist dell'utente loggato.
+     */
+    public String[] getPlaylistList() {
+        
+        List<String> playlists = current_user.getMusicLibrary().getPlaylists();
+        String[] playlist_array = new String[playlists.size()];
+        playlist_array = playlists.toArray(playlist_array);
+        
+        return playlist_array;
+    }
     
+    /**
+     *Restituisce la lista degli utenti affini su Netmus
+     */    
+    @Override
+    public void setFriendList() {
+        
+        client_factory.getProfileView().paintFriendlist(getFriendList());
+        
+    }
+    /**
+     *Crea e restituisce un'array contenente la lista di utenti affini
+     *all'utente loggato. 
+     */
+    public String[] getFriendList() {
+        // TODO Auto-generated method stub
+        String[] friends = {"Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato","Alberto Palazzin", "Andrea Mandolo", "Cosimo Caputo", "Daniele Donte", "Federicon Baron", "Simone Daminato"};
+        return friends;
+    }
+
+    /**
+     *Deve andare ad invocare il metodo setInfo di ProfileView
+     *per andare a graficare le informazioni del brano in
+     *riproduzione accanto al player, fornite da getSongInfo.
+     */    
+    @Override
+    public void setSongInfo() {
+        
+        client_factory.getProfileView().setInfo(getSongInfo());
+    }
+    /**
+     *Crea e restituisce le informazioni testuali relative
+     *al brano in riproduzione.
+     */
+    public String getSongInfo() {
+        // TODO Auto-generated method stub
+        return "Nessun brano in ascolto.";
+    }
+
+    /**
+     *Aggiorna la lista di canzoni della playlist
+     */     
+    @Override
+    public void setPlaylistSongs(String titolo_playlist) {  
+        getPlaylistSongs(titolo_playlist);
+    }
+    /**
+     *Fa disegnare alla \co{ProfileView} la lista brani di una playlist tramite
+     *il metodo \emph{paintPlaylistSongs}.
+     */
     public List<String> getPlaylistSongs(String playlist_name) {
         
         library_service_svc.getPlaylist(current_user.getUser(), playlist_name, new AsyncCallback<List<SongSummaryDTO>>() {
@@ -247,7 +279,9 @@ public class ProfileActivity extends AbstractActivity implements
         
     }
 
-    
+    /**
+     *Restituisce il link youtube della canzone selezionata
+     */  
     @Override
     public void playYouTube(String autore, String titolo, String album) {
         
@@ -264,7 +298,9 @@ public class ProfileActivity extends AbstractActivity implements
         }
     }
     
-    
+    /**
+     *Restituisce il summary delle canzoni
+     */   
     public void setSongs() {
                         
         client_factory.getProfileView().paintCatalogo(getSongs(current_user.getMusicLibrary()));
@@ -288,8 +324,9 @@ public class ProfileActivity extends AbstractActivity implements
         
         return song_list;
     }
-
-    
+    /**
+     *Aggiunge song alla playlist e restituisce true in caso di successo
+     */   
     @Override
     public void addToPLaylist(String playlist, final String autore, final String titolo, final String album) {
         
@@ -305,7 +342,9 @@ public class ProfileActivity extends AbstractActivity implements
             }
         });        
     }
-
+    /**
+     *Rimuovi il brano dalla playlist.
+     */
     @Override
     public void removeFromPLaylist(String playlist, final String autore, final String titolo, final String album) {
 
@@ -321,14 +360,18 @@ public class ProfileActivity extends AbstractActivity implements
             }
         });        
     }
-    
+    /**
+     *Sposta in alto la canzone della playlist selezionata
+     */     
     @Override
     public void moveUpInPLaylist(String playlist, String autore, String titolo, String album) {
         
         //scambia la canzone sleezionata con quella precedente e aggiorna la vista
         
     }
-    
+    /**
+     *Sposta in basso la canzone della playlist selezionata
+     */  
     @Override
     public void moveDownInPLaylist(String playlist, String autore, String titolo, String album) {
         
@@ -377,7 +420,9 @@ public class ProfileActivity extends AbstractActivity implements
         });
         //clientFactory.getProfileView().addToPlaylists(title);
     }
-    
+    /**
+     *Attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
+     */     
     @Override
     public void rateSong(final String artist, final String title, final String album, final int rate) {
         
@@ -407,7 +452,9 @@ public class ProfileActivity extends AbstractActivity implements
         song_service_svc.rateSong(current_user.getUser(), new SongSummaryDTO(artist,title,album), rate, callback);
         
     }
-
+    /**
+     *Restituisce il rating della canzone selezionata
+     */  
     @Override
     public double setRating(String artist, String title, String album) {
         
@@ -421,13 +468,15 @@ public class ProfileActivity extends AbstractActivity implements
         }
         return -1;
     }
-
-	@Override
-	public void setSongFields(String autore, String titolo, String album) {
-		
-	    List<SongDTO> songs = current_user.getMusicLibrary().getSongs();
-	    
-	    String genere ="----";
+    /**
+     *Imposta i campi della canzone selezionata.
+     */     
+    @Override
+    public void setSongFields(String autore, String titolo, String album) {
+        
+        List<SongDTO> songs = current_user.getMusicLibrary().getSongs();
+        
+        String genere ="----";
         String anno ="----";
         String compositore ="----";
         String traccia ="----";
@@ -445,15 +494,19 @@ public class ProfileActivity extends AbstractActivity implements
                 return;
             }
         }
-	}
-
+    }
+    /**
+     *Controlla i permessi ed avvia la visualizzazione del profilo dell'utente in input
+     */  
     @Override
     public void viewOtherLibrary(String user) {
         //Controlla che l'utente desiderato abbia un profilo pubblico verso l'utente attualmente autenticato
         //Se ha i permessi accedi al catalogo
         goTo(new ProfilePlace(user));
     }
-
+    /**
+     *Elimina la canzone
+     */    
     @Override
     public void deleteSong(final String autore, final String titolo, final String album) {
         
@@ -469,13 +522,17 @@ public class ProfileActivity extends AbstractActivity implements
             }
         });
     }
-
+    /**
+     *Esporta la lista delle canzoni in pdf
+     */   
     @Override
     public void exportPDF(String user) {
         // TODO Auto-generated method stub
         
     }
-
+    /**
+     *Apre la sezione di visualizzazione/modifica del profilo personale
+     */ 
     @Override
     public void editProfileView(String user) {
         
@@ -488,7 +545,9 @@ public class ProfileActivity extends AbstractActivity implements
         
         client_factory.getProfileView().showEditProfile(nickname, firstname, lastname, nationality, gender, aboutme);
     }
-
+    /**
+     *Invia i dati modficati quando viene premuti il pulsante salva
+     */   
     @Override
     public void editProfile(String user, String nick_name, String first_name,
             String last_name, String gender, String nationality,
@@ -522,21 +581,27 @@ public class ProfileActivity extends AbstractActivity implements
             }
         });
     }
-
+    /**
+     *Salva il titolo della canzone che è stato modificato dall'utente
+     */   
     @Override
     public void editSongTitle(String new_title, String old_title,
             String artist, String album) {
         // TODO Auto-generated method stub
         
     }
-
+    /**
+     *Salva il nome dell'album che è stato modificato dall'utente
+     */  
     @Override
     public void editSongAlbum(String new_album, String old_album,
             String artist, String title) {
         // TODO Auto-generated method stub
         
     }
-
+    /**
+     *Salva il nome dell'artista che è stato modificato dall'utente
+     */  
     @Override
     public void editSongArtist(String new_artist, String old_artist,
             String title, String album) {

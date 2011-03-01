@@ -11,9 +11,11 @@ import it.unipd.netmus.shared.UserDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: UserServiceAsync.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public interface UserServiceAsync {
     void loadProfile(String user, AsyncCallback<UserCompleteDTO> callback);
 

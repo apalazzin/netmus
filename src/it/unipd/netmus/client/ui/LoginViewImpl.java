@@ -28,9 +28,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 /**
- * @author smile
- *
- */
+ * Nome: LoginViewImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+*/
 public class LoginViewImpl extends Composite implements LoginView {
 
    private static LoginViewImplUiBinder uiBinder = GWT.create(LoginViewImplUiBinder.class);
