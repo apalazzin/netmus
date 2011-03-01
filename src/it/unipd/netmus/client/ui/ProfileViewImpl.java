@@ -1736,7 +1736,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
        youtube.getWidget(6).removeFromParent();
        setInfo("Nessun brano in ascolto.");
-
+       forward.setVisible(false);
+       rewind.setVisible(false);
        
    }
 
