@@ -33,11 +33,7 @@ public class TranslateDTOXML {
 	private Document document;
 	private Element root;
 	
-	/**
-	 * @deprecated
-	 */
 	public TranslateDTOXML() {
-		reset();
 	};
 	
     /**
@@ -107,7 +103,8 @@ public class TranslateDTOXML {
      * @param filename
      * @return
      */
-	private String clearFileName(String filename) {
+	@SuppressWarnings("unused")
+    private String clearFileName(String filename) {
 	    int start = filename.lastIndexOf("/")+1;
         int end = filename.lastIndexOf(".mp3");
         if (end < 0)

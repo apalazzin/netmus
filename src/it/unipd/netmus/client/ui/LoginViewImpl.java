@@ -5,7 +5,6 @@ import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
