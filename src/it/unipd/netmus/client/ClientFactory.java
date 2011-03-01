@@ -12,8 +12,24 @@ import com.google.gwt.place.shared.PlaceController;
 */
 public interface ClientFactory
 {
+	/**
+	 * Getter dell'attributo event_bus
+	 * @return
+	 */
 	EventBus getEventBus();
+	/**
+	 * Getter dell'attributo place_controller
+	 * @return
+	 */
 	PlaceController getPlaceController();
+	/**
+	 * Getter dell'attributo login_view
+	 * @return
+	 */
 	LoginView getLoginView();
+	/**
+	 * Getter dell'attributo profile_view
+	 * @return
+	 */
 	ProfileView getProfileView();
 }

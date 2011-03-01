@@ -34,7 +34,8 @@ public class Netmus implements EntryPoint {
    private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
 
    /**
-    * ---
+    * E il metodo d'ingresso dell'applicazione, chiamato automaticamente caricando un modulo
+    * che dichiara l'implementazione dell'interfaccia EntryPoint .
     */
    @Override
    public void onModuleLoad() {
@@ -75,7 +76,7 @@ public class Netmus implements EntryPoint {
    }
    
    /**
-    * ---
+    * Istanzia e inizializza i principali moduli dell'applicazione
     */
    private void startNetmus() {
        
