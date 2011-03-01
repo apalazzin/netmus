@@ -145,7 +145,7 @@ public class MusicLibrary {
             if (tmp.getSongId().equals(song.getId())) {
                 trovato = true;
             }
-        if (trovato) {
+        if (!trovato) {
             //add songId to the list
             this.song_list.add(new SongWithRating(song.getId()));
             
