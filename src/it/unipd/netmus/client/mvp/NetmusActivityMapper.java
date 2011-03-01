@@ -11,32 +11,33 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 /**
- * Nome: NetmusActivityMapper.java
- * Autore:  VT.G
- * Licenza: GNU GPL v3
- * Data Creazione: 15 Febbraio 2011
-*/
+ * Nome: NetmusActivityMapper.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 Data
+ * Creazione: 15 Febbraio 2011
+ */
 public class NetmusActivityMapper implements ActivityMapper {
 
-	private ClientFactory clientFactory;
+    private ClientFactory clientFactory;
 
-	public NetmusActivityMapper(ClientFactory clientFactory) {
-		super();
-		this.clientFactory = clientFactory;
-	}
+    public NetmusActivityMapper(ClientFactory clientFactory) {
+        super();
+        this.clientFactory = clientFactory;
+    }
 
     /**
-     * Activity & Mappa e istanzia l'activity adeguata in base al tipo del place dato in input.
+     * Activity & Mappa e istanzia l'activity adeguata in base al tipo del place
+     * dato in input.
      */
-	@Override
-	public Activity getActivity(Place place) {
-		// This is begging for GIN
-		if (place instanceof LoginPlace)
-			return new LoginActivity((LoginPlace) place, clientFactory);
-		else if (place instanceof ProfilePlace)
-			return new ProfileActivity((ProfilePlace) place, clientFactory);
+    @Override
+    public Activity getActivity(Place place) {
+        // This is begging for GIN
+        if (place instanceof LoginPlace)
+            return new LoginActivity((LoginPlace) place, clientFactory);
+        else if (place instanceof ProfilePlace)
+            return new ProfileActivity((ProfilePlace) place, clientFactory);
 
-		return null;
-	}
+        return null;
+    }
 
 }

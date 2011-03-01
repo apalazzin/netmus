@@ -10,43 +10,41 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 /**
- * Nome: ProfilePlace.java
- * Autore:  VT.G
- * Licenza: GNU GPL v3
+ * Nome: ProfilePlace.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
  * Data Creazione: 15 Febbraio 2011
-*/
+ */
 public class ProfilePlace extends Place {
-   
-   private String profileName;
-   
-   public ProfilePlace(String token)
-   {
-      this.profileName = token;
-   }
-   /**
-    * Getter dell'attributo profile_name
-    * @return
-    */
-   public String getProfileName()
-   {
-      return profileName;
-   }
-   /**
-    * Inner class
-    */
-   public static class Tokenizer implements PlaceTokenizer<ProfilePlace>
-   {
-      @Override
-      public String getToken(ProfilePlace place)
-      {
-         return place.getProfileName();
-      }
 
-      @Override
-      public ProfilePlace getPlace(String token)
-      {
-         return new ProfilePlace(token);
-      }
-   }
+    /**
+     * Inner class
+     */
+    public static class Tokenizer implements PlaceTokenizer<ProfilePlace> {
+        @Override
+        public ProfilePlace getPlace(String token) {
+            return new ProfilePlace(token);
+        }
+
+        @Override
+        public String getToken(ProfilePlace place) {
+            return place.getProfileName();
+        }
+    }
+
+    private String profileName;
+
+    public ProfilePlace(String token) {
+        this.profileName = token;
+    }
+
+    /**
+     * Getter dell'attributo profile_name
+     * 
+     * @return
+     */
+    public String getProfileName() {
+        return profileName;
+    }
 
 }
