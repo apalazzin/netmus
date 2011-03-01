@@ -49,7 +49,7 @@ public class ProfileActivity extends AbstractActivity implements
     private String name;
 
     @SuppressWarnings("unused")
-    private boolean is_owner;
+    private boolean is_owner; // not used yet
 
     private LoginServiceAsync login_service_svc = GWT
             .create(LoginService.class);
@@ -685,6 +685,7 @@ public class ProfileActivity extends AbstractActivity implements
                         setSongs();
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();
+						profileView.setUser(user);
                         profileView.setInfo(getSongInfo());
                         editProfileView(user);
 
