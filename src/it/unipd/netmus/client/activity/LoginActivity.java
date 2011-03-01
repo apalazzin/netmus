@@ -24,11 +24,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 /**
- * Nome: LoginActivity.java
- * Autore:  VT.G
- * Licenza: GNU GPL v3
+ * Nome: LoginActivity.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
  * Data Creazione: 15 Febbraio 2011
-*/
+ */
 public class LoginActivity extends AbstractActivity implements
         LoginView.Presenter {
     // Used to obtain views, eventBus, placeController
@@ -51,56 +51,30 @@ public class LoginActivity extends AbstractActivity implements
         this.client_factory = clientFactory;
     }
 
-	/**
-     *Invocato da ActivityManager per avviare una nuova LoginActivity.
-	 */
-	@Override
-	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
-	    
-	    
-	    
-	    AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof LoginException) {
-                    // user not logged yet - show loginView
-                    LoginView loginView = client_factory.getLoginView();
-                    loginView.setError(error);
-                    loginView.setLoginType(login_type);
-                    loginView.setPassword(password);
-                    loginView.setUser(user);
-                    loginView.setPresenter(LoginActivity.this);
-                    container_widget.setWidget(loginView.asWidget());
-
-                }
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                goTo(new ProfilePlace(result));
-            }
-        };
-
-        try {
-            login_service_svc.getLoggedInUser(callback);
-        } catch (LoginException e) {
-        }
-
-		
-	}
-	
     /**
-     *Permette di spostarsi in un place differente anche relativo ad un'altra view.Ad esempio per aprire la pagina di ProfileView una volta
-     *verificato il login. Verrà quindi richiamato sempre al termine dei metodi sendLogin e sendRegistration. 
+     * Permette di spostarsi in un place differente anche relativo ad un'altra
+     * view.Ad esempio per aprire la pagina di ProfileView una volta verificato
+     * il login. Verrà quindi richiamato sempre al termine dei metodi sendLogin
+     * e sendRegistration.
      */
-	public void goTo(Place place) {
-		client_factory.getPlaceController().goTo(place);
-	}
-	
+    @Override
+    public void goTo(Place place) {
+        client_factory.getPlaceController().goTo(place);
+    }
+
     /**
-     *Invia al server il login inserito dall'utente dopo averne controllato la validità
-     *(e-mail valida, password sufficientemente lunga).     
+     * Permette di effettuare un reindirizzamento al servlet dedicato
+     * all'autenticazione Google.
+     */
+    @Override
+    public void sendGoogleLogin(String user, String password)
+            throws LoginException {
+        Window.Location.assign("/logingoogle");
+    }
+
+    /**
+     * Invia al server il login inserito dall'utente dopo averne controllato la
+     * validità (e-mail valida, password sufficientemente lunga).
      */
     @Override
     public void sendLogin(String user, String password) throws LoginException {
@@ -111,6 +85,7 @@ public class LoginActivity extends AbstractActivity implements
         // Set up the callback object.
         AsyncCallback<String> callback = new AsyncCallback<String>() {
 
+            @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
                     goTo(new LoginPlace(username, pass,
@@ -144,16 +119,9 @@ public class LoginActivity extends AbstractActivity implements
     }
 
     /**
-     *Permette di effettuare un reindirizzamento al servlet dedicato all'autenticazione Google. 
-     */    
-    @Override
-    public void sendGoogleLogin(String user, String password)
-            throws LoginException {
-        Window.Location.assign("/logingoogle");
-    }
-    /**
-     *Invia al server i dati di registrazione inseriti dall'utente dopo averne controllato la
-     *correttezza (e-mail valida, password sufficientemente lunga).     
+     * Invia al server i dati di registrazione inseriti dall'utente dopo averne
+     * controllato la correttezza (e-mail valida, password sufficientemente
+     * lunga).
      */
     @Override
     public void sendRegistration(String user, String password,
@@ -176,6 +144,7 @@ public class LoginActivity extends AbstractActivity implements
             // Set up the callback object.
             AsyncCallback<LoginDTO> callback = new AsyncCallback<LoginDTO>() {
 
+                @Override
                 public void onFailure(Throwable caught) {
                     goTo(new LoginPlace(username, pass,
                             my_constants.infoUserUsato(),
@@ -205,5 +174,42 @@ public class LoginActivity extends AbstractActivity implements
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Invocato da ActivityManager per avviare una nuova LoginActivity.
+     */
+    @Override
+    public void start(final AcceptsOneWidget container_widget,
+            EventBus event_bus) {
+
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    // user not logged yet - show loginView
+                    LoginView loginView = client_factory.getLoginView();
+                    loginView.setError(error);
+                    loginView.setLoginType(login_type);
+                    loginView.setPassword(password);
+                    loginView.setUser(user);
+                    loginView.setPresenter(LoginActivity.this);
+                    container_widget.setWidget(loginView.asWidget());
+
+                }
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                goTo(new ProfilePlace(result));
+            }
+        };
+
+        try {
+            login_service_svc.getLoggedInUser(callback);
+        } catch (LoginException e) {
+        }
+
     }
 }
