@@ -51,32 +51,6 @@ public class LoginActivity extends AbstractActivity implements
         this.client_factory = clientFactory;
     }
 
-    /**
-     * Invoked by the ActivityManager to start a new Activity
-     */
-    @Override
-    public void start(final AcceptsOneWidget container_widget,
-            EventBus event_bus) {
-	LoginView.Presenter {
-
-	private ClientFactory client_factory;
-	private String user;
-	private String password;
-	private String error;
-	private LoginType login_type;
-	
-	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
-	MyConstants my_constants = GWT.create(MyConstants.class);
-	
-	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
-		this.user = place.getLoginName();
-		this.password = place.getPassword();
-		this.error = place.getError();
-		this.login_type = place.getLoginType();
-		this.client_factory = clientFactory;
-	}
-
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
 	/**
      *Invocato da ActivityManager per avviare una nuova LoginActivity.
 	 */
@@ -123,19 +97,11 @@ public class LoginActivity extends AbstractActivity implements
 	public void goTo(Place place) {
 		client_factory.getPlaceController().goTo(place);
 	}
+	
     /**
      *Invia al server il login inserito dall'utente dopo averne controllato la validità
      *(e-mail valida, password sufficientemente lunga).     
      */
-    }
-
-    /**
-     * Navigate to a new Place in the browser
-     */
-    public void goTo(Place place) {
-        client_factory.getPlaceController().goTo(place);
-    }
-
     @Override
     public void sendLogin(String user, String password) throws LoginException {
         final String username = user;

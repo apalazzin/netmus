@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server;
 
 import javax.servlet.http.HttpSession;
@@ -15,13 +12,22 @@ import it.unipd.netmus.shared.exception.RegistrationException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * @author ValterTexasGroup
+ * Nome: LoginServiceImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 13 Febbraio 2011
  *
  */
+
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
       LoginService {
    
+	/**
+	 * Inserisce i dati di login relativi alla registrazione di un nuovo utente nel
+     * database. Può lanciare eccezioni di tipo <= RegistrationException in
+     * caso vi siano problemi nell’inserimento.
+	 */
 	@Override
 	public LoginDTO insertRegistration(LoginDTO login) throws RegistrationException {
 		
@@ -39,6 +45,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	}
 	
+	/**
+	 * Metodo fondamentale per l’autenticazione che confronta i dati in input con quelli 
+	 * presenti nel database per verificare se il login è valido. Può lanciare eccezioni 
+	 * di tipo <= LoginException in caso il controllo non vada a buon fine.
+	 */
 	private UserAccount verifyLogin(LoginDTO login) throws LoginException {
 		
 		//find user in the database
@@ -61,6 +72,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	/**
+	 * Racchiude tutte i passi di autenticazione dell’utente. Utilizza verifyLogin e si 
+	 * occupa di iniziare la sessione dell’utente che si è autenticato.
+	 */
 	@Override
 	public String startLogin(LoginDTO login) throws LoginException {
 	    
@@ -78,6 +93,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		return session_id;
 	}
 
+	/**
+	 * Esegue una ricerca della sessione corrente utilizzando i metodi di
+     * LoginHelper e ritorna, se presenti, le informazioni di base (UserSummaryDTO) 
+     * dell’utente loggato.
+	 */
 	@Override
 	public String getLoggedInUser() throws LoginException {
 	    
@@ -90,6 +110,10 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    
 	}
 
+	/**
+	 * Invalida l’autenticazione dell’utente che viene rimandato alla pagina di
+     * login.
+	 */
 	@Override
 	public String logout() {
 	    HttpSession session = getThreadLocalRequest().getSession();
@@ -98,6 +122,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	    return user;
 	}
 
+    /**
+     * Recupera un eventuale sessione salvata nei cookie controllandone la validità 
+     * per l’utente dato in input. Questa funzionalità non è valida per gli utenti
+     * Google dei quali non viene gestito un cookie.
+     */
     @Override
     public String restartSession(String user, String session_id) throws LoginException {
         

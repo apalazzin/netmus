@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server.servlet;
 
 import it.unipd.netmus.server.LoginHelper;
@@ -16,12 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author ValterTexasGroup
- *
+ * Nome: LoginGoogleCallbackServlet.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
  */
+
 @SuppressWarnings("serial")
 public class LoginGoogleCallbackServlet extends HttpServlet {
     
+    /**
+     * Crea ed invia una richiesta al servizio di login Google per fargli mostrare la pagina 
+     * di login predefinita per i Google Account.
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         Principal googleUser = request.getUserPrincipal();
