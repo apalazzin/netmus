@@ -293,6 +293,7 @@ public class ProfileActivity extends AbstractActivity implements
                 youTubeCode = song.getYoutubeCode();
                 if (!youTubeCode.equals(""))
                     client_factory.getProfileView().playYouTube(youTubeCode);
+                    client_factory.getProfileView().setInfo( titolo + " - " +  autore + " -");
                 return;
             }
         }
