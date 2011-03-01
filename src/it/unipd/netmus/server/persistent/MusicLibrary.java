@@ -16,7 +16,11 @@ import com.google.code.twig.annotation.Index;
 import com.google.code.twig.annotation.Parent;
 
 /**
- * @author ValterTexasGroup
+ * Nome: MusicLibrary.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+ *
  *
  * Tipo, obiettivo e funzione del componente:
  * 
