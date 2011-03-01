@@ -12,8 +12,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- * Nome: AppletBar.java Autore: VT.G Licenza: GNU GPL v3 Data Creazione: 18
- * Febbraio 2011
+ * Nome: AppletBar.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 18 Febbraio 2011
  */
 public class AppletBar {
 
