@@ -1,12 +1,5 @@
 package it.unipd.netmus.server.utils;
 
-/**
- * Nome: AppEngineCache.java
- * Autore:  VT.G
- * Licenza: GNU GPL v3
- * Data Creazione: 17 Febbraio 2011
- */
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,85 +17,92 @@ import com.google.appengine.api.datastore.Text;
 
 import de.umass.lastfm.cache.Cache;
 
+/**
+ * Nome: AppEngineCache.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
+ */
 
 public class AppEngineCache extends Cache {
 
-        private static final String KIND = "lfm_cache";
-        private static final String PREFIX = "lfm_";
-        private DatastoreService datastore;
+    private static final String KIND = "lfm_cache";
+    private static final String PREFIX = "lfm_";
+    private DatastoreService datastore;
 
-        public AppEngineCache() {
-                this.datastore = DatastoreServiceFactory.getDatastoreService();
-        }
+    public AppEngineCache() {
+        this.datastore = DatastoreServiceFactory.getDatastoreService();
+    }
 
-        @Override
-        public void clear() {
-                for(Entity e: datastore.prepare(new Query(KIND)).asIterable()) {
-                        datastore.delete(e.getKey());
-                }
+    @Override
+    public void clear() {
+        for (Entity e : datastore.prepare(new Query(KIND)).asIterable()) {
+            datastore.delete(e.getKey());
         }
+    }
 
-        @Override
-        public boolean contains(String cacheEntryName) {
-                Key key = KeyFactory.createKey(KIND, PREFIX+cacheEntryName);
-                try {
-                        datastore.get(key);
-                } catch (EntityNotFoundException e) {
-                        return false;
-                }
-                return true;
+    @Override
+    public boolean contains(String cacheEntryName) {
+        Key key = KeyFactory.createKey(KIND, PREFIX + cacheEntryName);
+        try {
+            datastore.get(key);
+        } catch (EntityNotFoundException e) {
+            return false;
         }
+        return true;
+    }
 
-        @Override
-        public InputStream load(String cacheEntryName) {
-                Key key = KeyFactory.createKey(KIND, PREFIX+cacheEntryName);
-                try {
-                        Entity e = datastore.get(key);
-                        Text t = (Text) e.getProperty("data");
-                        return new ByteArrayInputStream(t.getValue().getBytes("UTF-8"));
-                } catch (EntityNotFoundException e) {
-                        // not found, return null
-                } catch (UnsupportedEncodingException e) {
-                        // never happens
-                }
-                return null;
+    @Override
+    public InputStream load(String cacheEntryName) {
+        Key key = KeyFactory.createKey(KIND, PREFIX + cacheEntryName);
+        try {
+            Entity e = datastore.get(key);
+            Text t = (Text) e.getProperty("data");
+            return new ByteArrayInputStream(t.getValue().getBytes("UTF-8"));
+        } catch (EntityNotFoundException e) {
+            // not found, return null
+        } catch (UnsupportedEncodingException e) {
+            // never happens
         }
+        return null;
+    }
 
-        @Override
-        public void remove(String cacheEntryName) {
-                Key key = KeyFactory.createKey(KIND, PREFIX+cacheEntryName);
-                datastore.delete(key);
-        }
+    @Override
+    public void remove(String cacheEntryName) {
+        Key key = KeyFactory.createKey(KIND, PREFIX + cacheEntryName);
+        datastore.delete(key);
+    }
 
-        @Override
-        public void store(String cacheEntryName, InputStream inputStream,
-                        long expirationDate) {
-                try {
-                        InputStreamReader reader = new InputStreamReader(inputStream, "UTF-8");
-                        StringBuilder sb = new StringBuilder(inputStream.available());
-                        char[] buf = new char[2048];
-                        int read;
-                        while ((read = reader.read(buf, 0, buf.length)) != -1) {
-                                sb.append(buf, 0, read);
-                        }
-                        Entity e = new Entity(KIND, PREFIX+cacheEntryName);
-                        e.setProperty("expirationDate", expirationDate);
-                        e.setProperty("data", new Text(sb.toString()));
-                        datastore.put(e);
-                } catch (IOException e) {
-                        // don't cache
-                }
+    @Override
+    public void store(String cacheEntryName, InputStream inputStream,
+            long expirationDate) {
+        try {
+            InputStreamReader reader = new InputStreamReader(inputStream,
+                    "UTF-8");
+            StringBuilder sb = new StringBuilder(inputStream.available());
+            char[] buf = new char[2048];
+            int read;
+            while ((read = reader.read(buf, 0, buf.length)) != -1) {
+                sb.append(buf, 0, read);
+            }
+            Entity e = new Entity(KIND, PREFIX + cacheEntryName);
+            e.setProperty("expirationDate", expirationDate);
+            e.setProperty("data", new Text(sb.toString()));
+            datastore.put(e);
+        } catch (IOException e) {
+            // don't cache
         }
+    }
 
-        @Override
-        public boolean isExpired(String cacheEntryName) {
-                Key key = KeyFactory.createKey(KIND, PREFIX+cacheEntryName);
-                try {
-                        Entity e = datastore.get(key);
-                        Long expirationDate = (Long) e.getProperty("expirationDate");
-                        return expirationDate < System.currentTimeMillis();
-                } catch (EntityNotFoundException e) {
-                        return false;
-                }
+    @Override
+    public boolean isExpired(String cacheEntryName) {
+        Key key = KeyFactory.createKey(KIND, PREFIX + cacheEntryName);
+        try {
+            Entity e = datastore.get(key);
+            Long expirationDate = (Long) e.getProperty("expirationDate");
+            return expirationDate < System.currentTimeMillis();
+        } catch (EntityNotFoundException e) {
+            return false;
         }
+    }
 }

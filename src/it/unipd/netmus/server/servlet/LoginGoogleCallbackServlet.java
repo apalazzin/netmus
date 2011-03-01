@@ -13,53 +13,58 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Nome: LoginGoogleCallbackServlet.java
- * Autore:  VT.G
- * Licenza: GNU GPL v3
+ * Nome: LoginGoogleCallbackServlet.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
  * Data Creazione: 17 Febbraio 2011
  */
 
 @SuppressWarnings("serial")
 public class LoginGoogleCallbackServlet extends HttpServlet {
-    
+
     /**
-     * Crea ed invia una richiesta al servizio di login Google per fargli mostrare la pagina 
-     * di login predefinita per i Google Account.
+     * Crea ed invia una richiesta al servizio di login Google per fargli
+     * mostrare la pagina di login predefinita per i Google Account.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
         Principal googleUser = request.getUserPrincipal();
         if (googleUser != null) {
-            
+
             try {
                 // REGISTRO IL GOOGLE USER (COME GOOGLE USER) E LO LOGGO
                 // controllo se esiste gia` in DB
-                UserAccount userAccount = UserAccount.load(googleUser.getName());
+                UserAccount userAccount = UserAccount
+                        .load(googleUser.getName());
                 if (userAccount == null) {
                     // creo l'utente google nel db
                     userAccount = new UserAccount(googleUser.getName(), "");
                     userAccount.setGoogleUser(true);
-                    
+
                 } else {
                     if (!userAccount.isGoogleUser()) {
-                        // non e' lui non e' possibile registrarlo con Google con quel nome
-                        throw new NetmusException("UTENTE NETMUS con STESSO USERNAME/MAIL");
+                        // non e' lui non e' possibile registrarlo con Google
+                        // con quel nome
+                        throw new NetmusException(
+                                "UTENTE NETMUS con STESSO USERNAME/MAIL");
                     }
                 }
-                //loggo , sessione (non uso i cookies per un utente non Netmus)
-                
+                // loggo , sessione (non uso i cookies per un utente non Netmus)
+
                 HttpSession session = request.getSession();
                 String session_id = session.getId();
                 // set session parameter - userID
                 LoginHelper.setSession(session, googleUser.getName());
                 // set in DB userAccount the new SessionID
                 userAccount.setLastSessionId(session_id);
-            }
-            catch (NetmusException ne) {
+            } catch (NetmusException ne) {
                 System.out.println(ne.getMoreInfo());
             }
         }
-        // TORNO AL ENTRY POINT E SE E' STATO LOGGATO PASSA IN AUTOMATICO AL PROFILE
+        // TORNO AL ENTRY POINT E SE E' STATO LOGGATO PASSA IN AUTOMATICO AL
+        // PROFILE
         response.sendRedirect(LoginHelper.getApplicationURL(request));
     }
 }

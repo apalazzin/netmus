@@ -28,8 +28,9 @@ import java.security.SecureRandom;
  * the algorithm is parameterised, so it can be increased as
  * computers get faster.
  *
- * @author Damien Miller
- * @version 0.2
+ * Nome: BCrypt.java
+ * Autore: Damien Miller
+ *
  */
 
 public class BCrypt {
