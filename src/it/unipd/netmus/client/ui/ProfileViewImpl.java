@@ -5,18 +5,12 @@ package it.unipd.netmus.client.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Stack;
-
-import it.unipd.netmus.client.place.LoginPlace;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -26,64 +20,48 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InsertPanel.ForIsWidget;
-import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 
 /**
- * @author smile
- *
- */
+ * Nome: ProfileViewImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+*/
 public class ProfileViewImpl extends Composite implements ProfileView {
 
    private static ProfileViewImplUiBinder uiBinder = GWT.create(ProfileViewImplUiBinder.class);
@@ -247,30 +225,30 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    //classe interna che rappresenta un brano
    private static class Song extends it.unipd.netmus.client.ui.ProfileView.Song {
 
-	   private final String autore;
-	   private final String titolo;
-	   private final String album;
-	   
-	   public Song(String autore, String titolo, String album) {
-		   this.autore = autore;
-		   this.titolo = titolo;
-		   this.album = album;
-	   }
-	   
-	   @Override
-	   public boolean equals(Object o) {
+       private final String autore;
+       private final String titolo;
+       private final String album;
+       
+       public Song(String autore, String titolo, String album) {
+           this.autore = autore;
+           this.titolo = titolo;
+           this.album = album;
+       }
+       
+       @Override
+       public boolean equals(Object o) {
 
-	       if (o==null)return false;
-	       if (!(o instanceof Song)) return false;
-	       
-	       Song song = (Song) o;
-	       
-	       if(this.autore.equals(song.autore) && this.titolo.equals(song.titolo) && this.album.equals(song.album)) {
-	           
-	           return true;
-	       }
-	           return false;
-	       
+           if (o==null)return false;
+           if (!(o instanceof Song)) return false;
+           
+           Song song = (Song) o;
+           
+           if(this.autore.equals(song.autore) && this.titolo.equals(song.titolo) && this.album.equals(song.album)) {
+               
+               return true;
+           }
+               return false;
+           
         }
 
    }
@@ -284,97 +262,98 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    public ProfileViewImpl() {
 
        youTubeListener();
-	   //costruisco la componente widget x il catalogo delle canzoni
-	   catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
-	   catalogo.setWidth("100%", true);
-//	   catalogo.setPageSize(100000);
-	  
-	   initWidget(uiBinder.createAndBindUi(this));
+       youtube_status = 0;
+       //costruisco la componente widget x il catalogo delle canzoni
+       catalogo = new CellTable<Song>(Integer.MAX_VALUE, resource);
+       catalogo.setWidth("100%", true);
+//     catalogo.setPageSize(100000);
+      
+       initWidget(uiBinder.createAndBindUi(this));
 
-	   //crea la colonna autore
-	   TextColumn<Song> autoreColumn = new TextColumn<Song>() {
-		   @Override
-	       public String getValue(Song song) {
-			   return song.autore;
-		   }
-	   };
-	   //la rende ordinabile
-	   autoreColumn.setSortable(true);
-	   // la aggiunge al catalogo
-	   catalogo.addColumn(autoreColumn, "Autore");
+       //crea la colonna autore
+       TextColumn<Song> autoreColumn = new TextColumn<Song>() {
+           @Override
+           public String getValue(Song song) {
+               return song.autore;
+           }
+       };
+       //la rende ordinabile
+       autoreColumn.setSortable(true);
+       // la aggiunge al catalogo
+       catalogo.addColumn(autoreColumn, "Autore");
 
-	   //crea la colonna titolo
-	   TextColumn<Song> titoloColumn = new TextColumn<Song>() {
-		   @Override
-	       public String getValue(Song song) {
-			   return song.titolo;
-		   }
-	   };
-	   //la rende ordinabile
-	   titoloColumn.setSortable(true);
-	   // la aggiunge al catalogo
-	   catalogo.addColumn(titoloColumn, "Titolo");
+       //crea la colonna titolo
+       TextColumn<Song> titoloColumn = new TextColumn<Song>() {
+           @Override
+           public String getValue(Song song) {
+               return song.titolo;
+           }
+       };
+       //la rende ordinabile
+       titoloColumn.setSortable(true);
+       // la aggiunge al catalogo
+       catalogo.addColumn(titoloColumn, "Titolo");
 
-	   
-	   //crea la colonna Album
-	   TextColumn<Song> albumColumn = new TextColumn<Song>() {
-		   @Override
-	       public String getValue(Song song) {
-			   return song.album;
-		   }
-	   };
-	   //la rende ordinabile
-	   albumColumn.setSortable(true);
-	   // la aggiunge al catalogo
-	   catalogo.addColumn(albumColumn, "Album");
-	   
-	   
-	    // Imposta l'oggetto Song selected in base alla selezione sulla tabella
-	    final SingleSelectionModel<Song> selectionModel = new SingleSelectionModel<Song>();
-	    catalogo.setSelectionModel(selectionModel);
-	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-	      public void onSelectionChange(SelectionChangeEvent event) {
-	          
-	         setBranoCatalogo(selectionModel.getSelectedObject());
-	         
-	         titolo_song.setText(selected_song.titolo);
-	         song_titolo.setText(selected_song.titolo);
-	         song_autore.setText(selected_song.autore);
-	         song_album.setText(selected_song.album);
-	         
-	         
-	         
-	         if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
-	             play.setUrl("images/pause.png");
-	             youtube_status = 1;
-	             last_selected=0;
-	         }
-	         else if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+       
+       //crea la colonna Album
+       TextColumn<Song> albumColumn = new TextColumn<Song>() {
+           @Override
+           public String getValue(Song song) {
+               return song.album;
+           }
+       };
+       //la rende ordinabile
+       albumColumn.setSortable(true);
+       // la aggiunge al catalogo
+       catalogo.addColumn(albumColumn, "Album");
+       
+       
+        // Imposta l'oggetto Song selected in base alla selezione sulla tabella
+        final SingleSelectionModel<Song> selectionModel = new SingleSelectionModel<Song>();
+        catalogo.setSelectionModel(selectionModel);
+        selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+          public void onSelectionChange(SelectionChangeEvent event) {
+              
+             setBranoCatalogo(selectionModel.getSelectedObject());
+             
+             titolo_song.setText(selected_song.titolo);
+             song_titolo.setText(selected_song.titolo);
+             song_autore.setText(selected_song.autore);
+             song_album.setText(selected_song.album);
+             
+             
+             
+             if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+                 play.setUrl("images/pause.png");
+                 youtube_status = 1;
+                 last_selected=0;
+             }
+             else if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
                  play.setUrl("images/play.png");
                  youtube_status = -1;
                  last_selected=0;
              }
 
-	         else {
-	             play.setUrl("images/play.png");
-	             if(youtube_status!=0&&youtube_status==1)
-	                 youtube_status = 2;
-	             else if(youtube_status!=0&&youtube_status==-1)
-	                 youtube_status = 3;
-	             last_selected=0;
-	         }
+             else {
+                 play.setUrl("images/play.png");
+                 if(youtube_status!=0&&youtube_status==1)
+                     youtube_status = 2;
+                 else if(youtube_status!=0&&youtube_status==-1)
+                     youtube_status = 3;
+                 last_selected=0;
+             }
              play_youtube.setUrl("images/play.png");
 
              global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
              showStar(rating);
-	         
-	         listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
-	         
-	         
-	      }
-	    });
-	    
-	    catalogo.addDomHandler(new DoubleClickHandler() {
+             
+             listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
+             
+             
+          }
+        });
+        
+        catalogo.addDomHandler(new DoubleClickHandler() {
 
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
@@ -390,9 +369,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }
 
             }}, DoubleClickEvent.getType());
-	    
-	    
-	       catalogo.addHandler(new KeyUpHandler() {
+        
+        
+           catalogo.addHandler(new KeyUpHandler() {
 
             @Override
             public void onKeyUp(KeyUpEvent event) {
@@ -405,30 +384,30 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
             }
 
-	            }, KeyUpEvent.getType());
-	    
-	    
-	    List<Song> list = dataProvider_catalogo.getList();
-	    
-	    ListHandler<Song> columnSortHandler = new ListHandler<Song>(list);
-	    
-	        columnSortHandler.setComparator(autoreColumn,
-	            new Comparator<Song>() {
-	              public int compare(Song o1, Song o2) {
-	                if (o1 == o2) {
-	                  return 0;
-	                }
+                }, KeyUpEvent.getType());
+        
+        
+        List<Song> list = dataProvider_catalogo.getList();
+        
+        ListHandler<Song> columnSortHandler = new ListHandler<Song>(list);
+        
+            columnSortHandler.setComparator(autoreColumn,
+                new Comparator<Song>() {
+                  public int compare(Song o1, Song o2) {
+                    if (o1 == o2) {
+                      return 0;
+                    }
 
-	                // Compare the name columns.
-	                if (o1 != null) {
-	                  return (o2 != null) ? o1.autore.compareTo(o2.autore) : 1;
-	                }
-	                return -1;
-	              }
-	            });
-	       
-	        
-	        
+                    // Compare the name columns.
+                    if (o1 != null) {
+                      return (o2 != null) ? o1.autore.compareTo(o2.autore) : 1;
+                    }
+                    return -1;
+                  }
+                });
+           
+            
+            
             columnSortHandler.setComparator(titoloColumn,
                     new Comparator<Song>() {
                       public int compare(Song o1, Song o2) {
@@ -461,85 +440,85 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                       }
                     });
             
-            catalogo.addColumnSortHandler(columnSortHandler);	        
+            catalogo.addColumnSortHandler(columnSortHandler);           
 
-	        
-	        // We know that the data is sorted alphabetically by default.
-	        catalogo.getColumnSortList().push(autoreColumn);
+            
+            // We know that the data is sorted alphabetically by default.
+            catalogo.getColumnSortList().push(autoreColumn);
 
-	    
-	    
-	    
-	    
-	    dataProvider_catalogo.addDataDisplay(catalogo);
+        
+        
+        
+        
+        dataProvider_catalogo.addDataDisplay(catalogo);
 
-	       playlist_songs.getElement().setInnerHTML("");
+           playlist_songs.getElement().setInnerHTML("");
 
-	       lista_canzoni = new CellTable<Song>(Integer.MAX_VALUE, resourcePlaylist);
-	       lista_canzoni.setWidth("100%", true);
+           lista_canzoni = new CellTable<Song>(Integer.MAX_VALUE, resourcePlaylist);
+           lista_canzoni.setWidth("100%", true);
 
-	       //crea la colonna titolo
-	       TextColumn<Song> titoloColumn2 = new TextColumn<Song>() {
-	           @Override
-	           public String getValue(Song song) {
-	               return song.titolo;
-	           }
-	       };
-	       //la rende ordinabile
-	       titoloColumn2.setSortable(true);
-	       // la aggiunge al catalogo
-	       lista_canzoni.addColumn(titoloColumn2, "Titolo");
-	       lista_canzoni.setColumnWidth(titoloColumn2,"60%");
+           //crea la colonna titolo
+           TextColumn<Song> titoloColumn2 = new TextColumn<Song>() {
+               @Override
+               public String getValue(Song song) {
+                   return song.titolo;
+               }
+           };
+           //la rende ordinabile
+           titoloColumn2.setSortable(true);
+           // la aggiunge al catalogo
+           lista_canzoni.addColumn(titoloColumn2, "Titolo");
+           lista_canzoni.setColumnWidth(titoloColumn2,"60%");
 
-	       
-	       //crea la colonna Album
-	       TextColumn<Song> albumColumn2 = new TextColumn<Song>() {
-	           @Override
-	           public String getValue(Song song) {
-	               return song.album;
-	           }
-	       };
-	       //la rende ordinabile
-	       albumColumn2.setSortable(true);
-	       // la aggiunge al catalogo
-	       lista_canzoni.addColumn(albumColumn2, "Album");
-	       lista_canzoni.setColumnWidth(albumColumn2,"60%");
-	       
-	       // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
-	       final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
-	       lista_canzoni.setSelectionModel(selectionModel2);
-	       selectionModel2.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-	         public void onSelectionChange(SelectionChangeEvent event) {
-	             
-	           setBranoPlaylist(selectionModel2.getSelectedObject());
-	           
-	           
-	             
-	             if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
-	                 play.setUrl("images/pause.png");
-	                 youtube_status = 1;
-	                 last_selected=1;
-	             }
-	             else if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
-	                 play.setUrl("images/play.png");
-	                 youtube_status = -1;
-	                 last_selected=1;
-	             }
+           
+           //crea la colonna Album
+           TextColumn<Song> albumColumn2 = new TextColumn<Song>() {
+               @Override
+               public String getValue(Song song) {
+                   return song.album;
+               }
+           };
+           //la rende ordinabile
+           albumColumn2.setSortable(true);
+           // la aggiunge al catalogo
+           lista_canzoni.addColumn(albumColumn2, "Album");
+           lista_canzoni.setColumnWidth(albumColumn2,"60%");
+           
+           // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
+           final SingleSelectionModel<Song> selectionModel2 = new SingleSelectionModel<Song>();
+           lista_canzoni.setSelectionModel(selectionModel2);
+           selectionModel2.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+             public void onSelectionChange(SelectionChangeEvent event) {
+                 
+               setBranoPlaylist(selectionModel2.getSelectedObject());
+               
+               
+                 
+                 if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+                     play.setUrl("images/pause.png");
+                     youtube_status = 1;
+                     last_selected=1;
+                 }
+                 else if(playing==1&&selectionModel2.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+                     play.setUrl("images/play.png");
+                     youtube_status = -1;
+                     last_selected=1;
+                 }
 
-	             else {
-	                 play.setUrl("images/play.png");
-	                 if(youtube_status!=0&&youtube_status==1)
-	                     youtube_status = 2;
-	                 else if(youtube_status!=0&&youtube_status==-1)
-	                     youtube_status = 3;
-	                 last_selected=1;
-	             }
-	             play_youtube.setUrl("images/play.png");
-	           
-	         }
-	       });
-	       
-	       
+                 else {
+                     play.setUrl("images/play.png");
+                     if(youtube_status!=0&&youtube_status==1)
+                         youtube_status = 2;
+                     else if(youtube_status!=0&&youtube_status==-1)
+                         youtube_status = 3;
+                     last_selected=1;
+                 }
+                 play_youtube.setUrl("images/play.png");
+               
+             }
+           });
+           
+           
            List<Song> listPl = dataProvider_playlist.getList();
            
            ListHandler<Song> columnPlSortHandler = new ListHandler<Song>(listPl);
@@ -579,17 +558,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                // We know that the data is sorted alphabetically by default.
                lista_canzoni.getColumnSortList().push(titoloColumn2);
                
-	       dataProvider_playlist.addDataDisplay(lista_canzoni);
-	               
-	       
-	       playlist_songs.add(lista_canzoni);
-	       
-	       HTMLPanel off = new HTMLPanel("");
-	       off.getElement().getStyle().setHeight(22, Style.Unit.PX);
-	       playlist_songs.add(off);	   
-	       main_panel.getElement().setId("main_panel");
-	       
-	       
+           dataProvider_playlist.addDataDisplay(lista_canzoni);
+                   
+           
+           playlist_songs.add(lista_canzoni);
+           
+           HTMLPanel off = new HTMLPanel("");
+           off.getElement().getStyle().setHeight(22, Style.Unit.PX);
+           playlist_songs.add(off);    
+           main_panel.getElement().setId("main_panel");
+           
+           
 
    }
  
@@ -816,7 +795,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
    @UiHandler("star1")
    void handleMouseOutStar1(MouseOutEvent e) {
-	   showStar(this.rating);
+       showStar(this.rating);
    }
    @UiHandler("star1")
    void handleClickStar1(ClickEvent e) {
@@ -831,7 +810,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        star3.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star4.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-	   star1.setUrl("images/star.png");
+       star1.setUrl("images/star.png");
        star2.setUrl("images/star.png");
        star3.setUrl("images/starbw.png");
        star4.setUrl("images/starbw.png");
@@ -839,7 +818,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
    @UiHandler("star2")
    void handleMouseOutStar2(MouseOutEvent e) {
-	   showStar(this.rating);
+       showStar(this.rating);
    }
    @UiHandler("star2")
    void handleClickStar2(ClickEvent e) {
@@ -854,14 +833,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        star3.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star4.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-	   star1.setUrl("images/star.png");
+       star1.setUrl("images/star.png");
        star2.setUrl("images/star.png");
        star3.setUrl("images/star.png");
        star4.setUrl("images/starbw.png");
        star5.setUrl("images/starbw.png");   }
    @UiHandler("star3")
    void handleMouseOutStar3(MouseOutEvent e) {
-	   showStar(this.rating);
+       showStar(this.rating);
    }
    @UiHandler("star3")
    void handleClickStar3(ClickEvent e) {
@@ -876,14 +855,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        star3.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star4.getElement().getStyle().setCursor(Style.Cursor.POINTER);
        star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-	   star1.setUrl("images/star.png");
+       star1.setUrl("images/star.png");
        star2.setUrl("images/star.png");
        star3.setUrl("images/star.png");
        star4.setUrl("images/star.png");
        star5.setUrl("images/starbw.png");   }
    @UiHandler("star4")
    void handleMouseOutStar4(MouseOutEvent e) {
-	   showStar(this.rating);
+       showStar(this.rating);
    }
    @UiHandler("star4")
    void handleClickStar4(ClickEvent e) {
@@ -893,16 +872,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
    @UiHandler("star5")
    void handleMouseOverStar5(MouseOverEvent e) {
-	   star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-	   star1.setUrl("images/star.png");
-	   star2.setUrl("images/star.png");
-	   star3.setUrl("images/star.png");
-	   star4.setUrl("images/star.png");
-	   star5.setUrl("images/star.png");
+       star5.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       star1.setUrl("images/star.png");
+       star2.setUrl("images/star.png");
+       star3.setUrl("images/star.png");
+       star4.setUrl("images/star.png");
+       star5.setUrl("images/star.png");
    }
    @UiHandler("star5")
    void handleMouseOutStar5(MouseOutEvent e) {
-	   showStar(this.rating);
+       showStar(this.rating);
    }
    @UiHandler("star5")
    void handleClickStar5(ClickEvent e) {
@@ -929,14 +908,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("edit_button")
    void handleClickEditButton(ClickEvent e) {
-	  if(selected_song!=null)
-		  viewSong(selected_song);
+      if(selected_song!=null)
+          viewSong(selected_song);
    }
    
    @UiHandler("edit_button")
    void handleMouseOverEditButton(MouseOverEvent e) {
-	   if(selected_song!=null)
-		   edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       if(selected_song!=null)
+           edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
 
@@ -1112,7 +1091,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @Override
    public void setNumeroBrani(int numero) {
-	   numero_brani.setText(String.valueOf(numero));
+       numero_brani.setText(String.valueOf(numero));
    }
 
    @Override
@@ -1150,109 +1129,109 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    //riempie la lista delle playlists
    @Override
    public void paintPlaylist(String[] lista) {
-	          
+              
        Arrays.sort(lista);
        
        playlists.clear();
-	   for(int k=0; k< lista.length; k++) {
+       for(int k=0; k< lista.length; k++) {
 
-		   	final Label tmpTxt = new Label(lista[k]);
-			tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
-	        tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+            final Label tmpTxt = new Label(lista[k]);
+            tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
+            tmpTxt.getElement().getStyle().setCursor(Style.Cursor.POINTER);
             tmpTxt.getElement().getStyle().setColor("#37A6EB");
             tmpTxt.getElement().getStyle().setProperty("fontFamily", "Verdana");
             tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setFontSize(12, Style.Unit.PX);
             tmpTxt.getElement().getStyle().setProperty("fontWeight", "bold");
             
-	        
-			Image tmpImg = new Image("images/playlistT.png");
-			tmpImg.setWidth("25px");
-			tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
-			tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
-			tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
-			
-			final FocusPanel wrapper = new FocusPanel();
+            
+            Image tmpImg = new Image("images/playlistT.png");
+            tmpImg.setWidth("25px");
+            tmpImg.getElement().getStyle().setMargin(2, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginTop(5, Style.Unit.PX);
+            tmpImg.getElement().getStyle().setMarginLeft(10, Style.Unit.PX);
+            
+            final FocusPanel wrapper = new FocusPanel();
 
-			HorizontalPanel tmpPnl = new HorizontalPanel();
-			tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-			tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
-			tmpPnl.add(tmpImg);
-			tmpPnl.add(tmpTxt);
+            HorizontalPanel tmpPnl = new HorizontalPanel();
+            tmpPnl.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            tmpPnl.getElement().getStyle().setMarginBottom(0, Style.Unit.PX);
+            tmpPnl.add(tmpImg);
+            tmpPnl.add(tmpTxt);
 
-			if(k%2>0)
-		         wrapper.getElement().getStyle().setBackgroundColor("#F5F5F5");
-			wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
-			wrapper.getElement().getStyle().setProperty("outline", "0");
-			wrapper.addMouseOverHandler( new MouseOverHandler(){
+            if(k%2>0)
+                 wrapper.getElement().getStyle().setBackgroundColor("#F5F5F5");
+            wrapper.getElement().getStyle().setMarginTop(0, Style.Unit.PX);
+            wrapper.getElement().getStyle().setProperty("outline", "0");
+            wrapper.addMouseOverHandler( new MouseOverHandler(){
 
                 @Override
                 public void onMouseOver(MouseOverEvent event) {                    
                       event.getRelativeElement().getStyle().setBackgroundColor("#e0fee1");
                       event.getRelativeElement().getStyle().setCursor(Style.Cursor.POINTER);
                 } }); 
-			
-			if(k%2>0) {
-    	         wrapper.addMouseOutHandler( new MouseOutHandler(){
-    	                @Override
-    	                public void onMouseOut(MouseOutEvent event) {
-    	                    event.getRelativeElement().getStyle().setBackgroundColor("#F5F5F5");
-    	                } });
-			} else {
-			    wrapper.addMouseOutHandler( new MouseOutHandler(){
+            
+            if(k%2>0) {
+                 wrapper.addMouseOutHandler( new MouseOutHandler(){
+                        @Override
+                        public void onMouseOut(MouseOutEvent event) {
+                            event.getRelativeElement().getStyle().setBackgroundColor("#F5F5F5");
+                        } });
+            } else {
+                wrapper.addMouseOutHandler( new MouseOutHandler(){
                     @Override
                     public void onMouseOut(MouseOutEvent event) {
                             event.getRelativeElement().getStyle().setBackgroundColor("#FFFFFF");
                     } });
-			}
+            }
 
-	          wrapper.addClickHandler(new ClickHandler() { 
-	                @Override
-	                public void onClick(ClickEvent event) {
-	                    viewPlaylist(tmpTxt.getText());
-	                    wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
-	                    Timer timerButton = new Timer() {
-	                        public void run() {
-	                            wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
-	                        }     
-	                    };
-	                    timerButton.schedule(50);
-	                }
-	            });
+              wrapper.addClickHandler(new ClickHandler() { 
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        viewPlaylist(tmpTxt.getText());
+                        wrapper.getElement().getStyle().setBackgroundColor("#FFFFFF");
+                        Timer timerButton = new Timer() {
+                            public void run() {
+                                wrapper.getElement().getStyle().setBackgroundColor("#e0fee1");      
+                            }     
+                        };
+                        timerButton.schedule(50);
+                    }
+                });
 
-			wrapper.add(tmpPnl);
-			
-			//playlists.getElement().setPropertyString("width", "100%");
-			playlists.add(wrapper);
-	   }
+            wrapper.add(tmpPnl);
+            
+            //playlists.getElement().setPropertyString("width", "100%");
+            playlists.add(wrapper);
+       }
    }
 
    //riempie la lista degli amici netmus
    @Override
    public void paintFriendlist(String[] lista) {
-	   
-	   for(int k=0; k< lista.length; k++) {
+       
+       for(int k=0; k< lista.length; k++) {
 
-		   	Label tmpTxt = new Label(lista[k]);
-		   	Label bull = new Label("\u25FC");
-		   	bull.getElement().getStyle().setFontSize(10, Style.Unit.PX);
-		   	bull.getElement().getStyle().setColor("#555555");
-		   	bull.getElement().getStyle().setMarginRight(10, Style.Unit.PX);
+            Label tmpTxt = new Label(lista[k]);
+            Label bull = new Label("\u25FC");
+            bull.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+            bull.getElement().getStyle().setColor("#555555");
+            bull.getElement().getStyle().setMarginRight(10, Style.Unit.PX);
             bull.getElement().getStyle().setMarginBottom(6, Style.Unit.PX);
-		   	
-		   	
-			HorizontalPanel tmpPnl = new HorizontalPanel();
-			tmpPnl.add(bull);
-			tmpPnl.add(tmpTxt);
-			
-			friends.add(tmpPnl);
-	   }
+            
+            
+            HorizontalPanel tmpPnl = new HorizontalPanel();
+            tmpPnl.add(bull);
+            tmpPnl.add(tmpTxt);
+            
+            friends.add(tmpPnl);
+       }
    }
 
    //imposta il testo all'interno della finestra informativa
    @Override
    public void setInfo(String text) {
-	   info.getElement().setInnerHTML(text);
+       info.getElement().setInnerHTML(text);
    }
 
 
@@ -1260,7 +1239,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @Override
    public void setUser(String username) {
-	   utente.setText(username);
+       utente.setText(username);
 
        Timer timersd = new Timer() {
            public void run() {
@@ -1287,7 +1266,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            }
        };
        timersd.schedule(600);
-	
+    
    }
 
 
@@ -1707,9 +1686,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
                    + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
-                   		"<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
+                        "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
                    + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
-                   		"allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
+                        "allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
            
            
             
@@ -2218,11 +2197,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
 
 
-	@Override
-	public void setSongFields(String autore, String titolo, String album,
-			String genere, String anno, String compositore, String traccia, String cover) {
-		
-	    
+    @Override
+    public void setSongFields(String autore, String titolo, String album,
+            String genere, String anno, String compositore, String traccia, String cover) {
+        
+        
         song_titolo.setText(titolo);
         song_autore.setText(autore);
         song_album.setText(album);
@@ -2487,7 +2466,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         //addClickHandler(MyClickEditProfileHandler);
         
     }
-	
+    
     public void deleteSong(String autore, String titolo, String album) {
        
         Song canzone = new Song(autore, titolo, album);
@@ -2496,7 +2475,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         canzoni_catalogo.remove(canzone);
         closeSong();
     }
-	
+    
         
 }
 
