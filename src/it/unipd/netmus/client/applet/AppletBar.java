@@ -105,13 +105,6 @@ public class AppletBar {
     }
 
     /**
-     * Aggiorna l'attributo user.
-     */
-    private void setUser(String user) {
-        this.user = user;
-    }
-
-    /**
      * Indica all'applet di effettuare una scansione manuale.
      */
     void showChooser() {
@@ -147,6 +140,13 @@ public class AppletBar {
 
         libraryService.sendUserNewMusic(user, new_songs, callback);
         AppletBarView.showStatus(constants.pleaseWait());
+    }
+
+    /**
+     * Aggiorna l'attributo user.
+     */
+    private void setUser(String user) {
+        this.user = user;
     }
 
 }
