@@ -1,11 +1,10 @@
-/**
- * 
- */
 package it.unipd.netmus.server.utils;
 
 /**
- * @author ValterTexasGroup
- *
+ * Nome: AppEngineCache.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 17 Febbraio 2011
  */
 
 import java.io.ByteArrayInputStream;

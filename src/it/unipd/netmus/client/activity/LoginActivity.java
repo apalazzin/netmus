@@ -1,7 +1,5 @@
 package it.unipd.netmus.client.activity;
 
-import java.util.Date;
-
 import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.place.LoginPlace;
 import it.unipd.netmus.client.place.ProfilePlace;
@@ -13,6 +11,8 @@ import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 import it.unipd.netmus.shared.exception.RegistrationException;
+
+import java.util.Date;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -30,24 +30,26 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * Data Creazione: 15 Febbraio 2011
 */
 public class LoginActivity extends AbstractActivity implements
-	LoginView.Presenter {
+        LoginView.Presenter {
+    // Used to obtain views, eventBus, placeController
+    // Alternatively, could be injected via GIN
+    private ClientFactory client_factory;
+    private String user;
+    private String password;
+    private String error;
+    private LoginType login_type;
 
-	private ClientFactory client_factory;
-	private String user;
-	private String password;
-	private String error;
-	private LoginType login_type;
-	
-	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
-	MyConstants my_constants = GWT.create(MyConstants.class);
-	
-	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
-		this.user = place.getLoginName();
-		this.password = place.getPassword();
-		this.error = place.getError();
-		this.login_type = place.getLoginType();
-		this.client_factory = clientFactory;
-	}
+    private LoginServiceAsync login_service_svc = GWT
+            .create(LoginService.class);
+    MyConstants my_constants = GWT.create(MyConstants.class);
+
+    public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
+        this.user = place.getLoginName();
+        this.password = place.getPassword();
+        this.error = place.getError();
+        this.login_type = place.getLoginType();
+        this.client_factory = clientFactory;
+    }
 
 	/**
      *Invocato da ActivityManager per avviare una nuova LoginActivity.
@@ -70,7 +72,7 @@ public class LoginActivity extends AbstractActivity implements
                     loginView.setUser(user);
                     loginView.setPresenter(LoginActivity.this);
                     container_widget.setWidget(loginView.asWidget());
-                    
+
                 }
             }
 
@@ -79,10 +81,12 @@ public class LoginActivity extends AbstractActivity implements
                 goTo(new ProfilePlace(result));
             }
         };
-        
-        try { login_service_svc.getLoggedInUser(callback); }
-        catch(LoginException e) {
+
+        try {
+            login_service_svc.getLoggedInUser(callback);
+        } catch (LoginException e) {
         }
+
 		
 	}
 	
@@ -93,6 +97,7 @@ public class LoginActivity extends AbstractActivity implements
 	public void goTo(Place place) {
 		client_factory.getPlaceController().goTo(place);
 	}
+	
     /**
      *Invia al server il login inserito dall'utente dopo averne controllato la validità
      *(e-mail valida, password sufficientemente lunga).     
@@ -101,43 +106,49 @@ public class LoginActivity extends AbstractActivity implements
     public void sendLogin(String user, String password) throws LoginException {
         final String username = user;
         final String pass = password;
-        LoginDTO login = new LoginDTO(user,password);
+        LoginDTO login = new LoginDTO(user, password);
 
         // Set up the callback object.
         AsyncCallback<String> callback = new AsyncCallback<String>() {
-            
-          public void onFailure(Throwable caught) {
-              if (caught instanceof LoginException) {
-                  goTo(new LoginPlace(username,pass, my_constants.infoLoginIncorrect(),LoginType.NETMUSLOGIN));
-              }
-              else {
-                  goTo(new LoginPlace(username,pass, my_constants.databaseErrorGeneric(),LoginType.NETMUSLOGIN));  
-              }
-          }
-          
-          @Override
-          public void onSuccess(String session_id) {              
-              // create the cookie for this session
-              final long DURATION = 1000 * 60 * 60 * 24;
-              Date expires = new Date(System.currentTimeMillis() + DURATION);
-              Cookies.setCookie("user", username, expires);
-              Cookies.setCookie("sid", session_id, expires);
-              
-              goTo(new ProfilePlace(username));
-          }
+
+            public void onFailure(Throwable caught) {
+                if (caught instanceof LoginException) {
+                    goTo(new LoginPlace(username, pass,
+                            my_constants.infoLoginIncorrect(),
+                            LoginType.NETMUSLOGIN));
+                } else {
+                    goTo(new LoginPlace(username, pass,
+                            my_constants.databaseErrorGeneric(),
+                            LoginType.NETMUSLOGIN));
+                }
+            }
+
+            @Override
+            public void onSuccess(String session_id) {
+                // create the cookie for this session
+                final long DURATION = 1000 * 60 * 60 * 24;
+                Date expires = new Date(System.currentTimeMillis() + DURATION);
+                Cookies.setCookie("user", username, expires);
+                Cookies.setCookie("sid", session_id, expires);
+
+                goTo(new ProfilePlace(username));
+            }
         };
 
         // Make the call to send login info.
         try {
             login_service_svc.startLogin(login, callback);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
     }
+
     /**
      *Permette di effettuare un reindirizzamento al servlet dedicato all'autenticazione Google. 
      */    
     @Override
-    public void sendGoogleLogin(String user, String password) throws LoginException {
+    public void sendGoogleLogin(String user, String password)
+            throws LoginException {
         Window.Location.assign("/logingoogle");
     }
     /**
@@ -149,30 +160,36 @@ public class LoginActivity extends AbstractActivity implements
             String confirmPassword) throws RegistrationException {
         final String username = user;
         final String pass = password;
-        LoginDTO login = new LoginDTO(user,password);;
-        
+        LoginDTO login = new LoginDTO(user, password);
+        ;
+
         if (!FieldVerifier.isValidPassword(password))
-            goTo( new LoginPlace(username,pass, my_constants.errorPassword() ,LoginType.NETMUSREGISTRATION));
+            goTo(new LoginPlace(username, pass, my_constants.errorPassword(),
+                    LoginType.NETMUSREGISTRATION));
         else if (!FieldVerifier.isValidEmail(username))
-            goTo( new LoginPlace(username,pass, my_constants.errorEmail() ,LoginType.NETMUSREGISTRATION));
+            goTo(new LoginPlace(username, pass, my_constants.errorEmail(),
+                    LoginType.NETMUSREGISTRATION));
         else if (!password.equals(confirmPassword))
-            goTo( new LoginPlace(username,pass, my_constants.errorCPassword() ,LoginType.NETMUSREGISTRATION));
+            goTo(new LoginPlace(username, pass, my_constants.errorCPassword(),
+                    LoginType.NETMUSREGISTRATION));
         else {
-            
+
             // Set up the callback object.
             AsyncCallback<LoginDTO> callback = new AsyncCallback<LoginDTO>() {
-            
+
                 public void onFailure(Throwable caught) {
-                    goTo(new LoginPlace(username,pass, my_constants.infoUserUsato(),LoginType.NETMUSREGISTRATION));
+                    goTo(new LoginPlace(username, pass,
+                            my_constants.infoUserUsato(),
+                            LoginType.NETMUSREGISTRATION));
                 }
 
                 @Override
                 public void onSuccess(LoginDTO result) {
-                    
-                    //Reimposta la login
+
+                    // Reimposta la login
                     LoginView loginView = client_factory.getLoginView();
                     loginView.setLayout();
-                    
+
                     try {
                         sendLogin(result.getUser(), result.getPassword());
                     } catch (LoginException e) {
@@ -180,16 +197,14 @@ public class LoginActivity extends AbstractActivity implements
                     }
                 }
             };
-            
 
-            
             // Make the call to send login info.
             try {
                 login_service_svc.insertRegistration(login, callback);
             } catch (RegistrationException e) {
-                //exception alredy cought in method onFailure
+                // exception alredy cought in method onFailure
                 e.printStackTrace();
             }
-        }   
+        }
     }
 }

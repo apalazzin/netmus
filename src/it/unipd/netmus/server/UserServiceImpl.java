@@ -14,18 +14,29 @@ import it.unipd.netmus.shared.UserDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * @author ValterTexasGroup
- *
+ * Nome: UserServiceImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 13 Febbraio 2011
  */
 @SuppressWarnings("serial")
 public class UserServiceImpl extends RemoteServiceServlet implements
       UserService {
     
+    /**
+     * Trova nel Datastore l’utente a cui corrisponde l’username dato in input e ne
+     * ritorna le informazioni incapsulate in un DTO. Gli utenti di cui viene richiesto
+     * il caricamento devono essere presenti nel Datastore.
+     */
     @Override
 	public UserCompleteDTO loadProfile(String user){
 		return UserAccount.load(user).toUserCompleteDTO();
 	}
 
+    /**
+     * Salva nell’ UserAccount del Datastore i dati presenti nell’ UserCompleteDTO dato in input 
+     * sovrascrivendo le informazioni precedenti. E previsto qui anche il cambio della password.
+     */
     @Override
     public boolean editProfile(String user, UserCompleteDTO new_info_user) {
         
@@ -51,12 +62,21 @@ public class UserServiceImpl extends RemoteServiceServlet implements
 
     }
 
+    /**
+     * Cancella irreversibilmente l’utente e tutte le sue informazioni dal Datastore e 
+     * conseguentemente lo reindirizza alla pagina iniziale di login. Le canzoni che facevano
+     * parte del catalogo non vengono cancellate.
+     */
     @Override
     public boolean deleteProfile(String user) {
         // TODO Auto-generated method stub
         return false;
     }
 
+    /**
+     * Cerca nel Datastore i nomi degli utenti il cui catalogo ha proprietà simili a quello dato 
+     * in input. I criteri di somiglianza sono dati dall’artista più ricorrente ed il genere più ascoltato.
+     */
     @Override
     public List<UserDTO> findSimilarUser(String user) {
         // TODO Auto-generated method stub

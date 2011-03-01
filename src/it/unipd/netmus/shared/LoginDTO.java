@@ -8,6 +8,14 @@ import java.io.Serializable;
 /**
  * @author ValterTexasGroup
  *
+ *
+ *Tipo, obiettivo e funzione del componente:
+ *
+ *Come tutte le altri classi di questo package questa classe permette lo scambio di 
+ *informazioni tra client e server all'interno delle chiamate RPC.
+ *Contiene e rappresenta i dati di login di un utente.
+ *
+ *
  */
 
 @SuppressWarnings("serial")
