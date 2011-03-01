@@ -29,83 +29,78 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class Netmus implements EntryPoint {
 
-    private Place default_place = new LoginPlace("");
-    private SimplePanel app_widget = new SimplePanel();
-    private LoginServiceAsync login_service_svc = GWT
-            .create(LoginService.class);
+   private Place default_place = new LoginPlace("");
+   private SimplePanel app_widget = new SimplePanel();
+   private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
 
-    /**
-     * ---
-     */
-    @Override
-    public void onModuleLoad() {
+   /**
+    * E il metodo d'ingresso dell'applicazione, chiamato automaticamente caricando un modulo
+    * che dichiara l'implementazione dell'interfaccia EntryPoint .
+    */
+   @Override
+   public void onModuleLoad() {
+      
+      String user = Cookies.getCookie("user");
+      String session_id = Cookies.getCookie("sid");
+      System.err.println("Cookie user: "+user);
+      System.err.println("Cookie sessionID: "+session_id);
+      
+      
+      AsyncCallback<String> callback = new AsyncCallback<String>() {
 
-        String user = Cookies.getCookie("user");
-        String session_id = Cookies.getCookie("sid");
-        System.err.println("Cookie user: " + user);
-        System.err.println("Cookie sessionID: " + session_id);
-
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                startNetmus();
-            }
-
-            @Override
-            public void onSuccess(String session_id_new) {
-
-                String user = Cookies.getCookie("user"); // stesso utente
-
-                // refresh cookies
-                Cookies.removeCookie("user");
-                Cookies.removeCookie("sid");
-                final long DURATION = 1000 * 60 * 60 * 24;
-                Date expires = new Date(System.currentTimeMillis() + DURATION);
-                Cookies.setCookie("user", user, expires);
-                Cookies.setCookie("sid", session_id_new, expires);
-
-                startNetmus();
-            }
-        };
-
-        try {
-            login_service_svc.restartSession(user, session_id, callback);
-        } catch (Exception e) {
-            e.printStackTrace();
+        @Override
+        public void onFailure(Throwable caught) {
+            startNetmus();
         }
-    }
+        @Override
+        public void onSuccess(String session_id_new) {
+            
+          String user = Cookies.getCookie("user"); // stesso utente
+            
+          // refresh cookies
+          Cookies.removeCookie("user"); Cookies.removeCookie("sid");
+          final long DURATION = 1000 * 60 * 60 * 24;
+          Date expires = new Date(System.currentTimeMillis() + DURATION);
+          Cookies.setCookie("user", user, expires);
+          Cookies.setCookie("sid", session_id_new, expires);
+          
+          startNetmus();
+        }
+      };
+      
+      try {
+          login_service_svc.restartSession(user, session_id, callback);
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+   }
+   
+   /**
+    * Istanzia e inizializza i principali moduli dell'applicazione
+    */
+   private void startNetmus() {
+       
+       // Create ClientFactory using deferred binding so we can replace with different impls in gwt.xml
+       ClientFactory clientFactory = GWT.create(ClientFactory.class);
+       EventBus eventBus = clientFactory.getEventBus();
+       PlaceController placeController = clientFactory.getPlaceController();
 
-    /**
-     * ---
-     */
-    private void startNetmus() {
+       // Start ActivityManager for the main widget with our ActivityMapper
+       ActivityMapper activityMapper = new NetmusActivityMapper(clientFactory);
+       ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+       activityManager.setDisplay(app_widget);
 
-        // Create ClientFactory using deferred binding so we can replace with
-        // different impls in gwt.xml
-        ClientFactory clientFactory = GWT.create(ClientFactory.class);
-        EventBus eventBus = clientFactory.getEventBus();
-        PlaceController placeController = clientFactory.getPlaceController();
+       // Start PlaceHistoryHandler with our PlaceHistoryMapper
+       NetmusPlaceHistoryMapper historyMapper= GWT.create(NetmusPlaceHistoryMapper.class);
+       PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+       historyHandler.register(placeController, eventBus, default_place);
 
-        // Start ActivityManager for the main widget with our ActivityMapper
-        ActivityMapper activityMapper = new NetmusActivityMapper(clientFactory);
-        ActivityManager activityManager = new ActivityManager(activityMapper,
-                eventBus);
-        activityManager.setDisplay(app_widget);
-
-        // Start PlaceHistoryHandler with our PlaceHistoryMapper
-        NetmusPlaceHistoryMapper historyMapper = GWT
-                .create(NetmusPlaceHistoryMapper.class);
-        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(
-                historyMapper);
-        historyHandler.register(placeController, eventBus, default_place);
-
-        RootPanel.get().setStyleName("gwt-root");
-        // applet e' la barra applet, resta inizialmente invisibile e vuota
-        RootPanel.get("applet-bar").setVisible(false);
-        RootPanel.get("application").add(app_widget);
-
-        // Goes to place represented on URL or default place
-        historyHandler.handleCurrentHistory();
-    }
+       RootPanel.get().setStyleName( "gwt-root" );
+       // applet e' la barra applet, resta inizialmente invisibile e vuota
+       RootPanel.get("applet-bar").setVisible(false);
+       RootPanel.get("application").add(app_widget);
+      
+       // Goes to place represented on URL or default place
+       historyHandler.handleCurrentHistory();
+   }
 }
