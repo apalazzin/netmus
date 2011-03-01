@@ -21,9 +21,11 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: AppletBarView.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 18 Febbraio 2011
+*/
 class AppletBarView {
     
     private static AppletConstants constants = GWT.create(AppletConstants.class);
@@ -36,6 +38,9 @@ class AppletBarView {
     private static HTML applet = new HTML();
     private static HTMLPanel main = new HTMLPanel("");
     
+    /**
+     * Inizializza e crea la view.
+     */
     static void createView() {
         
         RootPanel.get("applet-bar").setStyleName("applet-bar");
@@ -156,7 +161,10 @@ class AppletBarView {
             }
         });
     }
-    
+
+    /**
+     * Rende visibile la view e carica il codice dell'applet.
+     */
     static void showBar() {
         RootPanel.get("applet-bar").setVisible(true);
         applet.setHTML("<applet " +
@@ -166,27 +174,44 @@ class AppletBarView {
                 "archive=\"applet/netmusApplet.jar, applet/jid3lib-0.5.4.jar\" " +
                 "width=1 height=1></applet>");
     }
-    
+
+    /**
+     * Rende non visibile la view e toglie il codice dell'applet.
+     */
     static void hideBar() {
         RootPanel.get("applet-bar").setVisible(false);
         applet.setHTML("");
     }
-    
+
+    /**
+     * Cambia lo stato del pulsante on\_off.
+     * @param button_state
+     */
     static void setOnOffButton(boolean button_state){
         if (button_state)
             on_off.setText(constants.appletEnable());
         else
             on_off.setText(constants.appletDisable());
     }
-    
+
+    /**
+     * Nasconde il pulsante rescan.
+     */
     static void rescanNotVisible() {
         rescan.setVisible(false);
     }
-    
+
+    /**
+     * Visualizza il pulsante rescan.
+     */
     static void rescanVisible() {
         rescan.setVisible(true);
     }
-    
+
+    /**
+     *  Visualizza lo stato dell'applet.
+     * @param info
+     */
     static void showStatus(String info){
         // internazionalizzazione
         if (info.equals("appletON")) info = constants.appletON();
@@ -197,7 +222,12 @@ class AppletBarView {
         //modifica le informazioni di stato
         status.setText(info);
     }
-    
+
+    /**
+     * Visualizza lo stato della scansione: scansionati m su n.
+     * @param actual
+     * @param total
+     */
     static void scanningStatus(int actual, int total){
         //aggiornare la grafica con le nuove info
         showStatus(actual+"/"+total);

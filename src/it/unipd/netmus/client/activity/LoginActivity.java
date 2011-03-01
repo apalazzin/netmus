@@ -23,6 +23,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+/**
+ * Nome: LoginActivity.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public class LoginActivity extends AbstractActivity implements
         LoginView.Presenter {
     // Used to obtain views, eventBus, placeController
@@ -51,8 +57,35 @@ public class LoginActivity extends AbstractActivity implements
     @Override
     public void start(final AcceptsOneWidget container_widget,
             EventBus event_bus) {
+	LoginView.Presenter {
+
+	private ClientFactory client_factory;
+	private String user;
+	private String password;
+	private String error;
+	private LoginType login_type;
+	
+	private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
+	MyConstants my_constants = GWT.create(MyConstants.class);
+	
+	public LoginActivity(LoginPlace place, ClientFactory clientFactory) {
+		this.user = place.getLoginName();
+		this.password = place.getPassword();
+		this.error = place.getError();
+		this.login_type = place.getLoginType();
+		this.client_factory = clientFactory;
+	}
 
         AsyncCallback<String> callback = new AsyncCallback<String>() {
+	/**
+     *Invocato da ActivityManager per avviare una nuova LoginActivity.
+	 */
+	@Override
+	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
+	    
+	    
+	    
+	    AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -80,6 +113,20 @@ public class LoginActivity extends AbstractActivity implements
         } catch (LoginException e) {
         }
 
+		
+	}
+	
+    /**
+     *Permette di spostarsi in un place differente anche relativo ad un'altra view.Ad esempio per aprire la pagina di ProfileView una volta
+     *verificato il login. Verrà quindi richiamato sempre al termine dei metodi sendLogin e sendRegistration. 
+     */
+	public void goTo(Place place) {
+		client_factory.getPlaceController().goTo(place);
+	}
+    /**
+     *Invia al server il login inserito dall'utente dopo averne controllato la validità
+     *(e-mail valida, password sufficientemente lunga).     
+     */
     }
 
     /**
@@ -130,12 +177,18 @@ public class LoginActivity extends AbstractActivity implements
 
     }
 
+    /**
+     *Permette di effettuare un reindirizzamento al servlet dedicato all'autenticazione Google. 
+     */    
     @Override
     public void sendGoogleLogin(String user, String password)
             throws LoginException {
         Window.Location.assign("/logingoogle");
     }
-
+    /**
+     *Invia al server i dati di registrazione inseriti dall'utente dopo averne controllato la
+     *correttezza (e-mail valida, password sufficientemente lunga).     
+     */
     @Override
     public void sendRegistration(String user, String password,
             String confirmPassword) throws RegistrationException {

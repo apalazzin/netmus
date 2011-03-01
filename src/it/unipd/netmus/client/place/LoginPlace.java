@@ -12,12 +12,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 /**
- * LoginPlace estende la classe Place messa a disposizione da GWT.
- * La classe e' associata alla classe interna Tokenizer che permette di
- * serializzare lo stato del Place in un simbolo(token) URL. 
- * 
- * @author ValterTexasGroup
- */
+ * Nome: LoginPlace.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public class LoginPlace extends Place {
 	   
 	   private String user;
@@ -37,27 +36,41 @@ public class LoginPlace extends Place {
 	      this.error = error;
 	      this.loginType = loginType;
 	   }
-	   
+	   /**
+	    * Getter dell'attributo user
+	    * @return
+	    */
 	   public String getLoginName()
 	   {
 	      return user;
 	   }
-	   
+	   /**
+	    * Getter dell'attributo passwordHash
+	    * @return
+	    */
 	   public String getPassword()
 	   {
 		   return passwordHash;
 	   }
-	   
+	   /**
+	    * Getter dell'attributo error
+	    * @return
+	    */
 	   public String getError()
 	   {
 		   return error;
 	   }
-
+       /**
+        * Getter dell'attributo loginType
+        * @return
+        */
 	   public LoginType getLoginType()
 	   {
 		   return loginType;
 	   }
-	   
+	   /**
+	    * Inner class
+	    */
 	   public static class Tokenizer implements PlaceTokenizer<LoginPlace>
 	   {
 	      @Override

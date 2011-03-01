@@ -10,12 +10,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 /**
- * ProfilePlace estende la classe Place messa a disposizione da GWT.
- * La classe e' associata alla classe interna Tokenizer che permette di
- * serializzare lo stato del Place in un simbolo(token) URL. 
- * 
- * @author ValterTexasGroup
- */
+ * Nome: ProfilePlace.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public class ProfilePlace extends Place {
    
    private String profileName;
@@ -24,12 +23,17 @@ public class ProfilePlace extends Place {
    {
       this.profileName = token;
    }
-
+   /**
+    * Getter dell'attributo profile_name
+    * @return
+    */
    public String getProfileName()
    {
       return profileName;
    }
-
+   /**
+    * Inner class
+    */
    public static class Tokenizer implements PlaceTokenizer<ProfilePlace>
    {
       @Override

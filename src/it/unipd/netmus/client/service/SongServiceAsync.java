@@ -8,9 +8,11 @@ import it.unipd.netmus.shared.SongSummaryDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: SongServiceAsync.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public interface SongServiceAsync {
 
     void rateSong(String user, SongSummaryDTO song, int rating,
