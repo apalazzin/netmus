@@ -33,11 +33,7 @@ public class TranslateDTOXML {
 	private Document document;
 	private Element root;
 	
-	/**
-	 * @deprecated
-	 */
 	public TranslateDTOXML() {
-		reset();
 	};
 	
     /**
