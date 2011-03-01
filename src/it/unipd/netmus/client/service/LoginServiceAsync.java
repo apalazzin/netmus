@@ -10,9 +10,11 @@ import it.unipd.netmus.shared.exception.RegistrationException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
- * @author ValterTexasGroup
- *
- */
+ * Nome: LoginServiceAsync.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public interface LoginServiceAsync {
 
 	void insertRegistration(LoginDTO login, AsyncCallback<LoginDTO> callback) throws RegistrationException;

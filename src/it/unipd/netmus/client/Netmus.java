@@ -22,10 +22,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
- * Classe Entry point che definisce il metodo <code>onModuleLoad()</code>.
- * @author ValterTexasGroup
- *
- */
+ * Nome: Netmus.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 14 Febbraio 2011
+*/
 public class Netmus implements EntryPoint {
 
    private Place default_place = new LoginPlace("");

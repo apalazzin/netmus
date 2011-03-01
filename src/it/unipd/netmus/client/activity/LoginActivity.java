@@ -23,10 +23,15 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+/**
+ * Nome: LoginActivity.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
+*/
 public class LoginActivity extends AbstractActivity implements
 	LoginView.Presenter {
-	// Used to obtain views, eventBus, placeController
-	// Alternatively, could be injected via GIN
+
 	private ClientFactory client_factory;
 	private String user;
 	private String password;
@@ -45,8 +50,8 @@ public class LoginActivity extends AbstractActivity implements
 	}
 
 	/**
-	* Invoked by the ActivityManager to start a new Activity
-	*/
+     *Invocato da ActivityManager per avviare una nuova LoginActivity.
+	 */
 	@Override
 	public void start(final AcceptsOneWidget container_widget, EventBus event_bus) {
 	    
@@ -81,13 +86,17 @@ public class LoginActivity extends AbstractActivity implements
 		
 	}
 	
-	/**
-	* Navigate to a new Place in the browser
-	*/
+    /**
+     *Permette di spostarsi in un place differente anche relativo ad un'altra view.Ad esempio per aprire la pagina di ProfileView una volta
+     *verificato il login. Verrà quindi richiamato sempre al termine dei metodi sendLogin e sendRegistration. 
+     */
 	public void goTo(Place place) {
 		client_factory.getPlaceController().goTo(place);
 	}
-
+    /**
+     *Invia al server il login inserito dall'utente dopo averne controllato la validità
+     *(e-mail valida, password sufficientemente lunga).     
+     */
     @Override
     public void sendLogin(String user, String password) throws LoginException {
         final String username = user;
@@ -124,12 +133,17 @@ public class LoginActivity extends AbstractActivity implements
         } catch (Exception e) {}
 
     }
-    
+    /**
+     *Permette di effettuare un reindirizzamento al servlet dedicato all'autenticazione Google. 
+     */    
     @Override
     public void sendGoogleLogin(String user, String password) throws LoginException {
         Window.Location.assign("/logingoogle");
     }
-
+    /**
+     *Invia al server i dati di registrazione inseriti dall'utente dopo averne controllato la
+     *correttezza (e-mail valida, password sufficientemente lunga).     
+     */
     @Override
     public void sendRegistration(String user, String password,
             String confirmPassword) throws RegistrationException {

@@ -10,9 +10,14 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.XMLParser;
 import com.google.gwt.xml.client.impl.DOMParseException;
 
+/**
+ * Nome: TranslateDTOXML.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 19 Febbraio 2011
+*/
 public class TranslateDTOXML {
 	
-	//node signatures
 	private final static String ROOT_NAME = "Library";
 	private final static String SONG_NAME = "Song";
 	private final static String ALBUMTITLE_NAME = "AlbumTitle";
@@ -22,25 +27,31 @@ public class TranslateDTOXML {
 	private final static String SONGTITLE_NAME = "SongTitle";
 	private final static String TRACKNUMBER_NAME = "TrackNumber";
 	private final static String YEAR_NAME = "Year";
-	//name of the attribute file:
+
 	private final static String FILE_NAME = "File";
 	
 	private Document document;
 	private Element root;
 	
-	
+	/**
+	 * @deprecated
+	 */
 	public TranslateDTOXML() {
 		reset();
 	};
 	
-	//used to start with a fresh DOM tree, it must be called to use DTOtoXML.
+    /**
+     * @deprecated
+     */
 	public void reset(){
 		document = XMLParser.createDocument();
 		root = document.createElement(ROOT_NAME);
 		document.appendChild(root);
 	};
-	
-	//add a single DTO to XML
+	/**
+	 * @deprecated
+	 * @param brano
+	 */
 	public void DTOtoXML(SongDTO brano){
 		
 		//create the new song node
@@ -83,12 +94,19 @@ public class TranslateDTOXML {
 		root.appendChild(song);	
 	}
 	
-	//generate the XML code
+    /**
+     * @deprecated
+     * @return
+     */
 	public String generateXML(){
 		return document.toString();
 	}
 	
-	//clear the filename path end extension
+    /**
+     * @deprecated
+     * @param filename
+     * @return
+     */
 	private String clearFileName(String filename) {
 	    int start = filename.lastIndexOf("/")+1;
         int end = filename.lastIndexOf(".mp3");
@@ -96,7 +114,13 @@ public class TranslateDTOXML {
             end = filename.lastIndexOf(".MP3");
         return filename.substring(start, end);
 	}
-	
+
+	/**
+	 * Crea un nuovo SongDTO, e seguendo le proprietà indicate nel
+	 * nodo di tipo Song, imposta opportunamente i suoi attributi.
+	 * @param node
+	 * @return
+	 */
 	private SongDTO generateDTO(Element node){
 		SongDTO song = new SongDTO();
 		while (node.hasChildNodes()){
@@ -116,7 +140,12 @@ public class TranslateDTOXML {
 		}
 		return song;
 	}
-	
+	/**
+	 * Fa il parsing del documento XML, e per ogni nodo di tipo Song, utilizza 
+	 * generateDTO per creare il relativo SongDTO, e se lo salva su una lista.
+	 * @param xml
+	 * @return
+	 */
 	public List<SongDTO> XMLToDTO(String xml){
 		
 		List<SongDTO> list=null;
