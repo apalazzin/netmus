@@ -49,7 +49,8 @@ public class ProfileActivity extends AbstractActivity implements
 
     private String name;
     
-    private boolean is_owner;
+    @SuppressWarnings("unused")
+    private boolean is_owner; // not used yet
     
     private LoginServiceAsync login_service_svc = GWT.create(LoginService.class);
     private LibraryServiceAsync library_service_svc = GWT.create(LibraryService.class);

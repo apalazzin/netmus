@@ -1817,6 +1817,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
     
     
+    @SuppressWarnings("unchecked")
     @Override
     public void addToPLaylist(String autore, String titolo, String album) {
          
@@ -1838,6 +1839,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
     
     
+    @SuppressWarnings("unchecked")
     @Override
     public void removeFromPlaylist(String autore, String titolo, String album) {
 
@@ -1954,7 +1956,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
              @Override
              public void onResize(ResizeEvent event) {               
 
-                 int catalogo_h = main_panel.getOffsetHeight();
+                 @SuppressWarnings("unused")
+                int catalogo_h = main_panel.getOffsetHeight();
                  left_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  main_panel.getElement().getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
                  DOM.getElementById("applet-bar").getStyle().setHeight(event.getHeight()-vertical_offset, Style.Unit.PX);
