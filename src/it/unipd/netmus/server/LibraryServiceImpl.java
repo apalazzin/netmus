@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server;
 
 import java.util.ArrayList;
@@ -15,7 +12,10 @@ import it.unipd.netmus.shared.SongSummaryDTO;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * @author ValterTexasGroup
+ * Nome: LibraryServiceImpl.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 13 Febbraio 2011
  *
  */
 @SuppressWarnings("serial")

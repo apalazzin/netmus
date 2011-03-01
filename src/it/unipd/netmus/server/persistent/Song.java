@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server.persistent;
 
 import it.unipd.netmus.server.utils.Utils;
@@ -11,34 +8,13 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 
-
 /**
- * @author ValterTexasGroup
+ * Nome: Song.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 15 Febbraio 2011
  *
  *
- *PROCEDURA SUGGERTA PER INSERIRE O MODIFICARE UNA CANZONE NEL DATABASE 
- *
- * Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle()).changeAlbum(song.getAlbum());
- * s.set_quello_che_vuoi   (per modificare gli altri attrobuti, 
- *          ATTENZIONE che se la canzone era già presente in database 
- *          potrebbe avere già delle informazioni).
- *
- *
- *
- *UserAccount user = UserAccount.load("nome_utente"); (Caricamente di un utente di Netmus)
- *
- *PROCEDURA PER ASSOCIARLA AD UN UTENTE
- * user.getMusicLibrary().addSong(s, false);       (con "true" aggiorna anche i dati statistici)
- * 
- *PROCEDURA PER RIMUOVERLA DA UN UTENTE
- * user.getMusicLibrary().removeSong(s, false);    (con "true" aggiorna anche i dati statistici)
- *
- *
- */
-
-
-/**
- * 
  * Tipo, obiettivo e funzione del componente:
  * 
  * Contiene le informazioni relative ad un brano musicale, in particolare ogni canzone è 
@@ -50,7 +26,28 @@ import com.google.code.twig.annotation.Index;
  * Al primo inserimento di una canzone qesta classe si occupa anche di reperire informazioni 
  * aggiuntive dai servizi esterni Youtube e Last.fm quali link per copertine e video in streaming.
  * 
+ * 
+ * 
+ * PROCEDURA SUGGERTA PER INSERIRE O MODIFICARE UNA CANZONE NEL DATABASE 
+ *
+ * Song s= new Song().changeArtist(song.getArtist()).changeTitle(song.getTitle()).changeAlbum(song.getAlbum());
+ * s.set_quello_che_vuoi   (per modificare gli altri attrobuti, 
+ *          ATTENZIONE che se la canzone era già presente in database 
+ *          potrebbe avere già delle informazioni).
+ *
+ *
+ *
+ * UserAccount user = UserAccount.load("nome_utente"); (Caricamente di un utente di Netmus)
+ *
+ * PROCEDURA PER ASSOCIARLA AD UN UTENTE
+ *  user.getMusicLibrary().addSong(s, false);       (con "true" aggiorna anche i dati statistici)
+ * 
+ * PROCEDURA PER RIMUOVERLA DA UN UTENTE
+ *  user.getMusicLibrary().removeSong(s, false);    (con "true" aggiorna anche i dati statistici)
+ *
+ *
  */
+
 
 
 public class Song {
@@ -245,7 +242,7 @@ public class Song {
             this.deleteOwner();
         }
     
-        if (title != null && title.equals("")==false)
+        if (title != null && title.equals(""))
             this.title = title;
         else
             this.title = "";
@@ -274,7 +271,7 @@ public class Song {
             this.deleteOwner();
         }
     
-        if (artist != null && artist.equals("")==false)
+        if (artist != null && artist.equals(""))
             this.artist = artist;
         else
             this.artist = "";
@@ -304,7 +301,7 @@ public class Song {
             this.deleteOwner();
         }
 
-        if (album != null && album.equals("")==false)
+        if (album != null && album.equals(""))
             this.album = album;
         else
             this.album = "";

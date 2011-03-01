@@ -7,7 +7,12 @@ import com.google.code.twig.ObjectDatastore;
 import com.google.code.twig.annotation.AnnotationObjectDatastore;
 
 /**
- * @author ValterTexasGroup
+ * 
+ * Nome: ODF.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 16 Febbraio 2011
+ *
  * 
  * Tipo, obiettivo e funzione del componente:
  * 
