@@ -19,7 +19,7 @@
    				<g:PasswordTextBox ui:field="password" styleName="{style.pass}">	</g:PasswordTextBox>
    				<g:Button ui:field="login" styleName="{style.login}">Login</g:Button>
    				
-   				<div id="registrazione" class="{style.registrazione}">
+   				<div id="registrazione" class="{style.registration}">
 	   				<div style="float: left; width: 170px;">&nbsp;</div><div id="password_check">&nbsp;</div>
    					<div style="float: left; width: 160px;">&nbsp;</div><g:PasswordTextBox ui:field="c_password" styleName="{style.pass}">	</g:PasswordTextBox>
    				</div>

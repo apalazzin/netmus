@@ -115,12 +115,13 @@ public class ProfileActivity extends AbstractActivity implements
                     @Override
                     public void onSuccess(UserCompleteDTO result) {
                         current_user = result;
+                        
                         setSongs();
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();
                         profileView.setInfo(getSongInfo());
                         editProfileView(user);
-                        
+                        profileView.setUser(user);
                         container_widget.setWidget(profileView.asWidget());
                         profileView.setLayout();
 

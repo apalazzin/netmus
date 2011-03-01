@@ -13,19 +13,19 @@
 			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
 			
 				<div style="height: 55px; width: 100%; border: 0px solid #000000;"></div>
-				<g:Label ui:field="user" styleName="{style.utente}"></g:Label>
+				<g:Label ui:field="user" styleName="{style.user}"></g:Label>
 
 
-				<g:HTMLPanel styleName="{style.statistiche}">				
+				<g:HTMLPanel styleName="{style.stats}">				
 				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600;">Numero di Brani:</span>
-				<g:Label ui:field="n_songs" styleName="{style.numero_brani}"></g:Label>
+				<g:Label ui:field="n_songs" styleName="{style.n_songs}"></g:Label>
 				</g:HTMLPanel>
 
 				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
 
 
 				<g:HTMLPanel styleName="{style.title}"><span>PLAYLIST</span>
-				<g:Image ui:field="add_playlist" styleName="{style.aggiungi_playlist}" url="images/plus_silver.png"></g:Image></g:HTMLPanel>
+				<g:Image ui:field="add_playlist" styleName="{style.add_playlist}" url="images/plus_silver.png"></g:Image></g:HTMLPanel>
 				
 				
 				<g:HTMLPanel ui:field="playlists" styleName="{style.playlist}">
@@ -69,35 +69,35 @@
 				</g:HTMLPanel>
 				
 
-				<g:HTMLPanel ui:field="library_container" styleName="{style.catalogo_container}">
-				<c:CellTable ui:field="library" styleName="{style.catalogo}"></c:CellTable>
+				<g:HTMLPanel ui:field="library_container" styleName="{style.catalogue_container}">
+				<c:CellTable ui:field="library" styleName="{style.catalogue}"></c:CellTable>
 				</g:HTMLPanel>
 				
 
 				
 				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
-					<g:HTMLPanel ui:field="playlist_content" styleName="{style.playlist_contenuto}">
+					<g:HTMLPanel ui:field="playlist_content" styleName="{style.playlist_inside}">
 						<g:HTMLPanel ui:field="playlist_songs"></g:HTMLPanel>						
 					</g:HTMLPanel>
 					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
 					<g:Label ui:field="playlist_title" styleName="{style.title_playlist}"></g:Label>
-					<g:Image ui:field="delete_playlist" styleName="{style.elimina_playlist}" url="images/cross_red.png"></g:Image>
-					<g:Image ui:field="close_playlist" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>			
+					<g:Image ui:field="delete_playlist" styleName="{style.remove_playlist}" url="images/cross_red.png"></g:Image>
+					<g:Image ui:field="close_playlist" styleName="{style.close_playlist}" url="images/close_silver.jpg"></g:Image>			
 					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
 					<g:HorizontalPanel>
-						<g:Label ui:field="insert_song" styleName="{style.brano_aggiungere}"></g:Label>
-						<g:Label ui:field="remove_song" styleName="{style.brano_rimuovere}"></g:Label>
+						<g:Label ui:field="insert_song" styleName="{style.song_add}"></g:Label>
+						<g:Label ui:field="remove_song" styleName="{style.track_remove}"></g:Label>
 					</g:HorizontalPanel>
 					</div>
-					<g:Image ui:field="add_song_to_playlist" styleName="{style.aggiungibrano_playlist}" url="images/plus_green.png"></g:Image>
-					<g:Image ui:field="remove_song_from_playlist" styleName="{style.rimuovibrano_playlist}" url="images/less_red.png"></g:Image>
+					<g:Image ui:field="add_song_to_playlist" styleName="{style.addtrack_playlist}" url="images/plus_green.png"></g:Image>
+					<g:Image ui:field="remove_song_from_playlist" styleName="{style.deletetrack_playlist}" url="images/less_red.png"></g:Image>
 					<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
 				</g:HTMLPanel>
 				
 				
 				<g:HTMLPanel ui:field="song_container" styleName="{style.song_container}">
 									
-					<g:HTMLPanel ui:field="song_contenuto" styleName="{style.song_contenuto}">
+					<g:HTMLPanel ui:field="song_contenuto" styleName="{style.song_inside}">
 						
 						
 						<g:HTMLPanel ui:field="song_fields" styleName="{style.song_fields}">
@@ -108,7 +108,7 @@
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_year"></g:Label></g:HorizontalPanel>
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_composer"></g:Label></g:HorizontalPanel>
 						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_track"></g:Label></g:HorizontalPanel>
-						<g:HTMLPanel ui:field="classificaG" styleName="{style.classificaG}">
+						<g:HTMLPanel ui:field="classificaG" styleName="{style.ranking_global}">
 							<span style="font-size: 12px; font-family: Verdana; margin-right: 15px;">Classifica:</span>
 							<g:Image ui:field="starG1" styleName="{style.starG}" url="images/starbw.png"/>
 							<g:Image ui:field="starG2" styleName="{style.starG}" url="images/starbw.png"/>
@@ -127,8 +127,8 @@
 				</g:HTMLPanel>
 					
 					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="track_title" styleName="{style.title_song}"></g:Label></div>
-					<g:Image ui:field="delete_song" styleName="{style.elimina_song}" url="images/cross_red.png"></g:Image>
-					<g:Image ui:field="close_song" styleName="{style.chiudi_playlist}" url="images/close_silver.jpg"></g:Image>					
+					<g:Image ui:field="delete_song" styleName="{style.delete_song}" url="images/cross_red.png"></g:Image>
+					<g:Image ui:field="close_song" styleName="{style.close_playlist}" url="images/close_silver.jpg"></g:Image>					
 					
 				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>	
 				</g:HTMLPanel>
@@ -139,11 +139,11 @@
 					<g:HTMLPanel ui:field="info_youtube" styleName="{style.info_youtube}"></g:HTMLPanel>
 					<g:Label ui:field="info_youtube_link" styleName="{style.info_youtube_link}"></g:Label>	
 					
-					<g:HTMLPanel ui:field="youtube_appendix" styleName="{style.youtube_appendice}"></g:HTMLPanel>
-					<g:Image ui:field="close_youtube" styleName="{style.chiudi_youtube}" url="images/close_silver.jpg"/>
+					<g:HTMLPanel ui:field="youtube_appendix" styleName="{style.youtube_appendix}"></g:HTMLPanel>
+					<g:Image ui:field="close_youtube" styleName="{style.close_youtube}" url="images/close_silver.jpg"/>
 				</g:HTMLPanel>
 			
-				<g:HTMLPanel ui:field="ranking" styleName="{style.classifica}">
+				<g:HTMLPanel ui:field="ranking" styleName="{style.ranking}">
 				<g:Image ui:field="star1" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star2" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star3" styleName="{style.star}" url="images/starbw.png"/>
@@ -159,7 +159,7 @@
 				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
 				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
 				
-				<g:Image ui:field="statistiche" styleName="{style.statistiche2}" url="images/statistiche.png"/>
+				<g:Image ui:field="statistiche" styleName="{style.stats2}" url="images/statistiche.png"/>
 				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;">Statistiche</span>
 				
 			
@@ -167,7 +167,7 @@
 			</g:HTMLPanel>
 	
 			   	<g:HTMLPanel ui:field="edit_profile" styleName="{style.edit_profile}">
-				<g:Image ui:field="edit_profile_close" styleName="{style.edit_profile_chiudi}" url="images/cross_red.png"/>
+				<g:Image ui:field="edit_profile_close" styleName="{style.edit_profile_close}" url="images/cross_red.png"/>
 				<g:Image ui:field="edit_profile_logo" styleName="{style.edit_profile_logo}" url="images/logo_netmus.png"/>
 			   	
 			   	<g:HorizontalPanel styleName="{style.edit_profile_top}">
@@ -205,7 +205,7 @@
 			   		</g:HTMLPanel>
 
 
-			   		<g:HTMLPanel styleName="{style.edit_profile_conferma}">
+			   		<g:HTMLPanel styleName="{style.edit_profile_conf}">
 			   		<g:VerticalPanel ui:field="edit_profile_vc">
 				   		<g:HorizontalPanel styleName="{style.edit_profile_row}">
 				   			<g:Label ui:field="edit_profile_labelCpassword" styleName="{style.edit_profile_label}"> Conferma:&nbsp;&nbsp;&nbsp;</g:Label>
