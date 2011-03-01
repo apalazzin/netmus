@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unipd.netmus.server.persistent;
 
 import it.unipd.netmus.shared.MusicLibraryDTO;
@@ -145,10 +142,10 @@ public class MusicLibrary {
         
         //find sond in the library
         for (SongWithRating tmp:this.song_list)
-            if (tmp.getSongId().equals(song.getId()) == true) {
+            if (tmp.getSongId().equals(song.getId())) {
                 trovato = true;
             }
-        if (trovato == false) {
+        if (!trovato) {
             //add songId to the list
             this.song_list.add(new SongWithRating(song.getId()));
             
@@ -159,7 +156,7 @@ public class MusicLibrary {
             this.setNumSongs(num_songs+1);
             
             //update statistic fields
-            if (update == true) {
+            if (update) {
                 this.updatePreferredArtist();
                 this.updatePreferredGenre();
             }
@@ -181,11 +178,11 @@ public class MusicLibrary {
         boolean trovato = false;
         SongWithRating saved_song = null;
         for (SongWithRating tmp:this.song_list)
-            if (tmp.getSongId().equals(song.getId()) == true) {
+            if (tmp.getSongId().equals(song.getId())) {
                 trovato = true;
                 saved_song = tmp;
             }
-        if (trovato == true) {
+        if (trovato) {
             //remove songId to the list
             this.song_list.remove(saved_song);
             
@@ -201,7 +198,7 @@ public class MusicLibrary {
             this.setNumSongs(num_songs-1);
             
             //update statistic fields
-            if (update == true) {
+            if (update) {
                 this.updatePreferredArtist();
                 this.updatePreferredGenre();
             }
@@ -223,7 +220,7 @@ public class MusicLibrary {
     public void rateSong(Song song, int rating) {
         song.update();
         for (SongWithRating tmp:this.song_list)
-            if (tmp.getSongId().equals(song.getId()) == true) {
+            if (tmp.getSongId().equals(song.getId())) {
                 if (tmp.getRating()>0) {
                     int old_rating = tmp.getRating();
                     tmp.setRating(rating);
@@ -239,7 +236,7 @@ public class MusicLibrary {
     public int getSongRate(Song song) {
         song.update();
         for (SongWithRating tmp:this.song_list)
-            if (tmp.getSongId().equals(song.getId()) == true)
+            if (tmp.getSongId().equals(song.getId()))
                 return tmp.getRating();
         return -1;
     }
@@ -260,11 +257,11 @@ public class MusicLibrary {
         List<Song> allSongs = this.allSongs();
         while (allSongs.size()>max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getGenre() != "") {
+            if (tmp.getGenre().equals("")) {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it:allSongs)
-                    if (it.getGenre() != "" && it.equals(tmp)==false && it.getGenre().equals(tmp.getGenre())==true ) {
+                    if (it.getGenre().equals("") && it.equals(tmp) && it.getGenre().equals(tmp.getGenre())) {
                         count++;
                         toBeRemoved.add(it);
                     }
@@ -296,11 +293,11 @@ public class MusicLibrary {
         List<Song> allSongs = this.allSongs();
         while (allSongs.size()>max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getArtist() != "") {
+            if (tmp.getArtist().equals("")) {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it:allSongs)
-                    if (it.getArtist() != "" && it.equals(tmp)==false && it.getArtist().equals(tmp.getArtist())==true ) {
+                    if (it.getArtist().equals("") && it.equals(tmp) && it.getArtist().equals(tmp.getArtist())) {
                         count++;
                         toBeRemoved.add(it);
                     }
@@ -406,7 +403,7 @@ public class MusicLibrary {
                 if (tmp2.getSongId().equals(song_id)) {
                     trovato = true;
                 }
-            if (trovato == true) {
+            if (trovato) {
                 return tmp.addSong(song_id);
             }
             else return false;
