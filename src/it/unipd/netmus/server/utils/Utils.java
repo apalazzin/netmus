@@ -45,7 +45,7 @@ public final class Utils {
             Iterator<Track> it = search.iterator();
             Track t;
             if (it.hasNext())
-                t = (Track) it.next();
+                t = it.next();
             else t = null;
             
             if (t==null)
@@ -77,7 +77,7 @@ public final class Utils {
             Iterator<Track> it = search.iterator();
             Track t;
             if (it.hasNext())
-                t = (Track) it.next();
+                t = it.next();
             else t = null;
             
             

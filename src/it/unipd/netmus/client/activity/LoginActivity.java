@@ -161,7 +161,6 @@ public class LoginActivity extends AbstractActivity implements
         final String username = user;
         final String pass = password;
         LoginDTO login = new LoginDTO(user, password);
-        ;
 
         if (!FieldVerifier.isValidPassword(password))
             goTo(new LoginPlace(username, pass, my_constants.errorPassword(),
