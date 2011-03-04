@@ -141,20 +141,39 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * Salva o aggiorna nel Datastore tutte le canzoni passate in input e se
      * possiedono sufficienti informazioni le inserisce nella libreria
      * dell’utente.
+     * @return 
      */
     @Override
-    public void sendUserNewMusic(String user, List<SongDTO> new_songs) {
+    public List<SongSummaryDTO> sendUserNewMusic(String user, List<SongDTO> new_songs) {
 
         // Invia al database tutte le canzonu della lista, ogni canzone ritorna
         // dopo le modifche
         // dovute alla gestione della persistenza.
 
         UserAccount useraccount = UserAccount.load(user);
+        List<SongSummaryDTO> incomplete = new ArrayList<SongSummaryDTO>();
 
         for (SongDTO songDTO : new_songs) {
             Song song = Song.storeOrUpdateFromDTO(songDTO);
-            if (song != null)
+            if (song != null) {
                 useraccount.getMusicLibrary().addSong(song, false);
+                if (song.getAlbumCover().equals("") || song.getYoutubeCode().equals(""))
+                    incomplete.add(song.toSummaryDTO());
+            }
+        }
+        
+        return incomplete;
+    }
+    
+    @Override
+    public void completeSongs(List<SongSummaryDTO> incomplete) {
+        
+        for (SongSummaryDTO song_dto : incomplete) {
+            Song song = Song.loadFromDTO(song_dto);
+            
+            if (song != null) {
+                song.completeSong();
+            }
         }
     }
 

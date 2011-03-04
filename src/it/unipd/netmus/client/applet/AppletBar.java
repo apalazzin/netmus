@@ -5,6 +5,7 @@ import it.unipd.netmus.client.event.DeviceScannedEvent;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
+import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.util.List;
 
@@ -123,7 +124,7 @@ public class AppletBar {
         if (new_songs == null)
             AppletBarView.showStatus(constants.xmlParsingError());
 
-        AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+        AsyncCallback<List<SongSummaryDTO>> callback = new AsyncCallback<List<SongSummaryDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
                 AppletBarView.showStatus(constants.sendingError());
@@ -131,10 +132,22 @@ public class AppletBar {
             }
 
             @Override
-            public void onSuccess(Void result) {
-                AppletBarView.showStatus(constants.sentToServer());
+            public void onSuccess(List<SongSummaryDTO> incomplete) {
+                AppletBarView.showStatus(constants.completion());
                 client_factory.getEventBus()
                         .fireEvent(new DeviceScannedEvent());
+                
+                // nuova RPC per far partire le ricerche esterne
+                libraryService.completeSongs(incomplete, new AsyncCallback<Void>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                    }
+                    @Override
+                    public void onSuccess(Void result) {
+                        AppletBarView.showStatus(constants.completionFinish());
+                    }
+                });
+                
             }
         };
 

@@ -1,5 +1,6 @@
 package it.unipd.netmus.client.service;
 
+import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -20,4 +21,7 @@ public interface SongServiceAsync {
 
     void rateSong(String user, SongSummaryDTO song, int rating,
             AsyncCallback<Double> callback);
+
+    void getSongDTO(SongSummaryDTO song_summary_dto,
+            AsyncCallback<SongDTO> callback);
 }

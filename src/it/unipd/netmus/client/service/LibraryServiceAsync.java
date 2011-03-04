@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LibraryServiceAsync {
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs,
-            AsyncCallback<Void> callback);
+            AsyncCallback<List<SongSummaryDTO>> callback);
 
     void addPlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
@@ -42,5 +42,8 @@ public interface LibraryServiceAsync {
 
     void removeSongFromPlaylist(String user, String playlist_name,
             String song_id, AsyncCallback<Boolean> callback);
+
+    void completeSongs(List<SongSummaryDTO> incomplete,
+            AsyncCallback<Void> callback);
 
 }

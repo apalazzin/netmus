@@ -1,5 +1,6 @@
 package it.unipd.netmus.client.service;
 
+import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -19,4 +20,6 @@ public interface SongService extends RemoteService {
     boolean editSong(String user, String artist, String title, String album);
 
     double rateSong(String user, SongSummaryDTO song, int rating);
+
+    SongDTO getSongDTO(SongSummaryDTO song_summary_dto);
 }

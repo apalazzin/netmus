@@ -259,7 +259,7 @@ public class UserAccount {
         tmp.setNationality(this.nationality);
         tmp.setPublicProfile(this.is_public_profile);
         tmp.setAllowedUsers(this.allowed_users);
-        tmp.setMusicLibrary(this.music_library.toMusicLibraryDTO());
+        tmp.setMusicLibrary(this.music_library.toMusicLibrarySummaryDTO());
         return tmp;
     }
 

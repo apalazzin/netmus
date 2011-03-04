@@ -17,6 +17,7 @@ import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
 import it.unipd.netmus.shared.MusicLibraryDTO;
+import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
@@ -333,9 +334,9 @@ public class ProfileActivity extends AbstractActivity implements
         return "Nessun brano in ascolto.";
     }
 
-    public List<String> getSongs(MusicLibraryDTO user_library) {
+    public List<String> getSongs(MusicLibrarySummaryDTO user_library) {
 
-        List<SongDTO> library = user_library.getSongs();
+        List<SongSummaryDTO> library = user_library.getSongs();
 
         List<String> song_list = new ArrayList<String>();
 
@@ -428,21 +429,31 @@ public class ProfileActivity extends AbstractActivity implements
      * Restituisce il link youtube della canzone selezionata
      */
     @Override
-    public void playYouTube(String autore, String titolo, String album) {
+    public void playYouTube(final String autore, final String titolo, final String album) {
 
-        List<SongDTO> songs = current_user.getMusicLibrary().getSongs();
-        String youTubeCode = "";
+        List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+        
 
-        for (SongDTO song : songs) {
+        for (SongSummaryDTO song : songs) {
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
-                youTubeCode = song.getYoutubeCode();
-                if (!youTubeCode.equals(""))
-                    client_factory.getProfileView().playYouTube(youTubeCode);
-                client_factory.getProfileView().setInfo(
-                        titolo + " - " + autore + " -");
-                return;
+                
+                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                    }
+                    @Override
+                    public void onSuccess(SongDTO song) {
+                        String youTubeCode = "";
+                        youTubeCode = song.getYoutubeCode();
+                        if (!youTubeCode.equals(""))
+                            client_factory.getProfileView().playYouTube(youTubeCode);
+                        client_factory.getProfileView().setInfo(
+                                titolo + " - " + autore + " - " + album);
+                        return;
+                    }
+                });
             }
         }
     }
@@ -466,14 +477,14 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(Double result) {
-                List<SongDTO> songs_dto = current_user.getMusicLibrary()
+                List<SongSummaryDTO> songs_dto = current_user.getMusicLibrary()
                         .getSongs();
-                for (SongDTO tmp : songs_dto) {
-                    if (tmp.getArtist().equalsIgnoreCase(artist)
-                            && tmp.getTitle().equalsIgnoreCase(title)
-                            && tmp.getAlbum().equalsIgnoreCase(album)) {
-                        tmp.setRatingForThisUser(rate);
-                        tmp.setRating(result);
+                for (SongSummaryDTO song_dto : songs_dto) {
+                    if (song_dto.getArtist().equalsIgnoreCase(artist)
+                            && song_dto.getTitle().equalsIgnoreCase(title)
+                            && song_dto.getAlbum().equalsIgnoreCase(album)) {
+                        song_dto.setRatingForThisUser(rate);
+                        song_dto.setRating(result);
                         client_factory.getProfileView().showGlobalStar(result);
                     }
                 }
@@ -543,17 +554,17 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public double setRating(String artist, String title, String album) {
 
-        List<SongDTO> songs_dto = this.current_user.getMusicLibrary()
+        List<SongSummaryDTO> songs_dto = this.current_user.getMusicLibrary()
                 .getSongs();
-        for (SongDTO tmp : songs_dto) {
-            if (tmp.getArtist().equalsIgnoreCase(artist)
-                    && tmp.getTitle().equalsIgnoreCase(title)
-                    && tmp.getAlbum().equalsIgnoreCase(album)) {
+        for (SongSummaryDTO song_dto : songs_dto) {
+            if (song_dto.getArtist().equalsIgnoreCase(artist)
+                    && song_dto.getTitle().equalsIgnoreCase(title)
+                    && song_dto.getAlbum().equalsIgnoreCase(album)) {
                 client_factory.getProfileView().setRating(
-                        tmp.getRatingForThisUser());
+                        song_dto.getRatingForThisUser());
                 client_factory.getProfileView().showStar(
-                        tmp.getRatingForThisUser());
-                return tmp.getRating();
+                        song_dto.getRatingForThisUser());
+                return song_dto.getRating();
             }
         }
         return -1;
@@ -563,35 +574,48 @@ public class ProfileActivity extends AbstractActivity implements
      * Imposta i campi della canzone selezionata.
      */
     @Override
-    public void setSongFields(String autore, String titolo, String album) {
+    public void setSongFields(final String autore, final String titolo, final String album) {
 
-        List<SongDTO> songs = current_user.getMusicLibrary().getSongs();
+        List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
-        String genere = "----";
-        String anno = "----";
-        String compositore = "----";
-        String traccia = "----";
-        String cover = "images/test_cover.jpg"; // valore url cover - defautl
-                                                // (images/test_cover.jpg)
-
-        for (SongDTO song : songs) {
+        for (SongSummaryDTO song : songs) {
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
-                if (!song.getGenre().equals(""))
-                    genere = song.getGenre();
-                if (!song.getYear().equals(""))
-                    anno = song.getYear();
-                if (!song.getComposer().equals(""))
-                    compositore = song.getComposer();
-                if (!song.getTrackNumber().equals(""))
-                    traccia = song.getTrackNumber();
+                
+                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                    }
+                    @Override
+                    public void onSuccess(SongDTO song) {
+                        
+                        String genere = "----";
+                        String anno = "----";
+                        String compositore = "----";
+                        String traccia = "----";
+                        String cover = "images/test_cover.jpg";
+                        
+                        if (!song.getGenre().equals(""))
+                            genere = song.getGenre();
+                        if (!song.getYear().equals(""))
+                            anno = song.getYear();
+                        if (!song.getComposer().equals(""))
+                            compositore = song.getComposer();
+                        if (!song.getTrackNumber().equals(""))
+                            traccia = song.getTrackNumber();
+                        if (!song.getAlbumCover().equals(""))
+                            cover = song.getAlbumCover();
+                        
+                        client_factory.getProfileView().setSongFields(autore, titolo,
+                                album, genere, anno, compositore, traccia, cover);
+                        return;
+                    }
+                });
+                
 
-                if (!song.getAlbumCover().equals(""))
-                    cover = song.getAlbumCover();
-                client_factory.getProfileView().setSongFields(autore, titolo,
-                        album, genere, anno, compositore, traccia, cover);
-                return;
+                
+                
             }
         }
     }
