@@ -17,6 +17,8 @@ import de.umass.lastfm.Track;
  * Data Creazione: 17 Febbraio 2011
  */
 public final class Utils {
+    
+    private static AppEngineCache app_engine_cache = new AppEngineCache();
 
     /**
      * Questo metodo attiva la cache di Last.fm per AppEngine ed esegue una
@@ -27,7 +29,7 @@ public final class Utils {
 
         try {
             // attivo il nuovo gestore di cache (x LAST FM)
-            Caller.getInstance().setCache(new AppEngineCache());
+            Caller.getInstance().setCache(app_engine_cache);
 
             Collection<Track> search = Track.search(keywords,
                     "33d9ef520018d87db5dff9ef74cc4904");
@@ -62,7 +64,7 @@ public final class Utils {
 
         try {
             // attivo il nuovo gestore di cache (x LAST FM)
-            Caller.getInstance().setCache(new AppEngineCache());
+            Caller.getInstance().setCache(app_engine_cache);
 
             Collection<Track> search = Track.search(filename,
                     "33d9ef520018d87db5dff9ef74cc4904");

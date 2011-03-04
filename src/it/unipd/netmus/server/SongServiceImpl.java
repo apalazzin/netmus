@@ -4,8 +4,10 @@ import it.unipd.netmus.client.service.SongService;
 import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
+import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import com.google.appengine.api.capabilities.CapabilityServicePb.IsEnabledResponse.SummaryStatus;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -62,7 +64,11 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         MusicLibrary library = userAccount.getMusicLibrary();
         library.rateSong(Song.loadFromDTO(song), rating);
         return Song.loadFromDTO(song).getRatingDouble();
-
+    }
+    
+    @Override
+    public SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
+        return Song.loadFromDTO(song_summary_dto).toSongDTO();
     }
 
 }

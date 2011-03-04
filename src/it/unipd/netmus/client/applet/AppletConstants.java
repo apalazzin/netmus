@@ -29,7 +29,9 @@ public interface AppletConstants extends Constants {
 
     String sendingError();
 
-    String sentToServer();
+    String completion();
+    
+    String completionFinish();
 
     String title();
 

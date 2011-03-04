@@ -40,6 +40,10 @@ public class MusicLibrarySummaryDTO implements Serializable {
         setSongs(s);
         setPlaylists(playlists);
     }
+    
+    public void addPlaylist(String playlist_name) {
+        playlists.add(playlist_name);
+    }
 
     public int getLibrarySize() {
         return songs.size();
@@ -55,6 +59,12 @@ public class MusicLibrarySummaryDTO implements Serializable {
 
     public List<SongSummaryDTO> getSongs() {
         return songs;
+    }
+    
+    public void removePlaylist(String playlist_name) {
+        if (playlists.contains(playlist_name)) {
+            playlists.remove(playlist_name);
+        }
     }
 
     public void setOwner(UserDTO owner) {

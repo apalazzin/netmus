@@ -24,6 +24,8 @@ public class SongSummaryDTO implements Serializable {
     private String artist;
     private String title;
     private String album;
+    private double rating;
+    private int rating_for_this_user;
 
     public SongSummaryDTO() {
         this.artist = "";
@@ -35,6 +37,8 @@ public class SongSummaryDTO implements Serializable {
         this.artist = artist;
         this.title = title;
         this.album = album;
+        this.rating = -1;
+        this.rating_for_this_user = -1;
     }
 
     public String getAlbum() {
@@ -43,6 +47,14 @@ public class SongSummaryDTO implements Serializable {
 
     public String getArtist() {
         return artist;
+    }
+    
+    public double getRating() {
+        return rating;
+    }
+
+    public int getRatingForThisUser() {
+        return rating_for_this_user;
     }
 
     public String getTitle() {
@@ -55,6 +67,14 @@ public class SongSummaryDTO implements Serializable {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+    
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setRatingForThisUser(int rating_for_this_user) {
+        this.rating_for_this_user = rating_for_this_user;
     }
 
     public void setTitle(String title) {

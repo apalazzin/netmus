@@ -96,8 +96,8 @@ public class Song {
 
         // Se la canzone non ha almeno il titolo non viene inserita nel database
         // e ritorna un riferimento null
-        if (song.getTitle().equals("")
-                && (song.getArtist().equals("") || song.getAlbum().equals("")))
+        if (song.getTitle().equals(""))
+//                && (song.getArtist().equals("") || song.getAlbum().equals("")))
             return null;
 
         // Transaction tx = ODF.get().beginTransaction();
@@ -123,10 +123,10 @@ public class Song {
                 s.setTrackNumber(song.getTrackNumber());
             if (!song.getYear().equals(""))
                 s.setYear(song.getYear());
-            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
-                    + s.getArtist()));
-            s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
-                    + s.getArtist()));
+//            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
+//                    + s.getArtist()));
+//            s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
+//                    + s.getArtist()));
             s.update();
             // tx.commit();
             return s;
@@ -144,15 +144,16 @@ public class Song {
             if (s.getYear().equals("") && song.getYear() != null)
                 s.setYear(song.getYear());
 
-            // prelievo delle informazioni da servizi esterni
-            if (s.getYoutubeCode().equals("")) {
-                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
-                        + s.getArtist()));
-            }
-            if (s.getAlbumCover().equals("")) {
-                s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
-                        + s.getArtist()));
-            }
+//            // prelievo delle informazioni da servizi esterni
+//            if (s.getYoutubeCode().equals("")) {
+//                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
+//                        + s.getArtist()));
+//            }
+//            if (s.getAlbumCover().equals("")) {
+//                s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
+//                        + s.getArtist()));
+//            }
+            s.update();
             // tx.commit();
             return s;
         }
@@ -364,6 +365,18 @@ public class Song {
             return tmp;
         }
 
+    }
+    
+    public void completeSong() {
+        String keywords = title + " " + artist;
+        
+        if (youtube_code.equals("")) {
+            setYoutubeCode(Utils.getYouTubeCode(keywords));
+        }
+        if (album_cover.equals("")) {
+            setAlbumCover(Utils.getCoverImage(keywords));
+        }
+        this.update();
     }
 
     public String getAlbum() {
