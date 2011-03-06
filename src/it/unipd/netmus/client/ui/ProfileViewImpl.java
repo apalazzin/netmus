@@ -1844,6 +1844,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            test.add(song);
        }
 
+       if(youtube_status!=0)
+           setPlaySong(true);
 
    }
 
