@@ -326,6 +326,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
           public void onSelectionChange(SelectionChangeEvent event) {
               
+              
+             
+
              setBranoCatalogo(selectionModel.getSelectedObject());
              
              track_title.setText(selected_song.titolo);
@@ -339,11 +342,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  play.setUrl("images/pause.png");
                  youtube_status = 1;
                  last_selected=0;
+                
              }
              else if(playing==0&&selectionModel.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
                  play.setUrl("images/play.png");
                  youtube_status = -1;
                  last_selected=0;
+                 
              }
 
              else {
@@ -361,10 +366,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
              
              listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
              
+             if(youtube_status!=0)
+                 setPlaySong(true);
              
           }
         });
         
+
         library.addDomHandler(new DoubleClickHandler() {
 
             @Override
@@ -526,6 +534,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                      last_selected=1;
                  }
                  play_youtube.setUrl("images/play.png");
+                 
+                 if(youtube_status!=0)
+                     setPlaySong(true);
                
              }
            });
@@ -1684,8 +1695,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            
        } else {
-           
-           
+
            
            youtube_status = 1;
            youtube.getElement().getStyle().setHeight(215, Style.Unit.PX);
@@ -1697,6 +1707,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            setLayout();
            
+           
+           setPlaySong(true);
            /*
            catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
            playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
@@ -1776,6 +1788,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        vertical_semioffset = 275;
 
        setLayout();
+       
+       setPlaySong(false);
+
        /*
        catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
        playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
@@ -2721,6 +2736,60 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         cover_playing.setUrl(cover);
     }
 
+    
+    private void setPlaySong(boolean flag) {
+        
+        
+        if(played_song!=null && playing==0) {
+            for (int j=0; j<dataProvider_catalogo.getList().size(); j++) {
+                
+                
+                if(played_song.equals(dataProvider_catalogo.getList().get(j)) && flag) {
+                    final int l = j;
+                    Timer timerButton = new Timer() {
+                        public void run() {
+                            library.getRowElement(l).getStyle().setColor("#37A6EB");
+                            library.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.BOLD);
+
+                        }     
+                    };
+                    timerButton.schedule(40);
+                    
+                    break;
+                } else {
+                    
+                    library.getRowElement(j).getStyle().setColor("#000000");
+                    library.getRowElement(j).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                }
+            }
+        
+        }   else if(played_song!=null && playing==1) {
+                
+            for (int j=0; j<dataProvider_playlist.getList().size(); j++) {
+                    
+                    
+                    if(played_song.equals(dataProvider_playlist.getList().get(j)) && flag) {
+                        final int l = j;
+                        Timer timerButton = new Timer() {
+                            public void run() {
+                                song_list.getRowElement(l).getStyle().setColor("#37A6EB");
+                                song_list.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.BOLD);
+                            }     
+                        };
+                        timerButton.schedule(40);
+                        
+                        break;
+                    } else {
+                        
+                        song_list.getRowElement(j).getStyle().setColor("#000000");
+                        song_list.getRowElement(j).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                        
+                    }
+                }
+            
+        }
+        
+    }
 
         
 }
