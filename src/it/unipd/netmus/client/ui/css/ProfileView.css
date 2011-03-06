@@ -186,16 +186,39 @@
 	bottom: 10px;
 	left:7px; 
 	height: 164px;
-	border: 1px solid #37A6EB;
+	border: 0px solid #37A6EB;
 	
 	-webkit-box-shadow: 2px 2px 4px #888888;
 	-moz-box-shadow: 2px 2px 4px #888888;
 	
 	width: 164px;
 	height: 164px;
+	
+		border-radius: 8px;
+	-moz-border-radius: 8px;
 
 }
 	
+
+.covers {
+	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+   	margin-bottom: 40px;
+	
+}
+
+.covers_img {
+	
+	
+	width: 100px;
+	margin-left: 40px;
+	margin-top: 40px;
+	float: left;
+	
+	}
 
 
 .editButton {
@@ -588,7 +611,7 @@ height: 30px;
 	
 	background-color: #EFFFEF;
 
-	top: 35px;
+	top: 25px;
 	left: 250px;
 	position: absolute;
 			
@@ -950,7 +973,7 @@ height: 30px;
 	margin-left: 10%;
 	margin-bottom: 15px;
 	
-	margin-top:10px;	
+	margin-top:15px;	
 	border: 1px solid #37A6EB;
 	
 	-webkit-box-shadow: 2px 2px 4px #888888;
@@ -1011,7 +1034,24 @@ height: 30px;
 	
 	}
 	
-	
+
+.switch_cover {
+
+	top: 70px;
+	left: 277px;
+	position: absolute;
+			
+	}
+
+
+.switch_list {
+
+	top: 70px;
+	left: 250px;
+	position: absolute;
+			
+	}
+
 
 .title {
 	

@@ -61,20 +61,20 @@ public class Song {
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        Transaction tx = ODF.get().beginTransaction();
-        try {
+//        Transaction tx = ODF.get().beginTransaction();
+ //       try {
             Song tmp = ODF
                     .get()
                     .load()
                     .type(Song.class)
                     .id((dto.getTitle() + SEPARATOR + dto.getArtist()
                             + SEPARATOR + dto.getAlbum()).toLowerCase()).now();
-            tx.commit();
+ //           tx.commit();
             return tmp;
-        } finally {
-            if (tx.isActive())
-                tx.rollback();
-        }
+  //      } finally {
+    //        if (tx.isActive())
+      //          tx.rollback();
+       // }
     }
 
     /**
