@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
+import java.lang.InterruptedException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -27,6 +28,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -138,6 +140,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel edit_profile;
    @UiField HTMLPanel edit_profile_aboutme;
 
+   @UiField HTMLPanel covers_container;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -170,6 +173,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image edit_profile_close;
    @UiField Image edit_profile_check_img;
    
+   @UiField Image switch_cover;
+   @UiField Image switch_list;
+   
    @UiField Button edit_profile_check;
 
    @UiField VerticalPanel edit_profile_vc;
@@ -187,10 +193,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    Song selected_song_playlist;
    Song played_song;
    
+   Image cover_playing = new Image();
+   
+   HTMLPanel cover_selected;
+   
+   Timer searcht;
+   
    List<Song> canzoni_catalogo = new ArrayList<Song>();
    List<Song> canzoni_playlist = new ArrayList<Song>();
    List<Song> player_playlist = new ArrayList<Song>();
-   
+   List<Song> canzoni_cover = new ArrayList<Song>();
    ListDataProvider<Song> dataProvider_playlist = new ListDataProvider<Song>();
    ListDataProvider<Song> dataProvider_catalogo = new ListDataProvider<Song>();
 
@@ -563,6 +575,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            playlist_songs.add(song_list);
            
+           covers_container.setVisible(false);
            HTMLPanel off = new HTMLPanel("");
            off.getElement().getStyle().setHeight(22, Style.Unit.PX);
            playlist_songs.add(off);    
@@ -626,6 +639,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            playPlayer();
            youtube_status=1;
            play.setUrl("images/pause.png");
+           paintMainCover(cover_playing.getUrl());
        }
 
        else if((youtube_status==2||youtube_status==3) && last_selected==0) {
@@ -1040,6 +1054,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleChangeValueSearchBox(KeyUpEvent e) {
        
        
+       
+
+       if(searcht!=null)
+           searcht.cancel();
+       
        dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
        
        if(!((TextBox)e.getSource()).getValue().equals("")) {
@@ -1059,13 +1078,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            for (Song song : canzoni_ricerca) {
                dataProvider_catalogo.getList().add(song);
            }
+
+           searcht = new Timer() {
+               public void run() {
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+               }     
+           };
+           searcht.schedule(800);
            
        } else {
            
            for (Song song : canzoni_catalogo) {
                dataProvider_catalogo.getList().add(song);
            }
+
+           searcht = new Timer() {
+               public void run() {
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+               }     
+           };
+           searcht.schedule(800);
        }
+       
+          
 
    }
    
@@ -1075,6 +1110,36 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
    }
 
+
+   @UiHandler("switch_cover")
+   void handleMouseOverSwitchCover(MouseOverEvent e) {
+       switch_cover.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
+   @UiHandler("switch_cover")
+   void handleMouseClickSwitchCover(ClickEvent e) {
+       switch_list.setUrl("images/switch_sx_off.png");
+       switch_cover.setUrl("images/switch_dx_on.png");
+       if(!covers_container.isVisible())
+       paintCovers(dataProvider_catalogo.getList());
+
+   }
+
+   
+   @UiHandler("switch_list")
+   void handleMouseOverSwitchList(MouseOverEvent e) {
+       switch_list.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
+   @UiHandler("switch_list")
+   void handleMouseClickSwitchList(ClickEvent e) {
+       switch_list.setUrl("images/switch_sx_on.png");
+       switch_cover.setUrl("images/switch_dx_off.png");
+       showCatalogo();
+       
+   }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -1562,8 +1627,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        if(s==2)
            youtube_status = -1;
        else if(s==1) {
+           if(cover_playing.getUrl()!="")
+               paintMainCover(cover_playing.getUrl());
            youtube_status = 1;
            setFwRw();
+           
        }
        else if(s==0)    {
            
@@ -1785,6 +1853,162 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
 
+    public void showCatalogo() {
+        
+        library.setVisible(true);
+        covers_container.setVisible(false);
+        
+    }
+  
+    //riempie il catalogo/libreria con la visuale Covers
+    private void paintCovers(List<Song> list) { 
+    
+        
+
+            covers_container.setVisible(true);        
+            library.setVisible(false);
+            
+            covers_container.clear();
+            canzoni_cover.remove(canzoni_cover);
+
+            
+            for (it.unipd.netmus.client.ui.ProfileView.Song song : list) {
+                
+                final Song canzone  = (Song) song;
+                
+                HTMLPanel cover_container = new HTMLPanel("");
+                
+                cover_container.getElement().getStyle().setWidth(108, Style.Unit.PX);
+                cover_container.getElement().getStyle().setHeight(145, Style.Unit.PX);
+                cover_container.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+                cover_container.getElement().getStyle().setMarginLeft(40, Style.Unit.PX);
+                cover_container.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
+                cover_container.getElement().getStyle().setFloat(Style.Float.LEFT);
+                cover_container.getElement().getStyle().setProperty("textAlign", "center");
+                
+                
+                final HTMLPanel tmp = new HTMLPanel("");
+                tmp.getElement().getStyle().setProperty("backgroundSize", "contain");
+                listener.setSongCover(canzone.autore, canzone.titolo, canzone.album, tmp);
+
+                tmp.getElement().getStyle().setMarginBottom(5, Style.Unit.PX);
+                tmp.getElement().getStyle().setWidth(100, Style.Unit.PX);
+                tmp.getElement().getStyle().setHeight(100, Style.Unit.PX);
+                tmp.getElement().getStyle().setProperty("borderRadius", "10px");
+                tmp.getElement().getStyle().setProperty("MozBorderRadius", "10px");
+                tmp.getElement().getStyle().setProperty("WebkitBoxShadow", "2px 2px 4px #888888");
+                tmp.getElement().getStyle().setProperty("MozBoxShadow", "2px 2px 4px #888888");
+                
+
+                if(canzone.equals(selected_song)) {
+                    cover_selected=tmp;
+                    cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
+                }
+                
+                tmp.addDomHandler(new MouseOverHandler() {
+
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        ((Widget)event.getSource()).getElement().getStyle().setCursor(Style.Cursor.POINTER);
+                        
+                    }}, MouseOverEvent.getType());
+                
+
+                tmp.addDomHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        
+                        if(cover_selected!=null)
+                            cover_selected.getElement().getStyle().setProperty("border", "0px solid #37A6EB");
+                        
+                        cover_selected=tmp;
+                        cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
+                        
+                        setBranoCatalogo(canzone);
+                        
+                        track_title.setText(selected_song.titolo);
+                        song_title.setText(selected_song.titolo);
+                        song_artist.setText(selected_song.autore);
+                        song_album.setText(selected_song.album);
+                        
+                        
+                        
+                        if(playing==0&&canzone.equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+                            play.setUrl("images/pause.png");
+                            youtube_status = 1;
+                            last_selected=0;
+                        }
+                        else if(playing==0&&canzone.equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+                            play.setUrl("images/play.png");
+                            youtube_status = -1;
+                            last_selected=0;
+                        }
+
+                        else {
+                            play.setUrl("images/play.png");
+                            if(youtube_status!=0&&youtube_status==1)
+                                youtube_status = 2;
+                            else if(youtube_status!=0&&youtube_status==-1)
+                                youtube_status = 3;
+                            last_selected=0;
+                        }
+                        play_youtube.setUrl("images/play.png");
+
+                        global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
+                        showStar(rating);
+                        
+                        listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
+                        
+                    }}, ClickEvent.getType());
+                
+                
+                tmp.addDomHandler(new DoubleClickHandler() {
+
+                    @Override
+                    public void onDoubleClick(DoubleClickEvent event) {
+                       
+                        if(playlist_opened) {
+                            
+                            listener.addToPLaylist(playlist_title.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
+                            
+                        } else {
+                            
+                            if(selected_song!=null)
+                                viewSong(selected_song);                    
+                        }
+                        
+                    }
+                
+                    
+                }, DoubleClickEvent.getType());
+                
+                
+                Label titolo = new Label();
+                titolo.setText(canzone.titolo);
+                titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
+                titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
+                titolo.getElement().getStyle().setProperty("maxHeight", "29px");
+                titolo.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+    
+                Label autore = new Label();
+                autore.setText(canzone.autore);
+                autore.getElement().getStyle().setProperty("fontFamily", "Verdana");
+                autore.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+                autore.getElement().getStyle().setColor("#999999");
+    
+                
+                cover_container.add(tmp);
+                cover_container.add(titolo);
+                cover_container.add(autore);
+                
+                covers_container.add(cover_container);
+                
+            }
+        
+            canzoni_cover = new ArrayList<Song>(list);
+        
+    }    
 
 
 
@@ -1807,7 +2031,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     @Override
     public void setBranoPlaylist(
             it.unipd.netmus.client.ui.ProfileView.Song selezione) {
-        // TODO Auto-generated method stub
+        
     
         selected_song_playlist = (Song) selezione; 
         remove_song.setText(selected_song_playlist.titolo);
@@ -2216,11 +2440,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
         if(!cover.equals("")) {
             song_cover.setUrl(cover);
-            this.cover.setUrl(cover);
+            if(youtube_status!=1&&youtube_status!=2)
+                this.cover.setUrl(cover);
         } else {
             song_cover.setUrl("images/test_cover.jpg");
-            this.cover.setUrl("images/test_cover.jpg");
+            if(youtube_status!=1&&youtube_status!=2)
+                    this.cover.setUrl("images/test_cover.jpg");
         }
+        
         
         showGlobalStar(global_rating);
 
@@ -2480,8 +2707,21 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         dataProvider_catalogo.getList().remove(canzone);
         canzoni_catalogo.remove(canzone);
         closeSong();
+        if(covers_container.isVisible())
+            paintCovers(dataProvider_catalogo.getList());
+        
+        
     }
-    
+
+
+
+    @Override
+    public void paintMainCover(String cover) {
+        this.cover.setUrl(cover);
+        cover_playing.setUrl(cover);
+    }
+
+
         
 }
 

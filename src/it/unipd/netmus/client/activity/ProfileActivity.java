@@ -34,6 +34,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 
 /**
  * Nome: ProfileActivity.java 
@@ -447,10 +449,16 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(SongDTO song) {
                         String youTubeCode = "";
                         youTubeCode = song.getYoutubeCode();
+                        String cover = song.getAlbumCover();
+                        
                         if (!youTubeCode.equals(""))
                             client_factory.getProfileView().playYouTube(youTubeCode);
                         client_factory.getProfileView().setInfo(
                                 titolo + " - " + autore + " - " + album);
+                        if (!cover.equals(""))
+                            client_factory.getProfileView().paintMainCover(cover);
+                        else
+                            client_factory.getProfileView().paintMainCover("images/test_cover.jpg");
                         return;
                     }
                 });
@@ -620,6 +628,44 @@ public class ProfileActivity extends AbstractActivity implements
         }
     }
 
+
+    /**
+     * Imposta i campi della canzone selezionata.
+     */
+    @Override
+    public void setSongCover(final String autore, final String titolo, final String album, final HTMLPanel img) {
+
+        List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+
+        for (SongSummaryDTO song : songs) {
+            if (song.getTitle().equals(titolo)
+                    && song.getArtist().equals(autore)
+                    && song.getAlbum().equals(album)) {
+                
+                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                    }
+                    @Override
+                    public void onSuccess(SongDTO song) {
+                       
+                        String cover = "images/test_cover.jpg";
+                        if (!song.getAlbumCover().equals(""))
+                            cover = song.getAlbumCover();                        
+                            img.getElement().getStyle().setBackgroundImage("url('"+cover+"')");
+                            
+                        return;
+                    }
+                });
+                
+
+                
+                
+            }
+        }
+    }
+    
+    
     /**
      * Deve andare ad invocare il metodo setInfo di ProfileView per andare a
      * graficare le informazioni del brano in riproduzione accanto al player,

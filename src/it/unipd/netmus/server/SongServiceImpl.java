@@ -67,7 +67,7 @@ public class SongServiceImpl extends RemoteServiceServlet implements
     }
     
     @Override
-    public SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
+    public synchronized SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
         return Song.loadFromDTO(song_summary_dto).toSongDTO();
     }
 

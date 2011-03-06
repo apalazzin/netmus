@@ -1,8 +1,11 @@
 package it.unipd.netmus.client.ui;
 
+
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
@@ -132,6 +135,11 @@ public interface ProfileView extends IsWidget {
     * Elimina la canzone dal catalogo
     */
    void deleteSong(String autore, String titolo, String album);
+   /**
+    * Imposta la cover principale enlla UI
+    *
+    */
+   void paintMainCover(String cover);
 
    public interface Presenter
    {
@@ -185,6 +193,7 @@ public interface ProfileView extends IsWidget {
       void removeFromPLaylist(String playlist, String autore, String titolo, String album);
       /**
        *Imposta i campi della canzone selezionata.
+     * @return 
        */      
       void setSongFields(String autore, String titolo, String album);
       /**
@@ -240,6 +249,13 @@ public interface ProfileView extends IsWidget {
        *Salva il nome dell'artista che è stato modificato dall'utente
        */      
       void editSongArtist(String new_artist, String old_artist, String title, String album);
+      /**
+       *Imposta la copertina del brano nella modalita' Covers
+     * @return 
+       */
+      void setSongCover(String autore, String titolo, String album, HTMLPanel tmp);
    }
+
+
 
 }

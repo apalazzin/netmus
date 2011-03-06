@@ -62,6 +62,9 @@
 				
 				
 				<g:HTMLPanel ui:field="info" styleName="{style.info}">Nessun brano in ascolto.</g:HTMLPanel>
+				<g:Image ui:field="switch_list" url="images/switch_sx_on.png" styleName="{style.switch_list}"></g:Image>
+				<g:Image ui:field="switch_cover" url="images/switch_dx_off.png" styleName="{style.switch_cover}"></g:Image>
+				
 			
 				<g:HTMLPanel ui:field="search" styleName="{style.search}">
 				<g:TextBox ui:field="search_box" styleName="{style.search_box}"></g:TextBox>
@@ -71,6 +74,9 @@
 
 				<g:HTMLPanel ui:field="library_container" styleName="{style.catalogue_container}">
 				<c:CellTable ui:field="library" styleName="{style.catalogue}"></c:CellTable>
+				
+				<g:HTMLPanel ui:field="covers_container" styleName="{style.covers}"></g:HTMLPanel>
+				
 				</g:HTMLPanel>
 				
 
@@ -119,10 +125,10 @@
 
 						</g:HTMLPanel>
 				
+						<g:Image ui:field="song_cover" styleName="{style.song_cover}"></g:Image>
 						
 						</g:HTMLPanel>
 						
-						<g:Image ui:field="song_cover" styleName="{style.song_cover}"></g:Image>
 					
 				</g:HTMLPanel>
 					
