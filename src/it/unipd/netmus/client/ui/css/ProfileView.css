@@ -37,7 +37,7 @@
 	
 	position: absolute;
 	top: 20px;
-	right: 300px;
+	right: 220px;
 	width: 60px;
 	
 	-webkit-transition: right 0.3s ease-in-out;
@@ -225,7 +225,7 @@
 	
 	position: absolute;
 	top: 20px;
-	right: 370px;
+	right: 290px;
 	width: 60px;
 	
 	-webkit-transition: right 0.3s ease-in-out;
@@ -849,7 +849,7 @@ height: 30px;
 
 .search {
 	
-	width: 185px;
+	width: 115px;
 	height: 15px;
 	
 	font-size: 11px;
@@ -873,7 +873,7 @@ height: 30px;
 
 .search_box{
 	
-	width: 150px;	
+	width: 80px;	
 	}
 
 
@@ -906,7 +906,7 @@ height: 30px;
 	
 	position: absolute;
 	top: 20px;
-	right: 230px;
+	right: 150px;
 	width: 60px;
 
 	-webkit-transition: right 0.3s ease-in-out;
