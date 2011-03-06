@@ -2099,7 +2099,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     public void setLayout() {
         
         
-            if(Window.getClientWidth()<1270) {
+            if(Window.getClientWidth()<1190) {
                 
                 search.getElement().getStyle().setOpacity(0);
                 social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
@@ -2110,11 +2110,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
             } else {
                 
-                social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
-                account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
-                edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+                social_button.getElement().getStyle().setRight(150, Style.Unit.PX);
+                account_button.getElement().getStyle().setRight(220, Style.Unit.PX);
+                edit_button.getElement().getStyle().setRight(290, Style.Unit.PX);
                 
-                           if(Window.getClientWidth()>1200)
+                           if(Window.getClientWidth()>1120)
                             search.getElement().getStyle().setOpacity(1);
                             
                 
@@ -2225,7 +2225,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  
 
                  
-                 if(event.getWidth()<1270) {
+                 if(event.getWidth()<1190) {
                      
                      search.getElement().getStyle().setOpacity(0);
                      social_button.getElement().getStyle().setRight(25, Style.Unit.PX);
@@ -2234,14 +2234,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                      
                  } else {
                      
-                     social_button.getElement().getStyle().setRight(230, Style.Unit.PX);
-                     account_button.getElement().getStyle().setRight(300, Style.Unit.PX);
-                     edit_button.getElement().getStyle().setRight(370, Style.Unit.PX);
+                     social_button.getElement().getStyle().setRight(150, Style.Unit.PX);
+                     account_button.getElement().getStyle().setRight(220, Style.Unit.PX);
+                     edit_button.getElement().getStyle().setRight(290, Style.Unit.PX);
                      
                         Timer timerSearch = new Timer() {
                             public void run() {
                                 
-                                if(Window.getClientWidth()>1200)
+                                if(Window.getClientWidth()>1120)
                                  search.getElement().getStyle().setOpacity(1);
                                  
                             }
