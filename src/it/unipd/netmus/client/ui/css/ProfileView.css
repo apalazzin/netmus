@@ -194,7 +194,7 @@
 	width: 164px;
 	height: 164px;
 	
-		border-radius: 8px;
+	border-radius: 8px;
 	-moz-border-radius: 8px;
 
 }
@@ -968,19 +968,21 @@ height: 30px;
 
 .song_cover {
 	
-	float: left;
-	margin-right: 10%;
-	margin-left: 10%;
-	margin-bottom: 15px;
+	margin-left: 20px;
+	margin-bottom: 20px;
 	
-	margin-top:15px;	
-	border: 1px solid #37A6EB;
+	margin-top:20px;	
+	border: 0px solid #37A6EB;
 	
 	-webkit-box-shadow: 2px 2px 4px #888888;
 	-moz-box-shadow: 2px 2px 4px #888888;
 	
 	width: 120px;
 	height: 120px;
+	
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	
 
 	
 }
