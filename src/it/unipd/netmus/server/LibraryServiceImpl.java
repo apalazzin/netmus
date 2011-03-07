@@ -12,10 +12,8 @@ import java.util.List;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * Nome: LibraryServiceImpl.java 
- * Autore: VT.G 
- * Licenza: GNU GPL v3 
- * Data Creazione: 13 Febbraio 2011
+ * Nome: LibraryServiceImpl.java Autore: VT.G Licenza: GNU GPL v3 Data
+ * Creazione: 13 Febbraio 2011
  * 
  */
 
@@ -63,7 +61,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         List<SongSummaryDTO> songs_dto = new ArrayList<SongSummaryDTO>();
 
         for (Song song : songs) {
-            songs_dto.add(song.toSummaryDTO());
+            songs_dto.add(song.toSongSummaryDTO());
         }
 
         return songs_dto;
@@ -141,12 +139,14 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * Salva o aggiorna nel Datastore tutte le canzoni passate in input e se
      * possiedono sufficienti informazioni le inserisce nella libreria
      * dell’utente.
-     * @return 
+     * 
+     * @return
      */
     @Override
-    public List<SongSummaryDTO> sendUserNewMusic(String user, List<SongDTO> new_songs) {
+    public List<SongSummaryDTO> sendUserNewMusic(String user,
+            List<SongDTO> new_songs) {
 
-        // Invia al database tutte le canzonu della lista, ogni canzone ritorna
+        // Invia al database tutte le canzoni della lista, ogni canzone ritorna
         // dopo le modifche
         // dovute alla gestione della persistenza.
 
@@ -157,22 +157,44 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
             Song song = Song.storeOrUpdateFromDTO(songDTO);
             if (song != null) {
                 useraccount.getMusicLibrary().addSong(song, false);
-                if (song.getAlbumCover().equals("") || song.getYoutubeCode().equals(""))
-                    incomplete.add(song.toSummaryDTO());
+                if (song.getAlbumCover().equals("")
+                        || song.getYoutubeCode().equals("")) {
+                    incomplete.add(song.toSongSummaryDTO());
+                }
             }
         }
-        
+
         return incomplete;
     }
-    
+
     @Override
     public void completeSongs(List<SongSummaryDTO> incomplete) {
+
+        String cache_album = "no_album";
+        String cache_album_cover = "no_album_cover";
         
         for (SongSummaryDTO song_dto : incomplete) {
             Song song = Song.loadFromDTO(song_dto);
-            
+
             if (song != null) {
+                if (song.getAlbum().equalsIgnoreCase(cache_album)) {
+                    song.setAlbumCover(cache_album_cover);
+                }
                 song.completeSong();
+                cache_album = song.getAlbum();
+                if (!song.getAlbumCover().equals("no_album_cover")) {
+                    if (song.getAlbumCover().equals("")) {
+                        cache_album_cover = "no_album_cover";
+                    }
+                    else {
+                        cache_album_cover = song.getAlbumCover();
+                    }
+                }
+                else {
+                    cache_album_cover = song.getAlbumCover();
+                    song.setAlbumCover("");
+                    song.update();
+                }
             }
         }
     }
