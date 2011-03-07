@@ -16,7 +16,6 @@ import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
-import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
@@ -35,13 +34,10 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 
 /**
- * Nome: ProfileActivity.java 
- * Autore: VT.G 
- * Licenza: GNU GPL v3 
- * Data Creazione: 15 Febbraio 2011
+ * Nome: ProfileActivity.java Autore: VT.G Licenza: GNU GPL v3 Data Creazione:
+ * 15 Febbraio 2011
  */
 
 public class ProfileActivity extends AbstractActivity implements
@@ -274,7 +270,7 @@ public class ProfileActivity extends AbstractActivity implements
         // TODO Auto-generated method stub
         String[] friends = { "Alberto Palazzin", "Andrea Mandolo",
                 "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato", "Giovanni Trezzi"};
+                "Simone Daminato", "Giovanni Trezzi" };
         return friends;
     }
 
@@ -404,6 +400,14 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
+     * Ask user before stopping this activity
+     */
+    @Override
+    public String mayStop() {
+        return my_constants.leavingProfilePage();
+    }
+
+    /**
      * Sposta in basso la canzone della playlist selezionata
      */
     @Override
@@ -431,34 +435,38 @@ public class ProfileActivity extends AbstractActivity implements
      * Restituisce il link youtube della canzone selezionata
      */
     @Override
-    public void playYouTube(final String autore, final String titolo, final String album) {
+    public void playYouTube(final String autore, final String titolo,
+            final String album) {
 
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        
 
         for (SongSummaryDTO song : songs) {
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
-                
+
                 song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
                     @Override
                     public void onFailure(Throwable caught) {
                     }
+
                     @Override
                     public void onSuccess(SongDTO song) {
                         String youTubeCode = "";
                         youTubeCode = song.getYoutubeCode();
                         String cover = song.getAlbumCover();
-                        
+
                         if (!youTubeCode.equals(""))
-                            client_factory.getProfileView().playYouTube(youTubeCode);
+                            client_factory.getProfileView().playYouTube(
+                                    youTubeCode);
                         client_factory.getProfileView().setInfo(
                                 titolo + " - " + autore + " - " + album);
                         if (!cover.equals(""))
-                            client_factory.getProfileView().paintMainCover(cover);
+                            client_factory.getProfileView().paintMainCover(
+                                    cover);
                         else
-                            client_factory.getProfileView().paintMainCover("images/test_cover.jpg");
+                            client_factory.getProfileView().paintMainCover(
+                                    "images/test_cover.jpg");
                         return;
                     }
                 });
@@ -582,7 +590,8 @@ public class ProfileActivity extends AbstractActivity implements
      * Imposta i campi della canzone selezionata.
      */
     @Override
-    public void setSongFields(final String autore, final String titolo, final String album) {
+    public void setSongCover(final String autore, final String titolo,
+            final String album, final HTMLPanel img) {
 
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
@@ -590,20 +599,57 @@ public class ProfileActivity extends AbstractActivity implements
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
-                
+
                 song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
                     @Override
                     public void onFailure(Throwable caught) {
                     }
+
                     @Override
                     public void onSuccess(SongDTO song) {
-                        
+
+                        String cover = "images/test_cover.jpg";
+                        if (!song.getAlbumCover().equals(""))
+                            cover = song.getAlbumCover();
+                        img.getElement().getStyle()
+                                .setBackgroundImage("url('" + cover + "')");
+
+                        return;
+                    }
+                });
+
+            }
+        }
+    }
+
+    /**
+     * Imposta i campi della canzone selezionata.
+     */
+    @Override
+    public void setSongFields(final String autore, final String titolo,
+            final String album) {
+
+        List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+
+        for (SongSummaryDTO song : songs) {
+            if (song.getTitle().equals(titolo)
+                    && song.getArtist().equals(autore)
+                    && song.getAlbum().equals(album)) {
+
+                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                    }
+
+                    @Override
+                    public void onSuccess(SongDTO song) {
+
                         String genere = "----";
                         String anno = "----";
                         String compositore = "----";
                         String traccia = "----";
                         String cover = "images/test_cover.jpg";
-                        
+
                         if (!song.getGenre().equals(""))
                             genere = song.getGenre();
                         if (!song.getYear().equals(""))
@@ -614,58 +660,18 @@ public class ProfileActivity extends AbstractActivity implements
                             traccia = song.getTrackNumber();
                         if (!song.getAlbumCover().equals(""))
                             cover = song.getAlbumCover();
-                        
-                        client_factory.getProfileView().setSongFields(autore, titolo,
-                                album, genere, anno, compositore, traccia, cover);
+
+                        client_factory.getProfileView().setSongFields(autore,
+                                titolo, album, genere, anno, compositore,
+                                traccia, cover);
                         return;
                     }
                 });
-                
 
-                
-                
             }
         }
     }
 
-
-    /**
-     * Imposta i campi della canzone selezionata.
-     */
-    @Override
-    public void setSongCover(final String autore, final String titolo, final String album, final HTMLPanel img) {
-
-        List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-
-        for (SongSummaryDTO song : songs) {
-            if (song.getTitle().equals(titolo)
-                    && song.getArtist().equals(autore)
-                    && song.getAlbum().equals(album)) {
-                
-                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                    }
-                    @Override
-                    public void onSuccess(SongDTO song) {
-                       
-                        String cover = "images/test_cover.jpg";
-                        if (!song.getAlbumCover().equals(""))
-                            cover = song.getAlbumCover();                        
-                            img.getElement().getStyle().setBackgroundImage("url('"+cover+"')");
-                            
-                        return;
-                    }
-                });
-                
-
-                
-                
-            }
-        }
-    }
-    
-    
     /**
      * Deve andare ad invocare il metodo setInfo di ProfileView per andare a
      * graficare le informazioni del brano in riproduzione accanto al player,
@@ -751,7 +757,7 @@ public class ProfileActivity extends AbstractActivity implements
                         setSongs();
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();
-						profileView.setUser(user);
+                        profileView.setUser(user);
                         profileView.setInfo(getSongInfo());
                         editProfileView(user);
 

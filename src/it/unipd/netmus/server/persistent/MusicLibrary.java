@@ -424,8 +424,11 @@ public class MusicLibrary {
 
     public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
         List<SongSummaryDTO> list = new ArrayList<SongSummaryDTO>();
-        for (Song tmp : this.allSongs())
-            list.add(tmp.toSummaryDTO());
+        for (Song tmp : this.allSongs()) {
+            SongSummaryDTO tmp2 = tmp.toSongSummaryDTO();
+            tmp2.setRatingForThisUser(this.getSongRate(tmp));
+            list.add(tmp2);
+        }
 
         List<String> playlists = this.getPlaylists();
         return new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list,

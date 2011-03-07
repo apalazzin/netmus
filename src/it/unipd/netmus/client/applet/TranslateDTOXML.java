@@ -133,21 +133,6 @@ public class TranslateDTOXML {
     }
 
     /**
-     * @deprecated
-     * @param filename
-     * @return
-     */
-    @SuppressWarnings("unused")
-    @Deprecated
-    private String clearFileName(String filename) {
-        int start = filename.lastIndexOf("/") + 1;
-        int end = filename.lastIndexOf(".mp3");
-        if (end < 0)
-            end = filename.lastIndexOf(".MP3");
-        return filename.substring(start, end);
-    }
-
-    /**
      * Crea un nuovo SongDTO, e seguendo le proprietà indicate nel nodo di tipo
      * Song, imposta opportunamente i suoi attributi.
      * 

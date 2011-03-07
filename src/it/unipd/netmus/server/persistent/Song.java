@@ -1,18 +1,18 @@
 package it.unipd.netmus.server.persistent;
 
+import java.util.List;
+
 import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
-import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.annotation.Id;
 import com.google.code.twig.annotation.Index;
 
 /**
- * Nome: Song.java 
- * Autore: VT.G 
- * Licenza: GNU GPL v3 
- * Data Creazione: 15 Febbraio 2011
+ * Nome: Song.java Autore: VT.G Licenza: GNU GPL v3 Data Creazione: 15 Febbraio
+ * 2011
  * 
  * 
  * Tipo, obiettivo e funzione del componente:
@@ -61,20 +61,43 @@ public class Song {
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
-//        Transaction tx = ODF.get().beginTransaction();
- //       try {
-            Song tmp = ODF
-                    .get()
-                    .load()
-                    .type(Song.class)
-                    .id((dto.getTitle() + SEPARATOR + dto.getArtist()
-                            + SEPARATOR + dto.getAlbum()).toLowerCase()).now();
- //           tx.commit();
-            return tmp;
-  //      } finally {
-    //        if (tx.isActive())
-      //          tx.rollback();
-       // }
+        Song tmp = ODF
+                .get()
+                .load()
+                .type(Song.class)
+                .id((dto.getTitle() + SEPARATOR + dto.getArtist() + SEPARATOR + dto
+                        .getAlbum()).toLowerCase()).now();
+        return tmp;
+    }
+
+    /**
+     * @param filename
+     * @return
+     */
+    @SuppressWarnings("unused")
+    private String clearFileName(String filename) {
+        String clean_name = filename;
+        if (filename != null && !filename.equals("")) {
+            clean_name = filename.replace('/', ' ').replace(".mp3", " ")
+                    .replace(".MP3", " ").replace('(', ' ').replace(')', ' ')
+                    .replace('[', ' ').replace(']', ' ');
+            return clean_name;
+        } else
+            return "";
+    }
+
+    /**
+     *
+     */
+    public static String findCoverFromAlbum(String album) {
+        List<Song> tmp = ODF.get().find().type(Song.class)
+                .addFilter("album", FilterOperator.EQUAL, album)
+                .returnAll().now();
+        if (tmp.size()>0 && !tmp.get(0).getAlbumCover().equals("")) {
+            return tmp.get(0).getAlbumCover();
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -85,25 +108,9 @@ public class Song {
      */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
-        // if (song != null) {
-        // if (song.getTitle() == null)
-        // song.setTitle("");
-        // if (song.getArtist() == null)
-        // song.setArtist("");
-        // if (song.getAlbum() == null)
-        // song.setAlbum("");
-        // }
-
-        // Se la canzone non ha almeno il titolo non viene inserita nel database
-        // e ritorna un riferimento null
         if (song.getTitle().equals(""))
-//                && (song.getArtist().equals("") || song.getAlbum().equals("")))
             return null;
 
-        // Transaction tx = ODF.get().beginTransaction();
-
-        // try {
-        // Ricerca e caricamento della canzone se già presente nel Datastore
         Song s = load(song.getTitle() + SEPARATOR + song.getArtist()
                 + SEPARATOR + song.getAlbum());
 
@@ -115,53 +122,29 @@ public class Song {
             s.setArtist(song.getArtist());
             s.setId(song.getTitle() + SEPARATOR + song.getArtist() + SEPARATOR
                     + song.getAlbum());
-            if (!song.getComposer().equals(""))
-                s.setComposer(song.getComposer());
-            if (!song.getGenre().equals(""))
-                s.setGenre(song.getGenre());
-            if (!song.getTrackNumber().equals(""))
-                s.setTrackNumber(song.getTrackNumber());
-            if (!song.getYear().equals(""))
-                s.setYear(song.getYear());
-//            s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
-//                    + s.getArtist()));
-//            s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
-//                    + s.getArtist()));
+            s.setComposer(song.getComposer());
+            s.setGenre(song.getGenre());
+            s.setTrackNumber(song.getTrackNumber());
+            s.setYear(song.getYear());
             s.update();
-            // tx.commit();
             return s;
         }
 
         else {
             // La canzone è presente nel Datastore.
             // inserimento delle informazioni prese dal DTO
-            if (s.getComposer().equals("") && song.getComposer() != null)
+            if (s.getComposer().equals(""))
                 s.setComposer(song.getComposer());
-            if (s.getGenre().equals("") && song.getGenre() != null)
+            if (s.getGenre().equals(""))
                 s.setGenre(song.getGenre());
-            if (s.getTrackNumber().equals("") && song.getTrackNumber() != null)
+            if (s.getTrackNumber().equals(""))
                 s.setTrackNumber(song.getTrackNumber());
-            if (s.getYear().equals("") && song.getYear() != null)
+            if (s.getYear().equals(""))
                 s.setYear(song.getYear());
 
-//            // prelievo delle informazioni da servizi esterni
-//            if (s.getYoutubeCode().equals("")) {
-//                s.setYoutubeCode(Utils.getYouTubeCode(s.getTitle() + " "
-//                        + s.getArtist()));
-//            }
-//            if (s.getAlbumCover().equals("")) {
-//                s.setAlbumCover(Utils.getCoverImage(s.getTitle() + " "
-//                        + s.getArtist()));
-//            }
             s.update();
-            // tx.commit();
             return s;
         }
-        // }
-        // finally {
-        // if (tx.isActive())
-        // tx.rollback();
-        // }
     }
 
     static void deleteSong(Song s) {
@@ -230,20 +213,10 @@ public class Song {
      * 
      */
     public double addRate(int rating) {
-
-        Transaction tx = ODF.get().beginTransaction();
-
-        try {
-            this.num_ratings++;
-            this.rating = (this.rating + rating) / this.num_ratings;
-            this.update();
-            tx.commit();
-            return this.rating;
-        } finally {
-            if (tx.isActive())
-                tx.rollback();
-        }
-
+        this.num_ratings++;
+        this.rating = (this.rating + rating) / this.num_ratings;
+        this.update();
+        return this.rating;
     }
 
     public Song changeAlbum(String album) {
@@ -321,18 +294,10 @@ public class Song {
      */
     public double changeRate(int old_rating, int rating) {
 
-        Transaction tx = ODF.get().beginTransaction();
-
-        try {
-            this.rating = ((this.rating * this.num_ratings) + rating - old_rating)
-                    / this.num_ratings;
-            this.update();
-            tx.commit();
-            return this.rating;
-        } finally {
-            if (tx.isActive())
-                tx.rollback();
-        }
+        this.rating = ((this.rating * this.num_ratings) + rating - old_rating)
+                / this.num_ratings;
+        this.update();
+        return this.rating;
     }
 
     public Song changeTitle(String title) {
@@ -366,7 +331,7 @@ public class Song {
         }
 
     }
-    
+
     public void completeSong() {
         String keywords = title + " " + artist;
         
@@ -374,7 +339,12 @@ public class Song {
             setYoutubeCode(Utils.getYouTubeCode(keywords));
         }
         if (album_cover.equals("")) {
-            setAlbumCover(Utils.getCoverImage(keywords));
+            String tmp = Song.findCoverFromAlbum(getAlbum());
+            if (!tmp.equals("")) {
+                setAlbumCover(tmp);
+            } else {
+                setAlbumCover(Utils.getCoverImage(keywords));
+            }
         }
         this.update();
     }
@@ -485,8 +455,10 @@ public class Song {
         return tmp;
     }
 
-    public SongSummaryDTO toSummaryDTO() {
-        return new SongSummaryDTO(this.artist, this.title, this.album);
+    public SongSummaryDTO toSongSummaryDTO() {
+        SongSummaryDTO tmp = new SongSummaryDTO(this.artist, this.title, this.album);
+        tmp.setRating(this.rating);
+        return tmp;
     }
 
     public void update() {

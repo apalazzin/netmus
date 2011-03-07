@@ -27,5 +27,6 @@ public interface MyConstants extends Constants {
 	String infoLoginIncorrect();
 	String databaseErrorGeneric();
     String accountGoogleLogin();
-	
+	String leavingProfilePage();
+    
 	}

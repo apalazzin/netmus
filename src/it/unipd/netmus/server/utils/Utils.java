@@ -26,7 +26,7 @@ public final class Utils {
      * copertina dell’album relativo ad un brano, in formato JPG.
      */
     public static String getCoverImage(String keywords) {
-
+        
         try {
             // attivo il nuovo gestore di cache (x LAST FM)
             Caller.getInstance().setCache(app_engine_cache);
