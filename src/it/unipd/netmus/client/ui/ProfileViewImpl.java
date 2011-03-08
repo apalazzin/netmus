@@ -175,6 +175,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiField Image switch_cover;
    @UiField Image switch_list;
+   @UiField Image loading;
    
    @UiField Button edit_profile_check;
 
@@ -587,6 +588,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            playlist_songs.add(song_list);
            
            covers_container.setVisible(false);
+           loading.setVisible(false);
+           
            HTMLPanel off = new HTMLPanel("");
            off.getElement().getStyle().setHeight(22, Style.Unit.PX);
            playlist_songs.add(off);    
@@ -1584,11 +1587,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        if(playing==0) {
            
            Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
-                      
-           closeYouTube();
+ 
+           
            youtube_status=1;
            played_song = to_play;
            playing=0;
+           closeYouTube();
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
            setFwRw();
            
@@ -1600,6 +1604,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            youtube_status=1;
            played_song = to_play;
            playing=1;
+           closeYouTube();
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
            setFwRw();
        }
@@ -1741,7 +1746,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            info_youtube.getElement().setInnerText(played_song.titolo + ". " + played_song.autore);
            
-           info_youtube_link.setText("http://www.youtube.com/watch?v=q" + link);
+           info_youtube_link.setText("http://www.youtube.com/watch?v=" + link);
            
            if(rm_link!=null) rm_link.removeHandler();
            
@@ -1880,6 +1885,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     //riempie il catalogo/libreria con la visuale Covers
     private void paintCovers(final List<Song> list) { 
     
+            if(list.size()>0) startLoading();
+        
             library.setVisible(false);
             covers_container.setVisible(true);    
             covers_container.clear();
@@ -1893,7 +1900,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }     
             };
             
-            timerCovers.schedule(5);
+            timerCovers.schedule(10);
             
         
             
@@ -2043,7 +2050,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }     
             };
             
-            timerCovers.schedule(5);
+            timerCovers.schedule(10);
 
             
         }
@@ -2812,6 +2819,22 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }
             
         }
+        
+    }
+
+
+
+    @Override
+    public void startLoading() {
+        loading.setVisible(true);
+        
+    }
+
+
+
+    @Override
+    public void stopLoading() {
+        loading.setVisible(false);
         
     }
 

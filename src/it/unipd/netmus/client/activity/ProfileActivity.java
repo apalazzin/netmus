@@ -73,6 +73,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void addPlaylist(final String playlist_name) {
 
+        client_factory.getProfileView().startLoading();
         library_service_svc.addPlaylist(current_user.getUser(), playlist_name,
                 new AsyncCallback<Boolean>() {
                     @Override
@@ -87,6 +88,7 @@ public class ProfileActivity extends AbstractActivity implements
                             client_factory.getProfileView().paintPlaylist(
                                     getPlaylistList());
                         }
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
         // clientFactory.getProfileView().addToPlaylists(title);
@@ -99,6 +101,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void addToPLaylist(String playlist, final String autore,
             final String titolo, final String album) {
 
+        client_factory.getProfileView().startLoading();
         String song_id = titolo + "-vt.g-" + autore + "-vt.g-" + album;
         song_id = song_id.toLowerCase();
         library_service_svc.addSongToPlaylist(current_user.getUser(), playlist,
@@ -112,6 +115,7 @@ public class ProfileActivity extends AbstractActivity implements
                         if (result)
                             client_factory.getProfileView().addToPLaylist(
                                     autore, titolo, album);
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
     }
@@ -122,6 +126,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void deletePlaylist(final String playlist_name) {
 
+        client_factory.getProfileView().startLoading();
         library_service_svc.removePlaylist(current_user.getUser(),
                 playlist_name, new AsyncCallback<Boolean>() {
                     @Override
@@ -136,6 +141,7 @@ public class ProfileActivity extends AbstractActivity implements
                             client_factory.getProfileView().paintPlaylist(
                                     getPlaylistList());
                         }
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
         // clientFactory.getProfileView().addToPlaylists(title);
@@ -148,6 +154,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void deleteSong(final String autore, final String titolo,
             final String album) {
 
+        client_factory.getProfileView().startLoading();
         song_service_svc.deleteSong(current_user.getUser(), autore, titolo,
                 album, new AsyncCallback<Boolean>() {
                     @Override
@@ -161,6 +168,7 @@ public class ProfileActivity extends AbstractActivity implements
                         if (result)
                             client_factory.getProfileView().deleteSong(autore,
                                     titolo, album);
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
     }
@@ -173,6 +181,7 @@ public class ProfileActivity extends AbstractActivity implements
             String last_name, String gender, String nationality,
             String aboutMe, String password) {
 
+        client_factory.getProfileView().startLoading();
         UserCompleteDTO new_user_data = new UserCompleteDTO();
 
         new_user_data.setNickName(nick_name);
@@ -202,6 +211,7 @@ public class ProfileActivity extends AbstractActivity implements
                     @Override
                     public void onSuccess(Boolean result) {
                         System.out.println("Profilo utente aggiornato");
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
     }
@@ -293,6 +303,7 @@ public class ProfileActivity extends AbstractActivity implements
      */
     public List<String> getPlaylistSongs(String playlist_name) {
 
+        client_factory.getProfileView().startLoading();
         library_service_svc.getPlaylist(current_user.getUser(), playlist_name,
                 new AsyncCallback<List<SongSummaryDTO>>() {
                     @Override
@@ -312,6 +323,7 @@ public class ProfileActivity extends AbstractActivity implements
                         }
                         client_factory.getProfileView().paintPlaylistSongs(
                                 song_list);
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
 
@@ -374,6 +386,7 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void logout() {
 
+        client_factory.getProfileView().startLoading();
         AsyncCallback<String> callback = new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -388,7 +401,7 @@ public class ProfileActivity extends AbstractActivity implements
 
                 // hide and disable the applet
                 AppletBar.get(user).appletBarOFF();
-
+                client_factory.getProfileView().stopLoading();
                 goTo(new LoginPlace(""));
             }
         };
@@ -438,6 +451,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void playYouTube(final String autore, final String titolo,
             final String album) {
 
+        client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
         for (SongSummaryDTO song : songs) {
@@ -467,6 +481,8 @@ public class ProfileActivity extends AbstractActivity implements
                         else
                             client_factory.getProfileView().paintMainCover(
                                     "images/test_cover.jpg");
+                        
+                        client_factory.getProfileView().stopLoading();
                         return;
                     }
                 });
@@ -481,6 +497,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void rateSong(final String artist, final String title,
             final String album, final int rate) {
 
+        client_factory.getProfileView().startLoading();
         // sistemo subito il rating visivo poi arrivera' la library aggiornata
         client_factory.getProfileView().setRating(rate);
         client_factory.getProfileView().showStar(rate);
@@ -504,6 +521,7 @@ public class ProfileActivity extends AbstractActivity implements
                         client_factory.getProfileView().showGlobalStar(result);
                     }
                 }
+                client_factory.getProfileView().stopLoading();
             }
 
         };
@@ -519,6 +537,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void removeFromPLaylist(String playlist, final String autore,
             final String titolo, final String album) {
 
+        client_factory.getProfileView().startLoading();
         String song_id = titolo + "-vt.g-" + autore + "-vt.g-" + album;
         song_id = song_id.toLowerCase();
         library_service_svc.removeSongFromPlaylist(current_user.getUser(),
@@ -532,6 +551,7 @@ public class ProfileActivity extends AbstractActivity implements
                         if (result)
                             client_factory.getProfileView().removeFromPlaylist(
                                     autore, titolo, album);
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
     }
@@ -593,6 +613,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void setSongCover(final String autore, final String titolo,
             final String album, final HTMLPanel img) {
 
+        client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
         for (SongSummaryDTO song : songs) {
@@ -613,7 +634,8 @@ public class ProfileActivity extends AbstractActivity implements
                             cover = song.getAlbumCover();
                         img.getElement().getStyle()
                                 .setBackgroundImage("url('" + cover + "')");
-
+                        
+                        client_factory.getProfileView().stopLoading();
                         return;
                     }
                 });
@@ -629,6 +651,7 @@ public class ProfileActivity extends AbstractActivity implements
     public void setSongFields(final String autore, final String titolo,
             final String album) {
 
+        client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
         for (SongSummaryDTO song : songs) {
@@ -664,6 +687,8 @@ public class ProfileActivity extends AbstractActivity implements
                         client_factory.getProfileView().setSongFields(autore,
                                 titolo, album, genere, anno, compositore,
                                 traccia, cover);
+                        
+                        client_factory.getProfileView().stopLoading();
                         return;
                     }
                 });
@@ -763,6 +788,7 @@ public class ProfileActivity extends AbstractActivity implements
 
                         container_widget.setWidget(profileView.asWidget());
                         profileView.setLayout();
+                        
 
                     }
                 };
