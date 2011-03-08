@@ -267,10 +267,34 @@ public class ProfileActivity extends AbstractActivity implements
      * all'utente loggato.
      */
     public String[] getFriendList() {
-        // TODO Auto-generated method stub
-        String[] friends = { "Alberto Palazzin", "Andrea Mandolo",
-                "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato", "Giovanni Trezzi" };
+        
+        String[] friends = {};
+        
+        library_service_svc.loadPreferredArtist(current_user.getUser(), new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(String preferred_artist) {
+                current_user.getMusicLibrary().setPreferred_artist(preferred_artist);
+            }
+        });
+        
+        library_service_svc.loadPreferredGenre(current_user.getUser(), new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(String preferred_genre) {
+                current_user.getMusicLibrary().setPreferred_genre(preferred_genre);
+            }
+            
+        });
+        
+        //String preferred_artist = current_user.getMusicLibrary().getPreferred_artist();
+        //String preferred_genre = current_user.getMusicLibrary().getPreferred_genre();
         return friends;
     }
 
