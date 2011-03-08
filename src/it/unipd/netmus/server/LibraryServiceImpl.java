@@ -69,36 +69,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     }
 
     /**
-     * Ritorna l’id della canzone condivisa dal maggior numero di utenti che fa
-     * parte del catalogo.
-     */
-    @Override
-    public String loadMostPopularSong(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * Calcola e ritorna l’artista più ricorrente all’interno delle canzoni del
-     * catalogo dell’utente specificato.
-     */
-    @Override
-    public String loadPreferredArtist(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * Calcola e ritorna il genere più ricorrente all’interno delle canzoni del
-     * catalogo dell’utente specificato.
-     */
-    @Override
-    public String loadPreferredGenre(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
      * Sposta la canzone all’indice dato in input nel primo attributo integer
      * al- l’indice specificato nel secondo, se questi indici sono validi
      * relativamente alla dimensione della playlist. Ritorna true se
@@ -171,8 +141,10 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     @Override
     public void updateStatisticFields(String user) {
         MusicLibrary library = UserAccount.load(user).getMusicLibrary();
-        library.updatePreferredArtist();
-        library.updatePreferredGenre();
+        if (library != null) {
+            library.updatePreferredArtist();
+            library.updatePreferredGenre();
+        }
     }
     
     @Override

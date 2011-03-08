@@ -24,12 +24,6 @@ public interface LibraryService extends RemoteService {
 
     public List<SongSummaryDTO> getPlaylist(String user, String playlist_name);
 
-    public String loadMostPopularSong(String user);
-
-    public String loadPreferredArtist(String user);
-
-    public String loadPreferredGenre(String user);
-
     public boolean moveSongInPlaylist(String user, String playlist_name,
             int from, int to);
 

@@ -70,21 +70,30 @@ public class UserAccount {
      * 
      * 
      */
-    public static List<String> findRelatedUsers(String preferred_artist, String preferred_genre) {
+    public List<String> findRelatedUsers() {
+        
+        String preferred_artist = this.getMusicLibrary().getPreferredArtist();
+        String preferred_genre = this.getMusicLibrary().getPreferredGenre();
         
         List<String> related_users = new ArrayList<String>();
         List<String> related_users_for_genre = new ArrayList<String>();
         List<String> related_users_for_artist = new ArrayList<String>();
         List<MusicLibrary> library = new ArrayList<MusicLibrary>();
         
-        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_artist", FilterOperator.EQUAL, preferred_artist).returnAll().now();
+        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_artist", FilterOperator.EQUAL, preferred_artist).fetchFirst(20).returnAll().now();
         for (MusicLibrary tmp : library) {
-            related_users_for_artist.add(tmp.getOwner().getUser());
+            String tmp2 = tmp.getOwner().getUser();
+            if (!tmp2.equals(this.getUser())) {
+                related_users_for_artist.add(tmp.getOwner().getUser());
+            }
         }
         
-        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_genre", FilterOperator.EQUAL, preferred_genre).returnAll().now();
+        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_genre", FilterOperator.EQUAL, preferred_genre).fetchFirst(20).returnAll().now();
         for (MusicLibrary tmp : library) {
-            related_users_for_genre.add(tmp.getOwner().getUser());
+            String tmp2 = tmp.getOwner().getUser();
+            if (!tmp2.equals(this.getUser())) {
+                related_users_for_genre.add(tmp.getOwner().getUser());
+            }
         }
         
         if (related_users_for_artist.size() == 0) {
@@ -98,13 +107,22 @@ public class UserAccount {
         }
         
         for (int i = 0; i<related_users_for_artist.size() || i<related_users_for_genre.size(); i++) {
-            related_users.add(related_users_for_artist.get(i));
-            related_users.add(related_users_for_genre.get(i));
+            if (related_users.indexOf(related_users_for_artist.get(i)) < 0) {
+                related_users.add(related_users_for_artist.get(i));
+            }
+            if (related_users.indexOf(related_users_for_genre.get(i)) < 0) {
+                related_users.add(related_users_for_genre.get(i));
+            }
             if (i+1 == related_users_for_artist.size()) {
-                related_users.addAll(related_users_for_genre.subList(i+1, related_users_for_genre.size()-1));
+                if (i+1 < related_users_for_genre.size()) {
+                    related_users.addAll(related_users_for_genre.subList(i+1, related_users_for_genre.size()-1));
+                }
             }
             if (i+1 == related_users_for_genre.size()) {
-                related_users.addAll(related_users_for_artist.subList(i+1, related_users_for_artist.size()-1));
+                if (i+1 < related_users_for_artist.size()) {
+                    related_users.addAll(related_users_for_artist.subList(i+1, related_users_for_artist.size()-1));
+            
+                }
             }
         }
         

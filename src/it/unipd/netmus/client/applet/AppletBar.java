@@ -4,6 +4,8 @@ import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.event.DeviceScannedEvent;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
+import it.unipd.netmus.client.service.UserService;
+import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -25,8 +27,10 @@ public class AppletBar {
     private String user; // identificativo utente loggato
     private boolean state = true; // stato applet alla creazione
     private ClientFactory client_factory = GWT.create(ClientFactory.class);
-    private LibraryServiceAsync libraryService = GWT
+    private LibraryServiceAsync library_service = GWT
             .create(LibraryService.class);
+    private UserServiceAsync user_service = GWT
+    .create(UserService.class);
     private static AppletConstants constants = GWT
             .create(AppletConstants.class);
 
@@ -138,7 +142,7 @@ public class AppletBar {
                         .fireEvent(new DeviceScannedEvent());
                 
                 // nuova RPC per far partire le ricerche esterne
-                libraryService.completeSongs(incomplete, new AsyncCallback<Void>() {
+                library_service.completeSongs(incomplete, new AsyncCallback<Void>() {
                     @Override
                     public void onFailure(Throwable caught) {
                     }
@@ -147,13 +151,32 @@ public class AppletBar {
                         AppletBarView.showStatus(constants.updatingStatistics());
                         
                         // nuova RPC per far partire l'update delle statistiche
-                        libraryService.updateStatisticFields(user, new AsyncCallback<Void>() {
+                        library_service.updateStatisticFields(user, new AsyncCallback<Void>() {
                             @Override
                             public void onFailure(Throwable caught) {
                             }
                             @Override
                             public void onSuccess(Void result) {
                                 AppletBarView.showStatus(constants.completionFinish());
+                                
+                                //nuova RPC per aggiornare la lista degli amici successivamente all'aggiornamento
+                                user_service.findRelatedUsers(user, new AsyncCallback<List<String>>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                    }
+
+                                    @Override
+                                    public void onSuccess(List<String> related_users) {
+                                        String[] names = new String[related_users.size()];
+                                        
+                                        for (int i=0; i<related_users.size(); i++) {
+                                            names[i] = related_users.get(i);
+                                        }
+                                        
+                                        client_factory.getProfileView().paintFriendlist(names);
+                                    }
+                                    
+                                });
                             }
                         });
                     }
@@ -162,7 +185,7 @@ public class AppletBar {
             }
         };
 
-        libraryService.sendUserNewMusic(user, new_songs, callback);
+        library_service.sendUserNewMusic(user, new_songs, callback);
         AppletBarView.showStatus(constants.pleaseWait());
     }
 

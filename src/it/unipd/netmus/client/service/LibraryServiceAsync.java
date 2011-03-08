@@ -28,8 +28,6 @@ public interface LibraryServiceAsync {
     void getPlaylist(String user, String playlist_name,
             AsyncCallback<List<SongSummaryDTO>> callback);
 
-    void loadMostPopularSong(String user, AsyncCallback<String> callback);
-
     void moveSongInPlaylist(String user, String playlist_name, int from,
             int to, AsyncCallback<Boolean> callback);
 
@@ -43,9 +41,5 @@ public interface LibraryServiceAsync {
             AsyncCallback<Void> callback);
 
     void updateStatisticFields(String user, AsyncCallback<Void> callback);
-
-    void loadPreferredArtist(String user, AsyncCallback<String> callback);
-
-    void loadPreferredGenre(String user, AsyncCallback<String> callback);
 
 }

@@ -201,7 +201,6 @@ public class ProfileActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        System.out.println("Profilo utente aggiornato");
                     }
                 });
     }
@@ -263,39 +262,29 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Crea e restituisce un'array contenente la lista di utenti affini
-     * all'utente loggato.
+     * Restituisce la lista degli utenti affini su Netmus
      */
-    public String[] getFriendList() {
+    public void setFriendList() {
         
-        String[] friends = {};
-        
-        library_service_svc.loadPreferredArtist(current_user.getUser(), new AsyncCallback<String>() {
+        user_service_svc.findRelatedUsers(current_user.getUser(), new AsyncCallback<List<String>>() {
             @Override
             public void onFailure(Throwable caught) {
             }
 
             @Override
-            public void onSuccess(String preferred_artist) {
-                current_user.getMusicLibrary().setPreferred_artist(preferred_artist);
-            }
-        });
-        
-        library_service_svc.loadPreferredGenre(current_user.getUser(), new AsyncCallback<String>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(String preferred_genre) {
-                current_user.getMusicLibrary().setPreferred_genre(preferred_genre);
+            public void onSuccess(List<String> related_users) {
+                
+                String[] names = new String[related_users.size()];
+                
+                for (int i=0; i<related_users.size(); i++) {
+                    names[i] = related_users.get(i);
+                }
+                
+                client_factory.getProfileView().paintFriendlist(names);
             }
             
         });
         
-        //String preferred_artist = current_user.getMusicLibrary().getPreferred_artist();
-        //String preferred_genre = current_user.getMusicLibrary().getPreferred_genre();
-        return friends;
     }
 
     /**
@@ -558,16 +547,6 @@ public class ProfileActivity extends AbstractActivity implements
                                     autore, titolo, album);
                     }
                 });
-    }
-
-    /**
-     * Restituisce la lista degli utenti affini su Netmus
-     */
-    @Override
-    public void setFriendList() {
-
-        client_factory.getProfileView().paintFriendlist(getFriendList());
-
     }
 
     /**

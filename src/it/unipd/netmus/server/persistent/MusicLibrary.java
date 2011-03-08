@@ -159,8 +159,10 @@ public class MusicLibrary {
 
     private int num_songs;
 
+    @Index
     private String preferred_artist;
 
+    @Index
     private String preferred_genre;
 
     // gestione PLAYLISTS
