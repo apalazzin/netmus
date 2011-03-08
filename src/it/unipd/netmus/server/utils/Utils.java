@@ -6,6 +6,7 @@ import it.unipd.netmus.shared.SongDTO;
 import java.util.Collection;
 import java.util.Iterator;
 
+import de.umass.lastfm.Album;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
@@ -25,30 +26,23 @@ public final class Utils {
      * ricerca esterna, con keyword artista e album, per recuperare l’url della
      * copertina dell’album relativo ad un brano, in formato JPG.
      */
-    public static String getCoverImage(String keywords) {
+    public static String getCoverImage(String artist, String album) {
         
         try {
             // attivo il nuovo gestore di cache (x LAST FM)
             Caller.getInstance().setCache(app_engine_cache);
 
-            Collection<Track> search = Track.search(keywords,
-                    "33d9ef520018d87db5dff9ef74cc4904");
+            Album search = Album.getInfo(artist, album, "33d9ef520018d87db5dff9ef74cc4904");
 
-            Iterator<Track> it = search.iterator();
-            Track t;
-            if (it.hasNext())
-                t = it.next();
-            else
-                t = null;
-
-            if (t == null)
-                return "";
-            else {
-                if (t.getImageURL(ImageSize.EXTRALARGE) != null)
-                    return t.getImageURL(ImageSize.EXTRALARGE);
-                else
+            if (search != null) {
+                if (search.getImageURL(ImageSize.EXTRALARGE) != null) {
+                    return search.getImageURL(ImageSize.EXTRALARGE);
+                }
+                else {
                     return "";
+                }
             }
+            else return "";
         } catch (Exception e) {
             return "";
         }

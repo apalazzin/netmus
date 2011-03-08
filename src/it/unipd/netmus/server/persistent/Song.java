@@ -333,17 +333,16 @@ public class Song {
     }
 
     public void completeSong() {
-        String keywords = title + " " + artist;
         
         if (youtube_code.equals("")) {
-            setYoutubeCode(Utils.getYouTubeCode(keywords));
+            setYoutubeCode(Utils.getYouTubeCode(title + " " + artist));
         }
         if (album_cover.equals("")) {
             String tmp = Song.findCoverFromAlbum(getAlbum());
             if (!tmp.equals("")) {
                 setAlbumCover(tmp);
             } else {
-                setAlbumCover(Utils.getCoverImage(keywords));
+                setAlbumCover(Utils.getCoverImage(artist, album));
             }
         }
         this.update();
