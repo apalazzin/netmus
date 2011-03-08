@@ -3,6 +3,7 @@ package it.unipd.netmus.server.utils;
 import it.unipd.netmus.server.youtube.YouTubeManager;
 import it.unipd.netmus.shared.SongDTO;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -92,8 +93,15 @@ public final class Utils {
      * ricerca non produce risultati restituisce stringa vuota.
      */
     public static String getYouTubeCode(String keywords) {
-
-        return YouTubeManager.getSearchResult(keywords);
+        
+        try {
+            return YouTubeManager.getSearchResult(keywords);
+        }
+        catch (RuntimeException io) {
+            System.err.println("RuntimeException YouTube: " + keywords);
+            return "";
+        }
+        
     }
 
 }
