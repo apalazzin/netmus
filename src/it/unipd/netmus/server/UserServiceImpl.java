@@ -80,7 +80,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements
      */
     @Override
     public UserCompleteDTO loadProfile(String user) {
-        return UserAccount.load(user).toUserCompleteDTO();
+        UserAccount user_account = UserAccount.load(user);
+        if (user_account != null)
+            return user_account.toUserCompleteDTO();
+        else return null;
+        
     }
 
 }

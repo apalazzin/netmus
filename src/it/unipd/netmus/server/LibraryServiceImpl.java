@@ -158,13 +158,11 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
             Song song = Song.storeOrUpdateFromDTO(songDTO);
             if (song != null) {
                 useraccount.getMusicLibrary().addSong(song);
-                if (song.getAlbumCover().equals("")
-                        || song.getYoutubeCode().equals("")) {
+                if (song.getAlbumCover().equals("")) {
                     incomplete.add(song.toSongSummaryDTO());
                 }
             }
         }
-
         return incomplete;
     }
 
@@ -207,7 +205,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         }
         
         //update statistic fields
-        
         
     }
 
