@@ -129,15 +129,13 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
                 
                 useraccount.getMusicLibrary().addSong(song);
                 
-                if (song.getAlbumCover().equals("")
-                        || song.getYoutubeCode().equals("")) {
+                if (song.getAlbumCover().equals("")) {
                     
                     //le canzoni incomplete vengono ritornate al chiamante
                     incomplete.add(song.toSongSummaryDTO());
                 }
             }
         }
-
         return incomplete;
     }
 
