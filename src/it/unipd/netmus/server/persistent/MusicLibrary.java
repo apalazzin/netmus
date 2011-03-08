@@ -408,7 +408,10 @@ public class MusicLibrary {
         }
 
         List<String> playlists = this.getPlaylists();
-        return new MusicLibraryDTO(this.owner.toUserDTO(), list, playlists);
+        MusicLibraryDTO library = new MusicLibraryDTO(this.owner.toUserDTO(), list, playlists);
+        library.setPreferred_artist(getPreferredArtist());
+        library.setPreferred_genre(getPreferredGenre());
+        return library;
     }
 
     public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
@@ -420,8 +423,10 @@ public class MusicLibrary {
         }
 
         List<String> playlists = this.getPlaylists();
-        return new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list,
-                playlists);
+        MusicLibrarySummaryDTO library = new MusicLibrarySummaryDTO(this.owner.toUserDTO(), list, playlists);
+        library.setPreferred_artist(getPreferredArtist());
+        library.setPreferred_genre(getPreferredGenre());
+        return library;
     }
 
     public void update() {

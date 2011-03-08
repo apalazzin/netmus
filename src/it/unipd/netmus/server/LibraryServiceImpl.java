@@ -83,7 +83,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * catalogo dell’utente specificato.
      */
     @Override
-    public List<String> loadPreferredArtists(String user) {
+    public String loadPreferredArtist(String user) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -93,7 +93,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * catalogo dell’utente specificato.
      */
     @Override
-    public List<String> loadPreferredGenres(String user) {
+    public String loadPreferredGenre(String user) {
         // TODO Auto-generated method stub
         return null;
     }
