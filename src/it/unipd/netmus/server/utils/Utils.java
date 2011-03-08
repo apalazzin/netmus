@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.catalina.HttpRequest;
+import org.apache.http.protocol.HttpService;
+
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
@@ -53,38 +56,40 @@ public final class Utils {
      */
     public static SongDTO getSongFromFileName(String filename) {
 
-        try {
-
-            Collection<Track> search = Track.search(filename,
-                    "33d9ef520018d87db5dff9ef74cc4904");
-
-            Iterator<Track> it = search.iterator();
-            Track t;
-            if (it.hasNext())
-                t = it.next();
-            else
-                t = null;
-
-            if (t == null)
-                return null;
-            else {
-                SongDTO song = new SongDTO();
-                song.setTitle(t.getName());
-                song.setArtist(t.getArtist());
-                song.setAlbum(t.getAlbum());
-                song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
-
-                if (song.getTitle() != null && song.getArtist() != null) {
-                    String keywords = song.getTitle() + " " + song.getArtist();
-
-                    song.setYoutubeCode(getYouTubeCode(keywords));
-                }
-
-                return song;
-            }
-        } catch (Exception e) {
-            return null;
-        }
+//        try {
+//
+//            Collection<Track> search = Track.search(filename,
+//                    "33d9ef520018d87db5dff9ef74cc4904");
+//
+//            Iterator<Track> it = search.iterator();
+//            Track t;
+//            if (it.hasNext())
+//                t = it.next();
+//            else
+//                t = null;
+//
+//            if (t == null)
+//                return null;
+//            else {
+//                SongDTO song = new SongDTO();
+//                song.setTitle(t.getName());
+//                song.setArtist(t.getArtist());
+//                song.setAlbum(t.getAlbum());
+//                song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
+//
+//                if (song.getTitle() != null && song.getArtist() != null) {
+//                    String keywords = song.getTitle() + " " + song.getArtist();
+//
+//                    song.setYoutubeCode(getYouTubeCode(keywords));
+//                }
+//
+//                return song;
+//            }
+//        } catch (Exception e) {
+//            return null;
+//        }
+        return null;
+        
     }
 
     /**
@@ -92,10 +97,10 @@ public final class Utils {
      * YouTube per pertinenza alla keyword in ingresso (autore titolo). Se la
      * ricerca non produce risultati restituisce stringa vuota.
      */
-    public static String getYouTubeCode(String keywords) {
+    public static String getYouTubeCode(String keywords, String ip) {
         
         try {
-            return YouTubeManager.getSearchResult(keywords);
+            return YouTubeManager.getSearchResult(keywords, ip);
         }
         catch (RuntimeException io) {
             System.err.println("RuntimeException YouTube: " + keywords);

@@ -333,10 +333,7 @@ public class Song {
     }
 
     public void completeSong() {
-        
-        if (youtube_code.equals("")) {
-            setYoutubeCode(Utils.getYouTubeCode(title + " " + artist));
-        }
+
         if (album_cover.equals("")) {
             String tmp = Song.findCoverFromAlbum(getAlbum());
             if (!tmp.equals("")) {
