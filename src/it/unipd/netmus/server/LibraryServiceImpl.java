@@ -1,6 +1,7 @@
 package it.unipd.netmus.server;
 
 import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.SongDTO;
@@ -68,36 +69,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     }
 
     /**
-     * Ritorna l’id della canzone condivisa dal maggior numero di utenti che fa
-     * parte del catalogo.
-     */
-    @Override
-    public String loadMostPopularSong(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * Calcola e ritorna l’artista più ricorrente all’interno delle canzoni del
-     * catalogo dell’utente specificato.
-     */
-    @Override
-    public List<String> loadPreferredArtists(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * Calcola e ritorna il genere più ricorrente all’interno delle canzoni del
-     * catalogo dell’utente specificato.
-     */
-    @Override
-    public List<String> loadPreferredGenres(String user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
      * Sposta la canzone all’indice dato in input nel primo attributo integer
      * al- l’indice specificato nel secondo, se questi indici sono validi
      * relativamente alla dimensione della playlist. Ritorna true se
@@ -146,9 +117,8 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     public List<SongSummaryDTO> sendUserNewMusic(String user,
             List<SongDTO> new_songs) {
 
-        // Invia al database tutte le canzoni della lista, ogni canzone ritorna
-        // dopo le modifche
-        // dovute alla gestione della persistenza.
+        // Invia al database tutte le canzoni della lista, ogni canzone incompleta ritorna
+        // per essere gestita diversamente.
 
         UserAccount useraccount = UserAccount.load(user);
         List<SongSummaryDTO> incomplete = new ArrayList<SongSummaryDTO>();
@@ -156,44 +126,67 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         for (SongDTO songDTO : new_songs) {
             Song song = Song.storeOrUpdateFromDTO(songDTO);
             if (song != null) {
-                useraccount.getMusicLibrary().addSong(song, false);
-                if (song.getAlbumCover().equals("")
-                        || song.getYoutubeCode().equals("")) {
+                
+                useraccount.getMusicLibrary().addSong(song);
+                
+                if (song.getAlbumCover().equals("")) {
+                    
+                    //le canzoni incomplete vengono ritornate al chiamante
                     incomplete.add(song.toSongSummaryDTO());
                 }
             }
         }
-
         return incomplete;
+    }
+
+    @Override
+    public void updateStatisticFields(String user) {
+        MusicLibrary library = UserAccount.load(user).getMusicLibrary();
+        
+        if (library != null) {
+            library.updatePreferredArtist();
+            library.updatePreferredGenre();
+        }
     }
 
     @Override
     public void completeSongs(List<SongSummaryDTO> incomplete) {
 
+        // variabili utilizzate per salvare l'album e la relativa copertina del
+        // brano scansionato precedentemente
         String cache_album = "no_album";
         String cache_album_cover = "no_album_cover";
-        
+
         for (SongSummaryDTO song_dto : incomplete) {
             Song song = Song.loadFromDTO(song_dto);
 
             if (song != null) {
+
+                // se l'album è lo stesso della canzone precendete assegna già
+                // la copertina in modo da non effettuare alcuna ricerca
                 if (song.getAlbum().equalsIgnoreCase(cache_album)) {
                     song.setAlbumCover(cache_album_cover);
                 }
+                
+                // ricerche interne ed esterne (solo in caso di necessità) per
+                // video e copertina
                 song.completeSong();
+
+                // inserimento in cache temporanea
                 cache_album = song.getAlbum();
-                if (!song.getAlbumCover().equals("no_album_cover")) {
-                    if (song.getAlbumCover().equals("")) {
-                        cache_album_cover = "no_album_cover";
-                    }
-                    else {
-                        cache_album_cover = song.getAlbumCover();
-                    }
-                }
-                else {
+
+                // se non è stata trovata la copertina ripristina i valori nella
+                // canzone e nella cache a stringa vuota
+                if (song.getAlbumCover().equals("no_album_cover")) {
                     cache_album_cover = song.getAlbumCover();
                     song.setAlbumCover("");
                     song.update();
+                } else {
+                    if (song.getAlbumCover().equals("")) {
+                        cache_album_cover = "no_album_cover";
+                    } else {
+                        cache_album_cover = song.getAlbumCover();
+                    }
                 }
             }
         }

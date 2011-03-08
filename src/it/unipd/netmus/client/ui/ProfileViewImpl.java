@@ -1289,6 +1289,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void paintFriendlist(String[] lista) {
        
+       friends.clear();
+       
        for(int k=0; k< lista.length; k++) {
 
             Label tmpTxt = new Label(lista[k]);
@@ -1587,12 +1589,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        if(playing==0) {
            
            Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
- 
-           
+                      
+           closeYouTube();
            youtube_status=1;
            played_song = to_play;
            playing=0;
-           closeYouTube();
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
            setFwRw();
            
@@ -1604,7 +1605,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            youtube_status=1;
            played_song = to_play;
            playing=1;
-           closeYouTube();
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
            setFwRw();
        }

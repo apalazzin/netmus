@@ -46,7 +46,7 @@ public class UserAccount {
 
         List<Song> songsList = user.getMusicLibrary().allSongs();
         for (Song tmp : songsList)
-            user.getMusicLibrary().removeSong(tmp, false);
+            user.getMusicLibrary().removeSong(tmp);
         MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
 
         ODF.get().storeOrUpdate(user);
@@ -65,7 +65,77 @@ public class UserAccount {
                 .addFilter("lastSessionId", FilterOperator.EQUAL, session_id)
                 .returnUnique().now();
     }
-
+    
+    /**
+     * 
+     * 
+     */
+    public List<String> findRelatedUsers() {
+        
+        //Artista e genere preferiti dell'utente, valori aggiornati all'ultimo caricamento/rimozione di canzoni
+        String preferred_artist = this.getMusicLibrary().getPreferredArtist();
+        String preferred_genre = this.getMusicLibrary().getPreferredGenre();
+        
+        //inizializzazione liste necessarie all'algoritmo
+        List<String> related_users = new ArrayList<String>();
+        List<String> related_users_for_genre = new ArrayList<String>();
+        List<String> related_users_for_artist = new ArrayList<String>();
+        List<MusicLibrary> library = new ArrayList<MusicLibrary>();
+        
+        //query nel datastore per cercare gli utenti con lo stesso preferred_artist
+        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_artist", FilterOperator.EQUAL, preferred_artist).fetchFirst(20).returnAll().now();
+        for (MusicLibrary tmp : library) {
+            String tmp2 = tmp.getOwner().getUser();
+            if (!tmp2.equals(this.getUser())) {
+                related_users_for_artist.add(tmp.getOwner().getUser());
+            }
+        }
+        
+        //query nel datastore per cercare gli utenti con lo stesso preferred_genre
+        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_genre", FilterOperator.EQUAL, preferred_genre).fetchFirst(20).returnAll().now();
+        for (MusicLibrary tmp : library) {
+            String tmp2 = tmp.getOwner().getUser();
+            if (!tmp2.equals(this.getUser())) {
+                related_users_for_genre.add(tmp.getOwner().getUser());
+            }
+        }
+        
+        //se gli utenti affini lo sono tutti per genere restituisce solo quella lista
+        if (related_users_for_artist.size() == 0) {
+            related_users.addAll(related_users_for_genre);
+            return related_users;
+        }
+        
+        //se gli utenti affini lo sono tutti per genere restituisce 
+        if (related_users_for_genre.size() == 0) {
+            related_users.addAll(related_users_for_artist);
+            return related_users;
+        }
+        
+        //altimenti mescola le due liste uno-per-tipo
+        for (int i = 0; i<related_users_for_artist.size() || i<related_users_for_genre.size(); i++) {
+            if (related_users.indexOf(related_users_for_artist.get(i)) < 0) {
+                related_users.add(related_users_for_artist.get(i));
+            }
+            if (related_users.indexOf(related_users_for_genre.get(i)) < 0) {
+                related_users.add(related_users_for_genre.get(i));
+            }
+            if (i+1 == related_users_for_artist.size()) {
+                if (i+1 < related_users_for_genre.size()) {
+                    related_users.addAll(related_users_for_genre.subList(i+1, related_users_for_genre.size()-1));
+                }
+            }
+            if (i+1 == related_users_for_genre.size()) {
+                if (i+1 < related_users_for_artist.size()) {
+                    related_users.addAll(related_users_for_artist.subList(i+1, related_users_for_artist.size()-1));
+            
+                }
+            }
+        }
+        
+        return related_users;
+    }
+    
     public static UserAccount load(String user) {
         return ODF.get().load().type(UserAccount.class).id(user).now();
     }

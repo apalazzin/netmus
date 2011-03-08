@@ -210,7 +210,6 @@ public class ProfileActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        System.out.println("Profilo utente aggiornato");
                         client_factory.getProfileView().stopLoading();
                     }
                 });
@@ -273,15 +272,29 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Crea e restituisce un'array contenente la lista di utenti affini
-     * all'utente loggato.
+     * Restituisce la lista degli utenti affini su Netmus
      */
-    public String[] getFriendList() {
-        // TODO Auto-generated method stub
-        String[] friends = { "Alberto Palazzin", "Andrea Mandolo",
-                "Cosimo Caputo", "Daniele Donte", "Federicon Baron",
-                "Simone Daminato", "Giovanni Trezzi" };
-        return friends;
+    public void setFriendList() {
+        
+        user_service_svc.findRelatedUsers(current_user.getUser(), new AsyncCallback<List<String>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(List<String> related_users) {
+                
+                String[] names = new String[related_users.size()];
+                
+                for (int i=0; i<related_users.size(); i++) {
+                    names[i] = related_users.get(i);
+                }
+                
+                client_factory.getProfileView().paintFriendlist(names);
+            }
+            
+        });
+        
     }
 
     /**
@@ -557,16 +570,6 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Restituisce la lista degli utenti affini su Netmus
-     */
-    @Override
-    public void setFriendList() {
-
-        client_factory.getProfileView().paintFriendlist(getFriendList());
-
-    }
-
-    /**
      * Deve andare ad invocare il metodo paintPlaylist di ProfileView per andare
      * a graficare la lista delle playlist generata da getPlaylistList.
      */
@@ -788,7 +791,6 @@ public class ProfileActivity extends AbstractActivity implements
 
                         container_widget.setWidget(profileView.asWidget());
                         profileView.setLayout();
-                        
 
                     }
                 };

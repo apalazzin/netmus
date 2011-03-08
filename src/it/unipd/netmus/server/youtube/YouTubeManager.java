@@ -21,11 +21,11 @@ public class YouTubeManager {
 
     private static final String YOUTUBE_URL = "http://gdata.youtube.com/feeds/api/videos";
 
-    public static String getSearchResult(String keywords) {
+    public static String getSearchResult(String keywords, String ip) {
 
         YouTubeVideo youtubeVideo = null;
         try {
-            youtubeVideo = retrieveVideo("NetmusProject", keywords, 2000);
+            youtubeVideo = retrieveVideo("NetmusProject", keywords, 2000, ip);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class YouTubeManager {
     }
 
     private static YouTubeVideo retrieveVideo(String clientID, String keywords,
-            int timeout) throws Exception {
+            int timeout, String ip) throws Exception {
 
         YouTubeService service = new YouTubeService(clientID);
         service.setConnectTimeout(timeout); // millis
@@ -75,8 +75,10 @@ public class YouTubeManager {
 
         query.setOrderBy(YouTubeQuery.OrderBy.RELEVANCE);
         query.setFullTextQuery(keywords);
-        query.setSafeSearch(YouTubeQuery.SafeSearch.MODERATE);
         query.setMaxResults(1);
+        query.setFormats(5);
+        if (!ip.equals("")) query.setIpRestriction(ip);
+        query.setSafeSearch(YouTubeQuery.SafeSearch.MODERATE);
 
         VideoFeed videoFeed = service.query(query, VideoFeed.class);
         List<VideoEntry> videos = videoFeed.getEntries();

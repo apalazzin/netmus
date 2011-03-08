@@ -28,10 +28,16 @@ public class MusicLibrarySummaryDTO implements Serializable {
     private List<SongSummaryDTO> songs;
 
     private List<String> playlists;
+    
+    private String preferred_artist;
+
+    private String preferred_genre;
 
     public MusicLibrarySummaryDTO() {
         this.owner = new UserDTO();
         this.songs = new ArrayList<SongSummaryDTO>();
+        this.preferred_artist = "";
+        this.preferred_genre = "";
     }
 
     public MusicLibrarySummaryDTO(UserDTO user, List<SongSummaryDTO> s,
@@ -39,6 +45,8 @@ public class MusicLibrarySummaryDTO implements Serializable {
         setOwner(user);
         setSongs(s);
         setPlaylists(playlists);
+        this.preferred_artist = "";
+        this.preferred_genre = "";
     }
     
     public void addPlaylist(String playlist_name) {
@@ -77,5 +85,21 @@ public class MusicLibrarySummaryDTO implements Serializable {
 
     public void setSongs(List<SongSummaryDTO> songs) {
         this.songs = songs;
+    }
+
+    public void setPreferred_artist(String preferred_artist) {
+        this.preferred_artist = preferred_artist;
+    }
+
+    public String getPreferred_artist() {
+        return preferred_artist;
+    }
+
+    public void setPreferred_genre(String preferred_genre) {
+        this.preferred_genre = preferred_genre;
+    }
+
+    public String getPreferred_genre() {
+        return preferred_genre;
     }
 }
