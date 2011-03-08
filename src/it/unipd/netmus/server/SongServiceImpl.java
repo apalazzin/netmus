@@ -35,7 +35,7 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         song_id = song_id.toLowerCase();
         Song song = Song.load(song_id);
 
-        return useraccount.getMusicLibrary().removeSong(song, true);
+        return useraccount.getMusicLibrary().removeSong(song);
     }
 
     /**

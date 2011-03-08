@@ -144,7 +144,18 @@ public class AppletBar {
                     }
                     @Override
                     public void onSuccess(Void result) {
-                        AppletBarView.showStatus(constants.completionFinish());
+                        AppletBarView.showStatus(constants.updatingStatistics());
+                        
+                        // nuova RPC per far partire l'update delle statistiche
+                        libraryService.updateStatisticFields(user, new AsyncCallback<Void>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                            }
+                            @Override
+                            public void onSuccess(Void result) {
+                                AppletBarView.showStatus(constants.completionFinish());
+                            }
+                        });
                     }
                 });
                 

@@ -19,8 +19,6 @@ public interface LibraryService extends RemoteService {
 
     public boolean addPlaylist(String user, String playlist_name);
 
-    // ---------GESTIONE PLAYLISTS-------------//
-
     public boolean addSongToPlaylist(String user, String playlist_name,
             String song_id);
 
@@ -35,8 +33,6 @@ public interface LibraryService extends RemoteService {
     public boolean moveSongInPlaylist(String user, String playlist_name,
             int from, int to);
 
-    // ---------GESTION STATISTICHE------------//
-
     public boolean removePlaylist(String user, String playlist_name);
 
     public boolean removeSongFromPlaylist(String user, String playlist_name,
@@ -45,5 +41,7 @@ public interface LibraryService extends RemoteService {
     public List<SongSummaryDTO> sendUserNewMusic(String user, List<SongDTO> new_songs);
 
     void completeSongs(List<SongSummaryDTO> incomplete);
+    
+    void updateStatisticFields(String user);
 
 }
