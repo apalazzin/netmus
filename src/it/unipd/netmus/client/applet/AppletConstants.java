@@ -38,4 +38,6 @@ public interface AppletConstants extends Constants {
     String xmlParsing();
 
     String xmlParsingError();
+    
+    String updatingStatistics();
 }

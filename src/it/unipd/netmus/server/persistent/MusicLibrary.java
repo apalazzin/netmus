@@ -202,7 +202,7 @@ public class MusicLibrary {
      * Ritorna true se l'inserimento ha avuto successo, false altrimenti.
      * 
      */
-    public boolean addSong(Song song, boolean update) {
+    public boolean addSong(Song song) {
 
         song.update();
         boolean trovato = false;
@@ -222,11 +222,6 @@ public class MusicLibrary {
             // increment the counter
             this.setNumSongs(num_songs + 1);
 
-            // update statistic fields
-            if (update) {
-                this.updatePreferredArtist();
-                this.updatePreferredGenre();
-            }
             return true;
         } else
             return false;
@@ -360,7 +355,7 @@ public class MusicLibrary {
      * rimane in database anche se non posseduta da alcun utente. Ritorna true
      * se la rimozione ha avuto successo, false altriementi.
      */
-    public boolean removeSong(Song song, boolean update) {
+    public boolean removeSong(Song song) {
 
         song.update();
         boolean trovato = false;
@@ -384,12 +379,6 @@ public class MusicLibrary {
 
             // increment the counter
             this.setNumSongs(num_songs - 1);
-
-            // update statistic fields
-            if (update) {
-                this.updatePreferredArtist();
-                this.updatePreferredGenre();
-            }
 
             return true;
         } else
@@ -470,19 +459,22 @@ public class MusicLibrary {
      * all'interno del metodo addSong(). --DA TESTARE--
      * 
      */
-    private void updatePreferredArtist() {
+    public void updatePreferredArtist() {
+        this.update();
+        
         String topArtist = "";
         int max = 0;
         int count;
         List<Song> toBeRemoved = new ArrayList<Song>();
         List<Song> allSongs = this.allSongs();
+        
         while (allSongs.size() > max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getArtist().equals("")) {
+            if (!tmp.getArtist().equals("")) {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it : allSongs)
-                    if (it.getArtist().equals("") && it.equals(tmp)
+                    if (!it.getArtist().equals("") && !it.equals(tmp)
                             && it.getArtist().equals(tmp.getArtist())) {
                         count++;
                         toBeRemoved.add(it);
@@ -505,7 +497,9 @@ public class MusicLibrary {
      * libreria. Ha visibilità privata poichè deve essere utilizzato solo quando
      * necessario all'interno del metodo addSong. --DA TESTARE--
      */
-    private void updatePreferredGenre() {
+    public void updatePreferredGenre() {
+        this.update();
+        
         String topGenre = "";
         int max = 0;
         int count;
@@ -513,11 +507,11 @@ public class MusicLibrary {
         List<Song> allSongs = this.allSongs();
         while (allSongs.size() > max) {
             Song tmp = allSongs.get(0);
-            if (tmp.getGenre().equals("")) {
+            if (!tmp.getGenre().equals("")) {
                 count = 1;
                 toBeRemoved.clear();
                 for (Song it : allSongs)
-                    if (it.getGenre().equals("") && it.equals(tmp)
+                    if (!it.getGenre().equals("") && !it.equals(tmp)
                             && it.getGenre().equals(tmp.getGenre())) {
                         count++;
                         toBeRemoved.add(it);

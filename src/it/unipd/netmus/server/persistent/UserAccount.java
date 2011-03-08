@@ -46,7 +46,7 @@ public class UserAccount {
 
         List<Song> songsList = user.getMusicLibrary().allSongs();
         for (Song tmp : songsList)
-            user.getMusicLibrary().removeSong(tmp, false);
+            user.getMusicLibrary().removeSong(tmp);
         MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
 
         ODF.get().storeOrUpdate(user);
@@ -65,7 +65,16 @@ public class UserAccount {
                 .addFilter("lastSessionId", FilterOperator.EQUAL, session_id)
                 .returnUnique().now();
     }
-
+    
+    /**
+     * 
+     * 
+     */
+    public static List<String> findRelatedUsers() {
+        ArrayList<String> related_users = new ArrayList<String>();
+        return related_users;
+    }
+    
     public static UserAccount load(String user) {
         return ODF.get().load().type(UserAccount.class).id(user).now();
     }
