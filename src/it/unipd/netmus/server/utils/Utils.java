@@ -30,8 +30,9 @@ public final class Utils {
             Album search = Album.getInfo(artist, album, "33d9ef520018d87db5dff9ef74cc4904");
 
             if (search != null) {
-                if (search.getImageURL(ImageSize.EXTRALARGE) != null) {
-                    return search.getImageURL(ImageSize.EXTRALARGE);
+                String album_image = search.getImageURL(ImageSize.EXTRALARGE);
+                if (album_image != null) {
+                    return album_image;
                 }
                 else {
                     return "";
