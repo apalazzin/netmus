@@ -4,6 +4,7 @@ import it.unipd.netmus.client.service.SongService;
 import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
+import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -35,7 +36,7 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         song_id = song_id.toLowerCase();
         Song song = Song.load(song_id);
 
-        return useraccount.getMusicLibrary().removeSong(song, true);
+        return useraccount.getMusicLibrary().removeSong(song);
     }
 
     /**
@@ -66,9 +67,31 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         return Song.loadFromDTO(song).getRatingDouble();
     }
     
+    /**
+     * Metodo chiamato quando si vogliono avere tutte le info di una certa canzone.
+     * Cerco il video su youtube e lo metto nel DTO... ogni volta faccio una ricerca su youtube (per Copyright legati al Country)
+     */
     @Override
     public synchronized SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
-        return Song.loadFromDTO(song_summary_dto).toSongDTO();
+        
+        Song song = Song.loadFromDTO(song_summary_dto);
+        
+        SongDTO song_dto = null;
+        if (song != null) {
+            song_dto = song.toSongDTO();
+            
+            String ip = getThreadLocalRequest().getRemoteAddr();
+            if (ip.equals("127.0.0.1")) ip="";
+            
+            song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
+            
+            if (song.getAlbumCover().equals("")) {
+                song.completeSong();
+                song_dto.setAlbumCover(song.getAlbumCover());
+            }
+        }
+
+        return song_dto;
     }
 
 }

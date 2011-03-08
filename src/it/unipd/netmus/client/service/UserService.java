@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.UserCompleteDTO;
-import it.unipd.netmus.shared.UserDTO;
 
 import java.util.List;
 
@@ -23,6 +22,6 @@ public interface UserService extends RemoteService {
 
     boolean editProfile(String user, UserCompleteDTO new_info_user);
 
-    List<UserDTO> findSimilarUser(String user);
+    List<String> findRelatedUsers(String user);
 
 }

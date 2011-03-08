@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.UserCompleteDTO;
-import it.unipd.netmus.shared.UserDTO;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public interface UserServiceAsync {
     void editProfile(String user, UserCompleteDTO new_info_user,
             AsyncCallback<Boolean> callback);
 
-    void findSimilarUser(String user, AsyncCallback<List<UserDTO>> callback);
-
     void loadProfile(String user, AsyncCallback<UserCompleteDTO> callback);
+
+    void findRelatedUsers(String user, AsyncCallback<List<String>> callback);
 }
