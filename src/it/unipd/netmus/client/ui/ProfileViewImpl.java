@@ -1286,6 +1286,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void paintFriendlist(String[] lista) {
        
+       friends.clear();
+       
        for(int k=0; k< lista.length; k++) {
 
             Label tmpTxt = new Label(lista[k]);

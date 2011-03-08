@@ -4,7 +4,6 @@ import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.UserCompleteDTO;
-import it.unipd.netmus.shared.UserDTO;
 
 import java.util.List;
 
@@ -68,9 +67,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements
      * dall’artista più ricorrente ed il genere più ascoltato.
      */
     @Override
-    public List<UserDTO> findSimilarUser(String user) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<String> findRelatedUsers(String user) {
+        UserAccount user_account = UserAccount.load(user);
+        return user_account.findRelatedUsers();
     }
 
     /**
