@@ -386,7 +386,11 @@ public class ProfileActivity extends AbstractActivity implements
      */
     @Override
     public void logout() {
-
+        goTo(new LoginPlace(""));
+    }
+    
+    @Override
+    public void onStop() {
         AsyncCallback<String> callback = new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -401,8 +405,6 @@ public class ProfileActivity extends AbstractActivity implements
 
                 // hide and disable the applet
                 AppletBar.get(user).appletBarOFF();
-
-                goTo(new LoginPlace(""));
             }
         };
 
