@@ -1,6 +1,7 @@
 package it.unipd.netmus.server;
 
 import it.unipd.netmus.client.service.LibraryService;
+import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.SongDTO;
@@ -156,7 +157,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         for (SongDTO songDTO : new_songs) {
             Song song = Song.storeOrUpdateFromDTO(songDTO);
             if (song != null) {
-                useraccount.getMusicLibrary().addSong(song, false);
+                useraccount.getMusicLibrary().addSong(song);
                 if (song.getAlbumCover().equals("")
                         || song.getYoutubeCode().equals("")) {
                     incomplete.add(song.toSongSummaryDTO());
@@ -167,6 +168,13 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         return incomplete;
     }
 
+    @Override
+    public void updateStatisticFields(String user) {
+        MusicLibrary library = UserAccount.load(user).getMusicLibrary();
+        library.updatePreferredArtist();
+        library.updatePreferredGenre();
+    }
+    
     @Override
     public void completeSongs(List<SongSummaryDTO> incomplete) {
 
@@ -197,6 +205,10 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
                 }
             }
         }
+        
+        //update statistic fields
+        
+        
     }
 
 }
