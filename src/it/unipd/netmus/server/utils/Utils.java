@@ -3,11 +3,11 @@ package it.unipd.netmus.server.utils;
 import it.unipd.netmus.server.youtube.YouTubeManager;
 import it.unipd.netmus.shared.SongDTO;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
 import de.umass.lastfm.Album;
-import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 
@@ -19,8 +19,6 @@ import de.umass.lastfm.Track;
  */
 public final class Utils {
     
-    private static AppEngineCache app_engine_cache = new AppEngineCache();
-
     /**
      * Questo metodo attiva la cache di Last.fm per AppEngine ed esegue una
      * ricerca esterna, con keyword artista e album, per recuperare l’url della
@@ -29,14 +27,13 @@ public final class Utils {
     public static String getCoverImage(String artist, String album) {
         
         try {
-            // attivo il nuovo gestore di cache (x LAST FM)
-            Caller.getInstance().setCache(app_engine_cache);
 
             Album search = Album.getInfo(artist, album, "33d9ef520018d87db5dff9ef74cc4904");
 
             if (search != null) {
-                if (search.getImageURL(ImageSize.EXTRALARGE) != null) {
-                    return search.getImageURL(ImageSize.EXTRALARGE);
+                String album_image = search.getImageURL(ImageSize.EXTRALARGE);
+                if (album_image != null) {
+                    return album_image;
                 }
                 else {
                     return "";
@@ -57,8 +54,6 @@ public final class Utils {
     public static SongDTO getSongFromFileName(String filename) {
 
         try {
-            // attivo il nuovo gestore di cache (x LAST FM)
-            Caller.getInstance().setCache(app_engine_cache);
 
             Collection<Track> search = Track.search(filename,
                     "33d9ef520018d87db5dff9ef74cc4904");
@@ -98,8 +93,15 @@ public final class Utils {
      * ricerca non produce risultati restituisce stringa vuota.
      */
     public static String getYouTubeCode(String keywords) {
-
-        return YouTubeManager.getSearchResult(keywords);
+        
+        try {
+            return YouTubeManager.getSearchResult(keywords);
+        }
+        catch (RuntimeException io) {
+            System.err.println("RuntimeException YouTube: " + keywords);
+            return "";
+        }
+        
     }
 
 }
