@@ -140,6 +140,16 @@ public interface ProfileView extends IsWidget {
     *
     */
    void paintMainCover(String cover);
+   /**
+    * Mostra la barra di caricamento
+    *
+    */
+   void startLoading();
+   /**
+    * Nasconde la barra di caricamento
+    *
+    */
+   void stopLoading();
 
    public interface Presenter
    {
