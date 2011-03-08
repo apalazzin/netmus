@@ -335,6 +335,7 @@ public class Song {
     public void completeSong() {
         
         if (youtube_code.equals("")) {
+            //ricerca esterna
             setYoutubeCode(Utils.getYouTubeCode(title + " " + artist));
         }
         if (album_cover.equals("")) {
@@ -342,6 +343,7 @@ public class Song {
             if (!tmp.equals("")) {
                 setAlbumCover(tmp);
             } else {
+                //ricerca esterna
                 setAlbumCover(Utils.getCoverImage(artist, album));
             }
         }
