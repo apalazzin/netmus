@@ -1878,157 +1878,179 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
   
     //riempie il catalogo/libreria con la visuale Covers
-    private void paintCovers(List<Song> list) { 
+    private void paintCovers(final List<Song> list) { 
     
-        
-
-            covers_container.setVisible(true);        
             library.setVisible(false);
-            
+            covers_container.setVisible(true);    
             covers_container.clear();
-            canzoni_cover.remove(canzoni_cover);
-
-            
-            for (it.unipd.netmus.client.ui.ProfileView.Song song : list) {
-                
-                final Song canzone  = (Song) song;
-                
-                HTMLPanel cover_container = new HTMLPanel("");
-                
-                cover_container.getElement().getStyle().setWidth(108, Style.Unit.PX);
-                cover_container.getElement().getStyle().setHeight(145, Style.Unit.PX);
-                cover_container.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
-                cover_container.getElement().getStyle().setMarginLeft(40, Style.Unit.PX);
-                cover_container.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
-                cover_container.getElement().getStyle().setFloat(Style.Float.LEFT);
-                cover_container.getElement().getStyle().setProperty("textAlign", "center");
-                
-                
-                final HTMLPanel tmp = new HTMLPanel("");
-                tmp.getElement().getStyle().setProperty("backgroundSize", "contain");
-                listener.setSongCover(canzone.autore, canzone.titolo, canzone.album, tmp);
-
-                tmp.getElement().getStyle().setMarginBottom(5, Style.Unit.PX);
-                tmp.getElement().getStyle().setWidth(100, Style.Unit.PX);
-                tmp.getElement().getStyle().setHeight(100, Style.Unit.PX);
-                tmp.getElement().getStyle().setProperty("borderRadius", "10px");
-                tmp.getElement().getStyle().setProperty("MozBorderRadius", "10px");
-                tmp.getElement().getStyle().setProperty("WebkitBoxShadow", "2px 2px 4px #888888");
-                tmp.getElement().getStyle().setProperty("MozBoxShadow", "2px 2px 4px #888888");
-                
-
-                if(canzone.equals(selected_song)) {
-                    cover_selected=tmp;
-                    cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
-                }
-                
-                tmp.addDomHandler(new MouseOverHandler() {
-
-                    @Override
-                    public void onMouseOver(MouseOverEvent event) {
-                        ((Widget)event.getSource()).getElement().getStyle().setCursor(Style.Cursor.POINTER);
-                        
-                    }}, MouseOverEvent.getType());
-                
-
-                tmp.addDomHandler(new ClickHandler() {
-
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        
-                        if(cover_selected!=null)
-                            cover_selected.getElement().getStyle().setProperty("border", "0px solid #37A6EB");
-                        
-                        cover_selected=tmp;
-                        cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
-                        
-                        setBranoCatalogo(canzone);
-                        
-                        track_title.setText(selected_song.titolo);
-                        song_title.setText(selected_song.titolo);
-                        song_artist.setText(selected_song.autore);
-                        song_album.setText(selected_song.album);
-                        
-                        
-                        
-                        if(playing==0&&canzone.equals(played_song)&&(youtube_status==1||youtube_status==2)) {
-                            play.setUrl("images/pause.png");
-                            youtube_status = 1;
-                            last_selected=0;
-                        }
-                        else if(playing==0&&canzone.equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
-                            play.setUrl("images/play.png");
-                            youtube_status = -1;
-                            last_selected=0;
-                        }
-
-                        else {
-                            play.setUrl("images/play.png");
-                            if(youtube_status!=0&&youtube_status==1)
-                                youtube_status = 2;
-                            else if(youtube_status!=0&&youtube_status==-1)
-                                youtube_status = 3;
-                            last_selected=0;
-                        }
-                        play_youtube.setUrl("images/play.png");
-
-                        global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
-                        showStar(rating);
-                        
-                        listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
-                        
-                    }}, ClickEvent.getType());
-                
-                
-                tmp.addDomHandler(new DoubleClickHandler() {
-
-                    @Override
-                    public void onDoubleClick(DoubleClickEvent event) {
-                       
-                        if(playlist_opened) {
-                            
-                            listener.addToPLaylist(playlist_title.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
-                            
-                        } else {
-                            
-                            if(selected_song!=null)
-                                viewSong(selected_song);                    
-                        }
-                        
-                    }
-                
-                    
-                }, DoubleClickEvent.getType());
-                
-                
-                Label titolo = new Label();
-                titolo.setText(canzone.titolo);
-                titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
-                titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
-                titolo.getElement().getStyle().setProperty("maxHeight", "29px");
-                titolo.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
-    
-                Label autore = new Label();
-                autore.setText(canzone.autore);
-                autore.getElement().getStyle().setProperty("fontFamily", "Verdana");
-                autore.getElement().getStyle().setFontSize(10, Style.Unit.PX);
-                autore.getElement().getStyle().setColor("#999999");
-    
-                
-                cover_container.add(tmp);
-                cover_container.add(titolo);
-                cover_container.add(autore);
-                
-                covers_container.add(cover_container);
-                
-            }
-        
+ 
+            canzoni_cover.remove(canzoni_cover);        
             canzoni_cover = new ArrayList<Song>(list);
+            
+            Timer timerCovers = new Timer() {
+                public void run() {
+                 paintInsideCover(list);   
+                }     
+            };
+            
+            timerCovers.schedule(5);
+            
+        
+            
         
     }    
 
 
 
+    private void paintInsideCover(List<Song> list) {
+        
+        for (final it.unipd.netmus.client.ui.ProfileView.Song song : list) {
+            
+            Timer timerCovers = new Timer() {
+                public void run() {
+                 
+            
+            final Song canzone  = (Song) song;
+            
+            HTMLPanel cover_container = new HTMLPanel("");
+            
+            cover_container.getElement().getStyle().setWidth(108, Style.Unit.PX);
+            cover_container.getElement().getStyle().setHeight(145, Style.Unit.PX);
+            cover_container.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+            cover_container.getElement().getStyle().setMarginLeft(40, Style.Unit.PX);
+            cover_container.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
+            cover_container.getElement().getStyle().setFloat(Style.Float.LEFT);
+            cover_container.getElement().getStyle().setProperty("textAlign", "center");
+            
+            
+            final HTMLPanel tmp = new HTMLPanel("");
+            tmp.getElement().getStyle().setProperty("backgroundSize", "contain");
+            listener.setSongCover(canzone.autore, canzone.titolo, canzone.album, tmp);
+
+            tmp.getElement().getStyle().setMarginBottom(5, Style.Unit.PX);
+            tmp.getElement().getStyle().setWidth(100, Style.Unit.PX);
+            tmp.getElement().getStyle().setHeight(100, Style.Unit.PX);
+            tmp.getElement().getStyle().setProperty("borderRadius", "10px");
+            tmp.getElement().getStyle().setProperty("MozBorderRadius", "10px");
+            tmp.getElement().getStyle().setProperty("WebkitBoxShadow", "2px 2px 4px #888888");
+            tmp.getElement().getStyle().setProperty("MozBoxShadow", "2px 2px 4px #888888");
+            
+
+            if(canzone.equals(selected_song)) {
+                cover_selected=tmp;
+                cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
+            }
+            
+            tmp.addDomHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    ((Widget)event.getSource()).getElement().getStyle().setCursor(Style.Cursor.POINTER);
+                    
+                }}, MouseOverEvent.getType());
+            
+
+            tmp.addDomHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    
+                    if(cover_selected!=null)
+                        cover_selected.getElement().getStyle().setProperty("border", "0px solid #37A6EB");
+                    
+                    cover_selected=tmp;
+                    cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
+                    
+                    setBranoCatalogo(canzone);
+                    
+                    track_title.setText(selected_song.titolo);
+                    song_title.setText(selected_song.titolo);
+                    song_artist.setText(selected_song.autore);
+                    song_album.setText(selected_song.album);
+                    
+                    
+                    
+                    if(playing==0&&canzone.equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+                        play.setUrl("images/pause.png");
+                        youtube_status = 1;
+                        last_selected=0;
+                    }
+                    else if(playing==0&&canzone.equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+                        play.setUrl("images/play.png");
+                        youtube_status = -1;
+                        last_selected=0;
+                    }
+
+                    else {
+                        play.setUrl("images/play.png");
+                        if(youtube_status!=0&&youtube_status==1)
+                            youtube_status = 2;
+                        else if(youtube_status!=0&&youtube_status==-1)
+                            youtube_status = 3;
+                        last_selected=0;
+                    }
+                    play_youtube.setUrl("images/play.png");
+
+                    global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
+                    showStar(rating);
+                    
+                    listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
+                    
+                }}, ClickEvent.getType());
+            
+            
+            tmp.addDomHandler(new DoubleClickHandler() {
+
+                @Override
+                public void onDoubleClick(DoubleClickEvent event) {
+                   
+                    if(playlist_opened) {
+                        
+                        listener.addToPLaylist(playlist_title.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
+                        
+                    } else {
+                        
+                        if(selected_song!=null)
+                            viewSong(selected_song);                    
+                    }
+                    
+                }
+            
+                
+            }, DoubleClickEvent.getType());
+            
+            
+            Label titolo = new Label();
+            titolo.setText(canzone.titolo);
+            titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
+            titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
+            titolo.getElement().getStyle().setProperty("maxHeight", "29px");
+            titolo.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+
+            Label autore = new Label();
+            autore.setText(canzone.autore);
+            autore.getElement().getStyle().setProperty("fontFamily", "Verdana");
+            autore.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+            autore.getElement().getStyle().setColor("#999999");
+
+            
+            cover_container.add(tmp);
+            cover_container.add(titolo);
+            cover_container.add(autore);
+            
+            covers_container.add(cover_container);
+         
+                }     
+            };
+            
+            timerCovers.schedule(5);
+
+            
+        }
+    }
+    
+    
+    
     @Override
     public void setBranoCatalogo(
             it.unipd.netmus.client.ui.ProfileView.Song selezione) {
