@@ -821,4 +821,10 @@ public class ProfileActivity extends AbstractActivity implements
         goTo(new ProfilePlace(user));
     }
 
+	@Override
+	public void exportPdf() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

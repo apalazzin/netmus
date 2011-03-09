@@ -176,6 +176,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image switch_cover;
    @UiField Image switch_list;
    @UiField Image loading;
+   @UiField Image pdf;
    
    @UiField Button edit_profile_check;
 
@@ -1154,6 +1155,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        showCatalogo();
        
    }
+   
+   @UiHandler("pdf")
+   void handleMouseClickPdf(ClickEvent e) {
+       listener.exportPdf();
+       
+   }
+   
+   @UiHandler("pdf")
+   void handleMouseOverPdf(MouseOverEvent e) {
+       pdf.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
@@ -1900,7 +1913,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }     
             };
             
-            timerCovers.schedule(10);
+            timerCovers.schedule(5);
             
         
             
@@ -2050,7 +2063,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 }     
             };
             
-            timerCovers.schedule(10);
+            timerCovers.schedule(5);
 
             
         }

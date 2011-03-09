@@ -264,6 +264,11 @@ public interface ProfileView extends IsWidget {
      * @return 
        */
       void setSongCover(String autore, String titolo, String album, HTMLPanel tmp);
+      /**
+       *Esporta versione PDF del catalogo
+     * @return 
+       */
+      void exportPdf();
    }
 
 

@@ -235,6 +235,9 @@
 			   	
 				
 				</g:HTMLPanel>
+				
+				<g:HTMLPanel ui:field="popup" styleName="{style.popup}">
+				</g:HTMLPanel>
    	
 	</g:HTMLPanel>
 
