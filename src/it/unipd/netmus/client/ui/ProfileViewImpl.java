@@ -42,6 +42,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -67,7 +69,8 @@ import com.google.gwt.user.client.ui.Label;
 public class ProfileViewImpl extends Composite implements ProfileView {
 
    private static ProfileViewImplUiBinder uiBinder = GWT.create(ProfileViewImplUiBinder.class);
-
+   MyConstants myConstants = GWT.create(MyConstants.class);
+   
    interface ProfileViewImplUiBinder extends UiBinder<Widget, ProfileViewImpl>
    {
    }
@@ -141,6 +144,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel edit_profile_aboutme;
 
    @UiField HTMLPanel covers_container;
+   @UiField HTMLPanel popup;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -2758,7 +2762,52 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
     
     public void deleteSong(String autore, String titolo, String album) {
-       
+    	
+    	
+    	VerticalPanel popup_vertical = new VerticalPanel();
+    	popup_vertical.getElement().getStyle().setWidth(195, Style.Unit.PX);
+    	
+    	popup_vertical.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+    	
+    	HorizontalPanel popup_text = new HorizontalPanel();
+    	popup_text.getElement().getStyle().setWidth(195, Style.Unit.PX);
+    	
+    	Label text = new Label();
+    	text.setText(myConstants. confirmDelete() + "\n\"" + titolo + " \"?");
+    	text.getElement().getStyle().setWidth(195, Style.Unit.PX);
+    	text.getElement().getStyle().setProperty("textAlign", "center");
+
+    	popup_text.add(text);
+    	popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
+    	popup_text.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+    	popup_text.getElement().getStyle().setColor("#FF0000");
+    	popup_text.getElement().getStyle().setProperty("textAlign", "center");
+
+    	HorizontalPanel popup_buttons = new HorizontalPanel();
+    	popup_buttons.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+    	popup_buttons.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
+    	
+    	Button ok = new Button("ok");
+    	ok.getElement().getStyle().setProperty("borderRadius", "8px");
+    	ok.getElement().getStyle().setProperty("MozBorderRadius", "8px");
+    	ok.getElement().getStyle().setProperty("WebkitBorderRadius", "8px");
+    	ok.getElement().getStyle().setMarginRight(30, Style.Unit.PX);
+
+    	Button cancel = new Button("cancel");
+    	cancel.getElement().getStyle().setProperty("borderRadius", "8px");
+    	cancel.getElement().getStyle().setProperty("MozBorderRadius", "8px");
+    	cancel.getElement().getStyle().setProperty("WebkitBorderRadius", "8px");
+    	
+    	popup_buttons.add(ok);
+    	popup_buttons.add(cancel);
+    	
+    	popup_vertical.add(popup_text);
+    	popup_vertical.add(popup_buttons);
+    	
+    	popup.add(popup_vertical);
+    	
+    	
+       /*
         n_songs.setText((new Integer(Integer.parseInt(n_songs.getText())-1)).toString());
         
         Song canzone = new Song(autore, titolo, album);
@@ -2768,7 +2817,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         closeSong();
         if(covers_container.isVisible())
             paintCovers(dataProvider_catalogo.getList());
-        
+        */
         
     }
 
