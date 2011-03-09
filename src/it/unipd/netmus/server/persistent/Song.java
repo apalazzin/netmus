@@ -73,7 +73,7 @@ public class Song {
     /**
      * @param filename
      * @return
-     */
+     *
     @SuppressWarnings("unused")
     private String clearFileName(String filename) {
         String clean_name = filename;
@@ -84,7 +84,7 @@ public class Song {
             return clean_name;
         } else
             return "";
-    }
+    }*/
 
     /**
      *
@@ -181,7 +181,7 @@ public class Song {
 
     private String track_number;
 
-    private String file;
+    //private String file;
 
     private String youtube_code;
 
@@ -194,7 +194,7 @@ public class Song {
         this.album_cover = "";
         this.artist = "";
         this.composer = "";
-        this.file = "";
+        //this.file = "";
         this.genre = "";
         this.title = "";
         this.track_number = "";
@@ -362,9 +362,9 @@ public class Song {
         return composer;
     }
 
-    public String getFile() {
+    /*public String getFile() {
         return file;
-    }
+    }*/
 
     public String getGenre() {
         return genre;
@@ -414,9 +414,9 @@ public class Song {
         this.composer = composer;
     }
 
-    public void setFile(String file) {
+    /*public void setFile(String file) {
         this.file = file;
-    }
+    }*/
 
     public void setGenre(String genre) {
         this.genre = genre;
@@ -440,7 +440,7 @@ public class Song {
         tmp.setTitle(this.title);
         tmp.setAlbum(this.album);
         tmp.setComposer(this.composer);
-        tmp.setFile(this.file);
+        //tmp.setFile(this.file);
         tmp.setGenre(this.genre);
         tmp.setTrackNumber(this.track_number);
         tmp.setYear(this.year);
