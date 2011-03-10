@@ -90,6 +90,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private HandlerRegistration rm_link;
    private HandlerRegistration rm_fw;
    private HandlerRegistration rm_rw;
+
+   private HandlerRegistration rm_popyes;
+   private HandlerRegistration rm_popno;
    
    //elementi uiBinder
 
@@ -183,6 +186,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image pdf;
    
    @UiField Button edit_profile_check;
+   
+   @UiField Button popup_yes;
+   @UiField Button popup_no;
 
    @UiField VerticalPanel edit_profile_vc;
 
@@ -594,6 +600,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            covers_container.setVisible(false);
            loading.setVisible(false);
+           popup.setVisible(false);
+           popup_yes.setVisible(false);
+           popup_no.setVisible(false);
+
            
            HTMLPanel off = new HTMLPanel("");
            off.getElement().getStyle().setHeight(22, Style.Unit.PX);
@@ -1126,7 +1136,54 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("delete_song")
    void handleMouseClickEliminaSong(ClickEvent e) {
-       listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
+       
+       
+       final HorizontalPanel popup_text = new HorizontalPanel();
+       popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+       
+       final Label text = new Label();
+       text.setText(myConstants. confirmDelete() + "\n\"" + selected_song.titolo + " \"?");
+       text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+       text.getElement().getStyle().setProperty("textAlign", "left");
+
+       popup_text.add(text);
+       popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
+       popup_text.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+       popup_text.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+       popup_text.getElement().getStyle().setColor("#FF0000");
+       popup_text.getElement().getStyle().setProperty("textAlign", "left");
+       
+        
+       popup.add(popup_text);
+       
+       popup_yes.setText(myConstants.yes());
+       popup_no.setText(myConstants.no());
+       
+       if(rm_popyes!=null) rm_popyes.removeHandler();
+       if(rm_popno!=null) rm_popno.removeHandler();
+       
+       rm_popyes = popup_yes.addClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
+            popup.remove(popup_text);
+            popup.setVisible(false); 
+        }});
+       
+       rm_popno = popup_no.addClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+           popup.remove(popup_text);
+           popup.setVisible(false); 
+        }});
+       
+       
+       popup.setVisible(true);
+       popup_yes.setVisible(true);
+       popup_no.setVisible(true);
+       
    }
 
 
@@ -2762,52 +2819,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
     
     public void deleteSong(String autore, String titolo, String album) {
-    	
-    	
-    	VerticalPanel popup_vertical = new VerticalPanel();
-    	popup_vertical.getElement().getStyle().setWidth(195, Style.Unit.PX);
-    	
-    	popup_vertical.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-    	
-    	HorizontalPanel popup_text = new HorizontalPanel();
-    	popup_text.getElement().getStyle().setWidth(195, Style.Unit.PX);
-    	
-    	Label text = new Label();
-    	text.setText(myConstants. confirmDelete() + "\n\"" + titolo + " \"?");
-    	text.getElement().getStyle().setWidth(195, Style.Unit.PX);
-    	text.getElement().getStyle().setProperty("textAlign", "center");
-
-    	popup_text.add(text);
-    	popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
-    	popup_text.getElement().getStyle().setFontSize(10, Style.Unit.PX);
-    	popup_text.getElement().getStyle().setColor("#FF0000");
-    	popup_text.getElement().getStyle().setProperty("textAlign", "center");
-
-    	HorizontalPanel popup_buttons = new HorizontalPanel();
-    	popup_buttons.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-    	popup_buttons.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
-    	
-    	Button ok = new Button("ok");
-    	ok.getElement().getStyle().setProperty("borderRadius", "8px");
-    	ok.getElement().getStyle().setProperty("MozBorderRadius", "8px");
-    	ok.getElement().getStyle().setProperty("WebkitBorderRadius", "8px");
-    	ok.getElement().getStyle().setMarginRight(30, Style.Unit.PX);
-
-    	Button cancel = new Button("cancel");
-    	cancel.getElement().getStyle().setProperty("borderRadius", "8px");
-    	cancel.getElement().getStyle().setProperty("MozBorderRadius", "8px");
-    	cancel.getElement().getStyle().setProperty("WebkitBorderRadius", "8px");
-    	
-    	popup_buttons.add(ok);
-    	popup_buttons.add(cancel);
-    	
-    	popup_vertical.add(popup_text);
-    	popup_vertical.add(popup_buttons);
-    	
-    	popup.add(popup_vertical);
-    	
-    	
-       /*
+    
         n_songs.setText((new Integer(Integer.parseInt(n_songs.getText())-1)).toString());
         
         Song canzone = new Song(autore, titolo, album);
@@ -2817,7 +2829,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         closeSong();
         if(covers_container.isVisible())
             paintCovers(dataProvider_catalogo.getList());
-        */
         
     }
 

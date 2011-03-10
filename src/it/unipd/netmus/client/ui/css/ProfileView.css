@@ -833,14 +833,14 @@ height: 30px;
 
 .popup {
 	
-	width: 200px;
+	width: 240px;
 	height: 100px;
 	
 	min-height: 100px;      	
 	
 	border: 1px solid #FF2222;
 	
-	background: rgba(20, 20, 20, 0.90);
+	background: rgba(20, 20, 20, 0.93);
 	
 	position: absolute;
 	
@@ -854,7 +854,9 @@ height: 30px;
 	z-index: 11;  
 	
 	padding: 40px;
-	display: block;
+	
+	
+	text-align: center;
 		
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -869,14 +871,42 @@ height: 30px;
 
 	border-radius: 15px;
 	-moz-border-radius: 15px;
-	-webkit-box-shadow: 4px 4px 10px #888888;
-	-moz-box-shadow: 4px 4px 10px #888888;
+	-webkit-box-shadow: 0px 0px 15px #FF0000;
+	-moz-box-shadow: 0px 0px 15px #FF0000;
 	
 	
 }
+
+.popup_yes {
+	
+	position: absolute;
+	bottom: 20px;
+	left: 50px;
+	
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	
+	width: 100px;
 	
 	}
 
+.popup_no {
+	
+	position: absolute;
+	bottom: 20px;
+	right: 50px;
+	
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	
+	width: 100px;
+	
+	}
+
+
+.deletetrack_playlist {
 
 .deletetrack_playlist {
 	
