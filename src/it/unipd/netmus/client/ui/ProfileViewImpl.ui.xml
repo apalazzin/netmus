@@ -237,6 +237,10 @@
 				</g:HTMLPanel>
 				
 				<g:HTMLPanel ui:field="popup" styleName="{style.popup}">
+				
+				<g:Button ui:field="popup_yes" styleName="{style.popup_yes}"></g:Button>
+				<g:Button ui:field="popup_no" styleName="{style.popup_no}"></g:Button>
+				
 				</g:HTMLPanel>
    	
 	</g:HTMLPanel>
