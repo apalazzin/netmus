@@ -116,12 +116,6 @@ public class AppletBar {
         AppletConnector.showChooser();
     }
 
-    
-    private final int SONGS_PACKAGE_SIZE = 30;
-    private int new_songs_size = 0;
-    private List<SongDTO> new_songs = null;
-    private List<SongDTO> new_songs_tmp = null;
-    
     /**
      * Dall'XML ricevuto dall'applet estrae le canzoni e le invia al server.
      * 
@@ -129,39 +123,20 @@ public class AppletBar {
      */
     void translateXML(String result) {
 
-        AppletBarView.showStatus(constants.xmlParsing());
-        List<SongDTO> new_songs = translator.XMLToDTO(result);
+        AppletBarView.showStatus(constants.pleaseWait());
+        sendMusic(result);   
+    }
+    
+    private void sendMusic(String xml) {
+        
+        List<SongDTO> new_songs = translator.XMLToDTO(xml);
         
         if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
             return;
         }
         
-        this.new_songs = new_songs;
-        
-        sendMusic();
-        AppletBarView.showStatus(constants.pleaseWait());
-    }
-    
-    private void sendMusic() {
-        
-        new_songs_size = new_songs.size();
-        
-        // se maggiore della dimesione massima del pacchetto inviabile con una RPC
-        if (new_songs_size > SONGS_PACKAGE_SIZE) {
-            new_songs_tmp = new ArrayList<SongDTO>(new_songs.subList(0, SONGS_PACKAGE_SIZE)); 
-            new_songs =  new ArrayList<SongDTO>(new_songs.subList(SONGS_PACKAGE_SIZE, new_songs_size));
-            
-            System.out.println("Invio "+SONGS_PACKAGE_SIZE);
-        }
-        else {
-            System.out.println("Invio "+new_songs_size);
-            
-            new_songs_tmp = new_songs;
-            new_songs = null;
-        }
-        
-        library_service.sendUserNewMusic(user, new_songs_tmp, new AsyncCallback<Void>() {
+        library_service.sendUserNewMusic(user, new_songs, new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable caught) {
                 AppletBarView.showStatus(constants.sendingError());
@@ -171,10 +146,11 @@ public class AppletBar {
             @Override
             public void onSuccess(Void incomplete) {
                 
-                if (new_songs != null) {
-                    System.out.println();
-                    sendMusic();
+                if (translator.otherChild()) {
+                    AppletBarView.showStatus(String.valueOf((translator.getParsed())));
+                    sendMusic("");
                 }
+                    
                 else {
                     AppletBarView.showStatus(constants.completionFinish());
                     client_factory.getEventBus()
