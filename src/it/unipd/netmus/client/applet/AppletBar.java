@@ -7,8 +7,8 @@ import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.SongSummaryDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -116,6 +116,12 @@ public class AppletBar {
         AppletConnector.showChooser();
     }
 
+    
+    private final int SONGS_PACKAGE_SIZE = 30;
+    private int new_songs_size = 0;
+    private List<SongDTO> new_songs = null;
+    private List<SongDTO> new_songs_tmp = null;
+    
     /**
      * Dall'XML ricevuto dall'applet estrae le canzoni e le invia al server.
      * 
@@ -125,10 +131,37 @@ public class AppletBar {
 
         AppletBarView.showStatus(constants.xmlParsing());
         List<SongDTO> new_songs = translator.XMLToDTO(result);
-        if (new_songs == null)
+        
+        if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
-
-        AsyncCallback<List<SongSummaryDTO>> callback = new AsyncCallback<List<SongSummaryDTO>>() {
+            return;
+        }
+        
+        this.new_songs = new_songs;
+        
+        sendMusic();
+        AppletBarView.showStatus(constants.pleaseWait());
+    }
+    
+    private void sendMusic() {
+        
+        new_songs_size = new_songs.size();
+        
+        // se maggiore della dimesione massima del pacchetto inviabile con una RPC
+        if (new_songs_size > SONGS_PACKAGE_SIZE) {
+            new_songs_tmp = new ArrayList<SongDTO>(new_songs.subList(0, SONGS_PACKAGE_SIZE)); 
+            new_songs =  new ArrayList<SongDTO>(new_songs.subList(SONGS_PACKAGE_SIZE, new_songs_size));
+            
+            System.out.println("Invio "+SONGS_PACKAGE_SIZE);
+        }
+        else {
+            System.out.println("Invio "+new_songs_size);
+            
+            new_songs_tmp = new_songs;
+            new_songs = null;
+        }
+        
+        library_service.sendUserNewMusic(user, new_songs_tmp, new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable caught) {
                 AppletBarView.showStatus(constants.sendingError());
@@ -136,57 +169,53 @@ public class AppletBar {
             }
 
             @Override
-            public void onSuccess(List<SongSummaryDTO> incomplete) {
-                AppletBarView.showStatus(constants.completion());
-                client_factory.getEventBus()
-                        .fireEvent(new DeviceScannedEvent());
+            public void onSuccess(Void incomplete) {
                 
-                // nuova RPC per far partire le ricerche esterne
-                library_service.completeSongs(incomplete, new AsyncCallback<Void>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                    }
-                    @Override
-                    public void onSuccess(Void result) {
-                        AppletBarView.showStatus(constants.updatingStatistics());
-                        
-                        // nuova RPC per far partire l'update delle statistiche
-                        library_service.updateStatisticFields(user, new AsyncCallback<Void>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                            }
-                            @Override
-                            public void onSuccess(Void result) {
-                                AppletBarView.showStatus(constants.completionFinish());
-                                
-                                //nuova RPC per aggiornare la lista degli amici successivamente all'aggiornamento
-                                user_service.findRelatedUsers(user, new AsyncCallback<List<String>>() {
-                                    @Override
-                                    public void onFailure(Throwable caught) {
-                                    }
-
-                                    @Override
-                                    public void onSuccess(List<String> related_users) {
-                                        String[] names = new String[related_users.size()];
-                                        
-                                        for (int i=0; i<related_users.size(); i++) {
-                                            names[i] = related_users.get(i);
-                                        }
-                                        
-                                        client_factory.getProfileView().paintFriendlist(names);
-                                    }
-                                    
-                                });
-                            }
-                        });
-                    }
-                });
+                if (new_songs != null) {
+                    System.out.println();
+                    sendMusic();
+                }
+                else {
+                    AppletBarView.showStatus(constants.completionFinish());
+                    client_factory.getEventBus()
+                            .fireEvent(new DeviceScannedEvent());
+                    
+//                    AppletBarView.showStatus(constants.updatingStatistics());
+//                    
+//                    // nuova RPC per far partire l'update delle statistiche
+//                    library_service.updateStatisticFields(user, new AsyncCallback<Void>() {
+//                        @Override
+//                        public void onFailure(Throwable caught) {
+//                        }
+//                        @Override
+//                        public void onSuccess(Void result) {
+//                            AppletBarView.showStatus(constants.completionFinish());
+//                            
+//                            //nuova RPC per aggiornare la lista degli amici successivamente all'aggiornamento
+//                            user_service.findRelatedUsers(user, new AsyncCallback<List<String>>() {
+//                                @Override
+//                                public void onFailure(Throwable caught) {
+//                                }
+//
+//                                @Override
+//                                public void onSuccess(List<String> related_users) {
+//                                    String[] names = new String[related_users.size()];
+//                                    
+//                                    for (int i=0; i<related_users.size(); i++) {
+//                                        names[i] = related_users.get(i);
+//                                    }
+//                                    
+//                                    client_factory.getProfileView().paintFriendlist(names);
+//                                }
+//                                
+//                            });
+//                        }
+//                    });
+                }
                 
             }
-        };
-
-        library_service.sendUserNewMusic(user, new_songs, callback);
-        AppletBarView.showStatus(constants.pleaseWait());
+        });
+        
     }
 
     /**

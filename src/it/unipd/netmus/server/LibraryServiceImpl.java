@@ -114,29 +114,19 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * @return
      */
     @Override
-    public List<SongSummaryDTO> sendUserNewMusic(String user,
+    public void sendUserNewMusic(String user,
             List<SongDTO> new_songs) {
 
-        // Invia al database tutte le canzoni della lista, ogni canzone incompleta ritorna
-        // per essere gestita diversamente.
+        // Invia al database tutte le canzoni della lista
 
         UserAccount useraccount = UserAccount.load(user);
-        List<SongSummaryDTO> incomplete = new ArrayList<SongSummaryDTO>();
 
         for (SongDTO songDTO : new_songs) {
             Song song = Song.storeOrUpdateFromDTO(songDTO);
             if (song != null) {
-                
                 useraccount.getMusicLibrary().addSong(song);
-                
-                if (song.getAlbumCover().equals("")) {
-                    
-                    //le canzoni incomplete vengono ritornate al chiamante
-                    incomplete.add(song.toSongSummaryDTO());
-                }
             }
         }
-        return incomplete;
     }
 
     @Override

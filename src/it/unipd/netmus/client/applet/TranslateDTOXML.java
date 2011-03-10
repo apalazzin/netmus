@@ -122,7 +122,7 @@ public class TranslateDTOXML {
             list = new ArrayList<SongDTO>();
             // start parsing
             while (root.hasChildNodes()) {
-                // for every child, parse it and att it to the list
+                // for every child, parse it and add it to the list
                 list.add(generateDTO((Element) root.getFirstChild()));
                 root.removeChild(root.getFirstChild());
             }
