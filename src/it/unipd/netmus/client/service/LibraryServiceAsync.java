@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LibraryServiceAsync {
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs,
-            AsyncCallback<List<SongSummaryDTO>> callback);
+            AsyncCallback<Void> callback);
 
     void addPlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
