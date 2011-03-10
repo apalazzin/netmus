@@ -668,6 +668,10 @@ height: 30px;
 	left: 5px;
 	width: 80px;
 	
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
 	
 	}
 	
