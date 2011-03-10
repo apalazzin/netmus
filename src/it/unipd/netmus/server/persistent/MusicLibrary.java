@@ -39,7 +39,6 @@ public class MusicLibrary {
     static private class Playlist {
 
         static void deletePlaylist(Playlist p) {
-            ODF.get().storeOrUpdate(p);
             ODF.get().delete(p);
         }
 
@@ -144,9 +143,6 @@ public class MusicLibrary {
     */
 
     static void deleteMusicLibrary(MusicLibrary ml) {
-        ODF.get().storeOrUpdate(ml);
-        //for (SongWithRating tmp : ml.song_list)
-        //    SongWithRating.deleteSongWithRating(tmp);
         for (Playlist tmp : ml.playlists)
             Playlist.deletePlaylist(tmp);
         ODF.get().delete(ml);
@@ -219,8 +215,10 @@ public class MusicLibrary {
         }
     }
 
-    public boolean addSongToPlaylist(String playlist_name, String song_id) {
+    public boolean addSongToPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
+        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        
         if (tmp != null) {
             if (song_list.containsKey(song_id)) {
                 return tmp.addSong(song_id);
@@ -370,8 +368,11 @@ public class MusicLibrary {
         }
     }
 
-    public boolean removeSongFromPlaylist(String playlist_name, String song_id) {
+    public boolean removeSongFromPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
+        
+        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        
         if (tmp != null) {
             return tmp.removeSong(song_id);
         } else
