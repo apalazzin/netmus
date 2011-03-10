@@ -152,7 +152,6 @@ public class MusicLibrary {
     @Parent
     private UserAccount owner;
     
-    @Index
     private Map<String, String> song_list;
 
     @Index
@@ -161,7 +160,6 @@ public class MusicLibrary {
     @Index
     private String preferred_genre;
     
-    @Index
     private List<Playlist> playlists;
 
     public MusicLibrary() {
@@ -217,7 +215,7 @@ public class MusicLibrary {
 
     public boolean addSongToPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        String song_id = Song.generateSongId(title, artist, album);
         
         if (tmp != null) {
             if (song_list.containsKey(song_id)) {
@@ -346,7 +344,7 @@ public class MusicLibrary {
     public boolean removeSong(String artist, String title,
             String album) {
 
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        String song_id = Song.generateSongId(title, artist, album);
         
         if (song_list.containsKey(song_id)) {
             
@@ -371,7 +369,7 @@ public class MusicLibrary {
     public boolean removeSongFromPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
         
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        String song_id = Song.generateSongId(title, artist, album);
         
         if (tmp != null) {
             return tmp.removeSong(song_id);
