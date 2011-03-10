@@ -22,9 +22,6 @@ public interface LibraryServiceAsync {
     void addPlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
 
-    void addSongToPlaylist(String user, String playlist_name, String song_id,
-            AsyncCallback<Boolean> callback);
-
     void getPlaylist(String user, String playlist_name,
             AsyncCallback<List<SongSummaryDTO>> callback);
 
@@ -34,12 +31,16 @@ public interface LibraryServiceAsync {
     void removePlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
 
-    void removeSongFromPlaylist(String user, String playlist_name,
-            String song_id, AsyncCallback<Boolean> callback);
-
     void completeSongs(List<SongSummaryDTO> incomplete,
             AsyncCallback<Void> callback);
 
     void updateStatisticFields(String user, AsyncCallback<Void> callback);
+
+    void addSongToPlaylist(String user, String playlist_name, String title,
+            String artist, String album, AsyncCallback<Boolean> callback);
+
+    void removeSongFromPlaylist(String user, String playlist_name,
+            String title, String artist, String album,
+            AsyncCallback<Boolean> callback);
 
 }

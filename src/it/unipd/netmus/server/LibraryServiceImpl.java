@@ -40,12 +40,9 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * cata.Ritorna true se l’operazione ha successo.
      */
     @Override
-    public boolean addSongToPlaylist(String user, String playlist_name,
-            String song_id) {
-
+    public boolean addSongToPlaylist(String user, String playlist_name, String title, String artist, String album) {
         UserAccount useraccount = UserAccount.load(user);
-        return useraccount.getMusicLibrary().addSongToPlaylist(playlist_name,
-                song_id);
+        return useraccount.getMusicLibrary().addSongToPlaylist(playlist_name, title, artist, album);
     }
 
     /**
@@ -99,11 +96,11 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      */
     @Override
     public boolean removeSongFromPlaylist(String user, String playlist_name,
-            String song_id) {
+            String title, String artist, String album) {
 
         UserAccount useraccount = UserAccount.load(user);
         return useraccount.getMusicLibrary().removeSongFromPlaylist(
-                playlist_name, song_id);
+                playlist_name, title, artist, album);
     }
 
     /**

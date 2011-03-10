@@ -98,14 +98,13 @@ public class ProfileActivity extends AbstractActivity implements
      * Aggiunge song alla playlist e restituisce true in caso di successo
      */
     @Override
-    public void addToPLaylist(String playlist, final String autore,
-            final String titolo, final String album) {
+    public void addToPLaylist(String playlist, final String artist,
+            final String title, final String album) {
 
         client_factory.getProfileView().startLoading();
-        String song_id = titolo + "-vt.g-" + autore + "-vt.g-" + album;
-        song_id = song_id.toLowerCase();
+
         library_service_svc.addSongToPlaylist(current_user.getUser(), playlist,
-                song_id, new AsyncCallback<Boolean>() {
+                title, artist, album, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
                     }
@@ -114,7 +113,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Boolean result) {
                         if (result)
                             client_factory.getProfileView().addToPLaylist(
-                                    autore, titolo, album);
+                                    artist, title, album);
                         client_factory.getProfileView().stopLoading();
                     }
                 });
@@ -547,14 +546,13 @@ public class ProfileActivity extends AbstractActivity implements
      * Rimuovi il brano dalla playlist.
      */
     @Override
-    public void removeFromPLaylist(String playlist, final String autore,
-            final String titolo, final String album) {
+    public void removeFromPLaylist(String playlist, final String artist,
+            final String title, final String album) {
 
         client_factory.getProfileView().startLoading();
-        String song_id = titolo + "-vt.g-" + autore + "-vt.g-" + album;
-        song_id = song_id.toLowerCase();
+        
         library_service_svc.removeSongFromPlaylist(current_user.getUser(),
-                playlist, song_id, new AsyncCallback<Boolean>() {
+                playlist, title, artist, album , new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
                     }
@@ -563,7 +561,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Boolean result) {
                         if (result)
                             client_factory.getProfileView().removeFromPlaylist(
-                                    autore, titolo, album);
+                                    artist, title, album);
                         client_factory.getProfileView().stopLoading();
                     }
                 });

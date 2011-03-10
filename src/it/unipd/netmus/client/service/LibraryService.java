@@ -20,7 +20,7 @@ public interface LibraryService extends RemoteService {
     public boolean addPlaylist(String user, String playlist_name);
 
     public boolean addSongToPlaylist(String user, String playlist_name,
-            String song_id);
+            String title, String artist, String album);
 
     public List<SongSummaryDTO> getPlaylist(String user, String playlist_name);
 
@@ -30,7 +30,7 @@ public interface LibraryService extends RemoteService {
     public boolean removePlaylist(String user, String playlist_name);
 
     public boolean removeSongFromPlaylist(String user, String playlist_name,
-            String song_id);
+            String title, String artist, String album);
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs);
 
