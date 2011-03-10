@@ -32,7 +32,7 @@ public interface LibraryService extends RemoteService {
     public boolean removeSongFromPlaylist(String user, String playlist_name,
             String song_id);
 
-    public List<SongSummaryDTO> sendUserNewMusic(String user, List<SongDTO> new_songs);
+    public void sendUserNewMusic(String user, List<SongDTO> new_songs);
 
     void completeSongs(List<SongSummaryDTO> incomplete);
     
