@@ -150,6 +150,11 @@ public interface ProfileView extends IsWidget {
     *
     */
    void stopLoading();
+   /**
+    * Segnala un errore/messaggio all'utente
+    *
+    */
+   void showError(String text);
 
    public interface Presenter
    {
