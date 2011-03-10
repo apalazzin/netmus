@@ -54,7 +54,21 @@ import com.google.code.twig.annotation.Index;
 
 public class Song {
 
-    static final String SEPARATOR = "-vtg-";
+    private static final String SEPARATOR = "-vtg-";
+    
+    static String generateSongId(String title, String artist, String album) {
+        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
+        if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
+            song_id = song_id.replace('.', ' ');
+            song_id = song_id.replace('\"', ' ');
+            song_id = song_id.replace('\'', ' ');
+            song_id = song_id.replace(':', ' ');
+            song_id = song_id.replace('/', ' ');
+            song_id = song_id.replace('\\', ' ');
+            song_id = song_id.replaceAll(" ", "");
+        }
+        return song_id;
+    }
 
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
@@ -65,8 +79,7 @@ public class Song {
                 .get()
                 .load()
                 .type(Song.class)
-                .id((dto.getTitle() + SEPARATOR + dto.getArtist() + SEPARATOR + dto
-                        .getAlbum()).toLowerCase()).now();
+                .id(generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
         return tmp;
     }
 
@@ -111,8 +124,7 @@ public class Song {
         if (song.getTitle().equals(""))
             return null;
 
-        Song s = load(song.getTitle() + SEPARATOR + song.getArtist()
-                + SEPARATOR + song.getAlbum());
+        Song s = load(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
         if (s == null) {
             // La canzone non è presente nel Datastore
@@ -120,8 +132,7 @@ public class Song {
             s.setAlbum(song.getAlbum());
             s.setTitle(song.getTitle());
             s.setArtist(song.getArtist());
-            s.setId(song.getTitle() + SEPARATOR + song.getArtist() + SEPARATOR
-                    + song.getAlbum());
+            s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
             s.setComposer(song.getComposer());
             s.setGenre(song.getGenre());
             s.setTrackNumber(song.getTrackNumber());
@@ -188,7 +199,7 @@ public class Song {
     private int num_ratings;
 
     public Song() {
-        this.id = SEPARATOR;
+        this.id = generateSongId("","","");
         this.num_owners = 0;
         this.album = "";
         this.album_cover = "";
@@ -237,12 +248,10 @@ public class Song {
         else
             this.album = "";
 
-        Song tmp = Song.load(this.title + SEPARATOR + this.artist + SEPARATOR
-                + this.album);
+        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(this.title + SEPARATOR + this.artist + SEPARATOR
-                    + this.album);
+            this.setId(generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -269,13 +278,11 @@ public class Song {
         else
             this.artist = "";
 
-        Song tmp = Song.load(this.title + SEPARATOR + this.artist + SEPARATOR
-                + this.album);
+        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
 
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(this.title + SEPARATOR + this.artist + SEPARATOR
-                    + this.album);
+            this.setId(generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -318,12 +325,10 @@ public class Song {
         else
             this.title = "";
 
-        Song tmp = Song.load(this.title + SEPARATOR + this.artist + SEPARATOR
-                + this.album);
+        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(this.title + SEPARATOR + this.artist + SEPARATOR
-                    + this.album);
+            this.setId(generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
