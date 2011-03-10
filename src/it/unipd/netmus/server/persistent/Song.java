@@ -54,7 +54,7 @@ import com.google.code.twig.annotation.Index;
 
 public class Song {
 
-    static final String SEPARATOR = "-vt.g-";
+    static final String SEPARATOR = "-vtg-";
 
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();

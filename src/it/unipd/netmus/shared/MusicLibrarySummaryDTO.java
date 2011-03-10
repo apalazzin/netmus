@@ -23,8 +23,6 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MusicLibrarySummaryDTO implements Serializable {
 
-    private UserDTO owner;
-
     private List<SongSummaryDTO> songs;
 
     private List<String> playlists;
@@ -34,15 +32,13 @@ public class MusicLibrarySummaryDTO implements Serializable {
     private String preferred_genre;
 
     public MusicLibrarySummaryDTO() {
-        this.owner = new UserDTO();
         this.songs = new ArrayList<SongSummaryDTO>();
         this.preferred_artist = "";
         this.preferred_genre = "";
     }
 
-    public MusicLibrarySummaryDTO(UserDTO user, List<SongSummaryDTO> s,
+    public MusicLibrarySummaryDTO(List<SongSummaryDTO> s,
             List<String> playlists) {
-        setOwner(user);
         setSongs(s);
         setPlaylists(playlists);
         this.preferred_artist = "";
@@ -57,10 +53,6 @@ public class MusicLibrarySummaryDTO implements Serializable {
         return songs.size();
     }
 
-    public UserDTO getOwner() {
-        return owner;
-    }
-
     public List<String> getPlaylists() {
         return playlists;
     }
@@ -73,10 +65,6 @@ public class MusicLibrarySummaryDTO implements Serializable {
         if (playlists.contains(playlist_name)) {
             playlists.remove(playlist_name);
         }
-    }
-
-    public void setOwner(UserDTO owner) {
-        this.owner = owner;
     }
 
     public void setPlaylists(List<String> playlists) {

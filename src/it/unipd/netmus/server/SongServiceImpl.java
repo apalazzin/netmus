@@ -8,7 +8,6 @@ import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
-import com.google.appengine.api.capabilities.CapabilityServicePb.IsEnabledResponse.SummaryStatus;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -32,11 +31,8 @@ public class SongServiceImpl extends RemoteServiceServlet implements
             String album) {
 
         UserAccount useraccount = UserAccount.load(user);
-        String song_id = title + "-vt.g-" + artist + "-vt.g-" + album;
-        song_id = song_id.toLowerCase();
-        Song song = Song.load(song_id);
-
-        return useraccount.getMusicLibrary().removeSong(song);
+        return useraccount.getMusicLibrary().removeSong(artist, title, album);
+        
     }
 
     /**

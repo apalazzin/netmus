@@ -44,9 +44,6 @@ public class UserAccount {
     public static void deleteUser(UserAccount user) {
         ODF.get().storeOrUpdate(user);
 
-        List<Song> songsList = user.getMusicLibrary().allSongs();
-        for (Song tmp : songsList)
-            user.getMusicLibrary().removeSong(tmp);
         MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
 
         ODF.get().storeOrUpdate(user);
