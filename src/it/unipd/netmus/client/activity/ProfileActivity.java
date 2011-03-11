@@ -482,15 +482,22 @@ public class ProfileActivity extends AbstractActivity implements
 
                         @Override
                         public void onSuccess(SongDTO song_dto) {
+                            System.out.println("youTubePlay(): " + titolo + " " + song_dto.getYoutubeCode());
                             
                             song.setYoutubeCode(song_dto.getYoutubeCode());
+                            
+                            if(!song_dto.getAlbumCover().equals(""))
                             song.setAlbumCover(song_dto.getAlbumCover());
+                            else
+                            song.setAlbumCover("images/test_cover.jpg");
 
-                            if (!song_dto.getYoutubeCode().equals(""))
+                            if (!song_dto.getYoutubeCode().equals("")) {
+                                client_factory.getProfileView().closeYouTube();
                                 client_factory.getProfileView().playYouTube(
-                                        song_dto.getYoutubeCode());
-                            client_factory.getProfileView().setInfo(
+                                            song_dto.getYoutubeCode());
+                                client_factory.getProfileView().setInfo(
                                     titolo + " - " + autore + " - " + album);
+                            }
                             if (!song_dto.getAlbumCover().equals(""))
                                 client_factory.getProfileView().paintMainCover(
                                         song_dto.getAlbumCover());
@@ -506,6 +513,7 @@ public class ProfileActivity extends AbstractActivity implements
                 }
                 else {
                     
+                    client_factory.getProfileView().closeYouTube();
                     client_factory.getProfileView().playYouTube(youTubeCode);
                     client_factory.getProfileView().setInfo(titolo + " - " + autore + " - " + album);
                 
@@ -634,30 +642,44 @@ public class ProfileActivity extends AbstractActivity implements
         client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
-        for (SongSummaryDTO song : songs) {
+        for (final SongSummaryDTO song : songs) {
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
 
-                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                    }
-
-                    @Override
-                    public void onSuccess(SongDTO song) {
-
-                        String cover = "images/test_cover.jpg";
-                        if (!song.getAlbumCover().equals(""))
-                            cover = song.getAlbumCover();
-                        img.getElement().getStyle()
-                                .setBackgroundImage("url('" + cover + "')");
-                        
-                        client_factory.getProfileView().stopLoading();
-                        return;
-                    }
-                });
-
+                String cover = song.getAlbumCover();
+                
+                if (cover.equals("")) {
+                    
+                    song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                        }
+    
+                        @Override
+                        public void onSuccess(SongDTO song_dto) {
+                            System.out.println("setSongCover(): " + titolo + song_dto.getYoutubeCode());
+                            song.setYoutubeCode(song_dto.getYoutubeCode());
+                            song.setAlbumCover(song_dto.getAlbumCover());
+                            
+                            String cover = "images/test_cover.jpg";
+                            if (!song_dto.getAlbumCover().equals(""))
+                                cover = song_dto.getAlbumCover();
+                            img.getElement().getStyle()
+                                    .setBackgroundImage("url('" + cover + "')");
+                            
+                            client_factory.getProfileView().stopLoading();
+                            return;
+                        }
+                    });
+                } else {
+                    
+                    img.getElement().getStyle()
+                    .setBackgroundImage("url('" + cover + "')");
+            
+                    client_factory.getProfileView().stopLoading();
+                    
+                }
             }
         }
     }

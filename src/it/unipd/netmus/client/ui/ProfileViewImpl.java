@@ -687,7 +687,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
 
        else if((youtube_status==2||youtube_status==3) && last_selected==0) {
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            play.setUrl("images/pause.png");
            played_song = selected_song;
@@ -697,7 +697,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
 
        else if((youtube_status==2||youtube_status==3) && last_selected==1) {
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            play.setUrl("images/pause.png");
            played_song = selected_song_playlist;
@@ -769,7 +769,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
 
        else if((youtube_status==2||youtube_status==3) && last_selected==0) {
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            play.setUrl("images/pause.png");
            played_song = selected_song;
@@ -779,7 +779,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
 
        else if((youtube_status==2||youtube_status==3) && last_selected==1) {
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            play.setUrl("images/pause.png");
            played_song = selected_song_playlist;
@@ -1726,7 +1726,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
                       
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            played_song = to_play;
            playing=0;
@@ -1737,7 +1737,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
            
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            played_song = to_play;
            playing=1;
@@ -1752,7 +1752,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
           Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)-1);
                       
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            played_song = to_play;
            playing=0;
@@ -1763,7 +1763,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)-1);
            
-           closeYouTube();
+           //closeYouTube();
            youtube_status=1;
            played_song = to_play;
            playing=1;
@@ -1791,7 +1791,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
                Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
                
-               closeYouTube();
+               //closeYouTube();
                youtube_status=1;
                played_song = to_play;
                playing=0;
@@ -1802,7 +1802,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
                Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
                
-               closeYouTube();
+               //closeYouTube();
                youtube_status=1;
                played_song = to_play;
                playing=1;
@@ -1832,7 +1832,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        if (link.equals("")) {
            
            System.out.println("link mancante");
-           closeYouTube();
+           
            
            
        } else {
@@ -1920,48 +1920,51 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    public void closeYouTube() {
        
-       youtube_status = 0;
-       youtube.getElement().getStyle().setHeight(60, Style.Unit.PX);
-       youtube.getElement().getStyle().setWidth(200, Style.Unit.PX);
-       youtube.getElement().getStyle().setBottom(22, Style.Unit.PX);
-       youtube.getElement().getStyle().setLeft(25, Style.Unit.PX);
-
-       vertical_semioffset = 275;
-
-       setLayout();
-       
-       setPlaySong(false);
-
-       /*
-       catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-       playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-       song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
-       */
-       
-       play_youtube.getElement().getStyle().setOpacity(1);
-       logo_youtube.getElement().getStyle().setOpacity(1);
-
-       logo_youtube.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-       logo_youtube.getElement().getStyle().setBottom(0, Style.Unit.PX);
-       logo_youtube.getElement().getStyle().setLeft(0, Style.Unit.PX);
-       
-       
-       info_youtube.getElement().getStyle().setOpacity(0);
-       info_youtube_link.getElement().getStyle().setOpacity(0);
-       youtube_appendix.getElement().getStyle().setOpacity(0);
-       close_youtube.getElement().getStyle().setOpacity(0);
-
-       info_youtube.setVisible(false);
-       info_youtube_link.setVisible(false);
-       youtube_appendix.setVisible(false);
-       close_youtube.setVisible(false);
-
-       ranking.getElement().getStyle().setLeft(265, Style.Unit.PX);
-       
-       youtube.getWidget(6).removeFromParent();
-       setInfo("Nessun brano in ascolto.");
-       forward.setVisible(false);
-       rewind.setVisible(false);
+           if(youtube_status!=0) {
+           
+               youtube_status = 0;
+               youtube.getElement().getStyle().setHeight(60, Style.Unit.PX);
+               youtube.getElement().getStyle().setWidth(200, Style.Unit.PX);
+               youtube.getElement().getStyle().setBottom(22, Style.Unit.PX);
+               youtube.getElement().getStyle().setLeft(25, Style.Unit.PX);
+        
+               vertical_semioffset = 275;
+        
+               setLayout();
+               
+               setPlaySong(false);
+        
+               /*
+               catalogo_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+               playlist_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+               song_container.getElement().getStyle().setHeight(Window.getClientHeight()-(vertical_semioffset), Style.Unit.PX);
+               */
+               
+               play_youtube.getElement().getStyle().setOpacity(1);
+               logo_youtube.getElement().getStyle().setOpacity(1);
+        
+               logo_youtube.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+               logo_youtube.getElement().getStyle().setBottom(0, Style.Unit.PX);
+               logo_youtube.getElement().getStyle().setLeft(0, Style.Unit.PX);
+               
+               
+               info_youtube.getElement().getStyle().setOpacity(0);
+               info_youtube_link.getElement().getStyle().setOpacity(0);
+               youtube_appendix.getElement().getStyle().setOpacity(0);
+               close_youtube.getElement().getStyle().setOpacity(0);
+        
+               info_youtube.setVisible(false);
+               info_youtube_link.setVisible(false);
+               youtube_appendix.setVisible(false);
+               close_youtube.setVisible(false);
+        
+               ranking.getElement().getStyle().setLeft(265, Style.Unit.PX);
+               
+               youtube.getWidget(6).removeFromParent();
+               setInfo("Nessun brano in ascolto.");
+               forward.setVisible(false);
+               rewind.setVisible(false);
+           }
        
    }
 
