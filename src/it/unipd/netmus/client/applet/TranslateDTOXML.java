@@ -32,6 +32,7 @@ public class TranslateDTOXML {
 
     private Document document;
     private Element root;
+    private int parsed;
 
     public TranslateDTOXML() {
     };
@@ -116,8 +117,11 @@ public class TranslateDTOXML {
         List<SongDTO> list = null;
         try {
             // create the DOM tree
-            document = XMLParser.parse(xml);
-            root = (Element) document.getFirstChild();
+            if (!xml.equals("")) {
+                document = XMLParser.parse(xml);
+                root = (Element) document.getFirstChild();
+                parsed = 0;
+            }
             // create the list
             list = new ArrayList<SongDTO>();
             // start parsing
@@ -125,11 +129,22 @@ public class TranslateDTOXML {
                 // for every child, parse it and add it to the list
                 list.add(generateDTO((Element) root.getFirstChild()));
                 root.removeChild(root.getFirstChild());
+                parsed++;
+                
+                if (list.size() == 30) return list;
             }
 
         } catch (DOMParseException e) {
         }
         return list;
+    }
+    
+    public int getParsed() {
+        return parsed;
+    }
+    
+    public boolean otherChild() {
+        return root.hasChildNodes();
     }
 
     /**
