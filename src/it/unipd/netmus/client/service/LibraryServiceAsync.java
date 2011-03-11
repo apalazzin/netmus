@@ -31,9 +31,6 @@ public interface LibraryServiceAsync {
     void removePlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
 
-    void completeSongs(List<SongSummaryDTO> incomplete,
-            AsyncCallback<Void> callback);
-
     void updateStatisticFields(String user, AsyncCallback<Void> callback);
 
     void addSongToPlaylist(String user, String playlist_name, String title,

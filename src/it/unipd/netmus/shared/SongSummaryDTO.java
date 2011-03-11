@@ -22,15 +22,27 @@ import java.io.Serializable;
 public class SongSummaryDTO implements Serializable {
 
     private String artist;
+    
     private String title;
+    
     private String album;
+    
     private double rating;
+    
     private int rating_for_this_user;
+    
+    private String album_cover;
+    
+    private String youtube_code;
 
     public SongSummaryDTO() {
         this.artist = "";
         this.title = "";
         this.album = "";
+        this.rating = -1;
+        this.rating_for_this_user = -1;
+        this.album_cover = "";
+        this.youtube_code = "";
     }
 
     public SongSummaryDTO(String artist, String title, String album) {
@@ -39,6 +51,8 @@ public class SongSummaryDTO implements Serializable {
         this.album = album;
         this.rating = -1;
         this.rating_for_this_user = -1;
+        this.album_cover = "";
+        this.youtube_code = "";
     }
 
     public String getAlbum() {
@@ -79,5 +93,21 @@ public class SongSummaryDTO implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setYoutubeCode(String youtube_code) {
+        this.youtube_code = youtube_code;
+    }
+
+    public String getYoutubeCode() {
+        return youtube_code;
+    }
+
+    public void setAlbumCover(String album_cover) {
+        this.album_cover = album_cover;
+    }
+
+    public String getAlbumCover() {
+        return album_cover;
     }
 }

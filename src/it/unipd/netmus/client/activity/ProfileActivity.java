@@ -466,38 +466,55 @@ public class ProfileActivity extends AbstractActivity implements
         client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
-        for (SongSummaryDTO song : songs) {
+        for (final SongSummaryDTO song : songs) {
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
 
-                song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                    }
+                String youTubeCode = song.getYoutubeCode();
+                String cover = song.getAlbumCover();
+                
+                if (youTubeCode.equals("") || cover.equals("")) {
+                    song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                        }
 
-                    @Override
-                    public void onSuccess(SongDTO song) {
-                        String youTubeCode = "";
-                        youTubeCode = song.getYoutubeCode();
-                        String cover = song.getAlbumCover();
+                        @Override
+                        public void onSuccess(SongDTO song_dto) {
+                            
+                            song.setYoutubeCode(song_dto.getYoutubeCode());
+                            song.setAlbumCover(song_dto.getAlbumCover());
 
-                        if (!youTubeCode.equals(""))
-                            client_factory.getProfileView().playYouTube(
-                                    youTubeCode);
-                        client_factory.getProfileView().setInfo(
-                                titolo + " - " + autore + " - " + album);
-                        if (!cover.equals(""))
-                            client_factory.getProfileView().paintMainCover(
-                                    cover);
-                        else
-                            client_factory.getProfileView().paintMainCover(
-                                    "images/test_cover.jpg");
-                        
-                        client_factory.getProfileView().stopLoading();
-                        return;
-                    }
-                });
+                            if (!song_dto.getYoutubeCode().equals(""))
+                                client_factory.getProfileView().playYouTube(
+                                        song_dto.getYoutubeCode());
+                            client_factory.getProfileView().setInfo(
+                                    titolo + " - " + autore + " - " + album);
+                            if (!song_dto.getAlbumCover().equals(""))
+                                client_factory.getProfileView().paintMainCover(
+                                        song_dto.getAlbumCover());
+                            else
+                                client_factory.getProfileView().paintMainCover(
+                                        "images/test_cover.jpg");
+                            
+                            client_factory.getProfileView().stopLoading();
+                            return;
+                            
+                        }
+                    });
+                }
+                else {
+                    
+                    client_factory.getProfileView().playYouTube(youTubeCode);
+                    client_factory.getProfileView().setInfo(titolo + " - " + autore + " - " + album);
+                
+                    client_factory.getProfileView().paintMainCover(cover);
+                    
+                    client_factory.getProfileView().stopLoading();
+                    return;
+                    
+                }
             }
         }
     }
@@ -655,7 +672,8 @@ public class ProfileActivity extends AbstractActivity implements
         client_factory.getProfileView().startLoading();
         List<SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
 
-        for (SongSummaryDTO song : songs) {
+        for (final SongSummaryDTO song : songs) {
+            
             if (song.getTitle().equals(titolo)
                     && song.getArtist().equals(autore)
                     && song.getAlbum().equals(album)) {
@@ -666,7 +684,7 @@ public class ProfileActivity extends AbstractActivity implements
                     }
 
                     @Override
-                    public void onSuccess(SongDTO song) {
+                    public void onSuccess(SongDTO song_dto) {
 
                         String genere = "----";
                         String anno = "----";
@@ -674,26 +692,28 @@ public class ProfileActivity extends AbstractActivity implements
                         String traccia = "----";
                         String cover = "images/test_cover.jpg";
 
-                        if (!song.getGenre().equals(""))
-                            genere = song.getGenre();
-                        if (!song.getYear().equals(""))
-                            anno = song.getYear();
-                        if (!song.getComposer().equals(""))
-                            compositore = song.getComposer();
-                        if (!song.getTrackNumber().equals(""))
-                            traccia = song.getTrackNumber();
-                        if (!song.getAlbumCover().equals(""))
-                            cover = song.getAlbumCover();
+                        if (!song_dto.getGenre().equals(""))
+                            genere = song_dto.getGenre();
+                        if (!song_dto.getYear().equals(""))
+                            anno = song_dto.getYear();
+                        if (!song_dto.getComposer().equals(""))
+                            compositore = song_dto.getComposer();
+                        if (!song_dto.getTrackNumber().equals(""))
+                            traccia = song_dto.getTrackNumber();
+                        if (!song_dto.getAlbumCover().equals(""))
+                            cover = song_dto.getAlbumCover();
 
                         client_factory.getProfileView().setSongFields(autore,
                                 titolo, album, genere, anno, compositore,
                                 traccia, cover);
                         
+                        song.setAlbumCover(cover);
+                        song.setYoutubeCode(song_dto.getYoutubeCode());
+                        
                         client_factory.getProfileView().stopLoading();
                         return;
                     }
                 });
-
             }
         }
     }
