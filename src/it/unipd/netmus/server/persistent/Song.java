@@ -100,12 +100,11 @@ public class Song {
             
             s.setTitle(song.getTitle());
             s.setArtist(song.getArtist());
-            s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
             s.setComposer(song.getComposer());
             s.setGenre(song.getGenre());
             s.setTrackNumber(song.getTrackNumber());
             s.setYear(song.getYear());
-            s.update();
+            s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
             return s;
         }
 
@@ -341,10 +340,6 @@ public class Song {
     public void setComposer(String composer) {
         this.composer = composer;
     }
-
-    /*public void setFile(String file) {
-        this.file = file;
-    }*/
 
     public void setGenre(String genre) {
         this.genre = genre;

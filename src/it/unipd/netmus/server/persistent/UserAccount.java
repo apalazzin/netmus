@@ -42,12 +42,8 @@ public class UserAccount {
      * 
      */
     public static void deleteUser(UserAccount user) {
-        ODF.get().storeOrUpdate(user);
 
         MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
-
-        ODF.get().storeOrUpdate(user);
-
         ODF.get().delete(user);
     }
 
@@ -254,7 +250,6 @@ public class UserAccount {
 
     public void setAboutMe(String about_me) {
         this.about_me = about_me;
-        this.update();
     }
 
     public void setAllowedUsers(List<String> allowed_users) {
@@ -263,22 +258,18 @@ public class UserAccount {
 
     public void setFirstName(String first_name) {
         this.first_name = first_name;
-        this.update();
     }
 
     public void setGender(String gender) {
         this.gender = gender;
-        this.update();
     }
 
     public void setGoogleUser(boolean is_uoogle_user) {
         this.is_google_user = is_uoogle_user;
-        this.update();
     }
 
     public void setLastName(String last_name) {
         this.last_name = last_name;
-        this.update();
     }
 
     public void setLastSessionId(String last_session_id) {
@@ -288,12 +279,10 @@ public class UserAccount {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
-        this.update();
     }
 
     public void setNickName(String nick_name) {
         this.nick_name = nick_name;
-        this.update();
     }
 
     public void setPassword(String password_hash) {

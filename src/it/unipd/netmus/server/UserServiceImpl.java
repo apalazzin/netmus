@@ -53,6 +53,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements
             current_user.setGender(new_info_user.getGender());
             current_user.setNationality(new_info_user.getNationality());
             current_user.setAboutMe(new_info_user.getAboutMe());
+            current_user.update();
             return true;
 
         } catch (Exception e) {
