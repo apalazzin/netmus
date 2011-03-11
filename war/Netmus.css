@@ -1,0 +1,212 @@
+/** Add css rules here for your application. */
+
+@font-face {
+	font-family: Verdana;
+	src: url('fonts/Verdana.ttf');
+}
+
+@font-face {
+	font-family: Verdana;
+	font-weight: bold;
+	src: url('fonts/Verdana_Bold.ttf');
+}
+
+
+div#applet-bar {
+   
+   height: 90%;
+   width: 33px;
+   min-height: 450px;      	
+   
+   background-color: gray;
+   position: absolute;
+   margin-top: 20px;
+   
+   right: 0px;
+   z-index: 5;
+   
+   overflow: hidden;
+   
+   	border-top: 2px solid #AAAAAA;
+   	border-left: 2px solid #AAAAAA;
+	border-bottom: 2px solid #AAAAAA;
+   	border-right: 0px solid#000000;
+   	
+	background-color: #FFFFFF;
+	
+	-webkit-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+	-moz-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+	-o-transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+	transition: width 0.3s ease-in-out, background-color 0s ease-in-out;
+	
+	border-radius: 15px 0px 0px 15px;
+	-moz-border-radius-topleft:  15px;
+	-moz-border-radius-bottomleft:  15px;
+
+	-moz-border-radius:  15px, 0px, 0px, 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
+}
+
+div#application {
+   clear:both;
+}
+
+.gwt-root {
+   background-color: #DDDDDD;
+   background-image: url('images/tribale.png');
+   background-repeat: no-repeat;
+   background-position: right top;
+   overflow: hidden;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+
+.applet_title {
+	
+	font-face: Verdana;
+	font-size: 12px;
+	color: #37A6EB;
+	margin-top: 10px;
+	width: 140px;
+	height: 18px;
+	background-color: #EEEEEE;
+	text-align: center;
+	border-top: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	
+	margin-top: 20px;
+	opacity: 0;
+	
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+	
+	}
+	
+.applet_status {
+	
+
+	
+	width: 200px;
+	height: 15px;
+	padding-top: 3px;
+	
+	color: #000000;
+	
+	font-size: 10px;
+	text-align: center;
+	
+	border: 1px solid #DCFFDC;
+	
+	background-color: #EFFFEF;
+
+	 
+	margin-left:-86px;
+	margin-top: 60px;
+	margin-bottom: 10px;		
+
+   	
+   		
+	 -webkit-transition: -webkit-transform 0.5s ease-in-out;
+	 -moz-transition: -moz-transform 0.5s ease-in-out;
+	 transition: transform 0.5s ease-in-out;
+
+	 -webkit-transition: width 0.5s, margin-left 0.5s, margin-top 0.5s, -webkit-transform 0.5s ease-in-out;
+	 -moz-transition: width 0.5s, margin-left 0.5s, margin-top 0.5s,-moz-transform 0.5s ease-in-out;
+	 transition: width 0.5s, margin-left0.5s, margin-top 0.5s, transform 0.5s ease-in-out;
+	 
+	 -moz-transform: rotate(90deg);
+	 -webkit-transform: rotate(90deg);
+	 transform: rotate(90deg);
+	 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 6px #37A6EB;
+	-moz-box-shadow: 0px 0px 6px #37A6EB;
+   	
+}
+
+
+.applet_botton {
+
+	font-face: Verdana;
+	font-size: 10px;
+	margin-top: 10px;	
+	}
+	
+	
+.applet_rescan {
+	
+	font-face: Verdana;
+	font-size: 10px;
+	margin-top: 10px;
+	
+	}
+	
+.applet_button_cnt {
+	
+	opacity: 0;
+	
+	-webkit-transition: opacity 0.8s ease-in-out;
+	-moz-transition: opacity 0.8s ease-in-out;
+	-o-transition: opacity 0.8s ease-in-out;
+	transition: opacity 0.8s ease-in-out;
+	
+	}
+	
+.applet_switch {
+	
+	
+	position: absolute;
+	bottom: 10px;
+	left: 90px;
+	
+	font-face: Verdana;
+	font-size: 12px;
+	color: #38D12F;	
+	
+	}
+	
+.applet_main {
+	
+	postion: relative;
+	width: 100%;
+	
+	
+	
+	}
+	
+}
