@@ -33,8 +33,6 @@ public interface LibraryService extends RemoteService {
             String title, String artist, String album);
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs);
-
-    void completeSongs(List<SongSummaryDTO> incomplete);
     
     void updateStatisticFields(String user);
 

@@ -2013,7 +2013,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         for (Song song : canzoni_catalogo) {
             test.add(song);
         }
-        
     }
 
 
@@ -2636,12 +2635,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     this.cover.setUrl("images/test_cover.jpg");
         }
         
-        
         showGlobalStar(global_rating);
 
     }
-
-
 
 
     @Override
