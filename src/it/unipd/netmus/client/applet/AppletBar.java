@@ -129,7 +129,7 @@ public class AppletBar {
     
     private void sendMusic(String xml) {
         
-        List<SongDTO> new_songs = translator.XMLToDTO(xml);
+        final List<SongDTO> new_songs = translator.XMLToDTO(xml);
         
         if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
@@ -153,8 +153,16 @@ public class AppletBar {
                     
                 else {
                     AppletBarView.showStatus(constants.completionFinish());
-                    client_factory.getEventBus()
-                            .fireEvent(new DeviceScannedEvent());
+                    
+                    List<String> tmp = new ArrayList<String>();
+                    for (SongDTO dto : new_songs) {
+                        tmp.add(dto.getArtist());
+                        tmp.add(dto.getTitle());
+                        tmp.add(dto.getAlbum());
+                    }
+                    client_factory.getProfileView().paintCatalogo(tmp);
+                    
+                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
                     
 //                    AppletBarView.showStatus(constants.updatingStatistics());
 //                    

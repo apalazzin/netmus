@@ -1,5 +1,6 @@
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -49,22 +50,6 @@ import com.google.code.twig.annotation.Id;
 
 public class Song {
 
-    private static final String SEPARATOR = "-vtg-";
-    
-    static String generateSongId(String title, String artist, String album) {
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
-        if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
-            song_id = song_id.replace('.', ' ');
-            song_id = song_id.replace('\"', ' ');
-            song_id = song_id.replace('\'', ' ');
-            song_id = song_id.replace(':', ' ');
-            song_id = song_id.replace('/', ' ');
-            song_id = song_id.replace('\\', ' ');
-            song_id = song_id.replaceAll(" ", "");
-        }
-        return song_id;
-    }
-
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id).now();
     }
@@ -74,7 +59,7 @@ public class Song {
                 .get()
                 .load()
                 .type(Song.class)
-                .id(generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
+                .id(FieldVerifier.generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
         return tmp;
     }
 
@@ -89,7 +74,7 @@ public class Song {
         if (song.getTitle().equals(""))
             return null;
 
-        Song s = load(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+        Song s = load(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
         if (s == null) {
             // La canzone non è presente nel Datastore
@@ -104,7 +89,7 @@ public class Song {
             s.setGenre(song.getGenre());
             s.setTrackNumber(song.getTrackNumber());
             s.setYear(song.getYear());
-            s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+            s.setId(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
             return s;
         }
 
@@ -154,7 +139,7 @@ public class Song {
     private int num_ratings;
 
     public Song() {
-        this.id = generateSongId("","","");
+        this.id = FieldVerifier.generateSongId("","","");
         this.num_owners = 0;
         this.album = "";
         this.artist = "";
@@ -200,10 +185,10 @@ public class Song {
         else
             this.album = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -230,11 +215,11 @@ public class Song {
         else
             this.artist = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
 
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -277,10 +262,10 @@ public class Song {
         else
             this.title = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.

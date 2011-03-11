@@ -2,7 +2,9 @@ package it.unipd.netmus.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Nome: MusicLibrarySummaryDTO.java 
@@ -23,7 +25,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MusicLibrarySummaryDTO implements Serializable {
 
-    private List<SongSummaryDTO> songs;
+    private Map<String, SongSummaryDTO> songs;
 
     private List<String> playlists;
     
@@ -32,17 +34,26 @@ public class MusicLibrarySummaryDTO implements Serializable {
     private String preferred_genre;
 
     public MusicLibrarySummaryDTO() {
-        this.songs = new ArrayList<SongSummaryDTO>();
+        this.songs = new HashMap<String, SongSummaryDTO>();
+        this.playlists = new ArrayList<String>();
         this.preferred_artist = "";
         this.preferred_genre = "";
     }
 
-    public MusicLibrarySummaryDTO(List<SongSummaryDTO> s,
+    public MusicLibrarySummaryDTO(Map<String, SongSummaryDTO> m,
             List<String> playlists) {
-        setSongs(s);
+        setSongs(m);
         setPlaylists(playlists);
         this.preferred_artist = "";
         this.preferred_genre = "";
+    }
+    
+    public Map<String, SongSummaryDTO> getSongs() {
+        return songs;
+    }
+
+    private void setSongs(Map<String, SongSummaryDTO> songs) {
+        this.songs = songs;
     }
     
     public void addPlaylist(String playlist_name) {
@@ -56,10 +67,6 @@ public class MusicLibrarySummaryDTO implements Serializable {
     public List<String> getPlaylists() {
         return playlists;
     }
-
-    public List<SongSummaryDTO> getSongs() {
-        return songs;
-    }
     
     public void removePlaylist(String playlist_name) {
         if (playlists.contains(playlist_name)) {
@@ -69,10 +76,6 @@ public class MusicLibrarySummaryDTO implements Serializable {
 
     public void setPlaylists(List<String> playlists) {
         this.playlists = playlists;
-    }
-
-    public void setSongs(List<SongSummaryDTO> songs) {
-        this.songs = songs;
     }
 
     public void setPreferred_artist(String preferred_artist) {
