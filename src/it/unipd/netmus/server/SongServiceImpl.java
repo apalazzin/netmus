@@ -1,6 +1,7 @@
 package it.unipd.netmus.server;
 
 import it.unipd.netmus.client.service.SongService;
+import it.unipd.netmus.server.persistent.Album;
 import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
@@ -75,19 +76,26 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         SongDTO song_dto = null;
         if (song != null) {
             song_dto = song.toSongDTO();
-            
+        }
+
+        if (song_summary_dto.getYoutubeCode().equals("")) {
             String ip = getThreadLocalRequest().getRemoteAddr();
             if (ip.equals("127.0.0.1")) ip="";
             
             song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
-            
-            if (song.getAlbumCover().equals("")) {
-            	
-                song.completeSong();
-                song_dto.setAlbumCover(song.getAlbumCover());
-            }
+        }
+        else {
+            song_dto.setYoutubeCode(song_summary_dto.getYoutubeCode());
         }
 
+        
+        if (song_summary_dto.getAlbumCover().equals("")) {
+            song_dto.setAlbumCover(Album.getAlbumCoverLastFm(song_dto.getAlbum(), song_dto.getArtist()));
+        }
+        else {
+            song_dto.setAlbumCover(song_summary_dto.getAlbumCover());
+        }
+        
         return song_dto;
     }
 

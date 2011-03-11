@@ -378,6 +378,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
              
              listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
              
+             
              if(youtube_status!=0)
                  setPlaySong(true);
              
@@ -2615,12 +2616,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     this.cover.setUrl("images/test_cover.jpg");
         }
         
-        
         showGlobalStar(global_rating);
 
     }
-
-
 
 
     @Override

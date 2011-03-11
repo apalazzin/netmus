@@ -1,14 +1,9 @@
 package it.unipd.netmus.server.persistent;
 
-import java.util.List;
-
-import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.code.twig.annotation.Id;
-import com.google.code.twig.annotation.Index;
 
 /**
  * Nome: Song.java Autore: VT.G Licenza: GNU GPL v3 Data Creazione: 15 Febbraio
@@ -71,7 +66,7 @@ public class Song {
     }
 
     public static Song load(String id) {
-        return ODF.get().load().type(Song.class).id(id.toLowerCase()).now();
+        return ODF.get().load().type(Song.class).id(id).now();
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
@@ -81,36 +76,6 @@ public class Song {
                 .type(Song.class)
                 .id(generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
         return tmp;
-    }
-
-    /**
-     * @param filename
-     * @return
-     *
-    @SuppressWarnings("unused")
-    private String clearFileName(String filename) {
-        String clean_name = filename;
-        if (filename != null && !filename.equals("")) {
-            clean_name = filename.replace('/', ' ').replace(".mp3", " ")
-                    .replace(".MP3", " ").replace('(', ' ').replace(')', ' ')
-                    .replace('[', ' ').replace(']', ' ');
-            return clean_name;
-        } else
-            return "";
-    }*/
-
-    /**
-     *
-     */
-    public static String findCoverFromAlbum(String album) {
-        List<Song> tmp = ODF.get().find().type(Song.class)
-                .addFilter("album", FilterOperator.EQUAL, album)
-                .returnAll().now();
-        if (tmp.size()>0 && !tmp.get(0).getAlbumCover().equals("")) {
-            return tmp.get(0).getAlbumCover();
-        } else {
-            return "";
-        }
     }
 
     /**
@@ -130,6 +95,9 @@ public class Song {
             // La canzone non è presente nel Datastore
             s = new Song();
             s.setAlbum(song.getAlbum());
+            
+            Album.storeNewAlbum(song.getAlbum(), song.getArtist());
+            
             s.setTitle(song.getTitle());
             s.setArtist(song.getArtist());
             s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
@@ -166,25 +134,17 @@ public class Song {
     @Id
     private String id;
 
-    @Index
     private String title;
 
-    @Index
     private String album;
 
-    @Index
     private String artist;
 
-    @Index
     private int num_owners;
 
-    @Index
     private double rating;
 
-    @Index
     private String genre;
-
-    private String album_cover;
 
     private String year;
 
@@ -192,25 +152,18 @@ public class Song {
 
     private String track_number;
 
-    //private String file;
-
-    private String youtube_code;
-
     private int num_ratings;
 
     public Song() {
         this.id = generateSongId("","","");
         this.num_owners = 0;
         this.album = "";
-        this.album_cover = "";
         this.artist = "";
         this.composer = "";
-        //this.file = "";
         this.genre = "";
         this.title = "";
         this.track_number = "";
         this.year = "";
-        this.youtube_code = "";
         this.num_ratings = 0;
         this.rating = 0;
     }
@@ -337,26 +290,8 @@ public class Song {
 
     }
 
-    public void completeSong() {
-
-        if (album_cover.equals("")) {
-            String tmp = Song.findCoverFromAlbum(getAlbum());
-            if (!tmp.equals("")) {
-                setAlbumCover(tmp);
-            } else {
-                //ricerca esterna
-                setAlbumCover(Utils.getCoverImage(artist, album));
-            }
-        }
-        this.update();
-    }
-
     public String getAlbum() {
         return album;
-    }
-
-    public String getAlbumCover() {
-        return album_cover;
     }
 
     public String getArtist() {
@@ -366,10 +301,6 @@ public class Song {
     public String getComposer() {
         return composer;
     }
-
-    /*public String getFile() {
-        return file;
-    }*/
 
     public String getGenre() {
         return genre;
@@ -407,14 +338,6 @@ public class Song {
         return year;
     }
 
-    public String getYoutubeCode() {
-        return youtube_code;
-    }
-
-    public void setAlbumCover(String album_cover) {
-        this.album_cover = album_cover;
-    }
-
     public void setComposer(String composer) {
         this.composer = composer;
     }
@@ -435,23 +358,16 @@ public class Song {
         this.year = year;
     }
 
-    public void setYoutubeCode(String youtube_code) {
-        this.youtube_code = youtube_code;
-    }
-
     public SongDTO toSongDTO() {
         SongDTO tmp = new SongDTO();
         tmp.setArtist(this.artist);
         tmp.setTitle(this.title);
         tmp.setAlbum(this.album);
         tmp.setComposer(this.composer);
-        //tmp.setFile(this.file);
         tmp.setGenre(this.genre);
         tmp.setTrackNumber(this.track_number);
         tmp.setYear(this.year);
-        tmp.setAlbumCover(this.album_cover);
         tmp.setNumOwners(this.num_owners);
-        tmp.setYoutubeCode(this.youtube_code);
         tmp.setNumRatings(this.num_ratings);
         tmp.setRating(this.rating);
         return tmp;

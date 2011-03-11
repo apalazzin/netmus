@@ -96,52 +96,6 @@ public class MusicLibrary {
         }
     }
 
-    // ---------------------------------------------------//
-    // ----------classe per gestione RATINGS--------------//
-    /*
-    static private class SongWithRating {
-
-        static void deleteSongWithRating(SongWithRating s) {
-            ODF.get().storeOrUpdate(s);
-            ODF.get().delete(s);
-        }
-
-        private String song_id;
-
-        private int rating;
-
-        @SuppressWarnings("unused")
-        public SongWithRating() {
-            this.song_id = Song.SEPARATOR;
-            this.rating = -1;
-        }
-
-        public SongWithRating(String song_id) {
-            this.song_id = song_id;
-            this.rating = -1;
-            this.update();
-        }
-
-        public int getRating() {
-            return rating;
-        }
-
-        public String getSongId() {
-            return song_id;
-        }
-
-        public void setRating(int rating) {
-            this.rating = rating;
-            this.update();
-        }
-
-        void update() {
-            ODF.get().storeOrUpdate(this);
-        }
-    }
-    // ---------------------------------------------------
-    */
-
     static void deleteMusicLibrary(MusicLibrary ml) {
         for (Playlist tmp : ml.playlists)
             Playlist.deletePlaylist(tmp);

@@ -136,47 +136,4 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         }
     }
 
-    @Override
-    public void completeSongs(List<SongSummaryDTO> incomplete) {
-
-        // variabili utilizzate per salvare l'album e la relativa copertina del
-        // brano scansionato precedentemente
-        String cache_album = "no_album";
-        String cache_album_cover = "no_album_cover";
-
-        for (SongSummaryDTO song_dto : incomplete) {
-            Song song = Song.loadFromDTO(song_dto);
-
-            if (song != null) {
-
-                // se l'album è lo stesso della canzone precendete assegna già
-                // la copertina in modo da non effettuare alcuna ricerca
-                if (song.getAlbum().equalsIgnoreCase(cache_album)) {
-                    song.setAlbumCover(cache_album_cover);
-                }
-                
-                // ricerche interne ed esterne (solo in caso di necessità) per
-                // video e copertina
-                song.completeSong();
-
-                // inserimento in cache temporanea
-                cache_album = song.getAlbum();
-
-                // se non è stata trovata la copertina ripristina i valori nella
-                // canzone e nella cache a stringa vuota
-                if (song.getAlbumCover().equals("no_album_cover")) {
-                    cache_album_cover = song.getAlbumCover();
-                    song.setAlbumCover("");
-                    song.update();
-                } else {
-                    if (song.getAlbumCover().equals("")) {
-                        cache_album_cover = "no_album_cover";
-                    } else {
-                        cache_album_cover = song.getAlbumCover();
-                    }
-                }
-            }
-        }
-    }
-
 }

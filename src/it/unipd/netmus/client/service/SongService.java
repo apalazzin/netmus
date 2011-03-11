@@ -22,4 +22,5 @@ public interface SongService extends RemoteService {
     double rateSong(String user, SongSummaryDTO song, int rating);
 
     SongDTO getSongDTO(SongSummaryDTO song_summary_dto);
+
 }
