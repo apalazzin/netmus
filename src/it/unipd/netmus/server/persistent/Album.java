@@ -57,6 +57,7 @@ public class Album {
             }
             else {
                 tmp.setCover(Utils.getCoverImage(artist, name));
+                ODF.get().update(tmp);
                 return tmp.getCover();
             }
         }
