@@ -5,6 +5,7 @@ package it.unipd.netmus.client.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.lang.InterruptedException;
@@ -247,7 +248,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    
    //classe interna che rappresenta un brano
-   private static class Song extends it.unipd.netmus.client.ui.ProfileView.Song {
+   private static class Song extends it.unipd.netmus.client.ui.ProfileView.Song implements Comparable<Song>  {
 
        private final String autore;
        private final String titolo;
@@ -274,6 +275,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                return false;
            
         }
+       
+       public int compareTo(Song compareObject) {
+           
+           if (this == compareObject) {
+                 return 0;
+                 }
+
+           if (this != null) {
+                 return (compareObject != null) ? this.album.compareTo(compareObject.album) : 1;
+            }
+           
+           return -1;
+            
+       }
 
    }
  
@@ -1990,9 +2005,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
         }
         
+        
+     
+        
+        Collections.sort(canzoni_catalogo);
+        
         for (Song song : canzoni_catalogo) {
             test.add(song);
         }
+        
     }
 
 
