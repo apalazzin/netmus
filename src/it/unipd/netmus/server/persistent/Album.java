@@ -17,8 +17,9 @@ public class Album {
     private static final String SEPARATOR = "-vtg-";
     
     static String generateAlbumId(String name, String artist) {
-        String song_id = (name + Album.SEPARATOR + artist).toLowerCase();
-        if (song_id != Album.SEPARATOR) {
+        String song_id = (Utils.cleanString(name) + Album.SEPARATOR
+        		+ Utils.cleanString(artist));
+        /*if (song_id != Album.SEPARATOR) {
             song_id = song_id.replace('.', ' ');
             song_id = song_id.replace('\"', ' ');
             song_id = song_id.replace('\'', ' ');
@@ -26,7 +27,7 @@ public class Album {
             song_id = song_id.replace('/', ' ');
             song_id = song_id.replace('\\', ' ');
             song_id = song_id.replaceAll(" ", "");
-        }
+        }*/
         return song_id;
     }
     
