@@ -659,7 +659,11 @@ public class ProfileActivity extends AbstractActivity implements
                         @Override
                         public void onSuccess(SongDTO song_dto) {
                             System.out.println("setSongCover(): " + titolo + song_dto.getYoutubeCode());
+                            
+                            song.setAlbumCover("images/test_cover.jpg");
+                            
                             song.setYoutubeCode(song_dto.getYoutubeCode());
+                            if (!song_dto.getAlbumCover().equals(""))
                             song.setAlbumCover(song_dto.getAlbumCover());
                             
                             String cover = "images/test_cover.jpg";
@@ -707,6 +711,8 @@ public class ProfileActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(SongDTO song_dto) {
+                        
+                        System.out.println("Fatta RPC SongDTO x SongFields() " + titolo);
 
                         String genere = "----";
                         String anno = "----";
