@@ -494,13 +494,20 @@ public class ProfileActivity extends AbstractActivity implements
                         song_summary_dto.setAlbumCover("images/test_cover.jpg");
                     }
 
-                    if (!song_dto.getYoutubeCode().equals("")) {
+                    
+                    if (song_dto.getYoutubeCode().equals("")) {
                         client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(
-                                    song_dto.getYoutubeCode());
+                        client_factory.getProfileView().playYouTube("00000000000");
+                        client_factory.getProfileView().playNext(); 
+                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                    else {
+                        client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
                         client_factory.getProfileView().setInfo(
                             title + " - " + artist + " - " + album);
                     }
+                    
+                    
                     if (!song_dto.getAlbumCover().equals(""))
                         client_factory.getProfileView().paintMainCover(
                                 song_dto.getAlbumCover());
@@ -512,74 +519,16 @@ public class ProfileActivity extends AbstractActivity implements
                     return;
                     
                 }
-                /*
-                      song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
-                                                        
-                             if(!song_dto.getAlbumCover().equals("")) {
-                        		song_summary_dto.setAlbumCover(song_dto.getAlbumCover());
-                		    }
-		                    else {
-        		                song_summary_dto.setAlbumCover("images/test_cover.jpg");
-                		    }
-
-
-                            if (song_dto.getYoutubeCode().equals("")) {
-                                client_factory.getProfileView().closeYouTube();
-                                client_factory.getProfileView().playYouTube("00000000000");
-                                client_factory.getProfileView().playNext(); 
-                                client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
-                            else {
-                                client_factory.getProfileView().closeYouTube();
-                                client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-                                client_factory.getProfileView().setInfo(
-                                    title + " - " + artist + " - " + album);
-                            }
-                            
-                             if (!song_dto.getAlbumCover().equals(""))
-               			         client_factory.getProfileView().paintMainCover(
-                                song_dto.getAlbumCover());
-		                    else
-        		                client_factory.getProfileView().paintMainCover(
-                                "images/test_cover.jpg");
-                    
-                		    client_factory.getProfileView().stopLoading();
-		                    return;
-                            
-                        }
-				*/
             });
         }
         else {
-            
             client_factory.getProfileView().closeYouTube();
             client_factory.getProfileView().playYouTube(youTubeCode);
             client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-        
             client_factory.getProfileView().paintMainCover(cover);
             
             client_factory.getProfileView().stopLoading();
             return;
-            
-            /*
-                    if (youTubeCode.equals("")) {
-                        client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playNext(); 
-                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
-                    
-                    else {
-                    
-                        client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(youTubeCode);
-                        client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-                    
-                        client_factory.getProfileView().paintMainCover(cover);
-                        
-                        client_factory.getProfileView().stopLoading();
-                        return;
-                    }
-                }
-			*/
         }
     }
 
