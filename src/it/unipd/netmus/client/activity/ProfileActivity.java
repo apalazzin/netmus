@@ -494,7 +494,7 @@ public class ProfileActivity extends AbstractActivity implements
                 		    }
 
 
-                            if (!song_dto.getYoutubeCode().equals("")) {
+                            if (song_dto.getYoutubeCode().equals("")) {
                                 client_factory.getProfileView().closeYouTube();
                                 client_factory.getProfileView().playYouTube("00000000000");
                                 client_factory.getProfileView().playNext(); 
