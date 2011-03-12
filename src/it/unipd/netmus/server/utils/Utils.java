@@ -86,7 +86,8 @@ public final class Utils {
                 SongDTO song = new SongDTO();
                 song.setTitle(t.getName());
                 song.setArtist(t.getArtist());
-                song.setAlbum(t.getAlbum());
+                if (t.getAlbum() != null)
+                	song.setAlbum(t.getAlbum());
                 song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
                 return song;
             }
