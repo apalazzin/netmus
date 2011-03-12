@@ -484,20 +484,27 @@ public class ProfileActivity extends AbstractActivity implements
                         public void onSuccess(SongDTO song_dto) {
                             System.out.println("youTubePlay(): " + titolo + " " + song_dto.getYoutubeCode());
                             
-                            song.setYoutubeCode(song_dto.getYoutubeCode());
+                            String code = song_dto.getYoutubeCode();
+                            
+                            song.setYoutubeCode(code);
                             
                             if(!song_dto.getAlbumCover().equals(""))
                             song.setAlbumCover(song_dto.getAlbumCover());
                             else
                             song.setAlbumCover("images/test_cover.jpg");
 
-                            if (!song_dto.getYoutubeCode().equals("")) {
+                            if (code.equals("")) {
                                 client_factory.getProfileView().closeYouTube();
-                                client_factory.getProfileView().playYouTube(
-                                            song_dto.getYoutubeCode());
+                                client_factory.getProfileView().playYouTube("00000000000");
+                                client_factory.getProfileView().playNext(); 
+                                client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + titolo + "\""); }
+                            else {
+                                client_factory.getProfileView().closeYouTube();
+                                client_factory.getProfileView().playYouTube(code);
                                 client_factory.getProfileView().setInfo(
                                     titolo + " - " + autore + " - " + album);
                             }
+                            
                             if (!song_dto.getAlbumCover().equals(""))
                                 client_factory.getProfileView().paintMainCover(
                                         song_dto.getAlbumCover());
@@ -512,16 +519,24 @@ public class ProfileActivity extends AbstractActivity implements
                     });
                 }
                 else {
+
+                    if (youTubeCode.equals("")) {
+                        client_factory.getProfileView().playYouTube("00000000000");
+                        client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playNext(); 
+                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + titolo + "\""); }
                     
-                    client_factory.getProfileView().closeYouTube();
-                    client_factory.getProfileView().playYouTube(youTubeCode);
-                    client_factory.getProfileView().setInfo(titolo + " - " + autore + " - " + album);
-                
-                    client_factory.getProfileView().paintMainCover(cover);
+                    else {
                     
-                    client_factory.getProfileView().stopLoading();
-                    return;
+                        client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube(youTubeCode);
+                        client_factory.getProfileView().setInfo(titolo + " - " + autore + " - " + album);
                     
+                        client_factory.getProfileView().paintMainCover(cover);
+                        
+                        client_factory.getProfileView().stopLoading();
+                        return;
+                    }                    
                 }
             }
         }
