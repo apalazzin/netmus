@@ -51,27 +51,6 @@ import com.google.code.twig.annotation.Id;
 
 public class Song {
 
-
-    private static final String SEPARATOR = "-vtg-";
-    
-    static String generateSongId(String title, String artist, String album) {
-        String song_id = (Utils.cleanString(title) + Song.SEPARATOR 
-        		+ Utils.cleanString(artist) + Song.SEPARATOR 
-        		+ Utils.cleanString(album));
-        /*if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
-        	 già fatto da cleanString()
-            song_id = song_id.replace('.', ' ');
-            song_id = song_id.replace('\"', ' ');
-            song_id = song_id.replace('\'', ' ');
-            song_id = song_id.replace(':', ' ');
-            song_id = song_id.replace('/', ' ');
-            song_id = song_id.replace('\\', ' ');
-            song_id = song_id.replaceAll(" ", "");
-            
-        }*/
-        return song_id;
-    }
-
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id).now();
     }
@@ -93,12 +72,14 @@ public class Song {
      */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
-        if ( song.getTitle() == null || song.getTitle().isEmpty() 
+        /*if ( song.getTitle() == null || song.getTitle().isEmpty() 
         		|| song.getAlbum() == null || song.getAlbum().isEmpty() 
         		|| song.getArtist() == null || song.getArtist().isEmpty())
             song = incompleteSong(song);
         if (song == null)
-        	return null;
+        	return null;*/
+        if (song.getTitle().equals(""))
+            return null;
 
         Song s = load(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
@@ -139,6 +120,7 @@ public class Song {
     /*
      * Cerca di recuperare informazioni sui brani incompleti, per poi vedere se è il caso di ignorarli
      */
+    @SuppressWarnings("unused")
     static private SongDTO incompleteSong(SongDTO s){
     	//guardo se posso ricavare informazioni dai meta tag.
     	if (!s.getArtist().isEmpty() && !s.getTitle().isEmpty())
@@ -149,10 +131,10 @@ public class Song {
     	//pure quelli se non sono già presenti nel nome del file (eventuali ripetizioni sarebbero dannose).
     	String extraTags = new String();
     	if (!s.getArtist().isEmpty() && 
-    			!Utils.cleanString(s.getFile()).contains(Utils.cleanString(s.getArtist())))
+    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getArtist())))
     		extraTags = s.getArtist();
     	else if (!s.getTitle().isEmpty() && 
-    			!Utils.cleanString(s.getFile()).contains(Utils.cleanString(s.getTitle())))
+    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getTitle())))
     		extraTags = s.getTitle();
     	
     	return Utils.getSongFromFileName(s.getFile() + extraTags);

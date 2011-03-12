@@ -131,6 +131,7 @@ public class AppletBar {
         
         final List<SongDTO> new_songs = translator.XMLToDTO(xml);
         
+        
         if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
             return;
@@ -148,6 +149,7 @@ public class AppletBar {
                 
                 if (translator.otherChild()) {
                     AppletBarView.showStatus(String.valueOf((translator.getParsed())));
+                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
                     sendMusic("");
                 }
                     
