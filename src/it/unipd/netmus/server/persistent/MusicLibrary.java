@@ -1,8 +1,7 @@
 package it.unipd.netmus.server.persistent;
 
-import it.unipd.netmus.shared.MusicLibraryDTO;
+import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
-import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.util.ArrayList;
@@ -169,7 +168,7 @@ public class MusicLibrary {
 
     public boolean addSongToPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
-        String song_id = Song.generateSongId(title, artist, album);
+        String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         if (tmp != null) {
             if (song_list.containsKey(song_id)) {
@@ -298,7 +297,7 @@ public class MusicLibrary {
     public boolean removeSong(String artist, String title,
             String album) {
 
-        String song_id = Song.generateSongId(title, artist, album);
+        String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         if (song_list.containsKey(song_id)) {
             
@@ -323,7 +322,7 @@ public class MusicLibrary {
     public boolean removeSongFromPlaylist(String playlist_name, String title, String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
         
-        String song_id = Song.generateSongId(title, artist, album);
+        String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         if (tmp != null) {
             return tmp.removeSong(song_id);
@@ -331,35 +330,8 @@ public class MusicLibrary {
             return false;
     }
 
-    public MusicLibraryDTO toMusicLibraryDTO() {
-        List<SongDTO> list = new ArrayList<SongDTO>();
-        
-        for (String tmp : song_list.keySet()) {
-            
-            Song song = ODF.get().load().type(Song.class).id(tmp).now();
-            
-            if (song != null) {
-                SongDTO song_dto = song.toSongDTO();
-                song_dto.setRatingForThisUser(Integer.parseInt(song_list.get(tmp)));
-                list.add(song_dto);
-                
-            }
-            
-        }
-
-        List<String> playlists = this.getPlaylists();
-        
-        MusicLibraryDTO library = new MusicLibraryDTO(list, playlists);
-        
-        library.setPreferred_artist(getPreferredArtist());
-        
-        library.setPreferred_genre(getPreferredGenre());
-        
-        return library;
-    }
-
     public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
-        List<SongSummaryDTO> list = new ArrayList<SongSummaryDTO>();
+        Map<String, SongSummaryDTO> map = new HashMap<String, SongSummaryDTO>();
 
         for (String tmp : song_list.keySet()) {
             
@@ -369,8 +341,8 @@ public class MusicLibrary {
                 if (song != null) {
                     SongSummaryDTO song_dto = song.toSongSummaryDTO();
                     song_dto.setRatingForThisUser(Integer.parseInt(song_list.get(tmp)));
-                    list.add(song_dto);
-                    
+                    map.put(tmp, song_dto);
+           
                 }
             }
             
@@ -378,7 +350,7 @@ public class MusicLibrary {
 
         List<String> playlists = this.getPlaylists();
         
-        MusicLibrarySummaryDTO library = new MusicLibrarySummaryDTO(list, playlists);
+        MusicLibrarySummaryDTO library = new MusicLibrarySummaryDTO(map, playlists);
         
         library.setPreferred_artist(getPreferredArtist());
         

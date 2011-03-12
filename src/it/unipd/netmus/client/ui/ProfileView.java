@@ -183,10 +183,6 @@ public interface ProfileView extends IsWidget {
        */
       void setSongInfo(); 
       /**
-       *Restituisce il summary delle canzoni
-       */
-      void setSongs();
-      /**
        *Restituisce il rating della canzone selezionata
        */      
       double setRating(String artist, String title, String album);

@@ -1,5 +1,9 @@
 package it.unipd.netmus.client.event;
 
+import it.unipd.netmus.shared.SongDTO;
+
+import java.util.List;
+
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
@@ -11,6 +15,12 @@ import com.google.gwt.event.shared.GwtEvent;
 public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
     public static Type<DeviceScannedEventHandler> TYPE = new Type<DeviceScannedEventHandler>();
 
+    private List<SongDTO> new_songs;
+    
+    public DeviceScannedEvent(List<SongDTO> new_songs) {
+        this.setNewSongs(new_songs);
+    }
+    
     /**
      * Restituisce il Type associato all'evento.
      */
@@ -25,6 +35,14 @@ public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
     @Override
     protected void dispatch(DeviceScannedEventHandler handler) {
         handler.onScanDevice(this);
+    }
+
+    public void setNewSongs(List<SongDTO> new_songs) {
+        this.new_songs = new_songs;
+    }
+
+    public List<SongDTO> getNewSongs() {
+        return new_songs;
     }
 
 }

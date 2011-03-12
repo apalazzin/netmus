@@ -19,6 +19,8 @@ package it.unipd.netmus.shared;
 
 public class FieldVerifier {
 
+    private static final String SEPARATOR = "-vtg-";
+    
     public static boolean isValidEmail(String email) {
 
         return email
@@ -41,6 +43,20 @@ public class FieldVerifier {
             return false;
         else
             return password.length() > 4;
+    }
+    
+    public static String generateSongId(String title, String artist, String album) {
+        String song_id = (title + FieldVerifier.SEPARATOR + artist + FieldVerifier.SEPARATOR + album).toLowerCase();
+        if (song_id != FieldVerifier.SEPARATOR+FieldVerifier.SEPARATOR) {
+            song_id = song_id.replace('.', ' ');
+            song_id = song_id.replace('\"', ' ');
+            song_id = song_id.replace('\'', ' ');
+            song_id = song_id.replace(':', ' ');
+            song_id = song_id.replace('/', ' ');
+            song_id = song_id.replace('\\', ' ');
+            song_id = song_id.replaceAll(" ", "");
+        }
+        return song_id;
     }
     
 }
