@@ -47,9 +47,13 @@ public interface ProfileView extends IsWidget {
     */   
    void setRating(int rating);
    /**
-    *Riempie il catalogo
+    *Inserisce le canzoni date in input al catalogo
     */
    void paintCatalogo(List<String> lista_canzoni);
+   /**
+    *Ripulisce e succesivamente riempie il catalogo 
+    */
+   void repaintLibrary(List<String> lista_canzoni);
    /**
     *Riempie la lista delle playlist
     */

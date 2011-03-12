@@ -40,10 +40,12 @@ public class AppletBar {
      * l'utente.
      */
     public static AppletBar get(String user) {
-        if (APPLET_BAR == null)
-            APPLET_BAR = new AppletBar(user);
-        else
+        if (APPLET_BAR == null) {
+                APPLET_BAR = new AppletBar(user);
+        }
+        else  {
             APPLET_BAR.setUser(user);
+        }
         return APPLET_BAR;
     }
 
@@ -129,13 +131,16 @@ public class AppletBar {
     
     private void sendMusic(String xml) {
         
-        final List<SongDTO> new_songs = translator.XMLToDTO(xml);
+        client_factory.getProfileView().startLoading();
         
+        final List<SongDTO> new_songs = translator.XMLToDTO(xml);
         
         if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
             return;
         }
+        
+        
         
         library_service.sendUserNewMusic(user, new_songs, new AsyncCallback<Void>() {
             @Override
@@ -147,6 +152,8 @@ public class AppletBar {
             @Override
             public void onSuccess(Void incomplete) {
                 
+                client_factory.getProfileView().stopLoading();
+                
                 if (translator.otherChild()) {
                     AppletBarView.showStatus(String.valueOf((translator.getParsed())));
                     client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
@@ -157,38 +164,6 @@ public class AppletBar {
                     AppletBarView.showStatus(constants.completionFinish());
                     
                     client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
-                    
-//                    AppletBarView.showStatus(constants.updatingStatistics());
-//                    
-//                    // nuova RPC per far partire l'update delle statistiche
-//                    library_service.updateStatisticFields(user, new AsyncCallback<Void>() {
-//                        @Override
-//                        public void onFailure(Throwable caught) {
-//                        }
-//                        @Override
-//                        public void onSuccess(Void result) {
-//                            AppletBarView.showStatus(constants.completionFinish());
-//                            
-//                            //nuova RPC per aggiornare la lista degli amici successivamente all'aggiornamento
-//                            user_service.findRelatedUsers(user, new AsyncCallback<List<String>>() {
-//                                @Override
-//                                public void onFailure(Throwable caught) {
-//                                }
-//
-//                                @Override
-//                                public void onSuccess(List<String> related_users) {
-//                                    String[] names = new String[related_users.size()];
-//                                    
-//                                    for (int i=0; i<related_users.size(); i++) {
-//                                        names[i] = related_users.get(i);
-//                                    }
-//                                    
-//                                    client_factory.getProfileView().paintFriendlist(names);
-//                                }
-//                                
-//                            });
-//                        }
-//                    });
                 }
                 
             }
