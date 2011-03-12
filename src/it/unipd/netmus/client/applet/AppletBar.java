@@ -154,14 +154,6 @@ public class AppletBar {
                 else {
                     AppletBarView.showStatus(constants.completionFinish());
                     
-                    List<String> tmp = new ArrayList<String>();
-                    for (SongDTO dto : new_songs) {
-                        tmp.add(dto.getArtist());
-                        tmp.add(dto.getTitle());
-                        tmp.add(dto.getAlbum());
-                    }
-                    client_factory.getProfileView().paintCatalogo(tmp);
-                    
                     client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
                     
 //                    AppletBarView.showStatus(constants.updatingStatistics());
