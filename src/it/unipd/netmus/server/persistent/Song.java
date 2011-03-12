@@ -97,8 +97,6 @@ public class Song {
             song = incompleteSong(song);
         if (song == null)
         	return null;
-        
-        System.out.println("Canzone: "+song.getTitle()+" "+song.getArtist()+" "+song.getAlbum());
 
         Song s = load(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
@@ -130,7 +128,6 @@ public class Song {
                 s.setTrackNumber(song.getTrackNumber());
             if (s.getYear().equals(""))
                 s.setYear(song.getYear());
-
             s.update();
             return s;
         }
