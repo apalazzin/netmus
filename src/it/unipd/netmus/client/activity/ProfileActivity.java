@@ -23,6 +23,7 @@ import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.exception.LoginException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,8 @@ public class ProfileActivity extends AbstractActivity implements
     private SongServiceAsync song_service_svc = GWT.create(SongService.class);
 
     private UserCompleteDTO current_user;
+    
+    private Map<String, SongDTO> info_alredy_loaded = new HashMap<String, SongDTO>();
 
     MyConstants my_constants = GWT.create(MyConstants.class);
 
@@ -449,15 +452,32 @@ public class ProfileActivity extends AbstractActivity implements
             final String album) {
 
         client_factory.getProfileView().startLoading();
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-
-        final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
-
-        String youTubeCode = song.getYoutubeCode();
-        String cover = song.getAlbumCover();
+        String youTubeCode = "";
+        String cover = "";
         
+        //ricerca nella mappa delle info già caricate
+        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+        
+        if (song_dto != null) {
+            youTubeCode = song_dto.getYoutubeCode();
+            cover = song_dto.getAlbumCover();
+            
+            client_factory.getProfileView().closeYouTube();
+            client_factory.getProfileView().playYouTube(youTubeCode);
+            client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
+        
+            client_factory.getProfileView().paintMainCover(cover);
+            
+            client_factory.getProfileView().stopLoading();
+            return;
+        }
+        
+
+        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+        final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
+
         if (youTubeCode.equals("") || cover.equals("")) {
-            song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+            song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
                 }
@@ -465,13 +485,13 @@ public class ProfileActivity extends AbstractActivity implements
                 @Override
                 public void onSuccess(SongDTO song_dto) {
                     
-                    song.setYoutubeCode(song_dto.getYoutubeCode());
+                    song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
                     
                     if(!song_dto.getAlbumCover().equals("")) {
-                        song.setAlbumCover(song_dto.getAlbumCover());
+                        song_summary_dto.setAlbumCover(song_dto.getAlbumCover());
                     }
                     else {
-                        song.setAlbumCover("images/test_cover.jpg");
+                        song_summary_dto.setAlbumCover("images/test_cover.jpg");
                     }
 
                     if (!song_dto.getYoutubeCode().equals("")) {
@@ -668,6 +688,39 @@ public class ProfileActivity extends AbstractActivity implements
 
         client_factory.getProfileView().startLoading();
         
+        //ricerca nella mappa delle info già caricate
+        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+        
+        if (song_dto != null) {
+            
+            //se le info erano già state caricate precedentemente vengono prese ed utilizzate immediatamente
+            String genere = "----";
+            String anno = "----";
+            String compositore = "----";
+            String traccia = "----";
+            String cover = "images/test_cover.jpg";
+            
+            if (!song_dto.getGenre().equals(""))
+                genere = song_dto.getGenre();
+            if (!song_dto.getYear().equals(""))
+                anno = song_dto.getYear();
+            if (!song_dto.getComposer().equals(""))
+                compositore = song_dto.getComposer();
+            if (!song_dto.getTrackNumber().equals(""))
+                traccia = song_dto.getTrackNumber();
+            if (!song_dto.getAlbumCover().equals(""))
+                cover = song_dto.getAlbumCover();
+
+            //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
+            client_factory.getProfileView().setSongFields(artist,
+                    title, album, genere, anno, compositore,
+                    traccia, cover);
+            
+            client_factory.getProfileView().stopLoading();
+            
+            return;
+        }
+        
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
 
@@ -679,12 +732,15 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(SongDTO song_dto) {
 
+                //salva le info caricate in modo che siano sempre disponibili nel client
+                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
+
                 String genere = "----";
                 String anno = "----";
                 String compositore = "----";
                 String traccia = "----";
                 String cover = "images/test_cover.jpg";
-
+                
                 if (!song_dto.getGenre().equals(""))
                     genere = song_dto.getGenre();
                 if (!song_dto.getYear().equals(""))
@@ -696,12 +752,10 @@ public class ProfileActivity extends AbstractActivity implements
                 if (!song_dto.getAlbumCover().equals(""))
                     cover = song_dto.getAlbumCover();
 
+                //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
                 client_factory.getProfileView().setSongFields(artist,
                         title, album, genere, anno, compositore,
                         traccia, cover);
-                
-                song.setAlbumCover(cover);
-                song.setYoutubeCode(song_dto.getYoutubeCode());
                 
                 client_factory.getProfileView().stopLoading();
                 return;
@@ -753,9 +807,21 @@ public class ProfileActivity extends AbstractActivity implements
                             //vanno ad aggiornare la libreria dell'utente mantenuta nell'activity
                             @Override
                             public void onScanDevice(DeviceScannedEvent event) {
+                                
+                                List<String> tmp_list = new ArrayList<String>();
+                                
                                 for (SongDTO tmp : event.getNewSongs()) {
-                                    current_user.getMusicLibrary().getSongs().put(FieldVerifier.generateSongId(tmp.getTitle(), tmp.getArtist(), tmp.getAlbum()), new SongSummaryDTO(tmp.getArtist(), tmp.getTitle(), tmp.getAlbum()));
+                                    if (!tmp.getTitle().equals("")) {
+                                        
+                                        if (current_user.getMusicLibrary().getSongs().put(FieldVerifier.generateSongId(tmp.getTitle(), tmp.getArtist(), tmp.getAlbum()), new SongSummaryDTO(tmp.getArtist(), tmp.getTitle(), tmp.getAlbum())) == null) {
+                                            tmp_list.add(tmp.getArtist());
+                                            tmp_list.add(tmp.getTitle());
+                                            tmp_list.add(tmp.getAlbum());
+                                        }
+                                    }
                                 }
+                                
+                                client_factory.getProfileView().paintCatalogo(tmp_list);
                             }
                             
                         });
