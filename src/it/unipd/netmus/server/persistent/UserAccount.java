@@ -178,7 +178,7 @@ public class UserAccount {
         this.is_public_profile = true;
         this.allowed_users = new ArrayList<String>();
     }
-
+    
     public UserAccount(String user, String password_hash) {
         music_library = new MusicLibrary(this);
         this.user = user;

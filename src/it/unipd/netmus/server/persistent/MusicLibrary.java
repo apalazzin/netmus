@@ -372,89 +372,14 @@ public class MusicLibrary {
         return null;
     }
 
-    private void setPreferredArtist(String preferred_artist) {
+    public void setPreferredArtist(String preferred_artist) {
         this.preferred_artist = preferred_artist;
         this.update();
     }
 
-    private void setPreferredGenre(String preferred_genre) {
+    public void setPreferredGenre(String preferred_genre) {
         this.preferred_genre = preferred_genre;
         this.update();
-    }
-
-    /**
-     * 
-     * Calcola e salva il nome del artista più ricorrente nella libreria. Ha
-     * visibilità privata poichè deve essere utilizzato solo quando necessario
-     * all'interno del metodo addSong(). --DA TESTARE--
-     * 
-     */
-    public void updatePreferredArtist() {
-        
-        String topArtist = "";
-        int max = 0;
-        int count;
-        List<Song> toBeRemoved = new ArrayList<Song>();
-        List<Song> allSongs = this.getAllSongs();
-        
-        while (allSongs.size() > max) {
-            Song tmp = allSongs.get(0);
-            if (!tmp.getArtist().equals("")) {
-                count = 1;
-                toBeRemoved.clear();
-                for (Song it : allSongs)
-                    if (!it.getArtist().equals("") && !it.equals(tmp)
-                            && it.getArtist().equals(tmp.getArtist())) {
-                        count++;
-                        toBeRemoved.add(it);
-                    }
-                if (count > max) {
-                    max = count;
-                    topArtist = tmp.getArtist();
-                }
-                allSongs.removeAll(toBeRemoved);
-                allSongs.remove(tmp);
-            } else
-                allSongs.remove(tmp);
-        }
-        this.setPreferredArtist(topArtist);
-    }
-
-    /**
-     * 
-     * Calcola e salva il nome del genere musicale più ricorrente nella
-     * libreria. Ha visibilità privata poichè deve essere utilizzato solo quando
-     * necessario all'interno del metodo addSong. --DA TESTARE--
-     */
-    public void updatePreferredGenre() {
-        
-        String topGenre = "";
-        int max = 0;
-        int count;
-        List<Song> toBeRemoved = new ArrayList<Song>();
-        List<Song> allSongs = this.getAllSongs();
-        while (allSongs.size() > max) {
-            Song tmp = allSongs.get(0);
-            if (!tmp.getGenre().equals("")) {
-                count = 1;
-                toBeRemoved.clear();
-                for (Song it : allSongs)
-                    if (!it.getGenre().equals("") && !it.equals(tmp)
-                            && it.getGenre().equals(tmp.getGenre())) {
-                        count++;
-                        toBeRemoved.add(it);
-                    }
-                if (count > max) {
-                    max = count;
-                    topGenre = tmp.getGenre();
-                }
-                allSongs.removeAll(toBeRemoved);
-                allSongs.remove(tmp);
-            } else
-                allSongs.remove(tmp);
-        }
-        this.setPreferredGenre(topGenre);
-        
     }
 
 }

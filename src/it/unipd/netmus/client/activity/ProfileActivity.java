@@ -825,6 +825,19 @@ public class ProfileActivity extends AbstractActivity implements
                                     }
                                 }
                                 
+                                if (event.isLastSongs()) {
+                                    String tmp = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
+                                    
+                                    library_service_svc.storeStatistics(current_user.getUser(), tmp, new AsyncCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void result) {}
+
+                                        @Override
+                                        public void onFailure(Throwable caught) {}
+                                        }
+                                    );
+                                }
+                                
                                 client_factory.getProfileView().paintCatalogo(tmp_list);
                             }
                             
@@ -894,5 +907,46 @@ public class ProfileActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/*
+	 * Ricerca all'interno della libreria data in input il genere musicale più ricorrente tra
+	 * tutte le canzoni.
+	 */
+	public String calculatePreferredArtist(Map<String, SongSummaryDTO> all_songs_map) {
+	    client_factory.getProfileView().startLoading();
+	    
+	    String preferred_artist = "";
+	    List<String> all_artists = new ArrayList<String>();
+	    
+	    for (SongSummaryDTO tmp : all_songs_map.values()) {
+	        all_artists.add(tmp.getArtist());
+	    }
 
+        int max = 0;
+        int count;
+        List<String> toBeRemoved = new ArrayList<String>();
+        while (all_artists.size() > max) {
+            String tmp = all_artists.get(0);
+            if (!tmp.equals("")) {
+                count = 0;
+                toBeRemoved.clear();
+                for (String it : all_artists)
+                    if (!it.equals("") && it.equals(tmp)) {
+                        count++;
+                        toBeRemoved.add(it);
+                    }
+                if (count > max) {
+                    max = count;
+                    preferred_artist = tmp;
+                }
+                all_artists.removeAll(toBeRemoved);
+            } else
+                all_artists.remove(tmp);
+        }
+        
+	    client_factory.getProfileView().stopLoading();
+	    
+	    return preferred_artist;
+	}
+	
 }

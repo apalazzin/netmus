@@ -4,11 +4,8 @@ import it.unipd.netmus.client.ClientFactory;
 import it.unipd.netmus.client.event.DeviceScannedEvent;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
-import it.unipd.netmus.client.service.UserService;
-import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.shared.SongDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -29,8 +26,6 @@ public class AppletBar {
     private ClientFactory client_factory = GWT.create(ClientFactory.class);
     private LibraryServiceAsync library_service = GWT
             .create(LibraryService.class);
-    private UserServiceAsync user_service = GWT
-    .create(UserService.class);
     private static AppletConstants constants = GWT
             .create(AppletConstants.class);
 
@@ -163,7 +158,7 @@ public class AppletBar {
                 else {
                     AppletBarView.showStatus(constants.completionFinish());
                     
-                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
+                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs,true));
                 }
                 
             }
