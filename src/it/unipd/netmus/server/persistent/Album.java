@@ -1,6 +1,7 @@
 package it.unipd.netmus.server.persistent;
 
 import it.unipd.netmus.server.utils.Utils;
+import it.unipd.netmus.shared.FieldVerifier;
 
 import com.google.code.twig.annotation.Id;
 
@@ -14,25 +15,8 @@ import com.google.code.twig.annotation.Id;
 
 public class Album {
 
-    private static final String SEPARATOR = "-vtg-";
-    
-    static String generateAlbumId(String name, String artist) {
-        String song_id = (Utils.cleanString(name) + Album.SEPARATOR
-        		+ Utils.cleanString(artist));
-        /*if (song_id != Album.SEPARATOR) {
-            song_id = song_id.replace('.', ' ');
-            song_id = song_id.replace('\"', ' ');
-            song_id = song_id.replace('\'', ' ');
-            song_id = song_id.replace(':', ' ');
-            song_id = song_id.replace('/', ' ');
-            song_id = song_id.replace('\\', ' ');
-            song_id = song_id.replaceAll(" ", "");
-        }*/
-        return song_id;
-    }
-    
     public static String getAlbumCover(String name, String artist) {
-        Album tmp = ODF.get().load().type(Album.class).id(generateAlbumId(name, artist)).now();
+        Album tmp = ODF.get().load().type(Album.class).id(FieldVerifier.generateAlbumId(name, artist)).now();
         if (tmp != null) {
             return tmp.getCover();
         }
@@ -51,7 +35,7 @@ public class Album {
     }
     
     public static String getAlbumCoverLastFm(String name, String artist) {
-        Album tmp = ODF.get().load().type(Album.class).id(generateAlbumId(name, artist)).now();
+        Album tmp = ODF.get().load().type(Album.class).id(FieldVerifier.generateAlbumId(name, artist)).now();
         if (tmp != null) {
             if (!tmp.getCover().equals("")) {
                 return tmp.getCover();
@@ -76,7 +60,7 @@ public class Album {
     public Album() {}
     
     public Album(String name, String artist) throws Exception {
-        setId(generateAlbumId(name, artist));
+        setId(FieldVerifier.generateAlbumId(name, artist));
         setCover("");
         ODF.get().store().instance(this).ensureUniqueKey().now();
     }

@@ -3,12 +3,8 @@ package it.unipd.netmus.server.utils;
 import it.unipd.netmus.server.youtube.YouTubeManager;
 import it.unipd.netmus.shared.SongDTO;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.catalina.HttpRequest;
-import org.apache.http.protocol.HttpService;
 
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
@@ -111,22 +107,6 @@ public final class Utils {
             return "";
         }
         
-    }
-    
-    /**
-     * @param s stringa da convertire per l'id. Ritrona stringa vuota in caso di valore null.
-     * @return stringa convertita
-     */
-    public static String cleanString(String s){
-    	if (s == null) return "";
-    	String t = s.toLowerCase();
-    	t = t.replaceAll("é|è|ê|ë|æ|ē|ĕ|ė|ę|ě|ẹ|ẻ|ẽ|ế|ề|ể|ễ|ệ", "e");
-    	t = t.replaceAll("á|à|â|ã|ä|å|ā|ă|ą|ằ|ạ|ả|ấ|ầ|ẩ|ẫ|ậ|ắ|ằ|ẳ|ẵ|ặ", "a");
-    	t = t.replaceAll("í|ì|î|ï|ĩ|ī|ĭ|į|ı|ỉ|ị", "i");
-    	t = t.replaceAll("ó|ò|ô|õ|ö|ō|ŏ|ő|ọ|ỏ|ố|ồ|ổ|ỗ|ộ|ớ|ờ|ở|ỡ|ợ", "o");
-    	t = t.replaceAll("ù|ù|û|ü|ũ|ū|ŭ|ů|ű|ų|ụ|ủ|ứ|ừ|ử|ữ|ự", "u");
-    	t = t.replaceAll(" |'|`|\"|^|\\?|!|%|&|@|,|\\.|#|\\{|\\}|\\[|\\]|\\||-|_|/|;|:|<|>|\\\\|\\*|\\+|=|\\(|\\)", "");
-    	return t;
     }
 
 }
