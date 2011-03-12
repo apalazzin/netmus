@@ -1778,17 +1778,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public void youTubeChange(int s) {
 
-       if(s==2) {
+       if(s==2)
            youtube_status = -1;
-           play.setUrl("images/play.png");
-       }
-       
        else if(s==1) {
            if(cover_playing.getUrl()!="")
                paintMainCover(cover_playing.getUrl());
            youtube_status = 1;
-           if(this.selected_song.equals(this.played_song))
-               play.setUrl("images/pause.png");
            setFwRw();
            
        }
@@ -2004,19 +1999,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    //riempie il catalogo/libreria con la lista dei brani
     @Override
     public void paintCatalogo(List<String> lista_canzoni) {
-    
+        
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.removeAll(canzoni_catalogo);       
-        canzoni_catalogo.removeAll(canzoni_catalogo);
+        test.clear();
         
         for (int j=0; j<lista_canzoni.size(); j+=3) {
-            
             canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
         }
         
-        
-     
+        setNumeroBrani(canzoni_catalogo.size());
         
         Collections.sort(canzoni_catalogo);
         
