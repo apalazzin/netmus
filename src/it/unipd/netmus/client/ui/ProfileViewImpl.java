@@ -37,6 +37,9 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -609,10 +612,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                song_list.getColumnSortList().push(titoloColumn2);
                
            dataProvider_playlist.addDataDisplay(song_list);
-                   
-           
            playlist_songs.add(song_list);
            
+  
            covers_container.setVisible(false);
            loading.setVisible(false);
            popup.setVisible(false);
@@ -1988,7 +1990,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            test.add(song);
        }
 
-       if(youtube_status!=0)
+       if(youtube_status!=0 && this.playing==1)
            setPlaySong(true);
 
    }
@@ -2930,6 +2932,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     library.getRowElement(j).getStyle().setFontWeight(Style.FontWeight.NORMAL);
                 }
             }
+            
+            for (int l=0; l<dataProvider_playlist.getList().size(); l++) {
+                
+                song_list.getRowElement(l).getStyle().setColor("#000000");
+                song_list.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                
+            }
         
         }   else if(played_song!=null && playing==1) {
                 
@@ -2954,7 +2963,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                         
                     }
                 }
-            
+         
+            for (int l=0; l<dataProvider_catalogo.getList().size(); l++) {
+                
+                library.getRowElement(l).getStyle().setColor("#000000");
+                library.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                
+            }
         }
         
     }
