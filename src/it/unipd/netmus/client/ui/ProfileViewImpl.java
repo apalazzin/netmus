@@ -1722,14 +1722,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
 
    
-   private void playNext() {
+   public void playNext() {
        
        if(playing==0) {
            
            Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
                       
            //closeYouTube();
-           youtube_status=1;
+           //youtube_status=1;
            played_song = to_play;
            playing=0;
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
@@ -1740,7 +1740,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
            
            //closeYouTube();
-           youtube_status=1;
+           //youtube_status=1;
            played_song = to_play;
            playing=1;
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
@@ -1748,14 +1748,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
    }
    
-   private void playPrev() {
+   public void playPrev() {
        
       if(playing==0) {
            
           Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)-1);
                       
            //closeYouTube();
-           youtube_status=1;
+           //youtube_status=1;
            played_song = to_play;
            playing=0;
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
@@ -1766,7 +1766,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)-1);
            
            //closeYouTube();
-           youtube_status=1;
+           //youtube_status=1;
            played_song = to_play;
            playing=1;
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
@@ -1778,12 +1778,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public void youTubeChange(int s) {
 
-       if(s==2)
+       if(s==2) {
            youtube_status = -1;
+           play.setUrl("images/play.png");
+       }
+       
        else if(s==1) {
            if(cover_playing.getUrl()!="")
                paintMainCover(cover_playing.getUrl());
            youtube_status = 1;
+           if(this.selected_song.equals(this.played_song))
+               play.setUrl("images/pause.png");
            setFwRw();
            
        }
@@ -1812,10 +1817,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
            }
                
-           
        }
            
     }
+   
+   public void youTubeError(int s) {
+
+       Window.alert("" + s);
+       playNext();
+       
+   }
    
    public native void youTubeListener() /*-{
        
@@ -1826,6 +1837,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
    
    }-*/;
+   
+   
+   public native void youTubeErrorListener() /*-{
+   
+   var _this = this;
+   
+   $wnd.youTubeError = function(s) {
+      _this.@it.unipd.netmus.client.ui.ProfileViewImpl::youTubeError(I)(s);
+   }
+
+}-*/;
 
 
    public void playYouTube(final String link) {
@@ -1834,7 +1856,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        if (link.equals("")) {
            
            System.out.println("link mancante");
-           
+           playNext();
            
            
        } else {
@@ -1908,17 +1930,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            
            player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
-                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
+                   + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
                         "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
-                   + "&rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
+                   + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
                         "allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
-           
-           
-            
+                 
        }
 
        
    }
+
 
    public void closeYouTube() {
        
@@ -1999,12 +2020,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    //riempie il catalogo/libreria con la lista dei brani
     @Override
     public void paintCatalogo(List<String> lista_canzoni) {
-        
+    
         List<Song> test = dataProvider_catalogo.getList();
         
         test.clear();
         
         for (int j=0; j<lista_canzoni.size(); j+=3) {
+            
             canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
         }
         

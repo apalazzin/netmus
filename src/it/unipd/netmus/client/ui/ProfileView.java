@@ -155,6 +155,17 @@ public interface ProfileView extends IsWidget {
     *
     */
    void showError(String text);
+   /**
+    * Riproduce la canzone successiva a catalogo
+    *
+    */
+   void playNext();
+   /**
+    * Ripeoduce la canzone precedente a catalogo
+    *
+    */
+   void playPrev();
+
 
    public interface Presenter
    {
