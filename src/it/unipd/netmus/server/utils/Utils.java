@@ -51,45 +51,49 @@ public final class Utils {
     /**
      * Con questo metodo andremo a provare a recuperare informazioni ulteriori
      * di un brano che non ha info nel tag, usando come keyword il nome del file
-     * stesso. Se verrà trovato qualcosa si proverà a proporlo all’utente. In
-     * uscita restituirà un SongDTO.
+     * stesso, più eventuali paroe chiave. Se verrà trovato qualcosa si proverà a 
+     * proporlo all’utente. In uscita restituirà un SongDTO.
+     * 
+     * Per un corretto utilizzo, il nome del file deve sempre essere al primo posto,
+     * seguito dalle altre chiavi di ricerca.
      */
     public static SongDTO getSongFromFileName(String filename) {
+    	
+    	//pulisco la stringa da percorsi e estensione, rimango solo con il nome del file.
+    	filename = filename.replaceAll("(^.*(\\\\|/))|\\.MP3|\\.mp3|\\.Mp3|\\.mP3", "");
+        return getSongFromIncompleteInfo(filename);
+    }
+    
+    /*
+     * Richiama last.fm per vedere se si riesce a trovare una canzone con le poche informazioni a disposizione.
+     */
+    public static SongDTO getSongFromIncompleteInfo(String info){
+    	try {
+    		System.out.println("Ricerca info: " + info);
+            Collection<Track> search = Track.search(info,
+                    "33d9ef520018d87db5dff9ef74cc4904");
 
-//        try {
-//
-//            Collection<Track> search = Track.search(filename,
-//                    "33d9ef520018d87db5dff9ef74cc4904");
-//
-//            Iterator<Track> it = search.iterator();
-//            Track t;
-//            if (it.hasNext())
-//                t = it.next();
-//            else
-//                t = null;
-//
-//            if (t == null)
-//                return null;
-//            else {
-//                SongDTO song = new SongDTO();
-//                song.setTitle(t.getName());
-//                song.setArtist(t.getArtist());
-//                song.setAlbum(t.getAlbum());
-//                song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
-//
-//                if (song.getTitle() != null && song.getArtist() != null) {
-//                    String keywords = song.getTitle() + " " + song.getArtist();
-//
-//                    song.setYoutubeCode(getYouTubeCode(keywords));
-//                }
-//
-//                return song;
-//            }
-//        } catch (Exception e) {
-//            return null;
-//        }
+            Iterator<Track> it = search.iterator();
+            Track t;
+            if (it.hasNext())
+                t = it.next();
+            else
+                t = null;
+
+            if (t == null)
+                return null;
+            else {
+                SongDTO song = new SongDTO();
+                song.setTitle(t.getName());
+                song.setArtist(t.getArtist());
+                if (t.getAlbum() != null)
+                	song.setAlbum(t.getAlbum());
+                song.setAlbumCover(t.getImageURL(ImageSize.EXTRALARGE));
+                return song;
+            }
+        } catch (Exception e) {
+        }
         return null;
-        
     }
 
     /**
@@ -110,10 +114,11 @@ public final class Utils {
     }
     
     /**
-     * @param s stringa da convertire per l'id.
+     * @param s stringa da convertire per l'id. Ritrona stringa vuota in caso di valore null.
      * @return stringa convertita
      */
     public static String cleanString(String s){
+    	if (s == null) return "";
     	String t = s.toLowerCase();
     	t = t.replaceAll("é|è|ê|ë|æ|ē|ĕ|ė|ę|ě|ẹ|ẻ|ẽ|ế|ề|ể|ễ|ệ", "e");
     	t = t.replaceAll("á|à|â|ã|ä|å|ā|ă|ą|ằ|ạ|ả|ấ|ầ|ẩ|ẫ|ậ|ắ|ằ|ẳ|ẵ|ặ", "a");

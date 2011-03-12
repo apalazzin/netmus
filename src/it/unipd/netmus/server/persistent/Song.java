@@ -1,5 +1,6 @@
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -52,8 +53,11 @@ public class Song {
     private static final String SEPARATOR = "-vtg-";
     
     static String generateSongId(String title, String artist, String album) {
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
-        if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
+        String song_id = (Utils.cleanString(title) + Song.SEPARATOR 
+        		+ Utils.cleanString(artist) + Song.SEPARATOR 
+        		+ Utils.cleanString(album));
+        /*if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
+        	 già fatto da cleanString()
             song_id = song_id.replace('.', ' ');
             song_id = song_id.replace('\"', ' ');
             song_id = song_id.replace('\'', ' ');
@@ -61,7 +65,8 @@ public class Song {
             song_id = song_id.replace('/', ' ');
             song_id = song_id.replace('\\', ' ');
             song_id = song_id.replaceAll(" ", "");
-        }
+            
+        }*/
         return song_id;
     }
 
@@ -86,8 +91,12 @@ public class Song {
      */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
-        if (song.getTitle().equals(""))
-            return null;
+        if ( song.getTitle() == null || song.getTitle().isEmpty() 
+        		|| song.getAlbum() == null || song.getAlbum().isEmpty() 
+        		|| song.getArtist() == null || song.getArtist().isEmpty())
+            song = incompleteSong(song);
+        if (song == null)
+        	return null;
 
         Song s = load(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
@@ -119,10 +128,31 @@ public class Song {
                 s.setTrackNumber(song.getTrackNumber());
             if (s.getYear().equals(""))
                 s.setYear(song.getYear());
-
             s.update();
             return s;
         }
+    }
+    
+    /*
+     * Cerca di recuperare informazioni sui brani incompleti, per poi vedere se è il caso di ignorarli
+     */
+    static private SongDTO incompleteSong(SongDTO s){
+    	//guardo se posso ricavare informazioni dai meta tag.
+    	if (!s.getArtist().isEmpty() && !s.getTitle().isEmpty())
+    		return Utils.getSongFromIncompleteInfo(s.getArtist() + " " 
+    				+ s.getTitle() );
+    	
+    	//altrimenti, proviamo dal nome del file: se ho artista o titolo nei metatag, cerco di utilizzare
+    	//pure quelli se non sono già presenti nel nome del file (eventuali ripetizioni sarebbero dannose).
+    	String extraTags = new String();
+    	if (!s.getArtist().isEmpty() && 
+    			!Utils.cleanString(s.getFile()).contains(Utils.cleanString(s.getArtist())))
+    		extraTags = s.getArtist();
+    	else if (!s.getTitle().isEmpty() && 
+    			!Utils.cleanString(s.getFile()).contains(Utils.cleanString(s.getTitle())))
+    		extraTags = s.getTitle();
+    	
+    	return Utils.getSongFromFileName(s.getFile() + extraTags);
     }
 
     static void deleteSong(Song s) {
