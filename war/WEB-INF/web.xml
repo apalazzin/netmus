@@ -42,8 +42,7 @@
     <url-pattern>/netmus/usersService</url-pattern>
   </servlet-mapping>
   
-  
-<!-- 
+  <!-- 
     <filter>
         <filter-name>appstats</filter-name>
         <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
@@ -75,8 +74,7 @@
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
- -->
-  
+   -->
     <!-- ===================== Login Google Servlet ===================== -->
 
   <servlet>

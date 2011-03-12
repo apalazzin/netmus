@@ -1,5 +1,7 @@
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.server.utils.Utils;
+import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
@@ -49,22 +51,6 @@ import com.google.code.twig.annotation.Id;
 
 public class Song {
 
-    private static final String SEPARATOR = "-vtg-";
-    
-    static String generateSongId(String title, String artist, String album) {
-        String song_id = (title + Song.SEPARATOR + artist + Song.SEPARATOR + album).toLowerCase();
-        if (song_id != Song.SEPARATOR+Song.SEPARATOR) {
-            song_id = song_id.replace('.', ' ');
-            song_id = song_id.replace('\"', ' ');
-            song_id = song_id.replace('\'', ' ');
-            song_id = song_id.replace(':', ' ');
-            song_id = song_id.replace('/', ' ');
-            song_id = song_id.replace('\\', ' ');
-            song_id = song_id.replaceAll(" ", "");
-        }
-        return song_id;
-    }
-
     public static Song load(String id) {
         return ODF.get().load().type(Song.class).id(id).now();
     }
@@ -74,7 +60,7 @@ public class Song {
                 .get()
                 .load()
                 .type(Song.class)
-                .id(generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
+                .id(FieldVerifier.generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
         return tmp;
     }
 
@@ -86,10 +72,16 @@ public class Song {
      */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
+        /*if ( song.getTitle() == null || song.getTitle().isEmpty() 
+        		|| song.getAlbum() == null || song.getAlbum().isEmpty() 
+        		|| song.getArtist() == null || song.getArtist().isEmpty())
+            song = incompleteSong(song);
+        if (song == null)
+        	return null;*/
         if (song.getTitle().equals(""))
             return null;
 
-        Song s = load(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+        Song s = load(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
 
         if (s == null) {
             // La canzone non è presente nel Datastore
@@ -104,7 +96,7 @@ public class Song {
             s.setGenre(song.getGenre());
             s.setTrackNumber(song.getTrackNumber());
             s.setYear(song.getYear());
-            s.setId(generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+            s.setId(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
             return s;
         }
 
@@ -123,6 +115,29 @@ public class Song {
             s.update();
             return s;
         }
+    }
+    
+    /*
+     * Cerca di recuperare informazioni sui brani incompleti, per poi vedere se è il caso di ignorarli
+     */
+    @SuppressWarnings("unused")
+    static private SongDTO incompleteSong(SongDTO s){
+    	//guardo se posso ricavare informazioni dai meta tag.
+    	if (!s.getArtist().isEmpty() && !s.getTitle().isEmpty())
+    		return Utils.getSongFromIncompleteInfo(s.getArtist() + " " 
+    				+ s.getTitle() );
+    	
+    	//altrimenti, proviamo dal nome del file: se ho artista o titolo nei metatag, cerco di utilizzare
+    	//pure quelli se non sono già presenti nel nome del file (eventuali ripetizioni sarebbero dannose).
+    	String extraTags = new String();
+    	if (!s.getArtist().isEmpty() && 
+    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getArtist())))
+    		extraTags = s.getArtist();
+    	else if (!s.getTitle().isEmpty() && 
+    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getTitle())))
+    		extraTags = s.getTitle();
+    	
+    	return Utils.getSongFromFileName(s.getFile() + extraTags);
     }
 
     static void deleteSong(Song s) {
@@ -154,7 +169,7 @@ public class Song {
     private int num_ratings;
 
     public Song() {
-        this.id = generateSongId("","","");
+        this.id = FieldVerifier.generateSongId("","","");
         this.num_owners = 0;
         this.album = "";
         this.artist = "";
@@ -200,10 +215,10 @@ public class Song {
         else
             this.album = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -230,11 +245,11 @@ public class Song {
         else
             this.artist = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
 
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -277,10 +292,10 @@ public class Song {
         else
             this.title = "";
 
-        Song tmp = Song.load(generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.

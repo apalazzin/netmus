@@ -2023,16 +2023,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.removeAll(canzoni_catalogo);       
-        canzoni_catalogo.removeAll(canzoni_catalogo);
+        test.clear();
         
         for (int j=0; j<lista_canzoni.size(); j+=3) {
             
             canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
         }
         
-        
-     
+        setNumeroBrani(canzoni_catalogo.size());
         
         Collections.sort(canzoni_catalogo);
         
