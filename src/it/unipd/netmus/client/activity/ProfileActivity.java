@@ -845,7 +845,7 @@ public class ProfileActivity extends AbstractActivity implements
                             tmp.add(dto.getTitle());
                             tmp.add(dto.getAlbum());
                         }
-                        client_factory.getProfileView().paintCatalogo(tmp);
+                        client_factory.getProfileView().repaintLibrary(tmp);
                         
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();

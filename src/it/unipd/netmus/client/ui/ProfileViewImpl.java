@@ -1996,7 +1996,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    
-   //riempie il catalogo/libreria con la lista dei brani
+   //aggiunge al catalogo/libreria la lista dei brani
     @Override
     public void paintCatalogo(List<String> lista_canzoni) {
         
@@ -2015,6 +2015,28 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         for (Song song : canzoni_catalogo) {
             test.add(song);
         }
+    }
+    
+    //riempie il catalogo/libreria con la lista dei brani
+    @Override
+    public void repaintLibrary(List<String> lista_canzoni) {
+        
+        List<Song> test = dataProvider_catalogo.getList();
+        
+        test.clear();
+        canzoni_catalogo.clear();
+        
+        for (int j=0; j<lista_canzoni.size(); j+=3) {
+            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+        }
+        
+        Collections.sort(canzoni_catalogo);
+        
+        for (Song song : canzoni_catalogo) {
+            test.add(song);
+        }
+        
+        setNumeroBrani(test.size());
     }
 
 
