@@ -31,13 +31,16 @@ public class MusicLibrarySummaryDTO implements Serializable {
     
     private String preferred_artist;
 
-    private String preferred_genre;
+    private String most_popular_song;
+    
+    private String most_popular_song_for_this_user;
 
     public MusicLibrarySummaryDTO() {
         this.songs = new HashMap<String, SongSummaryDTO>();
         this.playlists = new ArrayList<String>();
         this.preferred_artist = "";
-        this.preferred_genre = "";
+        this.most_popular_song = "";
+        this.most_popular_song_for_this_user = "";
     }
 
     public MusicLibrarySummaryDTO(Map<String, SongSummaryDTO> m,
@@ -45,7 +48,8 @@ public class MusicLibrarySummaryDTO implements Serializable {
         setSongs(m);
         setPlaylists(playlists);
         this.preferred_artist = "";
-        this.preferred_genre = "";
+        this.most_popular_song = "";
+        this.most_popular_song_for_this_user = "";
     }
     
     public Map<String, SongSummaryDTO> getSongs() {
@@ -86,11 +90,20 @@ public class MusicLibrarySummaryDTO implements Serializable {
         return preferred_artist;
     }
 
-    public void setPreferred_genre(String preferred_genre) {
-        this.preferred_genre = preferred_genre;
+    public void setMostPopularSong(String most_popular_song) {
+        this.most_popular_song = most_popular_song;
     }
 
-    public String getPreferred_genre() {
-        return preferred_genre;
+    public String getMostPopularSong() {
+        return most_popular_song;
+    }
+
+    public void setMostPopularSongForThisUser(
+            String most_popular_song_for_this_user) {
+        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
+    }
+
+    public String getMostPopularSongForThisUser() {
+        return most_popular_song_for_this_user;
     }
 }
