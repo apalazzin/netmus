@@ -456,7 +456,7 @@ public class ProfileActivity extends AbstractActivity implements
         
         //ricerca nella mappa delle info già caricate
         SongDTO song_dto = info_alredy_loaded.get(song_id);
-        
+
         if (song_dto != null) {
             
             client_factory.getProfileView().closeYouTube();
@@ -710,53 +710,54 @@ public class ProfileActivity extends AbstractActivity implements
             
             return;
         }
-        
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
+        else {
+            Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+            final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
 
-        song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(SongDTO song_dto) {
-
-                //Imposta la copertina di default in caso non ce ne siano altre
-                if (song_dto.getAlbumCover().equals("")) {
-                    song_dto.setAlbumCover("images/test_cover.jpg");
+            song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
                 }
-                
-                //salva le info caricate in modo che siano sempre disponibili nel client
-                info_alredy_loaded.put(song_id, song_dto);
-                
-                //Riempimento default dei campi
-                String genere = "----";
-                String anno = "----";
-                String compositore = "----";
-                String traccia = "----";
-                String cover = "images/test_cover.jpg";
-                
-                if (!song_dto.getGenre().equals(""))
-                    genere = song_dto.getGenre();
-                if (!song_dto.getYear().equals(""))
-                    anno = song_dto.getYear();
-                if (!song_dto.getComposer().equals(""))
-                    compositore = song_dto.getComposer();
-                if (!song_dto.getTrackNumber().equals(""))
-                    traccia = song_dto.getTrackNumber();
-                if (!song_dto.getAlbumCover().equals(""))
-                    cover = song_dto.getAlbumCover();
 
-                //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
-                client_factory.getProfileView().setSongFields(artist,
-                        title, album, genere, anno, compositore,
-                        traccia, cover);
-                
-                client_factory.getProfileView().stopLoading();
-                return;
-            }
-        });
+                @Override
+                public void onSuccess(SongDTO song_dto) {
+
+                    //Imposta la copertina di default in caso non ce ne siano altre
+                    if (song_dto.getAlbumCover().equals("")) {
+                        song_dto.setAlbumCover("images/test_cover.jpg");
+                    }
+                    
+                    //salva le info caricate in modo che siano sempre disponibili nel client
+                    info_alredy_loaded.put(song_id, song_dto);
+                    
+                    //Riempimento default dei campi
+                    String genere = "----";
+                    String anno = "----";
+                    String compositore = "----";
+                    String traccia = "----";
+                    String cover = "images/test_cover.jpg";
+                    
+                    if (!song_dto.getGenre().equals(""))
+                        genere = song_dto.getGenre();
+                    if (!song_dto.getYear().equals(""))
+                        anno = song_dto.getYear();
+                    if (!song_dto.getComposer().equals(""))
+                        compositore = song_dto.getComposer();
+                    if (!song_dto.getTrackNumber().equals(""))
+                        traccia = song_dto.getTrackNumber();
+                    if (!song_dto.getAlbumCover().equals(""))
+                        cover = song_dto.getAlbumCover();
+
+                    //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
+                    client_factory.getProfileView().setSongFields(artist,
+                            title, album, genere, anno, compositore,
+                            traccia, cover);
+                    
+                    client_factory.getProfileView().stopLoading();
+                    return;
+                }
+            });
+        }
     }
 
     /**
