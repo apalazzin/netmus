@@ -10,6 +10,8 @@ import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
+import it.unipd.netmus.client.service.PdfService;
+import it.unipd.netmus.client.service.PdfServiceAsync;
 import it.unipd.netmus.client.service.SongService;
 import it.unipd.netmus.client.service.SongServiceAsync;
 import it.unipd.netmus.client.service.UserService;
@@ -59,7 +61,8 @@ public class ProfileActivity extends AbstractActivity implements
             .create(LibraryService.class);
     private UserServiceAsync user_service_svc = GWT.create(UserService.class);
     private SongServiceAsync song_service_svc = GWT.create(SongService.class);
-
+    private PdfServiceAsync pdf_service_svc = GWT.create(PdfService.class);
+    
     private UserCompleteDTO current_user;
     
     private Map<String, SongDTO> info_alredy_loaded = new HashMap<String, SongDTO>();
@@ -270,9 +273,8 @@ public class ProfileActivity extends AbstractActivity implements
      * Esporta la lista delle canzoni in pdf
      */
     @Override
-    public void exportPDF(String user) {
-        // TODO Auto-generated method stub
-
+    public void exportPDF() {
+    	exportPDF(current_user.getUser());
     }
 
     /**
@@ -926,8 +928,18 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
 	@Override
-	public void exportPdf() {
-		// TODO Auto-generated method stub
+	public void exportPDF(String user) {
+        pdf_service_svc.exportPDF(user, new AsyncCallback<String>(){
+        	@Override
+        	public void onFailure(Throwable caught) {
+            	System.out.println("no.. tutto in vacca");
+            }
+            @Override
+            public void onSuccess(String result) {
+            	System.out.println("ok.. iera ora");
+            }
+        
+        });
 		
 	}
 	

@@ -289,7 +289,7 @@ public interface ProfileView extends IsWidget {
        *Esporta versione PDF del catalogo
      * @return 
        */
-      void exportPdf();
+      void exportPDF();
    }
 
 

@@ -1284,7 +1284,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("pdf")
    void handleMouseClickPdf(ClickEvent e) {
-       listener.exportPdf();
+       listener.exportPDF();
        
    }
    
