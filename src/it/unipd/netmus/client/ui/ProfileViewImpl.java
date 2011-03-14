@@ -152,6 +152,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiField HTMLPanel covers_container;
    @UiField HTMLPanel popup;
+   @UiField HTMLPanel popup_fast;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -1928,17 +1929,30 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            youtube_appendix.getElement().getStyle().setOpacity(1);
            close_youtube.getElement().getStyle().setOpacity(1);
 
+           if(DOM.getElementById("youtube_player")==null) {
+               player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
+                       + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
+                            "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
+                       + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
+                            "allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
+           } else {
+               
+               playPlayerSong(link);
+           }
            
-           player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
-                   + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
-                        "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
-                   + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
-                        "allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
                  
        }
 
        
    }
+
+   
+   private static native void playPlayerSong(String t) /*-{ 
+   
+   $doc.getElementById('youtube_player').loadVideoById(t, 0, 'medium');
+   
+
+    }-*/;
 
 
    public void closeYouTube() {
@@ -1952,8 +1966,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                youtube.getElement().getStyle().setLeft(25, Style.Unit.PX);
         
                vertical_semioffset = 275;
-        
-               setLayout();
+
+               Timer timerLayout = new Timer() {
+                   public void run() {
+                       
+                       setLayout();
+                        
+                   }
+               };
+               timerLayout.schedule(500);
                
                setPlaySong(false);
         
@@ -3077,11 +3098,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
     
-    
-    private void showErrorFast(String text_t) {
+    @Override
+    public void showErrorFast(String text_t) {
+        
+        popup_fast.getElement().getStyle().setDisplay(Style.Display.BLOCK);
        
         final HorizontalPanel popup_text = new HorizontalPanel();
         popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+        popup_text.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
         
         final Label text = new Label();
         text.setText(text_t);
@@ -3096,25 +3120,35 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         popup_text.getElement().getStyle().setProperty("textAlign", "left");
         
          
-        popup.add(popup_text);
+        popup_fast.add(popup_text);
         
-        popup_yes.setText("ok");
-        
-        
-        if(rm_popyes!=null) rm_popyes.removeHandler();
-        
-        
-        rm_popyes = popup_yes.addClickHandler(new ClickHandler() {
-
-         @Override
-         public void onClick(ClickEvent event) {
-             popup.remove(popup_text);
-             popup.setVisible(false); 
-         }});
+        Timer timerPopup1 = new Timer() {
+            public void run() {
                 
-        popup.setVisible(true);
-        popup_yes.setVisible(true);
+                Timer timerPopup2 = new Timer() {
+                    public void run() {
+
+                        Timer timerPopup3 = new Timer() {
+                            public void run() {
+                                
+                                popup_fast.remove(popup_text);
+                                popup_fast.getElement().getStyle().setDisplay(Style.Display.NONE);
+                                 
+                            }
+                        };
+                        timerPopup3.schedule(600);
+
+                        popup_fast.getElement().getStyle().setOpacity(0);
+                         
+                    }
+                };
+                timerPopup2.schedule(1500);
+                popup_fast.getElement().getStyle().setOpacity(1);
+            }
+        };
+        timerPopup1.schedule(10);
         
+
     }
 
         
