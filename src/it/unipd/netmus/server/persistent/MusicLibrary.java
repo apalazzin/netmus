@@ -1,9 +1,12 @@
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.server.utils.cache.CacheSupport;
+import it.unipd.netmus.server.utils.cache.Cacheable;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,17 +34,35 @@ import com.google.code.twig.annotation.Parent;
  * 
  */
 
-public class MusicLibrary {
+@SuppressWarnings("serial")
+public class MusicLibrary implements Serializable, Cacheable {
 
     // ---------------------------------------------------//
     // ----------Classe per gestire PLAILISTS-------------//
-    static private class Playlist {
+    static private class Playlist implements Serializable, Cacheable {
 
         static void deletePlaylist(Playlist p) {
+            CacheSupport.cacheRemove(p.id);
+            ODF.get().storeOrUpdate(p);
             ODF.get().delete(p);
+        }
+        
+        static public Playlist load(String id) {
+            Playlist playlist = (Playlist) CacheSupport.cacheGet(id);
+            
+            if (playlist == null) {
+                playlist = ODF.get().load().type(Playlist.class).id(id).now();
+                if (playlist != null) {
+                    playlist.addToCache();
+                }
+            }
+            
+            return playlist;
         }
 
         @Id
+        private String id;
+        
         private String name;
 
         private List<String> songs_list;
@@ -52,9 +73,11 @@ public class MusicLibrary {
             this.name = "";
         }
 
-        Playlist(String name) {
+        Playlist(String name, String owner) {
             this.name = name;
             this.songs_list = new ArrayList<String>();
+            this.id = FieldVerifier.generatePlaylistId(name, owner);
+            this.update();
         }
 
         boolean addSong(String song_id) {
@@ -63,6 +86,10 @@ public class MusicLibrary {
                 return true;
             } else
                 return false;
+        }
+        
+        String getId() {
+            return id;
         }
 
         String getName() {
@@ -92,16 +119,27 @@ public class MusicLibrary {
 
         void update() {
             ODF.get().storeOrUpdate(this);
+            this.addToCache();
         }
+
+        @Override
+        public void addToCache() {
+            CacheSupport.cachePut(this.id, this);
+        }
+
     }
 
     static void deleteMusicLibrary(MusicLibrary ml) {
-        for (Playlist tmp : ml.playlists)
-            Playlist.deletePlaylist(tmp);
+        for (String tmp : ml.playlists) {
+            Playlist playlist = Playlist.load(tmp);
+            Playlist.deletePlaylist(playlist);
+        }
         ODF.get().delete(ml);
     }
 
     @Id
+    private String id;
+    
     @Parent
     private UserAccount owner;
     
@@ -113,27 +151,29 @@ public class MusicLibrary {
     @Index
     private String preferred_genre;
     
-    private List<Playlist> playlists;
+    private List<String> playlists;
 
     public MusicLibrary() {
-        this.playlists = new ArrayList<Playlist>();
+        this.playlists = new ArrayList<String>();
         this.song_list = new HashMap<String, String>();
         this.preferred_artist = "";
         this.preferred_genre = "";
+        this.id = "";
     }
 
     public MusicLibrary(UserAccount owner) {
         this.owner = owner;
-        this.playlists = new ArrayList<Playlist>();
+        this.playlists = new ArrayList<String>();
         this.song_list = new HashMap<String, String>();
         this.preferred_artist = "";
         this.preferred_genre = "";
+        this.id = owner.getUser()+"-library";
     }
 
     public boolean addPlaylist(String playlist_name) {
         if (this.getPlaylist(playlist_name) == null) {
-            Playlist tmp = new Playlist(playlist_name);
-            this.playlists.add(tmp);
+            Playlist tmp = new Playlist(playlist_name, owner.getUser());
+            this.playlists.add(tmp.getId());
             this.update();
             return true;
         } else
@@ -156,8 +196,6 @@ public class MusicLibrary {
 
             // update song's attributes
             song.newOwner();
-
-            this.update();
             
             return true;
             
@@ -199,32 +237,30 @@ public class MusicLibrary {
     }
 
     public List<String> getPlaylists() {
-        List<String> playlists = new ArrayList<String>();
-        for (Playlist tmp : this.playlists)
-            playlists.add(tmp.getName());
-        return playlists;
-    }
-
-    public List<String> getPlaylistSongNames(String playlist_name) {
-        for (Playlist tmp : this.playlists) {
-            if (tmp.getName().equalsIgnoreCase(playlist_name))
-                return tmp.getSongs();
+        List <String> list_names = new ArrayList<String>();
+        
+        for (String id : this.playlists) {
+            Playlist playlist = getPlaylistFromId(id);
+            if (playlist != null) {
+                list_names.add(playlist.getName());
+            }
         }
-        return null;
+        
+        return list_names;
     }
 
     public List<Song> getPlaylistSongs(String playlist_name) {
-        for (Playlist tmp : this.playlists) {
-            if (tmp.getName().equalsIgnoreCase(playlist_name)) {
-                List<String> songNames = tmp.getSongs();
-                List<Song> songs = new ArrayList<Song>();
-                for (String tmp2 : songNames) {
-                    songs.add(Song.load(tmp2));
-                }
-                return songs;
+        Playlist playlist = getPlaylist(playlist_name);
+        if (playlist != null) {
+            List<Song> songs = new ArrayList<Song>();
+            for (String tmp2 : playlist.getSongs()) {
+                songs.add(Song.load(tmp2));
             }
+            return songs;
         }
-        return null;
+        else {
+            return null;
+        }
     }
 
     public String getPreferredArtist() {
@@ -303,15 +339,23 @@ public class MusicLibrary {
             
             // remove songId to the list
             this.song_list.remove(song_id);
+            
+            // remove song from Cache
+            CacheSupport.cacheRemove(song_id);
 
-            // update song's attributes and delete it form database if necessary
+            // update song's attributes
             Song song = Song.load(song_id);
             song.deleteOwner();
 
             // remove song from playlists
-            for (Playlist tmp : this.playlists) {
-                tmp.removeSong(song_id);
+            for (String tmp : this.playlists) {
+                Playlist playlist = getPlaylist(tmp); 
+                playlist.removeSong(song_id);
             }
+            
+            // save changes to library
+            this.update();
+            
             return true;
         } 
         else {
@@ -361,15 +405,15 @@ public class MusicLibrary {
 
     public void update() {
         ODF.get().storeOrUpdate(this);
+        this.addToCache();
     }
 
     private Playlist getPlaylist(String playlist_name) {
-        for (int i = 0; i < this.playlists.size(); i++) {
-            Playlist tmp = this.playlists.get(i);
-            if (tmp.getName().equalsIgnoreCase(playlist_name))
-                return tmp;
-        }
-        return null;
+        return Playlist.load(FieldVerifier.generatePlaylistId(playlist_name, this.owner.getUser()));
+    }
+    
+    private Playlist getPlaylistFromId(String playlist_id) {
+        return Playlist.load(playlist_id);
     }
 
     public void setPreferredArtist(String preferred_artist) {
@@ -380,6 +424,11 @@ public class MusicLibrary {
     public void setPreferredGenre(String preferred_genre) {
         this.preferred_genre = preferred_genre;
         this.update();
+    }
+
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.id, this);
     }
 
 }
