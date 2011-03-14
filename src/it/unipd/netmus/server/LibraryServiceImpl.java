@@ -49,12 +49,12 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * ap- partengono alla playlist.Ritorna true se l’operazione ha successo.
      */
     @Override
-    public List<SongSummaryDTO> getPlaylist(String user, String titolo) {
+    public List<SongSummaryDTO> getPlaylist(String user, String name) {
 
         UserAccount useraccount = UserAccount.load(user);
 
         List<Song> songs = useraccount.getMusicLibrary().getPlaylistSongs(
-                titolo);
+                name);
         List<SongSummaryDTO> songs_dto = new ArrayList<SongSummaryDTO>();
 
         for (Song song : songs) {
@@ -123,6 +123,8 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
                 useraccount.getMusicLibrary().addSong(song);
             }
         }
+        
+        useraccount.getMusicLibrary().update();
     }
 
     @Override
