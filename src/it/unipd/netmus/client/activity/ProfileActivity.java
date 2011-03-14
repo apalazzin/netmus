@@ -453,18 +453,17 @@ public class ProfileActivity extends AbstractActivity implements
             final String album) {
 
         client_factory.getProfileView().startLoading();
-        final String youTubeCode = "";
-        final String cover = "";
+        final String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         //ricerca nella mappa delle info già caricate
-        final SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
-
+        final SongDTO song_dto = info_alredy_loaded.get(song_id);
 
         if (song_dto != null) {
             
+            //La canzone è già stata caricata una volta e le informazioni sono disponibili 
+            //nel client.
             Timer timerPlay = new Timer() {
                 public void run() {
-                    System.out.println("FAST");
                     if (song_dto.getYoutubeCode().equals("")) {
                         //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube("00000000000");
@@ -487,64 +486,54 @@ public class ProfileActivity extends AbstractActivity implements
             };
             timerPlay.schedule(5);
 
-            
             return;
         }
-        
+        else {
 
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
+            Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+            
+            //caricamento dalla mappa della canzone selezionata
+            final SongSummaryDTO current_song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
 
-        
-            System.out.println("RPC");
-            song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-
-                @Override
-                public void onSuccess(SongDTO song_dto) {
-                  
-                    
-                    info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
-                    
-                    song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
-                    
-                    if(!song_dto.getAlbumCover().equals("")) {
-                        song_summary_dto.setAlbumCover(song_dto.getAlbumCover());
-                    }
-                    else {
-                        song_summary_dto.setAlbumCover("images/test_cover.jpg");
+            song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
                     }
 
-                    
-                    if (song_dto.getYoutubeCode().equals("")) {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
-                        client_factory.getProfileView().playNext(); }
-                    else {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-                        client_factory.getProfileView().setInfo(
-                            title + " - " + artist + " - " + album);
-                    }
-                    
-                    
-                    if (!song_dto.getAlbumCover().equals(""))
+                    @Override
+                    public void onSuccess(SongDTO song_dto) {
+                        
+                        //Imposta la copertina di default in caso non ce ne siano altre
+                        if (song_dto.getAlbumCover().equals("")) {
+                            song_dto.setAlbumCover("images/test_cover.jpg");
+                        }
+                        
+                        //Mostra la copertina relativa alla canzone
                         client_factory.getProfileView().paintMainCover(
                                 song_dto.getAlbumCover());
-                    else
-                        client_factory.getProfileView().paintMainCover(
-                                "images/test_cover.jpg");
-                    
-                    client_factory.getProfileView().stopLoading();
-                    return;
-                    
-                }
+                        
+                        //Salva le informazioni caricate dal server in una mappa cache diposnibile nel client
+                        info_alredy_loaded.put(song_id, song_dto);
+                        
+                        //Se il video non è disponibile passa alla canzone successiva
+                        if (song_dto.getYoutubeCode().equals("")) {
+                            //client_factory.getProfileView().closeYouTube();
+                            client_factory.getProfileView().playYouTube("00000000000");
+                            client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                            client_factory.getProfileView().playNext(); }
+                        else {
+                            //client_factory.getProfileView().closeYouTube();
+                            client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
+                            client_factory.getProfileView().setInfo(
+                                title + " - " + artist + " - " + album);
+                        }
+                        
+                        client_factory.getProfileView().stopLoading();
+                        
+                        return;
+                    }
             });
-        
-        
+        }
     }
 
     /**
@@ -741,53 +730,54 @@ public class ProfileActivity extends AbstractActivity implements
             
             return;
         }
-        
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
+        else {
+            Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+            final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
 
-        song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(SongDTO song_dto) {
-
-                //Imposta la copertina di default in caso non ce ne siano altre
-                if (song_dto.getAlbumCover().equals("")) {
-                    song_dto.setAlbumCover("images/test_cover.jpg");
+            song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
                 }
-                
-                //salva le info caricate in modo che siano sempre disponibili nel client
-                info_alredy_loaded.put(song_id, song_dto);
-                
-                //Riempimento default dei campi
-                String genere = "----";
-                String anno = "----";
-                String compositore = "----";
-                String traccia = "----";
-                String cover = "images/test_cover.jpg";
-                
-                if (!song_dto.getGenre().equals(""))
-                    genere = song_dto.getGenre();
-                if (!song_dto.getYear().equals(""))
-                    anno = song_dto.getYear();
-                if (!song_dto.getComposer().equals(""))
-                    compositore = song_dto.getComposer();
-                if (!song_dto.getTrackNumber().equals(""))
-                    traccia = song_dto.getTrackNumber();
-                if (!song_dto.getAlbumCover().equals(""))
-                    cover = song_dto.getAlbumCover();
 
-                //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
-                client_factory.getProfileView().setSongFields(artist,
-                        title, album, genere, anno, compositore,
-                        traccia, cover);
-                
-                client_factory.getProfileView().stopLoading();
-                return;
-            }
-        });
+                @Override
+                public void onSuccess(SongDTO song_dto) {
+
+                    //Imposta la copertina di default in caso non ce ne siano altre
+                    if (song_dto.getAlbumCover().equals("")) {
+                        song_dto.setAlbumCover("images/test_cover.jpg");
+                    }
+                    
+                    //salva le info caricate in modo che siano sempre disponibili nel client
+                    info_alredy_loaded.put(song_id, song_dto);
+                    
+                    //Riempimento default dei campi
+                    String genere = "----";
+                    String anno = "----";
+                    String compositore = "----";
+                    String traccia = "----";
+                    String cover = "images/test_cover.jpg";
+                    
+                    if (!song_dto.getGenre().equals(""))
+                        genere = song_dto.getGenre();
+                    if (!song_dto.getYear().equals(""))
+                        anno = song_dto.getYear();
+                    if (!song_dto.getComposer().equals(""))
+                        compositore = song_dto.getComposer();
+                    if (!song_dto.getTrackNumber().equals(""))
+                        traccia = song_dto.getTrackNumber();
+                    if (!song_dto.getAlbumCover().equals(""))
+                        cover = song_dto.getAlbumCover();
+
+                    //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
+                    client_factory.getProfileView().setSongFields(artist,
+                            title, album, genere, anno, compositore,
+                            traccia, cover);
+                    
+                    client_factory.getProfileView().stopLoading();
+                    return;
+                }
+            });
+        }
     }
 
     /**
