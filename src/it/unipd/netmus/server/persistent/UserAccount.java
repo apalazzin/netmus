@@ -1,9 +1,12 @@
 package it.unipd.netmus.server.persistent;
 
+import it.unipd.netmus.server.utils.cache.CacheSupport;
+import it.unipd.netmus.server.utils.cache.Cacheable;
 import it.unipd.netmus.shared.LoginDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
 import it.unipd.netmus.shared.UserDTO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,8 @@ import com.google.code.twig.annotation.Type;
  * 
  */
 
-public class UserAccount {
+@SuppressWarnings("serial")
+public class UserAccount implements Serializable, Cacheable {
 
     /**
      * 
@@ -63,6 +67,7 @@ public class UserAccount {
      * 
      * 
      */
+    /*
     public List<String> findRelatedUsers() {
         
         //Artista e genere preferiti dell'utente, valori aggiornati all'ultimo caricamento/rimozione di canzoni
@@ -128,10 +133,26 @@ public class UserAccount {
         
         return related_users;
     }
+    */
     
     public static UserAccount load(String user) {
-        return ODF.get().load().type(UserAccount.class).id(user).now();
+        
+        UserAccount user_account = (UserAccount) CacheSupport.cacheGet(user);
+        
+        if (user_account == null) {
+            user_account = ODF.get().load().type(UserAccount.class).id(user).now();
+            if (user_account != null) {
+                user_account.addToCache();
+            }
+        }
+        else {
+            user_account.music_library = (MusicLibrary) CacheSupport.cacheGet(user+"-library");
+        }
+        
+        return user_account;
+        
     }
+
 
     @Id
     private String user;
@@ -164,7 +185,6 @@ public class UserAccount {
     private boolean is_google_user;
 
     public UserAccount() {
-        this.music_library = new MusicLibrary(this);
         this.about_me = "";
         this.first_name = "";
         this.gender = "";
@@ -177,10 +197,10 @@ public class UserAccount {
         this.user = "";
         this.is_public_profile = true;
         this.allowed_users = new ArrayList<String>();
+        this.music_library = new MusicLibrary(this);
     }
     
     public UserAccount(String user, String password_hash) {
-        music_library = new MusicLibrary(this);
         this.user = user;
         this.password_hash = password_hash;
         this.is_google_user = false;
@@ -193,7 +213,10 @@ public class UserAccount {
         this.nick_name = "";
         this.is_public_profile = true;
         this.allowed_users = new ArrayList<String>();
+        this.music_library = new MusicLibrary(this);
+        System.out.println("arrivato");
         this.store();
+        System.out.println("arrivato2");
     }
 
     public String getAboutMe() {
@@ -296,6 +319,7 @@ public class UserAccount {
 
     public void store() {
         ODF.get().store().instance(this).ensureUniqueKey().now();
+        this.addToCache();
     }
 
     public LoginDTO toLoginDTO() {
@@ -335,5 +359,13 @@ public class UserAccount {
 
     public void update() {
         ODF.get().storeOrUpdate(this);
+        this.addToCache();
     }
+
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.user, this);
+        CacheSupport.cachePut(this.user+"-library", this.music_library);
+    }
+
 }

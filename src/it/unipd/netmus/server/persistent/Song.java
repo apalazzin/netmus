@@ -1,6 +1,10 @@
 package it.unipd.netmus.server.persistent;
 
+import java.io.Serializable;
+
 import it.unipd.netmus.server.utils.Utils;
+import it.unipd.netmus.server.utils.cache.CacheSupport;
+import it.unipd.netmus.server.utils.cache.Cacheable;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
@@ -49,10 +53,21 @@ import com.google.code.twig.annotation.Id;
  * 
  */
 
-public class Song {
+@SuppressWarnings("serial")
+public class Song implements Serializable, Cacheable {
 
     public static Song load(String id) {
-        return ODF.get().load().type(Song.class).id(id).now();
+        
+        Song song = (Song) CacheSupport.cacheGet(id);
+        
+        if (song == null) {
+            song = ODF.get().load().type(Song.class).id(id).now();
+            if (song != null) {
+                song.addToCache();
+            }
+        }
+        
+        return song;
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
@@ -391,6 +406,7 @@ public class Song {
 
     public void update() {
         ODF.get().storeOrUpdate(this);
+        this.addToCache();
     }
 
     void deleteOwner() {
@@ -418,6 +434,11 @@ public class Song {
 
     private void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.id, this);
     }
 
 }
