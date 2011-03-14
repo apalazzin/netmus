@@ -455,18 +455,17 @@ public class ProfileActivity extends AbstractActivity implements
             final String album) {
 
         client_factory.getProfileView().startLoading();
-        final String youTubeCode = "";
-        final String cover = "";
+        final String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         //ricerca nella mappa delle info già caricate
-        final SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
-
+        final SongDTO song_dto = info_alredy_loaded.get(song_id);
 
         if (song_dto != null) {
             
+            //La canzone è già stata caricata una volta e le informazioni sono disponibili 
+            //nel client.
             Timer timerPlay = new Timer() {
                 public void run() {
-                    System.out.println("FAST");
                     if (song_dto.getYoutubeCode().equals("")) {
                         //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube("00000000000");
@@ -489,64 +488,54 @@ public class ProfileActivity extends AbstractActivity implements
             };
             timerPlay.schedule(5);
 
-            
             return;
         }
-        
+        else {
 
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
+            Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+            
+            //caricamento dalla mappa della canzone selezionata
+            final SongSummaryDTO current_song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
 
-        
-            System.out.println("RPC");
-            song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-
-                @Override
-                public void onSuccess(SongDTO song_dto) {
-                  
-                    
-                    info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
-                    
-                    song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
-                    
-                    if(!song_dto.getAlbumCover().equals("")) {
-                        song_summary_dto.setAlbumCover(song_dto.getAlbumCover());
-                    }
-                    else {
-                        song_summary_dto.setAlbumCover("images/test_cover.jpg");
+            song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
                     }
 
-                    
-                    if (song_dto.getYoutubeCode().equals("")) {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
-                        client_factory.getProfileView().playNext(); }
-                    else {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-                        client_factory.getProfileView().setInfo(
-                            title + " - " + artist + " - " + album);
-                    }
-                    
-                    
-                    if (!song_dto.getAlbumCover().equals(""))
+                    @Override
+                    public void onSuccess(SongDTO song_dto) {
+                        
+                        //Imposta la copertina di default in caso non ce ne siano altre
+                        if (song_dto.getAlbumCover().equals("")) {
+                            song_dto.setAlbumCover("images/test_cover.jpg");
+                        }
+                        
+                        //Mostra la copertina relativa alla canzone
                         client_factory.getProfileView().paintMainCover(
                                 song_dto.getAlbumCover());
-                    else
-                        client_factory.getProfileView().paintMainCover(
-                                "images/test_cover.jpg");
-                    
-                    client_factory.getProfileView().stopLoading();
-                    return;
-                    
-                }
+                        
+                        //Salva le informazioni caricate dal server in una mappa cache diposnibile nel client
+                        info_alredy_loaded.put(song_id, song_dto);
+                        
+                        //Se il video non è disponibile passa alla canzone successiva
+                        if (song_dto.getYoutubeCode().equals("")) {
+                            //client_factory.getProfileView().closeYouTube();
+                            client_factory.getProfileView().playYouTube("00000000000");
+                            client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                            client_factory.getProfileView().playNext(); }
+                        else {
+                            //client_factory.getProfileView().closeYouTube();
+                            client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
+                            client_factory.getProfileView().setInfo(
+                                title + " - " + artist + " - " + album);
+                        }
+                        
+                        client_factory.getProfileView().stopLoading();
+                        
+                        return;
+                    }
             });
-        
-        
+        }
     }
 
     /**
@@ -576,6 +565,26 @@ public class ProfileActivity extends AbstractActivity implements
                 song.setRating(result);
                 client_factory.getProfileView().showGlobalStar(result);
 
+                
+                //Ricalcolo delle statistiche relative al rating delle canzoni del catalogo
+                List<String> song_statistics = calculateSongStatistics(current_user.getMusicLibrary().getSongs());
+                String most_popular_song = song_statistics.get(0);
+                String most_popular_song_for_this_user = song_statistics.get(1);
+                
+                //Salvataggio delle statistiche nella libreria mantenuta nel client
+                current_user.getMusicLibrary().setMostPopularSong(most_popular_song);
+                current_user.getMusicLibrary().setMostPopularSongForThisUser(most_popular_song_for_this_user);
+                
+                //Salvataggio delle statistiche nel Datasotre
+                library_service_svc.storeStatistics(current_user.getUser(), "", most_popular_song, most_popular_song_for_this_user, new AsyncCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void result) {}
+
+                    @Override
+                    public void onFailure(Throwable caught) {}
+                    }
+                );
+                
                 client_factory.getProfileView().stopLoading();
             }
 
@@ -652,52 +661,38 @@ public class ProfileActivity extends AbstractActivity implements
             final String album, final HTMLPanel img) {
         
         client_factory.getProfileView().startLoading();
-
+/*
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
-
-        String cover = song.getAlbumCover();
+        final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
+            
+        String cover = "";
         
-        if (cover.equals("")) {
-            
-            song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
+        song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+            }
 
-                @Override
-                public void onSuccess(SongDTO song_dto) {
-                    
-                    Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-                    SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
-                    
-                    song.setAlbumCover("images/test_cover.jpg");
-                    
-                    song.setYoutubeCode(song_dto.getYoutubeCode());
-                    if (!song_dto.getAlbumCover().equals("")) {
-                        song.setAlbumCover(song_dto.getAlbumCover());
-                    }
-                    
-                    String cover = "images/test_cover.jpg";
-                    if (!song_dto.getAlbumCover().equals("")) {
-                        cover = song_dto.getAlbumCover();
-                    }
-                    
-                    img.getElement().getStyle()
-                            .setBackgroundImage("url('" + cover + "')");
-                    
-                    client_factory.getProfileView().stopLoading();
-                    return;
+            @Override
+            public void onSuccess(SongDTO song_dto) {
+                
+                String cover = "images/test_cover.jpg";
+                if (!song_dto.getAlbumCover().equals("")) {
+                    cover = song_dto.getAlbumCover();
                 }
-            });
-        } else {
+                
+                img.getElement().getStyle()
+                        .setBackgroundImage("url('" + cover + "')");
+                
+                client_factory.getProfileView().stopLoading();
+                return;
+            }
+        });
             
-            img.getElement().getStyle()
-            .setBackgroundImage("url('" + cover + "')");
-    
-            client_factory.getProfileView().stopLoading();
+        img.getElement().getStyle()
+        .setBackgroundImage("url('" + cover + "')");
+*/
+        client_factory.getProfileView().stopLoading();
             
-        }
     }
 
     /**
@@ -743,53 +738,54 @@ public class ProfileActivity extends AbstractActivity implements
             
             return;
         }
-        
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
+        else {
+            Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
+            final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
 
-        song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(SongDTO song_dto) {
-
-                //Imposta la copertina di default in caso non ce ne siano altre
-                if (song_dto.getAlbumCover().equals("")) {
-                    song_dto.setAlbumCover("images/test_cover.jpg");
+            song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
+                @Override
+                public void onFailure(Throwable caught) {
                 }
-                
-                //salva le info caricate in modo che siano sempre disponibili nel client
-                info_alredy_loaded.put(song_id, song_dto);
-                
-                //Riempimento default dei campi
-                String genere = "----";
-                String anno = "----";
-                String compositore = "----";
-                String traccia = "----";
-                String cover = "images/test_cover.jpg";
-                
-                if (!song_dto.getGenre().equals(""))
-                    genere = song_dto.getGenre();
-                if (!song_dto.getYear().equals(""))
-                    anno = song_dto.getYear();
-                if (!song_dto.getComposer().equals(""))
-                    compositore = song_dto.getComposer();
-                if (!song_dto.getTrackNumber().equals(""))
-                    traccia = song_dto.getTrackNumber();
-                if (!song_dto.getAlbumCover().equals(""))
-                    cover = song_dto.getAlbumCover();
 
-                //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
-                client_factory.getProfileView().setSongFields(artist,
-                        title, album, genere, anno, compositore,
-                        traccia, cover);
-                
-                client_factory.getProfileView().stopLoading();
-                return;
-            }
-        });
+                @Override
+                public void onSuccess(SongDTO song_dto) {
+
+                    //Imposta la copertina di default in caso non ce ne siano altre
+                    if (song_dto.getAlbumCover().equals("")) {
+                        song_dto.setAlbumCover("images/test_cover.jpg");
+                    }
+                    
+                    //salva le info caricate in modo che siano sempre disponibili nel client
+                    info_alredy_loaded.put(song_id, song_dto);
+                    
+                    //Riempimento default dei campi
+                    String genere = "----";
+                    String anno = "----";
+                    String compositore = "----";
+                    String traccia = "----";
+                    String cover = "images/test_cover.jpg";
+                    
+                    if (!song_dto.getGenre().equals(""))
+                        genere = song_dto.getGenre();
+                    if (!song_dto.getYear().equals(""))
+                        anno = song_dto.getYear();
+                    if (!song_dto.getComposer().equals(""))
+                        compositore = song_dto.getComposer();
+                    if (!song_dto.getTrackNumber().equals(""))
+                        traccia = song_dto.getTrackNumber();
+                    if (!song_dto.getAlbumCover().equals(""))
+                        cover = song_dto.getAlbumCover();
+
+                    //richiesta di visualizzazione delle info dettagliate nell'interfaccia grafica
+                    client_factory.getProfileView().setSongFields(artist,
+                            title, album, genere, anno, compositore,
+                            traccia, cover);
+                    
+                    client_factory.getProfileView().stopLoading();
+                    return;
+                }
+            });
+        }
     }
 
     /**
@@ -851,9 +847,13 @@ public class ProfileActivity extends AbstractActivity implements
                                 }
                                 
                                 if (event.isLastSongs()) {
-                                    String tmp = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
+                                    String preferred_artist = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
                                     
-                                    library_service_svc.storeStatistics(current_user.getUser(), tmp, new AsyncCallback<Void>() {
+                                    //Aggiornamento delle statistiche calcolate nel catalogo mantenuto nel client
+                                    current_user.getMusicLibrary().setPreferred_artist(preferred_artist);
+                                    
+                                    //Aggiornamento delle statistiche calcolate nel Datastore
+                                    library_service_svc.storeStatistics(current_user.getUser(), preferred_artist, "", "", new AsyncCallback<Void>() {
                                         @Override
                                         public void onSuccess(Void result) {}
 
@@ -944,10 +944,10 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 	
 	/*
-	 * Ricerca all'interno della libreria data in input il genere musicale più ricorrente tra
+	 * Ricerca all'interno della libreria data in input l'artista più ricorrente tra
 	 * tutte le canzoni.
 	 */
-	public String calculatePreferredArtist(Map<String, SongSummaryDTO> all_songs_map) {
+	private String calculatePreferredArtist(Map<String, SongSummaryDTO> all_songs_map) {
 	    client_factory.getProfileView().startLoading();
 	    
 	    String preferred_artist = "";
@@ -982,6 +982,50 @@ public class ProfileActivity extends AbstractActivity implements
 	    client_factory.getProfileView().stopLoading();
 	    
 	    return preferred_artist;
+	}
+	
+	
+	/*
+     * Ricerca all'interno della libreria data in input la canzone che è stata valutata meglio 
+     * da tutti gli utenti che la condividono e quella preferita dall'utente che possiede la libreria.
+     * Ne ritorna gli id in una lista.
+     */
+	private List<String> calculateSongStatistics(Map<String, SongSummaryDTO> all_songs_map) {
+        client_factory.getProfileView().startLoading();
+        
+        SongSummaryDTO most_popular_song = null;
+        SongSummaryDTO most_popular_song_for_this_user = null;
+        double max1 = 0;
+        int max2 = 0;
+        
+        for (SongSummaryDTO tmp : all_songs_map.values()) {
+            if (tmp.getRating() > max1) {
+                max1 = tmp.getRating();
+                most_popular_song = tmp;
+            }
+            if (tmp.getRatingForThisUser() > max2) {
+                max2 = tmp.getRatingForThisUser();
+                most_popular_song_for_this_user = tmp;
+            }
+        }
+        
+        List<String> tmp = new ArrayList<String>(2);
+        if (most_popular_song != null) {
+            tmp.add(FieldVerifier.generateSongId(most_popular_song.getTitle(), most_popular_song.getArtist(), most_popular_song.getAlbum()));
+        }
+        else {
+            tmp.add("");
+        }
+        if (most_popular_song_for_this_user != null) {
+            tmp.add(FieldVerifier.generateSongId(most_popular_song_for_this_user.getTitle(), most_popular_song_for_this_user.getArtist(), most_popular_song_for_this_user.getAlbum()));
+        }
+        else {
+            tmp.add("");
+        }
+        
+        client_factory.getProfileView().stopLoading();
+        
+        return tmp;
 	}
 	
 }

@@ -49,12 +49,12 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * ap- partengono alla playlist.Ritorna true se l’operazione ha successo.
      */
     @Override
-    public List<SongSummaryDTO> getPlaylist(String user, String titolo) {
+    public List<SongSummaryDTO> getPlaylist(String user, String name) {
 
         UserAccount useraccount = UserAccount.load(user);
 
         List<Song> songs = useraccount.getMusicLibrary().getPlaylistSongs(
-                titolo);
+                name);
         List<SongSummaryDTO> songs_dto = new ArrayList<SongSummaryDTO>();
 
         for (Song song : songs) {
@@ -123,22 +123,26 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
                 useraccount.getMusicLibrary().addSong(song);
             }
         }
+        
+        useraccount.getMusicLibrary().update();
     }
 
     @Override
-    public void storeStatistics(String user, String preferred_artist) {
+    public void storeStatistics(String user, String preferred_artist,
+            String most_popular_song, String most_popular_song_for_this_user) {
         UserAccount user_account = UserAccount.load(user);
         
-        user_account.getMusicLibrary().setPreferredArtist(preferred_artist);
-    }
-
-    @Override
-    public List<String> getStatistics(String user) {
-        UserAccount user_account = UserAccount.load(user);
+        if (!preferred_artist.equals("")) {
+            user_account.getMusicLibrary().setPreferredArtist(preferred_artist);
+        }
         
-        List<String> tmp = new ArrayList<String>();
-        tmp.add(user_account.getMusicLibrary().getPreferredArtist());
-        return tmp;
+        if (!most_popular_song.equals("")) {
+            user_account.getMusicLibrary().setMostPopularSong(most_popular_song);
+        }
+        
+        if (!most_popular_song_for_this_user.equals("")) {
+            user_account.getMusicLibrary().setMostPopularSongForThisUser(most_popular_song_for_this_user);
+        }
+     
     }
-
 }

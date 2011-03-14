@@ -22,6 +22,10 @@ public class SongDTO extends SongSummaryDTO {
     private String composer;
 
     private String genre;
+    
+    private String youtube_code;
+    
+    private String album_cover;
 
     private String track_number;
 
@@ -34,6 +38,7 @@ public class SongDTO extends SongSummaryDTO {
     // costruttore di default
     public SongDTO() {
         super();
+        
         this.year = "";
         this.composer = "";
         this.genre = "";
@@ -97,6 +102,22 @@ public class SongDTO extends SongSummaryDTO {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public void setYoutubeCode(String youtube_code) {
+        this.youtube_code = youtube_code;
+    }
+
+    public String getYoutubeCode() {
+        return youtube_code;
+    }
+
+    public void setAlbumCover(String album_cover) {
+        this.album_cover = album_cover;
+    }
+
+    public String getAlbumCover() {
+        return album_cover;
     }
 
 }
