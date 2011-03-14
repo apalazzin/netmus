@@ -155,7 +155,10 @@ public class MusicLibrary implements Serializable, Cacheable {
     private String preferred_artist;
 
     @Index
-    private String preferred_genre;
+    private String most_popular_song;
+    
+    @Index
+    private String most_popular_song_for_this_user;
     
     private List<String> playlists;
 
@@ -163,7 +166,8 @@ public class MusicLibrary implements Serializable, Cacheable {
         this.playlists = new ArrayList<String>();
         this.song_list = new HashMap<String, String>();
         this.preferred_artist = "";
-        this.preferred_genre = "";
+        this.most_popular_song = "";
+        this.most_popular_song_for_this_user = "";
         this.id = "";
     }
 
@@ -172,7 +176,8 @@ public class MusicLibrary implements Serializable, Cacheable {
         this.playlists = new ArrayList<String>();
         this.song_list = new HashMap<String, String>();
         this.preferred_artist = "";
-        this.preferred_genre = "";
+        this.most_popular_song = "";
+        this.most_popular_song_for_this_user = "";
         this.id = owner.getUser()+"-library";
     }
 
@@ -273,10 +278,6 @@ public class MusicLibrary implements Serializable, Cacheable {
         return preferred_artist;
     }
 
-    public String getPreferredGenre() {
-        return preferred_genre;
-    }
-
     public int getSongRateForThisUser(Song song) {
         
         if (song_list.containsKey(song.getId())) {
@@ -312,9 +313,11 @@ public class MusicLibrary implements Serializable, Cacheable {
             if (old_rating > 0) {
                 song_list.put(song.getId(), str_rating);
                 song.changeRate(old_rating, rating);
+                this.update();
             } else {
                 song_list.put(song.getId(), str_rating);
                 song.addRate(rating);
+                this.update();
             }
         }
     }
@@ -403,8 +406,8 @@ public class MusicLibrary implements Serializable, Cacheable {
         MusicLibrarySummaryDTO library = new MusicLibrarySummaryDTO(map, playlists);
         
         library.setPreferred_artist(getPreferredArtist());
-        
-        library.setPreferred_genre(getPreferredGenre());
+        library.setMostPopularSong(this.most_popular_song);
+        library.setMostPopularSongForThisUser(this.most_popular_song_for_this_user);
         
         return library;
     }
@@ -427,11 +430,6 @@ public class MusicLibrary implements Serializable, Cacheable {
         this.update();
     }
 
-    public void setPreferredGenre(String preferred_genre) {
-        this.preferred_genre = preferred_genre;
-        this.update();
-    }
-
     @Override
     public void addToCache() {
         CacheSupport.cachePut(this.id, this);
@@ -440,6 +438,25 @@ public class MusicLibrary implements Serializable, Cacheable {
     @Override
     public void removeFromCache() {
         CacheSupport.cacheRemove(this.id);
+    }
+
+    public void setMostPopularSong(String most_popular_song) {
+        this.most_popular_song = most_popular_song;
+        this.update();
+    }
+
+    public String getMostPopularSong() {
+        return most_popular_song;
+    }
+
+    public void setMostPopularSongForThisUser(
+            String most_popular_song_for_this_user) {
+        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
+        this.update();
+    }
+
+    public String getMostPopularSongForThisUser() {
+        return most_popular_song_for_this_user;
     }
 
 }
