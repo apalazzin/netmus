@@ -456,17 +456,36 @@ public class ProfileActivity extends AbstractActivity implements
         final String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         //ricerca nella mappa delle info già caricate
-        SongDTO song_dto = info_alredy_loaded.get(song_id);
+        final SongDTO song_dto = info_alredy_loaded.get(song_id);
 
         if (song_dto != null) {
             
-            client_factory.getProfileView().closeYouTube();
-            client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-            client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-        
-            client_factory.getProfileView().paintMainCover(song_dto.getAlbumCover());
-            
-            client_factory.getProfileView().stopLoading();
+            //La canzone è già stata caricata una volta e le informazioni sono disponibili 
+            //nel client.
+            Timer timerPlay = new Timer() {
+                public void run() {
+                    if (song_dto.getYoutubeCode().equals("")) {
+                        //client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube("00000000000");
+                        client_factory.getProfileView().playNext(); 
+                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                    else {
+                        //client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
+                        client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
+                    }
+
+                    if (!song_dto.getAlbumCover().equals(""))
+                        client_factory.getProfileView().paintMainCover(song_dto.getAlbumCover());
+                    else
+                        client_factory.getProfileView().paintMainCover(
+                                "images/test_cover.jpg");
+                                
+                    client_factory.getProfileView().stopLoading();
+                }     
+            };
+            timerPlay.schedule(5);
+
             return;
         }
         else {
@@ -498,128 +517,24 @@ public class ProfileActivity extends AbstractActivity implements
                         
                         //Se il video non è disponibile passa alla canzone successiva
                         if (song_dto.getYoutubeCode().equals("")) {
-                            client_factory.getProfileView().closeYouTube();
+                            //client_factory.getProfileView().closeYouTube();
                             client_factory.getProfileView().playYouTube("00000000000");
-                            client_factory.getProfileView().stopLoading();
-                            client_factory.getProfileView().playNext(); 
-                            client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                            client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                            client_factory.getProfileView().playNext(); }
                         else {
-                            client_factory.getProfileView().closeYouTube();
+                            //client_factory.getProfileView().closeYouTube();
                             client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
                             client_factory.getProfileView().setInfo(
                                 title + " - " + artist + " - " + album);
-                            client_factory.getProfileView().stopLoading();
                         }
+                        
+                        client_factory.getProfileView().stopLoading();
                         
                         return;
                     }
             });
         }
     }
-
-/*
-
-    @Override
-    public void playYouTube(final String artist, final String title,
-            final String album) {
-
-        client_factory.getProfileView().startLoading();
-        final String youTubeCode = "";
-        final String cover = "";
-        
-        //ricerca nella mappa delle info già caricate
-        final SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
-
-
-        if (song_dto != null) {
-            
-            Timer timerPlay = new Timer() {
-                public void run() {
-                    System.out.println("FAST");
-                    if (song_dto.getYoutubeCode().equals("")) {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().playNext(); 
-                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\""); }
-                    else {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-                        client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-                    }
-
-                    if (!song_dto.getAlbumCover().equals(""))
-                        client_factory.getProfileView().paintMainCover(song_dto.getAlbumCover());
-                    else
-                        client_factory.getProfileView().paintMainCover(
-                                "images/test_cover.jpg");
-                                
-                    client_factory.getProfileView().stopLoading();
-                }     
-            };
-            timerPlay.schedule(5);
-
-            
-            return;
-        }
-        
-
-        Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
-
-        
-            System.out.println("RPC");
-            song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                }
-
-                @Override
-                public void onSuccess(SongDTO song_dto) {
-                  
-                    
-                    info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
-                    
-                    song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
-                    
-                    if(!song_dto.getAlbumCover().equals("")) {
-                        song_summary_dto.setAlbumCover(song_dto.getAlbumCover());
-                    }
-                    else {
-                        song_summary_dto.setAlbumCover("images/test_cover.jpg");
-                    }
-
-                    
-                    if (song_dto.getYoutubeCode().equals("")) {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
-                        client_factory.getProfileView().playNext(); }
-                    else {
-                        //client_factory.getProfileView().closeYouTube();
-                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
-                        client_factory.getProfileView().setInfo(
-                            title + " - " + artist + " - " + album);
-                    }
-                    
-                    
-                    if (!song_dto.getAlbumCover().equals(""))
-                        client_factory.getProfileView().paintMainCover(
-                                song_dto.getAlbumCover());
-                    else
-                        client_factory.getProfileView().paintMainCover(
-                                "images/test_cover.jpg");
-                    
-                    client_factory.getProfileView().stopLoading();
-                    return;
-                    
-                }
-            });
-        
-        
-    }
-
-
-*/
 
     /**
      * Attribuisce un punteggio compreso tra 1 e 5 alla canzone selezionata
