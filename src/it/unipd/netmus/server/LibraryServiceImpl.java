@@ -1,7 +1,6 @@
 package it.unipd.netmus.server;
 
 import it.unipd.netmus.client.service.LibraryService;
-import it.unipd.netmus.server.persistent.MusicLibrary;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.SongDTO;
@@ -127,13 +126,19 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public void updateStatisticFields(String user) {
-        MusicLibrary library = UserAccount.load(user).getMusicLibrary();
+    public void storeStatistics(String user, String preferred_artist) {
+        UserAccount user_account = UserAccount.load(user);
         
-        if (library != null) {
-            library.updatePreferredArtist();
-            library.updatePreferredGenre();
-        }
+        user_account.getMusicLibrary().setPreferredArtist(preferred_artist);
+    }
+
+    @Override
+    public List<String> getStatistics(String user) {
+        UserAccount user_account = UserAccount.load(user);
+        
+        List<String> tmp = new ArrayList<String>();
+        tmp.add(user_account.getMusicLibrary().getPreferredArtist());
+        return tmp;
     }
 
 }

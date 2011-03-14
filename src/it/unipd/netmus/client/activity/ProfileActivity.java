@@ -495,7 +495,7 @@ public class ProfileActivity extends AbstractActivity implements
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
 
-        if (true) {
+        
             System.out.println("RPC");
             song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
                 @Override
@@ -543,17 +543,8 @@ public class ProfileActivity extends AbstractActivity implements
                     
                 }
             });
-        }
-        else {
-            System.out.println("test");
-            client_factory.getProfileView().closeYouTube();
-            client_factory.getProfileView().playYouTube(youTubeCode);
-            client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-            client_factory.getProfileView().paintMainCover(cover);
-            
-            client_factory.getProfileView().stopLoading();
-            return;
-        }
+        
+        
     }
 
     /**
@@ -715,19 +706,21 @@ public class ProfileActivity extends AbstractActivity implements
             final String album) {
 
         client_factory.getProfileView().startLoading();
+        final String song_id = FieldVerifier.generateSongId(title, artist, album);
         
         //ricerca nella mappa delle info già caricate
-        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+        SongDTO song_dto = info_alredy_loaded.get(song_id);
         
         if (song_dto != null) {
             
-            //se le info erano già state caricate precedentemente vengono prese ed utilizzate immediatamente
+            //Riempimento default dei campi
             String genere = "----";
             String anno = "----";
             String compositore = "----";
             String traccia = "----";
             String cover = "images/test_cover.jpg";
             
+            //se le info erano già state caricate precedentemente vengono prese ed utilizzate immediatamente
             if (!song_dto.getGenre().equals(""))
                 genere = song_dto.getGenre();
             if (!song_dto.getYear().equals(""))
@@ -750,9 +743,9 @@ public class ProfileActivity extends AbstractActivity implements
         }
         
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
-        final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
+        final SongSummaryDTO current_song_summary_dto = songs.get(song_id);
 
-        song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+        song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
             @Override
             public void onFailure(Throwable caught) {
             }
@@ -760,9 +753,15 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(SongDTO song_dto) {
 
+                //Imposta la copertina di default in caso non ce ne siano altre
+                if (song_dto.getAlbumCover().equals("")) {
+                    song_dto.setAlbumCover("images/test_cover.jpg");
+                }
+                
                 //salva le info caricate in modo che siano sempre disponibili nel client
-                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
-
+                info_alredy_loaded.put(song_id, song_dto);
+                
+                //Riempimento default dei campi
                 String genere = "----";
                 String anno = "----";
                 String compositore = "----";
@@ -849,6 +848,19 @@ public class ProfileActivity extends AbstractActivity implements
                                     }
                                 }
                                 
+                                if (event.isLastSongs()) {
+                                    String tmp = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
+                                    
+                                    library_service_svc.storeStatistics(current_user.getUser(), tmp, new AsyncCallback<Void>() {
+                                        @Override
+                                        public void onSuccess(Void result) {}
+
+                                        @Override
+                                        public void onFailure(Throwable caught) {}
+                                        }
+                                    );
+                                }
+                                
                                 client_factory.getProfileView().paintCatalogo(tmp_list);
                             }
                             
@@ -918,5 +930,46 @@ public class ProfileActivity extends AbstractActivity implements
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/*
+	 * Ricerca all'interno della libreria data in input il genere musicale più ricorrente tra
+	 * tutte le canzoni.
+	 */
+	public String calculatePreferredArtist(Map<String, SongSummaryDTO> all_songs_map) {
+	    client_factory.getProfileView().startLoading();
+	    
+	    String preferred_artist = "";
+	    List<String> all_artists = new ArrayList<String>();
+	    
+	    for (SongSummaryDTO tmp : all_songs_map.values()) {
+	        all_artists.add(tmp.getArtist());
+	    }
 
+        int max = 0;
+        int count;
+        List<String> toBeRemoved = new ArrayList<String>();
+        while (all_artists.size() > max) {
+            String tmp = all_artists.get(0);
+            if (!tmp.equals("")) {
+                count = 0;
+                toBeRemoved.clear();
+                for (String it : all_artists)
+                    if (!it.equals("") && it.equals(tmp)) {
+                        count++;
+                        toBeRemoved.add(it);
+                    }
+                if (count > max) {
+                    max = count;
+                    preferred_artist = tmp;
+                }
+                all_artists.removeAll(toBeRemoved);
+            } else
+                all_artists.remove(tmp);
+        }
+        
+	    client_factory.getProfileView().stopLoading();
+	    
+	    return preferred_artist;
+	}
+	
 }
