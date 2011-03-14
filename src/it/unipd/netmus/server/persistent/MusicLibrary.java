@@ -42,8 +42,8 @@ public class MusicLibrary implements Serializable, Cacheable {
     static private class Playlist implements Serializable, Cacheable {
 
         static void deletePlaylist(Playlist p) {
-            CacheSupport.cacheRemove(p.id);
             ODF.get().storeOrUpdate(p);
+            p.removeFromCache();
             ODF.get().delete(p);
         }
         
@@ -127,6 +127,11 @@ public class MusicLibrary implements Serializable, Cacheable {
             CacheSupport.cachePut(this.id, this);
         }
 
+        @Override
+        public void removeFromCache() {
+            CacheSupport.cacheRemove(this.id);
+        }
+
     }
 
     static void deleteMusicLibrary(MusicLibrary ml) {
@@ -134,6 +139,7 @@ public class MusicLibrary implements Serializable, Cacheable {
             Playlist playlist = Playlist.load(tmp);
             Playlist.deletePlaylist(playlist);
         }
+        ml.removeFromCache();
         ODF.get().delete(ml);
     }
 
@@ -429,6 +435,11 @@ public class MusicLibrary implements Serializable, Cacheable {
     @Override
     public void addToCache() {
         CacheSupport.cachePut(this.id, this);
+    }
+
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.id);
     }
 
 }
