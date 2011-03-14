@@ -34,8 +34,6 @@ public interface LibraryService extends RemoteService {
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs);
     
-    public void storeStatistics(String user, String preferred_artist);
-    
-    public List<String> getStatistics(String user);
+    public void storeStatistics(String user, String preferred_artist, String most_popular_song, String most_popular_song_for_this_user);
 
 }

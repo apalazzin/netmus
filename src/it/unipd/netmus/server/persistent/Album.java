@@ -40,7 +40,7 @@ public class Album implements Serializable, Cacheable {
     }
     
     public void update() {
-        ODF.get().update(this);
+        ODF.get().storeOrUpdate(this);
         this.addToCache();
     }
     

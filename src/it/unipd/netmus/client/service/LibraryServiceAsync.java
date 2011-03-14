@@ -39,8 +39,7 @@ public interface LibraryServiceAsync {
             AsyncCallback<Boolean> callback);
 
     void storeStatistics(String user, String preferred_artist,
+            String most_popular_song, String most_popular_song_for_this_user,
             AsyncCallback<Void> callback);
-
-    void getStatistics(String user, AsyncCallback<List<String>> callback);
 
 }
