@@ -665,7 +665,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        }
        
        else if(youtube_status==0 && last_selected==1) {
-           if(selected_song_playlist!=null){ 
+           if(selected_song_playlist!=null){
                play.setUrl("images/pause.png");
                played_song = selected_song_playlist;
                playing=1;
@@ -3038,6 +3038,47 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void showError(String text_t) {
+       
+        final HorizontalPanel popup_text = new HorizontalPanel();
+        popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+        
+        final Label text = new Label();
+        text.setText(text_t);
+        text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+        text.getElement().getStyle().setProperty("textAlign", "left");
+
+        popup_text.add(text);
+        popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
+        popup_text.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+        popup_text.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+        popup_text.getElement().getStyle().setColor("#FF0000");
+        popup_text.getElement().getStyle().setProperty("textAlign", "left");
+        
+         
+        popup.add(popup_text);
+        
+        popup_yes.setText("ok");
+        
+        
+        if(rm_popyes!=null) rm_popyes.removeHandler();
+        
+        
+        rm_popyes = popup_yes.addClickHandler(new ClickHandler() {
+
+         @Override
+         public void onClick(ClickEvent event) {
+             popup.remove(popup_text);
+             popup.setVisible(false); 
+         }});
+                
+        popup.setVisible(true);
+        popup_yes.setVisible(true);
+        
+    }
+
+    
+    
+    private void showErrorFast(String text_t) {
        
         final HorizontalPanel popup_text = new HorizontalPanel();
         popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);

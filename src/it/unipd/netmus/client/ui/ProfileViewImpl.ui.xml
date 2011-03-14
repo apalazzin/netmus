@@ -242,6 +242,9 @@
 				<g:Button ui:field="popup_no" styleName="{style.popup_no}"></g:Button>
 				
 				</g:HTMLPanel>
+
+				<g:HTMLPanel ui:field="popup_fast" styleName="{style.popup_fast}"></g:HTMLPanel>
+
    	
 	</g:HTMLPanel>
 

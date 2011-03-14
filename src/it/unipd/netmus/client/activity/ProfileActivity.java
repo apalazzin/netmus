@@ -33,6 +33,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -452,23 +453,41 @@ public class ProfileActivity extends AbstractActivity implements
             final String album) {
 
         client_factory.getProfileView().startLoading();
-        String youTubeCode = "";
-        String cover = "";
+        final String youTubeCode = "";
+        final String cover = "";
         
         //ricerca nella mappa delle info già caricate
-        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
-        
+        final SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+
+
         if (song_dto != null) {
-            youTubeCode = song_dto.getYoutubeCode();
-            cover = song_dto.getAlbumCover();
             
-            client_factory.getProfileView().closeYouTube();
-            client_factory.getProfileView().playYouTube(youTubeCode);
-            client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
-        
-            client_factory.getProfileView().paintMainCover(cover);
+            Timer timerPlay = new Timer() {
+                public void run() {
+                    System.out.println("FAST");
+                    if (song_dto.getYoutubeCode().equals("")) {
+                        client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube("00000000000");
+                        client_factory.getProfileView().playNext(); 
+                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                    else {
+                        client_factory.getProfileView().closeYouTube();
+                        client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
+                        client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
+                    }
+
+                    if (!song_dto.getAlbumCover().equals(""))
+                        client_factory.getProfileView().paintMainCover(song_dto.getAlbumCover());
+                    else
+                        client_factory.getProfileView().paintMainCover(
+                                "images/test_cover.jpg");
+                                
+                    client_factory.getProfileView().stopLoading();
+                }     
+            };
+            timerPlay.schedule(5);
+
             
-            client_factory.getProfileView().stopLoading();
             return;
         }
         
@@ -476,7 +495,8 @@ public class ProfileActivity extends AbstractActivity implements
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         final SongSummaryDTO song_summary_dto = songs.get(FieldVerifier.generateSongId(title, artist, album));
 
-        if (youTubeCode.equals("") || cover.equals("")) {
+        if (true) {
+            System.out.println("RPC");
             song_service_svc.getSongDTO(song_summary_dto, new AsyncCallback<SongDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
@@ -484,6 +504,9 @@ public class ProfileActivity extends AbstractActivity implements
 
                 @Override
                 public void onSuccess(SongDTO song_dto) {
+                  
+                    
+                    info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
                     
                     song_summary_dto.setYoutubeCode(song_dto.getYoutubeCode());
                     
@@ -522,6 +545,7 @@ public class ProfileActivity extends AbstractActivity implements
             });
         }
         else {
+            System.out.println("test");
             client_factory.getProfileView().closeYouTube();
             client_factory.getProfileView().playYouTube(youTubeCode);
             client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
