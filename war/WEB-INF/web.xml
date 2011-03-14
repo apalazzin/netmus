@@ -14,24 +14,6 @@
     <servlet-name>loginService</servlet-name>
     <url-pattern>/netmus/loginService</url-pattern>
   </servlet-mapping>
-
-  <servlet>
-    <servlet-name>pdfService</servlet-name>
-    <servlet-class>it.unipd.netmus.server.PdfServiceImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>pdfService</servlet-name>
-    <url-pattern>/netmus/pdfService</url-pattern>
-  </servlet-mapping>
-  
-    <servlet>
-  	<servlet-name>pdfLoaderServlet</servlet-name>
-  	<servlet-class>it.unipd.netmus.server.PDFLoaderServlet</servlet-class>
-  </servlet>
-    <servlet-mapping>
-  	<servlet-name>pdfLoaderServlet</servlet-name>
-  	<url-pattern>/pdf</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>libraryService</servlet-name>
@@ -58,6 +40,16 @@
   <servlet-mapping>
     <servlet-name>usersService</servlet-name>
     <url-pattern>/netmus/usersService</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>pdfLoaderServlet</servlet-name>
+    <servlet-class>it.unipd.netmus.server.servlet.PDFLoaderServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>pdfLoaderServlet</servlet-name>
+    <url-pattern>/netmus/pdf</url-pattern>
   </servlet-mapping>
   
   <!-- 

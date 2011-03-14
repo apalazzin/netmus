@@ -10,8 +10,6 @@ import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.client.service.LibraryServiceAsync;
 import it.unipd.netmus.client.service.LoginService;
 import it.unipd.netmus.client.service.LoginServiceAsync;
-import it.unipd.netmus.client.service.PdfService;
-import it.unipd.netmus.client.service.PdfServiceAsync;
 import it.unipd.netmus.client.service.SongService;
 import it.unipd.netmus.client.service.SongServiceAsync;
 import it.unipd.netmus.client.service.UserService;
@@ -36,6 +34,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -54,6 +53,8 @@ public class ProfileActivity extends AbstractActivity implements
 
     @SuppressWarnings("unused")
     private boolean is_owner; // not used yet
+    
+    private boolean pdf_created = false;
 
     private LoginServiceAsync login_service_svc = GWT
             .create(LoginService.class);
@@ -61,8 +62,7 @@ public class ProfileActivity extends AbstractActivity implements
             .create(LibraryService.class);
     private UserServiceAsync user_service_svc = GWT.create(UserService.class);
     private SongServiceAsync song_service_svc = GWT.create(SongService.class);
-    private PdfServiceAsync pdf_service_svc = GWT.create(PdfService.class);
-    
+
     private UserCompleteDTO current_user;
     
     private Map<String, SongDTO> info_alredy_loaded = new HashMap<String, SongDTO>();
@@ -270,14 +270,6 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Esporta la lista delle canzoni in pdf
-     */
-    @Override
-    public void exportPDF() {
-    	exportPDF(current_user.getUser());
-    }
-
-    /**
      * Restituisce la lista degli utenti affini su Netmus
      */
     public void setFriendList() {
@@ -420,7 +412,13 @@ public class ProfileActivity extends AbstractActivity implements
      */
     @Override
     public String mayStop() {
-        return my_constants.leavingProfilePage();
+        if (pdf_created) {
+            pdf_created = false;
+            return my_constants.downloadPDF();
+        }
+        else {
+            return my_constants.leavingProfilePage();
+        }
     }
 
     /**
@@ -928,19 +926,24 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
 	@Override
-	public void exportPDF(String user) {
-        pdf_service_svc.exportPDF(user, new AsyncCallback<String>(){
-        	@Override
-        	public void onFailure(Throwable caught) {
-            	System.out.println("no.. tutto in vacca");
+	public void exportPdf() {
+	    
+	    client_factory.getProfileView().startLoading();
+	    
+        library_service_svc.generatePDF(current_user.getUser(), new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
             }
+
             @Override
             public void onSuccess(String result) {
-            	System.out.println("ok.. iera ora");
-            }
-        
+                client_factory.getProfileView().stopLoading();
+                pdf_created = true;
+                Window.Location.assign(result);
+            } 
+            
         });
-		
 	}
 	
 	/*

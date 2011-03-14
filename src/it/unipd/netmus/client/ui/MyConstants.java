@@ -31,5 +31,6 @@ public interface MyConstants extends Constants {
 	String confirmDelete();
 	String yes();
 	String no();
+	String downloadPDF();
 	
 	}
