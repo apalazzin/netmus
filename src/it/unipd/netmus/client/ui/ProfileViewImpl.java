@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -52,6 +53,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -123,8 +126,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label edit_profile_nickname;
    @UiField Label edit_profile_name;
    @UiField Label edit_profile_surname;
-   @UiField Label edit_profile_nationality;
-   @UiField Label edit_profile_gender;
    @UiField Label edit_profile_labelCpassword;   
    @UiField Label edit_profile_user;
    
@@ -153,6 +154,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel covers_container;
    @UiField HTMLPanel popup;
    @UiField HTMLPanel popup_fast;
+   @UiField HTMLPanel country_container;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -198,7 +200,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField VerticalPanel edit_profile_vc;
 
    @UiField TextBox search_box;
+   
+   @UiField RadioButton male;
+   @UiField RadioButton female;
 
+   SelectElement country;
    boolean playlist_opened; 
    boolean song_opened;
    
@@ -627,6 +633,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            off.getElement().getStyle().setHeight(22, Style.Unit.PX);
            playlist_songs.add(off);    
            main_panel.getElement().setId("main_panel");
+           country = (SelectElement) SelectElement.as(country_container.getElement().getChild(0));
            
            
 
@@ -1115,15 +1122,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
       edit_profile_surname.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
-   @UiHandler("edit_profile_nationality")
-   void handleMouseOverEditProfileNationality(MouseOverEvent e) {
-      edit_profile_nationality.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-   }
-   
-   @UiHandler("edit_profile_gender")
-   void handleMouseOverEditProfileGender(MouseOverEvent e) {
-      edit_profile_gender.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-   }
    
 
    @UiHandler("edit_profile_password")
@@ -1139,8 +1137,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("edit_profile_check")
    void handleMouseEditProfileCheck(ClickEvent e) {
         
+       String gender = "f";
+       
+       if(male.getValue()) gender="m";
+       
        listener.editProfile(edit_profile_user.getText(), edit_profile_nickname.getText(), edit_profile_name.getText(), edit_profile_surname.getText(),
-               edit_profile_gender.getText(), edit_profile_nationality.getText(), edit_profile_aboutme.getElement().getInnerHTML(),password);
+                gender, country.getValue(), edit_profile_aboutme.getElement().getInnerHTML(),password);
        
    }
    
@@ -2877,8 +2879,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         edit_profile_nickname.setText(nickname);
         edit_profile_name.setText(name);
         edit_profile_surname.setText(surname);
-        edit_profile_nationality.setText(nationality);
-        edit_profile_gender.setText(gender);
+        country.setValue(nationality);
+//        edit_profile_nationality.setText(nationality);
+//        edit_profile_gender.setText(gender);
+        if(gender.equals("m"))
+        male.setValue(true);
+        else
+        female.setValue(true);
+        
         edit_profile_aboutme.getElement().setInnerHTML(aboutme);
         
         edit_profile_vc.setVisible(false);
@@ -2891,8 +2899,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         edit_profile_nickname.addClickHandler(MyClickEditProfileHandler);
         edit_profile_name.addClickHandler(MyClickEditProfileHandler);
         edit_profile_surname.addClickHandler(MyClickEditProfileHandler);
-        edit_profile_nationality.addClickHandler(MyClickEditProfileHandler);
-        edit_profile_gender.addClickHandler(MyClickEditProfileHandler);
+        //edit_profile_nationality.addClickHandler(MyClickEditProfileHandler);
+        //edit_profile_gender.addClickHandler(MyClickEditProfileHandler);
         edit_profile_aboutme.addDomHandler(new ClickHandler() {
 
             @Override
@@ -2946,6 +2954,49 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
             }   }, ClickEvent.getType());
         //addClickHandler(MyClickEditProfileHandler);
+        
+        Element countr = (Element) country_container.getElement().getChild(0);
+
+        DOM.setEventListener(countr, new EventListener(){
+
+         @Override
+         public void onBrowserEvent(Event event) {
+             
+             if(password.equals(cpassword)) {
+                 edit_profile_check.getElement().getStyle().setOpacity(1);
+                 edit_profile_check.setEnabled(true);
+                 edit_profile_check_img.getElement().getStyle().setOpacity(1);
+             }
+             
+         }});
+        
+        DOM.sinkEvents(countr, Event.ONCLICK);
+        
+        male.addClickHandler(new ClickHandler(){
+
+            @Override
+            public void onClick(ClickEvent event) {
+                
+                if(password.equals(cpassword)) {
+                    edit_profile_check.getElement().getStyle().setOpacity(1);
+                    edit_profile_check.setEnabled(true);
+                    edit_profile_check_img.getElement().getStyle().setOpacity(1);
+                }
+            }
+        });
+        
+        female.addClickHandler(new ClickHandler(){
+
+            @Override
+            public void onClick(ClickEvent event) {
+                
+                if(password.equals(cpassword)) {
+                    edit_profile_check.getElement().getStyle().setOpacity(1);
+                    edit_profile_check.setEnabled(true);
+                    edit_profile_check_img.getElement().getStyle().setOpacity(1);
+                }
+            }
+        });
         
     }
     
@@ -3106,11 +3157,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final HorizontalPanel popup_text = new HorizontalPanel();
         popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
         popup_text.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
+        popup_text.getElement().getStyle().setProperty("textAlign", "center");
         
         final Label text = new Label();
         text.setText(text_t);
         text.getElement().getStyle().setWidth(240, Style.Unit.PX);
-        text.getElement().getStyle().setProperty("textAlign", "left");
+        text.getElement().getStyle().setProperty("textAlign", "center");
 
         popup_text.add(text);
         popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
@@ -3136,13 +3188,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                                  
                             }
                         };
-                        timerPopup3.schedule(600);
+                        timerPopup3.schedule(300);
 
                         popup_fast.getElement().getStyle().setOpacity(0);
                          
                     }
                 };
-                timerPopup2.schedule(1500);
+                timerPopup2.schedule(1800);
                 popup_fast.getElement().getStyle().setOpacity(1);
             }
         };
