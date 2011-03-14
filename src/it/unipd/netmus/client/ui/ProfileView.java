@@ -155,10 +155,15 @@ public interface ProfileView extends IsWidget {
     */
    void stopLoading();
    /**
-    * Segnala un errore/messaggio all'utente
+    * Segnala un errore/messaggio all'utente con richiesta di conferma
     *
     */
    void showError(String text);
+   /**
+    * Segnala un errore/messaggio all'utente che si chiude da solo
+    *
+    */
+   void showErrorFast(String text);
    /**
     * Riproduce la canzone successiva a catalogo
     *

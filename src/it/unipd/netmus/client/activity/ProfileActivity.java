@@ -466,12 +466,12 @@ public class ProfileActivity extends AbstractActivity implements
                 public void run() {
                     System.out.println("FAST");
                     if (song_dto.getYoutubeCode().equals("")) {
-                        client_factory.getProfileView().closeYouTube();
+                        //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube("00000000000");
                         client_factory.getProfileView().playNext(); 
-                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\""); }
                     else {
-                        client_factory.getProfileView().closeYouTube();
+                        //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
                         client_factory.getProfileView().setInfo(title + " - " + artist + " - " + album);
                     }
@@ -519,12 +519,12 @@ public class ProfileActivity extends AbstractActivity implements
 
                     
                     if (song_dto.getYoutubeCode().equals("")) {
-                        client_factory.getProfileView().closeYouTube();
+                        //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().playNext(); 
-                        client_factory.getProfileView().showError("Non e' disponibile il video Youtube di: \"" + title + "\""); }
+                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                        client_factory.getProfileView().playNext(); }
                     else {
-                        client_factory.getProfileView().closeYouTube();
+                        //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube(song_dto.getYoutubeCode());
                         client_factory.getProfileView().setInfo(
                             title + " - " + artist + " - " + album);
