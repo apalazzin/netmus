@@ -83,6 +83,12 @@ public class SongServiceImpl extends RemoteServiceServlet implements
             
         song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
         
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         song_dto.setAlbumCover(Album.getAlbumCoverLastFm(song_dto.getAlbum(), song_dto.getArtist()));
         
         return song_dto;
