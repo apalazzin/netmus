@@ -46,7 +46,8 @@ public class UserAccount implements Serializable, Cacheable {
      * 
      */
     public static void deleteUser(UserAccount user) {
-
+        ODF.get().storeOrUpdate(user);
+        user.removeFromCache();
         MusicLibrary.deleteMusicLibrary(user.getMusicLibrary());
         ODF.get().delete(user);
     }
@@ -214,9 +215,7 @@ public class UserAccount implements Serializable, Cacheable {
         this.is_public_profile = true;
         this.allowed_users = new ArrayList<String>();
         this.music_library = new MusicLibrary(this);
-        System.out.println("arrivato");
         this.store();
-        System.out.println("arrivato2");
     }
 
     public String getAboutMe() {
@@ -366,6 +365,11 @@ public class UserAccount implements Serializable, Cacheable {
     public void addToCache() {
         CacheSupport.cachePut(this.user, this);
         CacheSupport.cachePut(this.user+"-library", this.music_library);
+    }
+
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.user);
     }
 
 }

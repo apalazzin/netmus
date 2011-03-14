@@ -157,6 +157,7 @@ public class Song implements Serializable, Cacheable {
 
     static void deleteSong(Song s) {
         ODF.get().storeOrUpdate(s);
+        s.removeFromCache();
         ODF.get().delete(s);
     }
 
@@ -439,6 +440,11 @@ public class Song implements Serializable, Cacheable {
     @Override
     public void addToCache() {
         CacheSupport.cachePut(this.id, this);
+    }
+
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.id);
     }
 
 }
