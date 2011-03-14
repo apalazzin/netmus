@@ -58,6 +58,12 @@ public class FieldVerifier {
         return song_id;
     }
     
+    public static String generatePlaylistId(String name, String owner) {
+        String song_id = (FieldVerifier.cleanString(name) + FieldVerifier.SEPARATOR
+                + FieldVerifier.cleanString(owner));
+        return song_id;
+    }
+    
     /**
      * @param s stringa da convertire per l'id. Ritrona stringa vuota in caso di valore null.
      * @return stringa convertita
