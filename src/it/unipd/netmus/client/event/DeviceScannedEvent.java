@@ -17,8 +17,16 @@ public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
 
     private List<SongDTO> new_songs;
     
+    private boolean last_songs;
+    
     public DeviceScannedEvent(List<SongDTO> new_songs) {
-        this.setNewSongs(new_songs);
+        this.new_songs = new_songs;
+        this.last_songs = false;
+    }
+    
+    public DeviceScannedEvent(List<SongDTO> new_songs, boolean last_songs) {
+        this.new_songs = new_songs;
+        this.last_songs = last_songs;
     }
     
     /**
@@ -37,12 +45,12 @@ public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
         handler.onScanDevice(this);
     }
 
-    public void setNewSongs(List<SongDTO> new_songs) {
-        this.new_songs = new_songs;
-    }
-
     public List<SongDTO> getNewSongs() {
         return new_songs;
+    }
+
+    public boolean isLastSongs() {
+        return last_songs;
     }
 
 }

@@ -31,13 +31,16 @@ public interface LibraryServiceAsync {
     void removePlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
 
-    void updateStatisticFields(String user, AsyncCallback<Void> callback);
-
     void addSongToPlaylist(String user, String playlist_name, String title,
             String artist, String album, AsyncCallback<Boolean> callback);
 
     void removeSongFromPlaylist(String user, String playlist_name,
             String title, String artist, String album,
             AsyncCallback<Boolean> callback);
+
+    void storeStatistics(String user, String preferred_artist,
+            AsyncCallback<Void> callback);
+
+    void getStatistics(String user, AsyncCallback<List<String>> callback);
 
 }
