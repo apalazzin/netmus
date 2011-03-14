@@ -256,10 +256,6 @@ public interface ProfileView extends IsWidget {
        */      
       void deleteSong(String autore, String titolo, String album);
       /**
-       *Esporta la lista delle canzoni in pdf
-       */      
-      void exportPDF(String user);
-      /**
        *Apre la sezione di visualizzazione/modifica del profilo personale
        */      
       void editProfileView(String user);

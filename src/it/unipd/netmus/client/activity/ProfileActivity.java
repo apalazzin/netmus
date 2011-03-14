@@ -34,6 +34,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -52,6 +53,8 @@ public class ProfileActivity extends AbstractActivity implements
 
     @SuppressWarnings("unused")
     private boolean is_owner; // not used yet
+    
+    private boolean pdf_created = false;
 
     private LoginServiceAsync login_service_svc = GWT
             .create(LoginService.class);
@@ -267,15 +270,6 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Esporta la lista delle canzoni in pdf
-     */
-    @Override
-    public void exportPDF(String user) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
      * Restituisce la lista degli utenti affini su Netmus
      */
     public void setFriendList() {
@@ -418,7 +412,13 @@ public class ProfileActivity extends AbstractActivity implements
      */
     @Override
     public String mayStop() {
-        return my_constants.leavingProfilePage();
+        if (pdf_created) {
+            pdf_created = false;
+            return my_constants.downloadPDF();
+        }
+        else {
+            return my_constants.leavingProfilePage();
+        }
     }
 
     /**
@@ -927,8 +927,23 @@ public class ProfileActivity extends AbstractActivity implements
 
 	@Override
 	public void exportPdf() {
-		// TODO Auto-generated method stub
-		
+	    
+	    client_factory.getProfileView().startLoading();
+	    
+        library_service_svc.generatePDF(current_user.getUser(), new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                client_factory.getProfileView().stopLoading();
+                pdf_created = true;
+                Window.Location.assign(result);
+            } 
+            
+        });
 	}
 	
 	/*

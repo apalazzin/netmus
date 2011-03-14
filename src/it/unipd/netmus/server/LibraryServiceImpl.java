@@ -3,17 +3,25 @@ package it.unipd.netmus.server;
 import it.unipd.netmus.client.service.LibraryService;
 import it.unipd.netmus.server.persistent.Song;
 import it.unipd.netmus.server.persistent.UserAccount;
+import it.unipd.netmus.server.utils.GdataManager;
+import it.unipd.netmus.server.utils.velocity.VelocityEngineManager;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * Nome: LibraryServiceImpl.java Autore: VT.G Licenza: GNU GPL v3 Data
- * Creazione: 13 Febbraio 2011
+ * Nome: LibraryServiceImpl.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 13 Febbraio 2011
  * 
  */
 
@@ -144,5 +152,36 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
             user_account.getMusicLibrary().setMostPopularSongForThisUser(most_popular_song_for_this_user);
         }
      
+    }
+
+    @Override
+    public String generatePDF(String input) {
+        //generate the document
+        VelocityEngineManager.init();
+        VelocityContext context = new VelocityContext();
+        context.put("name", input);
+        Template t = VelocityEngineManager.getTemplate("mytemplate.vm");
+        StringWriter writer = new StringWriter();
+        try {
+            t.merge(context, writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "troubles merging your template " + e.getMessage();
+        } 
+        
+        //create the doc on google docs
+        String newDocId = "<error>";
+        try {
+            String title = "test doc for " + input;
+            String content = writer.toString();
+            newDocId = GdataManager.manager().createNewDocument(title, content).getResourceId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error interfacing with Google Docs, see your logs";
+        }
+
+        
+        //return the id
+        return "pdf?id=" + newDocId;
     }
 }

@@ -42,4 +42,6 @@ public interface LibraryServiceAsync {
             String most_popular_song, String most_popular_song_for_this_user,
             AsyncCallback<Void> callback);
 
+    void generatePDF(String user, AsyncCallback<String> callback);
+
 }
