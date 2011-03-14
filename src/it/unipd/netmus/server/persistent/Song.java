@@ -30,27 +30,6 @@ import com.google.code.twig.annotation.Id;
  * quali link per copertine e video in streaming.
  * 
  * 
- * 
- * PROCEDURA SUGGERTA PER INSERIRE O MODIFICARE UNA CANZONE NEL DATABASE
- * 
- * Song s= new
- * Song().changeArtist(song.getArtist()).changeTitle(song.getTitle())
- * .changeAlbum(song.getAlbum()); s.set_quello_che_vuoi (per modificare gli
- * altri attrobuti, ATTENZIONE che se la canzone era già presente in database
- * potrebbe avere già delle informazioni).
- * 
- * 
- * 
- * UserAccount user = UserAccount.load("nome_utente"); (Caricamente di un utente
- * di Netmus)
- * 
- * PROCEDURA PER ASSOCIARLA AD UN UTENTE user.getMusicLibrary().addSong(s,
- * false); (con "true" aggiorna anche i dati statistici)
- * 
- * PROCEDURA PER RIMUOVERLA DA UN UTENTE user.getMusicLibrary().removeSong(s,
- * false); (con "true" aggiorna anche i dati statistici)
- * 
- * 
  */
 
 @SuppressWarnings("serial")
@@ -87,12 +66,6 @@ public class Song implements Serializable, Cacheable {
      */
     public static Song storeOrUpdateFromDTO(SongDTO song) {
 
-        /*if ( song.getTitle() == null || song.getTitle().isEmpty() 
-        		|| song.getAlbum() == null || song.getAlbum().isEmpty() 
-        		|| song.getArtist() == null || song.getArtist().isEmpty())
-            song = incompleteSong(song);
-        if (song == null)
-        	return null;*/
         if (song.getTitle().equals(""))
             return null;
 

@@ -172,16 +172,17 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         //create the doc on google docs
         String newDocId = "<error>";
         try {
-            String title = "test doc for " + input;
+            String title = "library of " + input;
             String content = writer.toString();
             newDocId = GdataManager.manager().createNewDocument(title, content).getResourceId();
         } catch (Exception e) {
             e.printStackTrace();
-            return "error interfacing with Google Docs, see your logs";
+            return "error interfacing with Google Docs";
         }
 
         
         //return the id
         return "pdf?id=" + newDocId;
     }
+    
 }

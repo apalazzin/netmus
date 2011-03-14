@@ -25,8 +25,8 @@ import com.google.gdata.util.ServiceException;
 
 public class GdataManager {
 
-    private static final String USERNAME = "fede.baron.89@gmail.com";
-    private static final String PASSWORD = "jiPEHQ12";
+    private static final String USERNAME = "netmus.docs@gmail.com";
+    private static final String PASSWORD = "lusiaaavtg";
 
     private static GdataManager manager;
     
@@ -92,6 +92,11 @@ public class GdataManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public void deleteDocument(String resource_id) throws ServiceException {
+        // TODO Auto-generated method stub
+        
     }
 
 }

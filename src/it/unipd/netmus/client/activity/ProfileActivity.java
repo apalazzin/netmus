@@ -940,6 +940,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onSuccess(String result) {
                 client_factory.getProfileView().stopLoading();
                 pdf_created = true;
+                
                 Window.Location.assign(result);
             } 
             
