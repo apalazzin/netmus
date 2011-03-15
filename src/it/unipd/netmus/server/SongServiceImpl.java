@@ -80,16 +80,9 @@ public class SongServiceImpl extends RemoteServiceServlet implements
 
         String ip = getThreadLocalRequest().getRemoteAddr();
         if (ip.equals("127.0.0.1")) ip="";
-            
-        song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
-        
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         
         song_dto.setAlbumCover(Album.getAlbumCoverLastFm(song_dto.getAlbum(), song_dto.getArtist()));
+        song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
         
         return song_dto;
     }
