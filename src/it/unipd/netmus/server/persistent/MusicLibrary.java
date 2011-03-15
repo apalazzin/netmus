@@ -3,7 +3,7 @@ package it.unipd.netmus.server.persistent;
 import it.unipd.netmus.server.utils.cache.CacheSupport;
 import it.unipd.netmus.server.utils.cache.Cacheable;
 import it.unipd.netmus.shared.FieldVerifier;
-import it.unipd.netmus.shared.MusicLibrarySummaryDTO;
+import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.io.Serializable;
@@ -383,7 +383,7 @@ public class MusicLibrary implements Serializable, Cacheable {
             return false;
     }
 
-    public MusicLibrarySummaryDTO toMusicLibrarySummaryDTO() {
+    public MusicLibraryDTO toMusicLibrarySummaryDTO() {
         Map<String, SongSummaryDTO> map = new HashMap<String, SongSummaryDTO>();
 
         for (String tmp : song_list.keySet()) {
@@ -403,7 +403,7 @@ public class MusicLibrary implements Serializable, Cacheable {
 
         List<String> playlists = this.getPlaylists();
         
-        MusicLibrarySummaryDTO library = new MusicLibrarySummaryDTO(map, playlists);
+        MusicLibraryDTO library = new MusicLibraryDTO(map, playlists);
         
         library.setPreferred_artist(getPreferredArtist());
         library.setMostPopularSong(this.most_popular_song);
