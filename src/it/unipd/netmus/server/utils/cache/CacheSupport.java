@@ -16,9 +16,18 @@ import net.sf.jsr107cache.CacheStatistics;
  * Data Creazione: 14 Marzo 2011
  */
 
+/**
+ * CacheSupport è composta da soli metodi statici che forniscono le principali funzioni
+ * disponibili sulla Memcache. Questi servizi sono disponibili a tutte le
+ * componenti del lato server.
+ * Rende disponibili all'esterno le funzioni basilari di lettura e scrittura sulla memoria 
+ * cache in modo completamente trasparente rispetto all'implmentazione tramite JCache e
+ * soprattutto all'utilizzo della CacheFactory.
+ */
+
 public class CacheSupport {
     
-    /*
+    /**
      * Restituisce l'istanza della Memcache utilizzata; questo metodo è privato poichè la
      * configurazione della Memcache è interamente gestita in questa classe. 
      */
@@ -36,7 +45,7 @@ public class CacheSupport {
         
     }
 
-    /*
+    /**
      * carica dalla mappa della Memcache l'oggetto la cui chiave è data in input
      */
     public static Object cacheGet(String id) {
@@ -46,7 +55,7 @@ public class CacheSupport {
       return cache.get(id);
     }
 
-    /*
+    /**
      * Ripulisce l'intera Memcache
      */
     public static void cacheClear() {
@@ -56,7 +65,7 @@ public class CacheSupport {
         cache.clear();
     }
     
-    /*
+    /**
      * Rimuove dalla Memcache l'oggetto relativo alla chiave data in input
      */
     public static void cacheRemove(String id) {
@@ -66,7 +75,7 @@ public class CacheSupport {
         cache.remove(id);
     }
 
-    /*
+    /**
      * Salva nella Memcache l'oggetto e la relativa chiave dati in input
      */
     public static void cachePut(String id, Serializable o) {
