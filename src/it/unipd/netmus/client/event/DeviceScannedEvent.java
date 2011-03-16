@@ -17,7 +17,7 @@ public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
 
     private List<SongDTO> new_songs;
     
-    private boolean last_songs;
+    private boolean last_songs = false;
     
     public DeviceScannedEvent(List<SongDTO> new_songs) {
         this.new_songs = new_songs;
