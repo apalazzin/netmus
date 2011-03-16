@@ -844,9 +844,13 @@ public class ProfileActivity extends AbstractActivity implements
                                     }
                                 }
                                 
+                                client_factory.getProfileView().paintCatalogo(tmp_list);
+                                
                                 if (event.isLastSongs()) {
-                                    String preferred_artist = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
+                                    client_factory.getProfileView().sortCatalogo();
                                     
+                                    String preferred_artist = calculatePreferredArtist(current_user.getMusicLibrary().getSongs());
+
                                     //Aggiornamento delle statistiche calcolate nel catalogo mantenuto nel client
                                     current_user.getMusicLibrary().setPreferred_artist(preferred_artist);
                                     
@@ -860,8 +864,6 @@ public class ProfileActivity extends AbstractActivity implements
                                         }
                                     );
                                 }
-                                
-                                client_factory.getProfileView().paintCatalogo(tmp_list);
                             }
                             
                         });
@@ -885,7 +887,8 @@ public class ProfileActivity extends AbstractActivity implements
                             tmp.add(dto.getTitle());
                             tmp.add(dto.getAlbum());
                         }
-                        client_factory.getProfileView().repaintLibrary(tmp);
+                        client_factory.getProfileView().paintCatalogo(tmp);
+                        client_factory.getProfileView().sortCatalogo();
                         
                         profileView.paintPlaylist(getPlaylistList());
                         setFriendList();

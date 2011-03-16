@@ -51,9 +51,9 @@ public interface ProfileView extends IsWidget {
     */
    void paintCatalogo(List<String> lista_canzoni);
    /**
-    *Ripulisce e succesivamente riempie il catalogo 
+    *Ordina per artista (ordinamento lessicografico) le canzoni del catalogo
     */
-   void repaintLibrary(List<String> lista_canzoni);
+   void sortCatalogo();
    /**
     *Riempie la lista delle playlist
     */
