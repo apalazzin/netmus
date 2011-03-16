@@ -1266,8 +1266,26 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseClickSwitchCover(ClickEvent e) {
        switch_list.setUrl("images/switch_sx_off.png");
        switch_cover.setUrl("images/switch_dx_on.png");
-       if(!covers_container.isVisible())
-       paintCovers(dataProvider_catalogo.getList());
+       if(!covers_container.isVisible()) {
+           
+           List<Song> lista = new ArrayList<Song>();
+           List<String> generi = new ArrayList<String>();
+           for(Song song : dataProvider_catalogo.getList()) {
+               
+               if(generi.indexOf(song.album)==-1) {
+                   
+                   lista.add(song);
+                   generi.add(song.album);
+                   
+               }
+               
+           }
+           
+           Collections.sort(lista);
+           
+           paintCovers(lista);
+
+       }
 
    }
 
@@ -2246,7 +2264,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             
             Label titolo = new Label();
-            titolo.setText(canzone.titolo);
+            titolo.setText(canzone.album);
             titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
             titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
             titolo.getElement().getStyle().setProperty("maxHeight", "29px");

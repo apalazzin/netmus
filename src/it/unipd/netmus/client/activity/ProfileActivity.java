@@ -659,7 +659,21 @@ public class ProfileActivity extends AbstractActivity implements
             final String album, final HTMLPanel img) {
         
         client_factory.getProfileView().startLoading();
-/*
+        
+        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+        
+        if (song_dto != null) {
+            
+            
+            String cover = song_dto.getAlbumCover();
+            img.getElement().getStyle()
+            .setBackgroundImage("url('" + cover + "')");
+            client_factory.getProfileView().stopLoading();
+            
+            return;
+        }
+        
+
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
             
@@ -672,6 +686,10 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(SongDTO song_dto) {
+                
+              //salva le info caricate in modo che siano sempre disponibili nel client
+                
+                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
                 
                 String cover = "images/test_cover.jpg";
                 if (!song_dto.getAlbumCover().equals("")) {
@@ -688,7 +706,7 @@ public class ProfileActivity extends AbstractActivity implements
             
         img.getElement().getStyle()
         .setBackgroundImage("url('" + cover + "')");
-*/
+
         client_factory.getProfileView().stopLoading();
             
     }
