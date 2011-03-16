@@ -2045,44 +2045,41 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.clear();
-        
         for (int j=0; j<lista_canzoni.size(); j+=3) {
-            
-            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+            Song song = new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2));
+            test.add(song);
+            canzoni_catalogo.add(song);
         }
         
         setNumeroBrani(canzoni_catalogo.size());
         
-        Collections.sort(canzoni_catalogo);
+        Collections.sort(test, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.autore;
+                String artist_2 = arg1.autore;
+                return artist_1.compareToIgnoreCase(artist_2);
+            }
+        });
         
-        for (Song song : canzoni_catalogo) {
-            test.add(song);
-        }
     }
     
-    //riempie il catalogo/libreria con la lista dei brani
+    //Ordina per artista (ordinamento lessicografico) le canzoni del catalogo
     @Override
-    public void repaintLibrary(List<String> lista_canzoni) {
-        
+    public void sortCatalogo() {
+    
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.clear();
-        canzoni_catalogo.clear();
+        Collections.sort(test, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.autore;
+                String artist_2 = arg1.autore;
+                return artist_1.compareToIgnoreCase(artist_2);
+            }
+        });
         
-        for (int j=0; j<lista_canzoni.size(); j+=3) {
-            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
-        }
-        
-        Collections.sort(canzoni_catalogo);
-        
-        for (Song song : canzoni_catalogo) {
-            test.add(song);
-        }
-        
-        setNumeroBrani(test.size());
     }
-
 
     public void showCatalogo() {
         
