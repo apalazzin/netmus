@@ -153,28 +153,83 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         }
      
     }
+    
+    // check the presence of test in the list tested
+    private int check_list(List<String> tested, String test){
+    	int counter = 0;
+    	boolean cond=false;
+    	for(int i=0; i<tested.size();i++){
+    		if(test.equals(tested.get(i))){
+    			cond = true;
+    		}
+    	}
+    	if(cond==false){
+    		tested.add(test);
+    		counter++;
+    	}
+    	return counter;
+    }
 
     @Override
-    public String generatePDF(String input) {
+    public String generatePDF(String user) {
         //generate the document
         VelocityEngineManager.init();
         VelocityContext context = new VelocityContext();
-        context.put("name", input);
-        Template t = VelocityEngineManager.getTemplate("mytemplate.vm");
+        context.put("name", user);
+        // create the music list        
+        
+        // catalog statistics
+        int artists = 0;
+        int albums = 0;
+        int songs = 0;
+        List<String> curr_artist = new ArrayList<String>();
+        List<String> curr_album = new ArrayList<String>();
+        
+        UserAccount useraccount = UserAccount.load(user);
+        String content;
+        String content_tmp = "<table width=\"100%\">\n"
+        	+"  <tr>\n"
+        	+"    <td><b>Title</b></td>\n"
+        	+"    <td><b>Artist</b></td>\n"
+        	+"    <td><b>Album</b></td>\n"
+        	+"  </tr>\n";
+        
+        List<Song> tmp_list = useraccount.getMusicLibrary().getAllSongs();
+        
+        for(Song tmp : tmp_list){
+        	content_tmp +="  <tr>\n"
+        	+"    <td height=50>"+tmp.getTitle()+"</td>\n"
+        	+"    <td height=50>"+tmp.getArtist()+"</td>\n"
+        	+"    <td height=50>"+tmp.getAlbum()+"</td>\n"
+        	+"  </tr>\n";
+        	songs++;
+        	artists+=check_list(curr_artist, tmp.getArtist());
+        	albums+=check_list(curr_album, tmp.getAlbum());
+        }
+        
+        content = "<table width=\"30%\">"
+        	+"  <tr><td><b>Songs</b></td><td>"+songs+"</td></tr>"
+        	+"  <tr><td><b>Artists</b></td><td>"+artists+"</td></tr>"        	
+        	+"  <tr><td><b>Albums</b></td><td>"+albums+"</td></tr>" 
+        	+"</table>\n"
+        	+content_tmp;
+
+        context.put("content", content);
         StringWriter writer = new StringWriter();
+        Template list = VelocityEngineManager.getTemplate("list.mv");
+
         try {
-            t.merge(context, writer);
+            list.merge(context, writer);
         } catch (Exception e) {
             e.printStackTrace();
             return "troubles merging your template " + e.getMessage();
         } 
-        
         //create the doc on google docs
         String newDocId = "<error>";
         try {
-            String title = "test doc for " + input;
-            String content = writer.toString();
-            newDocId = GdataManager.manager().createNewDocument(title, content).getResourceId();
+            String title = "test doc for " + user;
+            String body = writer.toString();
+            newDocId = GdataManager.manager().createNewDocument(title, body).getResourceId();
         } catch (Exception e) {
             e.printStackTrace();
             return "error interfacing with Google Docs, see your logs";
