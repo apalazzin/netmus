@@ -626,7 +626,7 @@ height: 30px;
 .info_youtube {
 
 	position: absolute;
-	bottom: 155px; 
+	top: 55px; 
 	left: 355px;
 	
 	opacity: 0;
@@ -644,7 +644,7 @@ height: 30px;
 .info_youtube_link {
 
 	position: absolute;
-	bottom: 143px; 
+	top: 41px; 
 	left: 355px;
 	
 	width: 300px;
