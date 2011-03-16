@@ -689,16 +689,19 @@ public class ProfileActivity extends AbstractActivity implements
                 
               //salva le info caricate in modo che siano sempre disponibili nel client
                 
-                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
                 
                 String cover = "images/test_cover.jpg";
                 if (!song_dto.getAlbumCover().equals("")) {
                     cover = song_dto.getAlbumCover();
                 }
                 
+                song_dto.setAlbumCover(cover);
+                
                 img.getElement().getStyle()
                         .setBackgroundImage("url('" + cover + "')");
-                
+
+                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
+
                 client_factory.getProfileView().stopLoading();
                 return;
             }
