@@ -50,12 +50,19 @@ public class Song implements Serializable, Cacheable {
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        Song tmp = ODF
-                .get()
-                .load()
-                .type(Song.class)
-                .id(FieldVerifier.generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum())).now();
-        return tmp;
+        
+        String id = FieldVerifier.generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum());
+        
+        Song song = (Song) CacheSupport.cacheGet(id);
+        
+        if (song == null) {
+            song = ODF.get().load().type(Song.class).id(id).now();
+            if (song != null) {
+                song.addToCache();
+            }
+        }
+        
+        return song;
     }
 
     /**

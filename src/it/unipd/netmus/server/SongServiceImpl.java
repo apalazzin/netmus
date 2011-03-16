@@ -77,6 +77,9 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         if (song != null) {
             song_dto = song.toSongDTO();
         }
+        else {
+            return new SongDTO();
+        }
 
         String ip = getThreadLocalRequest().getRemoteAddr();
         if (ip.equals("127.0.0.1")) ip="";

@@ -1875,7 +1875,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            setLayout();
            
            
-           
+           setPlaySong(true);
            /*
            catalogo_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
            playlist_container.getElement().getStyle().setProperty("minHeight", 515-vertical_semioffset, Style.Unit.PX);
@@ -1899,7 +1899,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
            
            HTMLPanel player = new HTMLPanel("player");
-           player.getElement().setId("player");
            player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
            player.getElement().getStyle().setTop(8, Style.Unit.PX);
            player.getElement().getStyle().setLeft(5, Style.Unit.PX);
@@ -1931,7 +1930,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            youtube_appendix.getElement().getStyle().setOpacity(1);
            close_youtube.getElement().getStyle().setOpacity(1);
 
-           if(DOM.getElementById("youtube_player")==null) { 
+           if(DOM.getElementById("youtube_player")==null) {
                player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
                             "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
@@ -1942,7 +1941,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                playPlayerSong(link);
            }
            
-           setPlaySong(true);      
+                 
        }
 
        
@@ -1956,7 +1955,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }-*/;
 
-   
+
    public void closeYouTube() {
        
            if(youtube_status!=0) {
@@ -2006,9 +2005,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
                ranking.getElement().getStyle().setLeft(265, Style.Unit.PX);
                
-               while(youtube.getElementById("player")!=null)
-               youtube.getElementById("player").removeFromParent();
-               //youtube.getWidget(6).removeFromParent();
+               youtube.getWidget(6).removeFromParent();
                setInfo("Nessun brano in ascolto.");
                forward.setVisible(false);
                rewind.setVisible(false);
@@ -2048,44 +2045,41 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.clear();
-        
         for (int j=0; j<lista_canzoni.size(); j+=3) {
-            
-            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
+            Song song = new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2));
+            test.add(song);
+            canzoni_catalogo.add(song);
         }
         
         setNumeroBrani(canzoni_catalogo.size());
         
-        Collections.sort(canzoni_catalogo);
+        Collections.sort(test, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.autore;
+                String artist_2 = arg1.autore;
+                return artist_1.compareToIgnoreCase(artist_2);
+            }
+        });
         
-        for (Song song : canzoni_catalogo) {
-            test.add(song);
-        }
     }
     
-    //riempie il catalogo/libreria con la lista dei brani
+    //Ordina per artista (ordinamento lessicografico) le canzoni del catalogo
     @Override
-    public void repaintLibrary(List<String> lista_canzoni) {
-        
+    public void sortCatalogo() {
+    
         List<Song> test = dataProvider_catalogo.getList();
         
-        test.clear();
-        canzoni_catalogo.clear();
+        Collections.sort(test, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.autore;
+                String artist_2 = arg1.autore;
+                return artist_1.compareToIgnoreCase(artist_2);
+            }
+        });
         
-        for (int j=0; j<lista_canzoni.size(); j+=3) {
-            canzoni_catalogo.add(new Song(lista_canzoni.get(j), lista_canzoni.get(j+1), lista_canzoni.get(j+2)));
-        }
-        
-        Collections.sort(canzoni_catalogo);
-        
-        for (Song song : canzoni_catalogo) {
-            test.add(song);
-        }
-        
-        setNumeroBrani(test.size());
     }
-
 
     public void showCatalogo() {
         
@@ -3043,7 +3037,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     };
                     timerButton.schedule(40);
                     
-                    
+                    break;
                 } else {
                     
                     library.getRowElement(j).getStyle().setColor("#000000");
@@ -3073,7 +3067,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                         };
                         timerButton.schedule(40);
                         
-                        
+                        break;
                     } else {
                         
                         song_list.getRowElement(j).getStyle().setColor("#000000");
