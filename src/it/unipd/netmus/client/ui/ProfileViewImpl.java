@@ -1940,9 +1940,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
                player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
-                            "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
+                            "<param name=\"allowscriptaccess\" value=\"always\"></param><param name=\"wmode\" value=\"opaque\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
-                            "allowfullscreen=\"true\" width=\"325\" height=\"200\"></embed></object>");
+                            "allowfullscreen=\"true\" width=\"325\" height=\"200\" wmode=\"opaque\"></embed></object>");
            } else {
                
                playPlayerSong(link);
