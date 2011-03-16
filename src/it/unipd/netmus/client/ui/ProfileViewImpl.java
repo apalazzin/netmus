@@ -204,6 +204,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField RadioButton male;
    @UiField RadioButton female;
 
+   Label error_text = new Label();
+   
    SelectElement country;
    boolean playlist_opened; 
    boolean song_opened;
@@ -1898,14 +1900,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            ranking.getElement().getStyle().setLeft(365, Style.Unit.PX);
            
            
-           HTMLPanel player = new HTMLPanel("player");
-           player.getElement().setId("player");
-           player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-           player.getElement().getStyle().setTop(8, Style.Unit.PX);
-           player.getElement().getStyle().setLeft(5, Style.Unit.PX);
-           youtube.add(player);
            
-           player.getElement().getStyle().setZIndex(3);
+           
+          
            
            info_youtube.getElement().setInnerText(played_song.titolo + ". " + played_song.autore);
            
@@ -1931,7 +1928,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            youtube_appendix.getElement().getStyle().setOpacity(1);
            close_youtube.getElement().getStyle().setOpacity(1);
 
-           if(DOM.getElementById("youtube_player")==null) { 
+           if(DOM.getElementById("player")==null){//DOM.getElementById("youtube_player")==null) {
+               
+               HTMLPanel player = new HTMLPanel("player");
+               player.getElement().setId("player");
+               player.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+               player.getElement().getStyle().setTop(8, Style.Unit.PX);
+               player.getElement().getStyle().setLeft(5, Style.Unit.PX);
+               player.getElement().getStyle().setZIndex(3);
+               youtube.add(player);
+               
                player.getElement().setInnerHTML("<object width=\"325\" height=\"200\"><param name=\"movie\" value=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\"></param><param name=\"allowFullScreen\" value=\"true\"></param>" +
                             "<param name=\"allowscriptaccess\" value=\"always\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
@@ -1951,8 +1957,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    private static native void playPlayerSong(String t) /*-{ 
    
-   $doc.getElementById('youtube_player').loadVideoById(t, 0, 'medium');
-   
+       $doc.getElementById('youtube_player').stopVideo();
+       $doc.getElementById('youtube_player').loadVideoById(t, 0, 'medium');
+       
 
     }-*/;
 
@@ -2008,6 +2015,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
                while(youtube.getElementById("player")!=null)
                youtube.getElementById("player").removeFromParent();
+               
+               youtube.getElementById("player").setId("");
                //youtube.getWidget(6).removeFromParent();
                setInfo("Nessun brano in ascolto.");
                forward.setVisible(false);
@@ -3158,7 +3167,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         popup_text.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
         popup_text.getElement().getStyle().setProperty("textAlign", "center");
         
-        final Label text = new Label();
+        final Label text = error_text;
         text.setText(text_t);
         text.getElement().getStyle().setWidth(240, Style.Unit.PX);
         text.getElement().getStyle().setProperty("textAlign", "center");
