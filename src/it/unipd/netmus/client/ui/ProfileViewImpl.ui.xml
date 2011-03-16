@@ -486,7 +486,7 @@
 			   	
 					<g:HTMLPanel ui:field="edit_profile_about" styleName="{style.edit_profile_about}">
 			   			<g:VerticalPanel >
-			   			<g:Label styleName="{style.edit_profile_label}">Inforamzioni su di me:</g:Label>
+			   			<g:Label styleName="{style.edit_profile_label}">Informazioni su di me:</g:Label>
 			   			<g:HTMLPanel  ui:field="edit_profile_aboutme" styleName="{style.edit_profile_aboutT}"></g:HTMLPanel>
 			   			</g:VerticalPanel>
 					</g:HTMLPanel>			   	
