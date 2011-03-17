@@ -52,7 +52,7 @@
 				<g:Image ui:field="forward" url="images/fwoff.png" styleName="{style.fw}"> </g:Image>
 				<g:Image ui:field="rewind" url="images/rwoff.png" styleName="{style.rw}"> </g:Image>
 	
-				<g:Image ui:field="social_button" url="images/temp_button.png" styleName="{style.socialButton}"></g:Image>
+				<g:Image ui:field="social_button" url="images/social_button.png" styleName="{style.socialButton}"></g:Image>
 
 				<g:Image ui:field="account_button" url="images/account_button.png" styleName="{style.accountButton}"></g:Image>
 
