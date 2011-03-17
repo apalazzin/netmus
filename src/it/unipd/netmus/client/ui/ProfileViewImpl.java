@@ -92,7 +92,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private String cpassword;
    
    private CellTable<Song> song_list;
-   
+   private CellTable<Song> album_list;
    
    private HandlerRegistration rm_link;
    private HandlerRegistration rm_fw;
@@ -209,6 +209,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    SelectElement country;
    boolean playlist_opened; 
    boolean song_opened;
+   boolean flag_album;
    
    int youtube_status=0;
    int last_selected = 0;
@@ -217,6 +218,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    Song selected_song;
    Song selected_song_playlist;
    Song played_song;
+   String selected_album;
    
    Image cover_playing = new Image();
    
@@ -230,7 +232,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    List<Song> canzoni_cover = new ArrayList<Song>();
    ListDataProvider<Song> dataProvider_playlist = new ListDataProvider<Song>();
    ListDataProvider<Song> dataProvider_catalogo = new ListDataProvider<Song>();
-
+   ListDataProvider<Song> dataProvider_album = new ListDataProvider<Song>();
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 
@@ -417,7 +419,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
 
-                if(playlist_opened) {
+                if(playlist_opened && flag_album == false) {
                     
                     listener.addToPLaylist(playlist_title.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
                     
@@ -504,12 +506,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             
             // We know that the data is sorted alphabetically by default.
             library.getColumnSortList().push(autoreColumn);
+            
+           dataProvider_catalogo.addDataDisplay(library);
 
-        
-        
-        
-        
-        dataProvider_catalogo.addDataDisplay(library);
+           
+           // PLAYLIST TABLE
 
            playlist_songs.getElement().setInnerHTML("");
 
@@ -570,7 +571,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                          youtube_status = 2;
                      else if(youtube_status!=0&&youtube_status==-1)
                          youtube_status = 3;
-                     last_selected=1;
+                         last_selected=1;
                  }
                  play_youtube.setUrl("images/play.png");
                  
@@ -623,7 +624,121 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            dataProvider_playlist.addDataDisplay(song_list);
            playlist_songs.add(song_list);
            
+           //ALBUM
+           
+           album_list = new CellTable<Song>(Integer.MAX_VALUE, resource);
+           album_list.setWidth("100%", true);
+
+           //crea la colonna titolo
+           TextColumn<Song> titoloColumn3 = new TextColumn<Song>() {
+               @Override
+               public String getValue(Song song) {
+                   return song.titolo;
+               }
+           };
+           //la rende ordinabile
+           titoloColumn3.setSortable(true);
+           // la aggiunge al catalogo
+           album_list.addColumn(titoloColumn3, "Titolo");
+           album_list.setColumnWidth(titoloColumn3,"60%");
+
+           
+           //crea la colonna Album
+           TextColumn<Song> autoreColumn2 = new TextColumn<Song>() {
+               @Override
+               public String getValue(Song song) {
+                   return song.autore;
+               }
+           };
+           //la rende ordinabile
+           autoreColumn2.setSortable(true);
+           // la aggiunge al catalogo
+           album_list.addColumn(autoreColumn2, "Autore");
+           album_list.setColumnWidth(autoreColumn2,"60%");
+           
+           // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
+           final SingleSelectionModel<Song> selectionModel3 = new SingleSelectionModel<Song>();
+           album_list.setSelectionModel(selectionModel3);
+           selectionModel3.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+             public void onSelectionChange(SelectionChangeEvent event) {
+                 
+               setBranoPlaylist(selectionModel3.getSelectedObject());
+               
+               
+                 
+                 if(playing==1&&selectionModel3.getSelectedObject().equals(played_song)&&(youtube_status==1||youtube_status==2)) {
+                     play.setUrl("images/pause.png");
+                     youtube_status = 1;
+                     last_selected=1;
+                 }
+                 else if(playing==1&&selectionModel3.getSelectedObject().equals(played_song)&&(youtube_status==-1||youtube_status==3)) {
+                     play.setUrl("images/play.png");
+                     youtube_status = -1;
+                     last_selected=1;
+                 }
+
+                 else {
+                     play.setUrl("images/play.png");
+                     if(youtube_status!=0&&youtube_status==1)
+                         youtube_status = 2;
+                     else if(youtube_status!=0&&youtube_status==-1)
+                         youtube_status = 3;
+                     last_selected=1;
+                 }
+                 play_youtube.setUrl("images/play.png");
+                 
+                 if(youtube_status!=0)
+                     setPlaySong(true);
+               
+             }
+           });
+           
+           
+           List<Song> listAlb = dataProvider_album.getList();
+           
+           ListHandler<Song> columnAlbSortHandler = new ListHandler<Song>(listAlb);
+           
+               columnAlbSortHandler.setComparator(titoloColumn3,
+                   new Comparator<Song>() {
+                     public int compare(Song o1, Song o2) {
+                       if (o1 == o2) {
+                         return 0;
+                       }
+
+                       // Compare the name columns.
+                       if (o1 != null) {
+                         return (o2 != null) ? o1.titolo.compareTo(o2.titolo) : 1;
+                       }
+                       return -1;
+                     }
+                   });
+               
+               columnAlbSortHandler.setComparator(autoreColumn2,
+                       new Comparator<Song>() {
+                         public int compare(Song o1, Song o2) {
+                           if (o1 == o2) {
+                             return 0;
+                           }
+
+                           // Compare the name columns.
+                           if (o1 != null) {
+                             return (o2 != null) ? o1.autore.compareTo(o2.autore) : 1;
+                           }
+                           return -1;
+                         }
+                       });
+   
+               album_list.addColumnSortHandler(columnAlbSortHandler);           
+           
+               // We know that the data is sorted alphabetically by default.
+               album_list.getColumnSortList().push(titoloColumn3);
+               
+           dataProvider_album.addDataDisplay(album_list);
+           
   
+           //FINE ALBUM
+           
+           
            covers_container.setVisible(false);
            loading.setVisible(false);
            popup.setVisible(false);
@@ -670,7 +785,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                played_song = selected_song;
                playing=0;
                listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
-               
+               setFwRw();
            }
        }
        
@@ -679,9 +794,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                play.setUrl("images/pause.png");
                played_song = selected_song_playlist;
                playing=1;
-               player_playlist = new ArrayList<Song>(dataProvider_playlist.getList());
+               player_playlist = new ArrayList<Song>(canzoni_playlist);
                listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
-               
+               setFwRw();
            }
        }
        
@@ -714,7 +829,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            play.setUrl("images/pause.png");
            played_song = selected_song_playlist;
            playing=1;
-           player_playlist =  new ArrayList<Song>(dataProvider_playlist.getList());
+           player_playlist =  new ArrayList<Song>(canzoni_playlist);
            listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
            setFwRw();
        }
@@ -753,7 +868,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                played_song = selected_song;
                playing=0;
                listener.playYouTube(selected_song.autore, selected_song.titolo, selected_song.album);
-               
+               setFwRw();
            }
        }
        
@@ -762,9 +877,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                play.setUrl("images/pause.png");
                played_song = selected_song_playlist;
                playing=1;
-               player_playlist = new ArrayList<Song>(dataProvider_playlist.getList());
+               player_playlist = new ArrayList<Song>(canzoni_playlist);
                listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
-               
+               setFwRw();
            }
        }
        
@@ -796,7 +911,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            play.setUrl("images/pause.png");
            played_song = selected_song_playlist;
            playing=1;
-           player_playlist =  new ArrayList<Song>(dataProvider_playlist.getList());
+           player_playlist =  new ArrayList<Song>(canzoni_playlist);
            listener.playYouTube(selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
            setFwRw();
        }
@@ -1016,6 +1131,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("close_playlist")
    void handleClickChiudiPlaylist(ClickEvent e) {
       closePlaylist();
+
+      Timer playclose = new Timer() {
+          public void run() {
+              
+              flag_album = false;
+              delete_playlist.setVisible(true);
+              remove_song_from_playlist.setVisible(true);
+              remove_song_from_playlist.setVisible(true);
+              add_song_to_playlist.setVisible(true);
+              remove_song.setVisible(true);
+              insert_song.setVisible(true);
+              delete_playlist.setVisible(true);
+              
+              playlist_songs.clear();
+              playlist_songs.add(song_list);
+
+          }     
+      };
+      playclose.schedule(400);
    }
    
    @UiHandler("close_playlist")
@@ -1025,22 +1159,66 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("edit_button")
    void handleClickEditButton(ClickEvent e) {
-      if(selected_song!=null)
+      if(selected_song!=null && !covers_container.isVisible())
           viewSong(selected_song);
    }
    
    @UiHandler("edit_button")
    void handleMouseOverEditButton(MouseOverEvent e) {
-       if(selected_song!=null)
+       if(selected_song!=null && !covers_container.isVisible())
            edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       else
+           edit_button.getElement().getStyle().setCursor(Style.Cursor.AUTO);
    }
 
 
+   @UiHandler("social_button")
+   void handleClickSocialButton(ClickEvent e) {
+      if(selected_song!=null || selected_album!=null)
+          closeSong();
+      
+      playlist_opened= true;
+      
+      //listener.setPlaylistSongs(canzone.album);
+      if(covers_container.isVisible() && selected_album!=null) {
+          
+          fillAlbum(selected_album);
+          playlist_title.setText(selected_album);
+
+      } else {
+
+          fillAlbum(selected_song.album);
+          playlist_title.setText(selected_song.album);
+
+      }
+
+      library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+      playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+      
+      
+      Timer timerAlbum = new Timer() {
+          public void run() {
+              playlist_content.getElement().getStyle().setOpacity(1);      
+          }
+      };
+      timerAlbum.schedule(400);
+
+   }
+
+   
+   @UiHandler("social_button")
+   void handleMouseOverSocialButton(MouseOverEvent e) {
+       if(selected_song!=null || selected_album!=null)
+           social_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
    @UiHandler("close_song")
    void handleClickChiudiSong(ClickEvent e) {
       closeSong();
    }
-   
+
+      
    @UiHandler("close_song")
    void handleMouseOverChiudiSong(MouseOverEvent e) {
       close_song.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -1179,7 +1357,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            searcht = new Timer() {
                public void run() {
-                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) {
+                       List<Song> lista = new ArrayList<Song>();
+                       List<String> generi = new ArrayList<String>();
+                       for(Song song : dataProvider_catalogo.getList()) {
+                           
+                           if(generi.indexOf(song.album)==-1) {
+                               
+                               lista.add(song);
+                               generi.add(song.album);
+                               
+                           }
+                           
+                       }
+                       
+                       Collections.sort(lista);
+                       
+                       paintCovers(lista);
+                       //paintCovers(dataProvider_catalogo.getList());
+                   }
                }     
            };
            searcht.schedule(800);
@@ -1192,7 +1388,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            searcht = new Timer() {
                public void run() {
-                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) {
+                       List<Song> lista = new ArrayList<Song>();
+                       List<String> generi = new ArrayList<String>();
+                       for(Song song : dataProvider_catalogo.getList()) {
+                           
+                           if(generi.indexOf(song.album)==-1) {
+                               
+                               lista.add(song);
+                               generi.add(song.album);
+                               
+                           }
+                           
+                       }
+                       
+                       Collections.sort(lista);
+                       
+                       paintCovers(lista);
+                       //paintCovers(dataProvider_catalogo.getList());
+                   }
                }     
            };
            searcht.schedule(800);
@@ -1267,6 +1481,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        switch_list.setUrl("images/switch_sx_off.png");
        switch_cover.setUrl("images/switch_dx_on.png");
        if(!covers_container.isVisible()) {
+           
+           if(song_opened)
+           closeSong();
            
            List<Song> lista = new ArrayList<Song>();
            List<String> generi = new ArrayList<String>();
@@ -1578,6 +1795,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
        song_opened = false;
        
+       
        library_container.getElement().getStyle().setWidth(100, Style.Unit.PCT);
        song_container.getElement().getStyle().setWidth(0, Style.Unit.PX);
        song_contenuto.getElement().getStyle().setOpacity(0);
@@ -1588,6 +1806,18 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void viewPlaylist(final String titolo) {
       
+       flag_album = false;
+       delete_playlist.setVisible(true);
+       remove_song_from_playlist.setVisible(true);
+       remove_song_from_playlist.setVisible(true);
+       add_song_to_playlist.setVisible(true);
+       remove_song.setVisible(true);
+       insert_song.setVisible(true);
+       delete_playlist.setVisible(true);
+       
+       playlist_songs.clear();
+       playlist_songs.add(song_list);
+       
        if(song_opened)  {
            
            closeSong();
@@ -1658,8 +1888,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
 
    private void setFwRw() {
-       
-      
        
        if(playing==0){
 
@@ -1961,9 +2189,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                             "<param name=\"allowscriptaccess\" value=\"always\"></param><param name=\"wmode\" value=\"opaque\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
                             "allowfullscreen=\"true\" width=\"325\" height=\"200\" wmode=\"opaque\"></embed></object>");
-           } else {
+          } else {
                
-               playPlayerSong(link);
+               stopPlayerSong();
+               
+               Timer timerPlay = new Timer() {
+                   public void run() {
+                       
+                       playPlayerSong(link);
+                        
+                   }
+               };
+               timerPlay.schedule(1300);
+               
            }
            
            setPlaySong(true);      
@@ -1972,14 +2210,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
    }
 
+
+   private static native void stopPlayerSong() /*-{ 
+   
+   $doc.getElementById('youtube_player').stopVideo();
+   $doc.getElementById('youtube_player').clearVideo();
+   
+
+}-*/;
+
    
    private static native void playPlayerSong(String t) /*-{ 
    
-       $doc.getElementById('youtube_player').stopVideo();
-       $doc.getElementById('youtube_player').loadVideoById(t, 0, 'medium');
+       $doc.getElementById('youtube_player').loadVideoById(t, 1, 'medium');
        
 
     }-*/;
+
 
    
    public void closeYouTube() {
@@ -2049,9 +2296,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @Override
    public void paintPlaylistSongs(List<String> lista) {
        
+       flag_album = false;
+       
        List<Song> test = dataProvider_playlist.getList();
        
-       test.removeAll(canzoni_playlist);       
+       test.removeAll(dataProvider_playlist.getList());       
        canzoni_playlist.removeAll(canzoni_playlist);
        for (int j=0; j<lista.size(); j+=3) {
            
@@ -2198,12 +2447,20 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 @Override
                 public void onClick(ClickEvent event) {
                     
+                    selected_album = canzone.album;
                     if(cover_selected!=null)
                         cover_selected.getElement().getStyle().setProperty("border", "0px solid #37A6EB");
                     
                     cover_selected=tmp;
                     cover_selected.getElement().getStyle().setProperty("border", "2px solid #37A6EB");
                     
+                    
+                    if(playlist_opened==true) {
+                    
+                        playlist_title.setText(canzone.album);
+                        fillAlbum(canzone.album);
+                        
+                    }                    /*
                     setBranoCatalogo(canzone);
                     
                     track_title.setText(selected_song.titolo);
@@ -2238,7 +2495,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     showStar(rating);
                     
                     listener.setSongFields(selected_song.autore, selected_song.titolo, selected_song.album);
-                    
+                    */
                 }}, ClickEvent.getType());
             
             
@@ -2247,15 +2504,24 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 @Override
                 public void onDoubleClick(DoubleClickEvent event) {
                    
-                    if(playlist_opened) {
-                        
-                        listener.addToPLaylist(playlist_title.getText(), selected_song.autore, selected_song.titolo, selected_song.album);
-                        
-                    } else {
-                        
-                        if(selected_song!=null)
-                            viewSong(selected_song);                    
-                    }
+                    closeSong();
+                    
+                    playlist_opened= true;
+                    
+                    //listener.setPlaylistSongs(canzone.album);
+                    fillAlbum(canzone.album);
+                     
+                    playlist_title.setText(canzone.album);
+                    library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+                    playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+                    
+                    
+                    Timer timerAlbum = new Timer() {
+                        public void run() {
+                            playlist_content.getElement().getStyle().setOpacity(1);      
+                        }
+                    };
+                    timerAlbum.schedule(400);
                     
                 }
             
@@ -2292,6 +2558,54 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         }
     }
     
+    
+    private void fillAlbum(String t) {
+       
+        flag_album = true;
+        
+        delete_playlist.setVisible(false);
+        remove_song_from_playlist.setVisible(false);
+        remove_song_from_playlist.setVisible(false);
+        add_song_to_playlist.setVisible(false);
+        remove_song.setVisible(false);
+        insert_song.setVisible(false);
+        delete_playlist.setVisible(false);
+        
+        playlist_songs.clear();
+        playlist_songs.add(album_list);
+        
+        List<Song> test = dataProvider_album.getList();
+        
+        test.removeAll(dataProvider_album.getList());       
+        
+        canzoni_playlist.removeAll(canzoni_playlist);
+        
+        for (int j=0; j<dataProvider_catalogo.getList().size(); j++) {
+            
+            if(dataProvider_catalogo.getList().get(j).album.equals(t))
+            canzoni_playlist.add(dataProvider_catalogo.getList().get(j));
+            
+        }
+        
+        
+        Collections.sort(canzoni_playlist, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.titolo;
+                String artist_2 = arg1.titolo;
+                return artist_1.compareToIgnoreCase(artist_2);
+            }
+        });
+        
+        for (Song song : canzoni_playlist) {
+            test.add(song);
+        }
+
+        if(youtube_status!=0 && this.playing==1)
+            setPlaySong(true);
+
+        
+    }
     
     
     @Override
@@ -3082,7 +3396,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
             }
         
-        }   else if(played_song!=null && playing==1) {
+        }   else if(played_song!=null && playing==1 && !flag_album) {
                 
             for (int j=0; j<dataProvider_playlist.getList().size(); j++) {
                     
@@ -3102,6 +3416,36 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                         
                         song_list.getRowElement(j).getStyle().setColor("#000000");
                         song_list.getRowElement(j).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                        
+                    }
+                }
+         
+            for (int l=0; l<dataProvider_catalogo.getList().size(); l++) {
+                
+                library.getRowElement(l).getStyle().setColor("#000000");
+                library.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                
+            }
+        } else if(played_song!=null && playing==1 && flag_album) {
+                
+            for (int j=0; j<dataProvider_album.getList().size(); j++) {
+                    
+                    
+                    if(played_song.equals(dataProvider_album.getList().get(j)) && flag) {
+                        final int l = j;
+                        Timer timerButton = new Timer() {
+                            public void run() {
+                                album_list.getRowElement(l).getStyle().setColor("#37A6EB");
+                                album_list.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.BOLD);
+                            }     
+                        };
+                        timerButton.schedule(40);
+                        
+                        
+                    } else {
+                        
+                        album_list.getRowElement(j).getStyle().setColor("#000000");
+                        album_list.getRowElement(j).getStyle().setFontWeight(Style.FontWeight.NORMAL);
                         
                     }
                 }
@@ -3140,7 +3484,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         final HorizontalPanel popup_text = new HorizontalPanel();
         popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
         
-        final Label text = new Label();
+        final Label text = error_text;
         text.setText(text_t);
         text.getElement().getStyle().setWidth(240, Style.Unit.PX);
         text.getElement().getStyle().setProperty("textAlign", "left");
