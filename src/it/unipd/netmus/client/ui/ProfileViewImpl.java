@@ -2189,9 +2189,19 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                             "<param name=\"allowscriptaccess\" value=\"always\"></param><param name=\"wmode\" value=\"opaque\"></param><embed id=\"youtube_player\" src=\"http://www.youtube.com/v/" + link
                        + "?rel=0&ap=%2526fmt%3D18&autoplay=1&iv_load_policy=3&fs=1&autohide=1&enablejsapi=1&showinfo=0&playerapiid=ytplayer\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\"" +
                             "allowfullscreen=\"true\" width=\"325\" height=\"200\" wmode=\"opaque\"></embed></object>");
-           } else {
+          } else {
                
-               playPlayerSong(link);
+               stopPlayerSong();
+               
+               Timer timerPlay = new Timer() {
+                   public void run() {
+                       
+                       playPlayerSong(link);
+                        
+                   }
+               };
+               timerPlay.schedule(1300);
+               
            }
            
            setPlaySong(true);      
@@ -2200,14 +2210,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
    }
 
+
+   private static native void stopPlayerSong() /*-{ 
+   
+   $doc.getElementById('youtube_player').stopVideo();
+   $doc.getElementById('youtube_player').clearVideo();
+   
+
+}-*/;
+
    
    private static native void playPlayerSong(String t) /*-{ 
    
-       $doc.getElementById('youtube_player').stopVideo();
-       $doc.getElementById('youtube_player').loadVideoById(t, 0, 'medium');
+       $doc.getElementById('youtube_player').loadVideoById(t, 1, 'medium');
        
 
     }-*/;
+
 
    
    public void closeYouTube() {
