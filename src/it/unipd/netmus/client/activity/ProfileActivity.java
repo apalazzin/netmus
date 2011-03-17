@@ -86,6 +86,8 @@ public class ProfileActivity extends AbstractActivity implements
                 new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.addPlaylistError());
                     }
 
                     @Override
@@ -115,6 +117,8 @@ public class ProfileActivity extends AbstractActivity implements
                 title, artist, album, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.addSongToPlaylistError());
                     }
 
                     @Override
@@ -138,6 +142,8 @@ public class ProfileActivity extends AbstractActivity implements
                 playlist_name, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.removePlaylistError());
                     }
 
                     @Override
@@ -166,6 +172,8 @@ public class ProfileActivity extends AbstractActivity implements
                 album, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.deleteSongError());
                     }
 
                     @Override
@@ -213,6 +221,8 @@ public class ProfileActivity extends AbstractActivity implements
                 new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.editProfileError());
                     }
 
                     @Override
@@ -277,6 +287,8 @@ public class ProfileActivity extends AbstractActivity implements
         user_service_svc.findRelatedUsers(current_user.getUser(), new AsyncCallback<List<String>>() {
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.findRelatedUsersError());
             }
 
             @Override
@@ -319,6 +331,8 @@ public class ProfileActivity extends AbstractActivity implements
                 new AsyncCallback<List<SongSummaryDTO>>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                        .showError(my_constants.getPlaylistError());
                     }
 
                     @Override
@@ -382,9 +396,12 @@ public class ProfileActivity extends AbstractActivity implements
     public void logout() {
 
         client_factory.getProfileView().startLoading();
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
+        
+        login_service_svc.logout(new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.getProfileViewError());
             }
 
             @Override
@@ -399,12 +416,7 @@ public class ProfileActivity extends AbstractActivity implements
                 client_factory.getProfileView().stopLoading();
                 goTo(new LoginPlace(""));
             }
-        };
-
-        try {
-            login_service_svc.logout(callback);
-        } catch (Exception e) {
-        }
+        });
     }
 
     /**
@@ -498,6 +510,8 @@ public class ProfileActivity extends AbstractActivity implements
             song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.getSongDTOError());
                     }
 
                     @Override
@@ -548,10 +562,15 @@ public class ProfileActivity extends AbstractActivity implements
         client_factory.getProfileView().setRating(rate);
         client_factory.getProfileView().showStar(rate);
 
-        AsyncCallback<Double> callback = new AsyncCallback<Double>() {
+        SongSummaryDTO new_song_dto = new SongSummaryDTO(artist, title, album);
+        
+        song_service_svc.rateSong(current_user.getUser(),
+                new_song_dto, rate, new AsyncCallback<Double>() {
 
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                .showError(my_constants.rateSongError());
             }
 
             @Override
@@ -579,17 +598,16 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Void result) {}
 
                     @Override
-                    public void onFailure(Throwable caught) {}
+                    public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.storeStatisticsError());
                     }
-                );
+                });
                 
                 client_factory.getProfileView().stopLoading();
             }
 
-        };
-        song_service_svc.rateSong(current_user.getUser(), new SongSummaryDTO(
-                artist, title, album), rate, callback);
-
+        });
     }
 
     /**
@@ -605,6 +623,8 @@ public class ProfileActivity extends AbstractActivity implements
                 playlist, title, artist, album , new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.removeSongFromPlaylistError());
                     }
 
                     @Override
@@ -682,6 +702,8 @@ public class ProfileActivity extends AbstractActivity implements
         song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.getSongDTOError());
             }
 
             @Override
@@ -764,6 +786,8 @@ public class ProfileActivity extends AbstractActivity implements
             song_service_svc.getSongDTO(current_song_summary_dto, new AsyncCallback<SongDTO>() {
                 @Override
                 public void onFailure(Throwable caught) {
+                    client_factory.getProfileView()
+                        .showError(my_constants.getSongDTOError());
                 }
 
                 @Override
@@ -826,12 +850,15 @@ public class ProfileActivity extends AbstractActivity implements
     public void start(final AcceptsOneWidget container_widget,
             EventBus event_bus) {
 
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
+        login_service_svc.getLoggedInUser( new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
                     goTo(new LoginPlace(""));
+                } else {
+                    client_factory.getProfileView()
+                        .showError(my_constants.getSongDTOError());
                 }
             }
 
@@ -881,9 +908,11 @@ public class ProfileActivity extends AbstractActivity implements
                                         public void onSuccess(Void result) {}
 
                                         @Override
-                                        public void onFailure(Throwable caught) {}
+                                        public void onFailure(Throwable caught) {
+                                            client_factory.getProfileView()
+                                                .showError(my_constants.storeStatisticsError());
                                         }
-                                    );
+                                    });
                                 }
                             }
                             
@@ -893,9 +922,11 @@ public class ProfileActivity extends AbstractActivity implements
                 profileView.setPresenter(ProfileActivity.this);
 
                 // inizializzazione dell'UserCompleteDTO mantenuto nell'activity
-                AsyncCallback<UserCompleteDTO> callback2 = new AsyncCallback<UserCompleteDTO>() {
+                user_service_svc.loadProfile(user, new AsyncCallback<UserCompleteDTO>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        client_factory.getProfileView()
+                            .showError(my_constants.loadProfileError());
                     }
 
                     @Override
@@ -921,19 +952,15 @@ public class ProfileActivity extends AbstractActivity implements
                         profileView.setLayout();
 
                     }
-                };
-                user_service_svc.loadProfile(user, callback2);
+                });
 
                 // load the applet bar, if not active yet
                 AppletBar.get(user).appletBarON();
             }
 
-        };
+        });
 
-        try {
-            login_service_svc.getLoggedInUser(callback);
-        } catch (LoginException e) {
-        }
+        
 
     }
 
@@ -958,6 +985,8 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.generatePDFError());
             }
 
             @Override

@@ -82,8 +82,8 @@ public class LoginActivity extends AbstractActivity implements
         final String pass = password;
         LoginDTO login = new LoginDTO(user, password);
 
-        // Set up the callback object.
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
+        // Make the call to send login info.
+        login_service_svc.startLogin(login, new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -108,14 +108,7 @@ public class LoginActivity extends AbstractActivity implements
 
                 goTo(new ProfilePlace(username));
             }
-        };
-
-        // Make the call to send login info.
-        try {
-            login_service_svc.startLogin(login, callback);
-        } catch (Exception e) {
-        }
-
+        });
     }
 
     /**
@@ -141,8 +134,8 @@ public class LoginActivity extends AbstractActivity implements
                     LoginType.NETMUSREGISTRATION));
         else {
 
-            // Set up the callback object.
-            AsyncCallback<LoginDTO> callback = new AsyncCallback<LoginDTO>() {
+            // Make the call to send login info.
+            login_service_svc.insertRegistration(login, new AsyncCallback<LoginDTO>() {
 
                 @Override
                 public void onFailure(Throwable caught) {
@@ -164,15 +157,7 @@ public class LoginActivity extends AbstractActivity implements
                         e.printStackTrace();
                     }
                 }
-            };
-
-            // Make the call to send login info.
-            try {
-                login_service_svc.insertRegistration(login, callback);
-            } catch (RegistrationException e) {
-                // exception alredy cought in method onFailure
-                e.printStackTrace();
-            }
+            });
         }
     }
 
@@ -183,7 +168,7 @@ public class LoginActivity extends AbstractActivity implements
     public void start(final AcceptsOneWidget container_widget,
             EventBus event_bus) {
 
-        AsyncCallback<String> callback = new AsyncCallback<String>() {
+        login_service_svc.getLoggedInUser(new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -204,12 +189,6 @@ public class LoginActivity extends AbstractActivity implements
             public void onSuccess(String result) {
                 goTo(new ProfilePlace(result));
             }
-        };
-
-        try {
-            login_service_svc.getLoggedInUser(callback);
-        } catch (LoginException e) {
-        }
-
+        });
     }
 }

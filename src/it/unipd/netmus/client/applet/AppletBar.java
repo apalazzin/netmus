@@ -121,7 +121,7 @@ public class AppletBar {
     void translateXML(String result) {
 
         AppletBarView.showStatus(constants.pleaseWait());
-        sendMusic(result);   
+        sendMusic(result);
     }
     
     private void sendMusic(String xml) {
@@ -140,6 +140,7 @@ public class AppletBar {
         library_service.sendUserNewMusic(user, new_songs, new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable caught) {
+                client_factory.getProfileView().showError(constants.sendingMessageError());
                 AppletBarView.showStatus(constants.sendingError());
                 System.err.println(caught.toString());
             }

@@ -1,8 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.LoginDTO;
-import it.unipd.netmus.shared.exception.LoginException;
-import it.unipd.netmus.shared.exception.RegistrationException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -14,15 +12,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface LoginServiceAsync {
 
-    void getLoggedInUser(AsyncCallback<String> callback) throws LoginException;
+    void getLoggedInUser(AsyncCallback<String> callback);
 
-    void insertRegistration(LoginDTO login, AsyncCallback<LoginDTO> callback)
-            throws RegistrationException;
+    void insertRegistration(LoginDTO login, AsyncCallback<LoginDTO> callback);
 
     void logout(AsyncCallback<String> callback);
 
     void restartSession(String user, String session_id,
-            AsyncCallback<String> callback) throws LoginException;
+            AsyncCallback<String> callback);
 
     void startLogin(LoginDTO login, AsyncCallback<String> callback);
 

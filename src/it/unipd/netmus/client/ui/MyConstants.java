@@ -33,4 +33,19 @@ public interface MyConstants extends Constants {
 	String no();
 	String downloadPDF();
 	
+	String addPlaylistError();
+	String addSongToPlaylistError();
+	String removePlaylistError();
+	String deleteSongError();
+	String editProfileError();
+	String findRelatedUsersError();
+	String getPlaylistError();
+	String getProfileViewError();
+	String getSongDTOError();
+	String rateSongError();
+	String storeStatisticsError();
+	String removeSongFromPlaylistError();
+	String loadProfileError();
+	String generatePDFError();
+	
 	}
