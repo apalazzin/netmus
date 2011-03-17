@@ -1,5 +1,7 @@
 package it.unipd.netmus.server.youtube;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +12,7 @@ import com.google.gdata.data.youtube.VideoEntry;
 import com.google.gdata.data.youtube.VideoFeed;
 import com.google.gdata.data.youtube.YouTubeMediaContent;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
+import com.google.gdata.util.ServiceException;
 
 /**
  * Nome: YouTubeManager.java 
@@ -21,14 +24,10 @@ public class YouTubeManager {
 
     private static final String YOUTUBE_URL = "http://gdata.youtube.com/feeds/api/videos";
 
-    public static String getSearchResult(String keywords, String ip) {
+    public static String getSearchResult(String keywords, String ip) throws IOException, ServiceException {
 
         YouTubeVideo youtubeVideo = null;
-        try {
-            youtubeVideo = retrieveVideo("NetmusProject", keywords, 2000, ip);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        youtubeVideo = retrieveVideo("NetmusProject", keywords, 2000, ip);
 
         if (youtubeVideo != null) {
             return youtubeVideo.getVideoCode();
@@ -67,7 +66,7 @@ public class YouTubeManager {
     }
 
     private static YouTubeVideo retrieveVideo(String clientID, String keywords,
-            int timeout, String ip) throws Exception {
+            int timeout, String ip) throws IOException, ServiceException  {
 
         YouTubeService service = new YouTubeService(clientID);
         service.setConnectTimeout(timeout); // millis

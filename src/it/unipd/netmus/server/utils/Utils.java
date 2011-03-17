@@ -3,8 +3,11 @@ package it.unipd.netmus.server.utils;
 import it.unipd.netmus.server.youtube.YouTubeManager;
 import it.unipd.netmus.shared.SongDTO;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+
+import com.google.gdata.util.ServiceException;
 
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
@@ -99,14 +102,22 @@ public final class Utils {
      */
     public static String getYouTubeCode(String keywords, String ip) {
         
-        try {
-            return YouTubeManager.getSearchResult(keywords, ip);
-        }
-        catch (RuntimeException io) {
-            System.err.println("RuntimeException YouTube: " + keywords);
-            return "";
-        }
+        return getYouTubeCode(keywords, ip, 3);
+    }
+    
+    private static String getYouTubeCode(String keywords, String ip, int retries) {
         
+        if (retries > 0) {
+            try {
+                return YouTubeManager.getSearchResult(keywords, ip);
+            }
+            catch (Exception e) {
+                return getYouTubeCode(keywords, ip, retries-1);
+            }
+
+        } else {
+            return "";
+        }        
     }
 
 }
