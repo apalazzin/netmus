@@ -2407,8 +2407,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             HTMLPanel cover_container = new HTMLPanel("");
             
             cover_container.getElement().getStyle().setWidth(108, Style.Unit.PX);
-            cover_container.getElement().getStyle().setHeight(145, Style.Unit.PX);
-            cover_container.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
+            cover_container.getElement().getStyle().setHeight(147, Style.Unit.PX);
+            cover_container.getElement().getStyle().setOverflow(Style.Overflow.VISIBLE);
             cover_container.getElement().getStyle().setMarginLeft(40, Style.Unit.PX);
             cover_container.getElement().getStyle().setMarginTop(20, Style.Unit.PX);
             cover_container.getElement().getStyle().setFloat(Style.Float.LEFT);
@@ -2979,7 +2979,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 @Override
                 public void onKeyDown(KeyDownEvent event) {
 
-                    if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !nome.getText().equals("") && !nome.getText().equals(" ") && !nome.getText().equals("  ")) {
                         
                         Label tmpTxt = new Label(nome.getText());
                         tmpTxt.getElement().getStyle().setMarginLeft(11, Style.Unit.PX);
@@ -3395,6 +3395,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 song_list.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
                 
             }
+            
+            if(flag_album) {
+             
+                for (int l=0; l<dataProvider_album.getList().size(); l++) {
+                    
+                    album_list.getRowElement(l).getStyle().setColor("#000000");
+                    album_list.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
+                    
+                }
+                
+            }
         
         }   else if(played_song!=null && playing==1 && !flag_album) {
                 
@@ -3456,7 +3467,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 library.getRowElement(l).getStyle().setFontWeight(Style.FontWeight.NORMAL);
                 
             }
-        }
+        } 
         
     }
 
