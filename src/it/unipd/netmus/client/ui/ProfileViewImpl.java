@@ -1357,7 +1357,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            searcht = new Timer() {
                public void run() {
-                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) {
+                       List<Song> lista = new ArrayList<Song>();
+                       List<String> generi = new ArrayList<String>();
+                       for(Song song : dataProvider_catalogo.getList()) {
+                           
+                           if(generi.indexOf(song.album)==-1) {
+                               
+                               lista.add(song);
+                               generi.add(song.album);
+                               
+                           }
+                           
+                       }
+                       
+                       Collections.sort(lista);
+                       
+                       paintCovers(lista);
+                       //paintCovers(dataProvider_catalogo.getList());
+                   }
                }     
            };
            searcht.schedule(800);
@@ -1370,7 +1388,25 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
            searcht = new Timer() {
                public void run() {
-                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) paintCovers(dataProvider_catalogo.getList());
+                   if(covers_container.isVisible() && !canzoni_cover.equals(dataProvider_catalogo.getList())) {
+                       List<Song> lista = new ArrayList<Song>();
+                       List<String> generi = new ArrayList<String>();
+                       for(Song song : dataProvider_catalogo.getList()) {
+                           
+                           if(generi.indexOf(song.album)==-1) {
+                               
+                               lista.add(song);
+                               generi.add(song.album);
+                               
+                           }
+                           
+                       }
+                       
+                       Collections.sort(lista);
+                       
+                       paintCovers(lista);
+                       //paintCovers(dataProvider_catalogo.getList());
+                   }
                }     
            };
            searcht.schedule(800);
