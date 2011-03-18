@@ -17,6 +17,7 @@ import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
 import it.unipd.netmus.shared.FieldVerifier;
+import it.unipd.netmus.shared.MusicLibraryDTO;
 import it.unipd.netmus.shared.MusicLibraryDTO.PlaylistDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
@@ -66,6 +67,8 @@ public class ProfileActivity extends AbstractActivity implements
     private UserCompleteDTO current_user;
     
     private Map<String, SongDTO> info_alredy_loaded = new HashMap<String, SongDTO>();
+    
+    private Map<String, String> cover_alredy_loaded = new HashMap<String, String>();
 
     MyConstants my_constants = GWT.create(MyConstants.class);
 
@@ -553,6 +556,7 @@ public class ProfileActivity extends AbstractActivity implements
                         
                         //Salva le informazioni caricate dal server in una mappa cache diposnibile nel client
                         info_alredy_loaded.put(song_id, song_dto);
+                        cover_alredy_loaded.put(FieldVerifier.generateAlbumId(album, artist), song_dto.getAlbumCover());
                         
                         //Se il video non è disponibile passa alla canzone successiva
                         if (song_dto.getYoutubeCode().equals("")) {
@@ -720,14 +724,12 @@ public class ProfileActivity extends AbstractActivity implements
         
         client_factory.getProfileView().startLoading();
         
-        SongDTO song_dto = info_alredy_loaded.get(FieldVerifier.generateSongId(title, artist, album));
+        String cover = cover_alredy_loaded.get(FieldVerifier.generateAlbumId(album, artist));
         
-        if (song_dto != null) {
+        if (cover != null) {
             
+            img.getElement().getStyle().setBackgroundImage("url('" + cover + "')");
             
-            String cover = song_dto.getAlbumCover();
-            img.getElement().getStyle()
-            .setBackgroundImage("url('" + cover + "')");
             client_factory.getProfileView().stopLoading();
             
             return;
@@ -737,7 +739,7 @@ public class ProfileActivity extends AbstractActivity implements
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         final SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
             
-        String cover = "";
+        cover = "";
         
         song_service_svc.getCoverImage(song, new AsyncCallback<String>() {
             @Override
@@ -750,11 +752,15 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(String cover) {
                 
-                //salva le info caricate in modo che siano sempre disponibili nel client
+                //Imposta la copertina di default nel caso in cui non sia stata trovata
                 if (cover.equals("")) {
                     cover = "images/test_cover.jpg";
                 }
                 
+                //salva le info caricate in modo che siano sempre disponibili nel client
+                cover_alredy_loaded.put(FieldVerifier.generateAlbumId(album, artist), cover);
+
+                //Mostra la copertina
                 img.getElement().getStyle()
                         .setBackgroundImage("url('" + cover + "')");
 
@@ -1152,17 +1158,23 @@ public class ProfileActivity extends AbstractActivity implements
 
     @Override
     public void setStats() {
-        // TODO Auto-generated method stub
-        // Deve restituire
-        // n um. di brani dell'utente  num
-        // artista preferito  pref
-        // canzone piu' votata dall'utente  prefs
-        // canzone che ha l'utente piu' votata in netmus  prefn
-        //
-        // TUTTE STRINGHE!
-        //
-        //client_factory.getprofileView().setStats(num, pref, prefs, prefn);
+        MusicLibraryDTO library = current_user.getMusicLibrary();
         
-        client_factory.getProfileView().setStats("10", "Tokio Hotel", "Monsoon", "Rette Micht");
+        //numero di canzoni del catalogo
+        String num_songs = String.valueOf(library.getSongs().size());
+        
+        //artista preferito
+        String preferred_artist = library.getPreferred_artist();
+        
+        //canzone più votata dall'utente
+        SongSummaryDTO song = library.getSongs().get(library.getMostPopularSongForThisUser()); 
+        String most_popular_song_for_this_user = song.getTitle() + " (" + song.getArtist() + ")";
+        
+        //canzone più votata del catalogo
+        song = library.getSongs().get(library.getMostPopularSong()); 
+        String most_popular_song = song.getTitle() + " (" + song.getArtist() + ")";
+        
+        //Visualizzazione del pop-up delle statistiche
+        client_factory.getProfileView().setStats(num_songs, preferred_artist, most_popular_song_for_this_user, most_popular_song);
     }
 }
