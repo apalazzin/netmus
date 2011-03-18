@@ -9,6 +9,8 @@ import it.unipd.netmus.shared.SongDTO;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.velocity.Template;
@@ -173,6 +175,23 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         	+"  </tr>\n";
         
         List<Song> tmp_list = useraccount.getMusicLibrary().getAllSongs();
+        Collections.sort(tmp_list, new Comparator<Song>() {
+            @Override
+            public int compare(Song arg0, Song arg1) {
+                String artist_1 = arg0.getArtist();
+                String artist_2 = arg1.getArtist();
+                String album_1 = arg0.getAlbum();
+                String album_2 = arg1.getAlbum();
+                int compare_artists = artist_1.compareToIgnoreCase(artist_2);
+                
+                if (compare_artists == 0) {
+                    return album_1.compareToIgnoreCase(album_2);
+                }
+                else {
+                    return compare_artists;
+                }
+            }
+        });
         
         for(Song tmp : tmp_list){
         	content_tmp +="  <tr>\n"
