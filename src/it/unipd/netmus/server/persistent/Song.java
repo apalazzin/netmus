@@ -32,8 +32,9 @@ import com.google.code.twig.annotation.Id;
  * 
  */
 
-@SuppressWarnings("serial")
 public class Song implements Serializable, Cacheable {
+
+    private static final long serialVersionUID = -6562913769428174789L;
 
     public static Song load(String id) {
         

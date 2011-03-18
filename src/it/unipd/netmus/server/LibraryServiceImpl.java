@@ -6,7 +6,6 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.GdataManager;
 import it.unipd.netmus.server.utils.velocity.VelocityEngineManager;
 import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -50,26 +49,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     public boolean addSongToPlaylist(String user, String playlist_name, String title, String artist, String album) {
         UserAccount useraccount = UserAccount.load(user);
         return useraccount.getMusicLibrary().addSongToPlaylist(playlist_name, title, artist, album);
-    }
-
-    /**
-     * Ritorna la lista ordinate delle canzoni in forma di SongSummaryDTO che
-     * ap- partengono alla playlist.Ritorna true se l’operazione ha successo.
-     */
-    @Override
-    public List<SongSummaryDTO> getPlaylist(String user, String name) {
-
-        UserAccount useraccount = UserAccount.load(user);
-
-        List<Song> songs = useraccount.getMusicLibrary().getPlaylistSongs(
-                name);
-        List<SongSummaryDTO> songs_dto = new ArrayList<SongSummaryDTO>();
-
-        for (Song song : songs) {
-            songs_dto.add(song.toSongSummaryDTO());
-        }
-
-        return songs_dto;
     }
 
     /**
@@ -135,7 +114,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         useraccount.getMusicLibrary().update();
     }
 
-    @Override
     public void storeStatistics(String user, String preferred_artist,
             String most_popular_song, String most_popular_song_for_this_user) {
         UserAccount user_account = UserAccount.load(user);

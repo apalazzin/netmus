@@ -25,4 +25,7 @@ public interface SongServiceAsync {
     void getSongDTO(SongSummaryDTO song_summary_dto,
             AsyncCallback<SongDTO> callback);
 
+    void getCoverImage(SongSummaryDTO song_summary_dto,
+            AsyncCallback<String> callback);
+
 }

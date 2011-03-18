@@ -30,8 +30,9 @@ import com.google.code.twig.annotation.Id;
  * richieste esterne.
  */
 
-@SuppressWarnings("serial")
 public class Album implements Serializable, Cacheable {
+
+    private static final long serialVersionUID = 3984724119207948622L;
 
     /**
      * Legge dalla cache e, se non presente, dal Datastore l'album

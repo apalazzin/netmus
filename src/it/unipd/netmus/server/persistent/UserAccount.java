@@ -36,8 +36,9 @@ import com.google.code.twig.annotation.Type;
  * 
  */
 
-@SuppressWarnings("serial")
 public class UserAccount implements Serializable, Cacheable {
+
+    private static final long serialVersionUID = 1456696419651595097L;
 
     /**
      * 
