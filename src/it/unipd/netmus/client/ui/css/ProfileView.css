@@ -343,14 +343,23 @@
 
 	
 .edit_profile_close {
-	
+
 	position: absolute;
 	
+	opacity: 0.5;
 	top: 15px;
 	left: 15px;
 	
 	
 	}
+	
+.edit_profile_clear {
+	
+	margin-left: 15px;
+	
+	
+	}
+	
 
 
 .edit_profile_check {
@@ -398,8 +407,8 @@
 	float: left;	
 	margin-top: 75px;
 	border: 0px solid #FF0000;
-	
-	
+	overflow: visible;
+	width: 140px;
 	}
 
 .edit_profile_conf {
@@ -408,6 +417,7 @@
 	float: left;	
 	margin-top: 75px;
 	border: 0px solid #FF0000;
+	
 	
 	
 	}

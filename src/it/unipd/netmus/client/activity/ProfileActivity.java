@@ -1084,5 +1084,12 @@ public class ProfileActivity extends AbstractActivity implements
         
         return tmp;
 	}
+
+    @Override
+    public void deleteProfile() {
+        // TODO Auto-generated method stub
+        //DEVE ELIMINARE L'UTENTE
+        //logout();
+    }
 	
 }

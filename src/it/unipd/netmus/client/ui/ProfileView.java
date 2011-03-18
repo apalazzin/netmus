@@ -286,6 +286,12 @@ public interface ProfileView extends IsWidget {
      * @return 
        */
       void exportPdf();
+      /**
+       *Elimina l'account dell'utente
+     * @return 
+       */
+      void deleteProfile();
+
    }
 
 
