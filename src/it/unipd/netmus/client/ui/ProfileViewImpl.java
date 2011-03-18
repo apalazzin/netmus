@@ -3158,7 +3158,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     this.cover.setUrl("images/test_cover.jpg");
         }
         
-        showGlobalStar(global_rating);
+        if (global_rating > 0) {
+            showGlobalStar(global_rating);
+        }
 
     }
 
