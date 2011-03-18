@@ -1196,6 +1196,97 @@ height: 30px;
 		
 	}
 
+
+.statistics {
+	
+	
+	
+	width: 400px;
+	height: 170px;
+	
+	
+	
+	border: 2px solid #222222;
+	
+	background: rgba(20, 20, 20, 0.90);
+	
+	position: absolute;
+	
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	
+	margin: auto;
+	
+	z-index: 10;  
+	
+	padding: 20px;
+	padding-top: 40px;
+	display: none;
+		
+	-webkit-user-select: none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
+   	user-select: none;
+   	
+   	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+   	
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
+	
+}
+
+.statistics_close {
+	
+	margin-top: 15px;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	color: green;
+	cursor: pointer;
+	width: 100px;
+	
+	}
+
+.statistics_title {
+	
+	font-family: Verdana;
+	font-size: 13px;
+	font-weight: bold;
+	color: green;
+	margin-bottom: 10px;
+	
+	}
+	
+
+.statistics_label {
+	
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+	
+	}
+	
+.statistics_data {
+	
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	color: #37A6EB;
+	
+	}
+	
+
+
 .stats {
 	
 	margin-top: 10px;

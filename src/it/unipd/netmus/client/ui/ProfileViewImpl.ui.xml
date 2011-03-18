@@ -167,7 +167,7 @@
 				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
 				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
 				
-				<g:Image ui:field="statistiche" styleName="{style.stats2}" url="images/statistiche.png"/>
+				<g:Image ui:field="statistics_open" styleName="{style.stats2}" url="images/statistiche.png"/>
 				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;">Statistiche</span>
 				
 			
@@ -499,6 +499,34 @@
 			   	
 				
 				</g:HTMLPanel>
+				
+				
+				
+						   	<g:HTMLPanel ui:field="statistics" styleName="{style.statistics}">
+						   	
+						   	<g:VerticalPanel>
+			   					<g:Label styleName="{style.statistics_title}">Statistiche Netmus</g:Label>
+			   					<g:HorizontalPanel>
+			   						<g:Label styleName="{style.statistics_label}">Numero di brani:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_tracks" styleName="{style.statistics_data}">100</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label styleName="{style.statistics_label}">Artista preferito:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_preferred" styleName="{style.statistics_data}">Tokio Hotel</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label styleName="{style.statistics_label}">Canzone preferita:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_preferreds" styleName="{style.statistics_data}">Durch den Monzun</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label styleName="{style.statistics_label}">Preferita in Netmus:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_preferredn" styleName="{style.statistics_data}">Rette Micht</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:Button ui:field="stat_close" styleName="{style.statistics_close}">chiudi</g:Button>
+			   				
+						   	</g:VerticalPanel>
+						   	</g:HTMLPanel>
+						   	
 				
 				<g:HTMLPanel ui:field="popup" styleName="{style.popup}">
 				
