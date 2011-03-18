@@ -708,11 +708,16 @@ public class ProfileActivity extends AbstractActivity implements
         Map<String, SongSummaryDTO> songs = current_user.getMusicLibrary().getSongs();
         SongSummaryDTO song = songs.get(FieldVerifier.generateSongId(title, artist, album));
         
-        client_factory.getProfileView().setRating(song.getRatingForThisUser());
-        client_factory.getProfileView().showStar(song.getRatingForThisUser());
+        if (song != null) {
+            client_factory.getProfileView().setRating(song.getRatingForThisUser());
+            client_factory.getProfileView().showStar(song.getRatingForThisUser());
+            return song.getRating();
+        }
+        else {
+            client_factory.getProfileView().showError(my_constants.removeSongFromPlaylistError());
+            return -1;
+        }
         
-        return song.getRating();
-
     }
 
     /**
@@ -1167,12 +1172,24 @@ public class ProfileActivity extends AbstractActivity implements
         String preferred_artist = library.getPreferred_artist();
         
         //canzone più votata dall'utente
-        SongSummaryDTO song = library.getSongs().get(library.getMostPopularSongForThisUser()); 
-        String most_popular_song_for_this_user = song.getTitle() + " (" + song.getArtist() + ")";
+        String most_popular_song_for_this_user = "";
+        SongSummaryDTO song = library.getSongs().get(library.getMostPopularSongForThisUser());
+        if (song != null) {
+            most_popular_song_for_this_user = song.getTitle() + " (" + song.getArtist() + ")";
+        }
+        else {
+            most_popular_song_for_this_user = my_constants.noVoteForThisUserError();
+        }
         
         //canzone più votata del catalogo
-        song = library.getSongs().get(library.getMostPopularSong()); 
-        String most_popular_song = song.getTitle() + " (" + song.getArtist() + ")";
+        String most_popular_song = "";
+        song = library.getSongs().get(library.getMostPopularSong());
+        if (song != null) {
+            most_popular_song = song.getTitle() + " (" + song.getArtist() + ")";
+        }
+        else {
+            most_popular_song = my_constants.noVoteError();
+        }
         
         //Visualizzazione del pop-up delle statistiche
         client_factory.getProfileView().setStats(num_songs, preferred_artist, most_popular_song_for_this_user, most_popular_song);
