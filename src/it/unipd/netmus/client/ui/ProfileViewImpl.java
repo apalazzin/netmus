@@ -1266,13 +1266,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("edit_profile_close")
    void handleMouseEditProfileChiudi(ClickEvent e) {
-      edit_profile.getElement().getStyle().setOpacity(0);
-      Timer timerHidden = new Timer() {
-          public void run() {
-              edit_profile.getElement().getStyle().setDisplay(Style.Display.NONE);  
-          }     
-      };
-      timerHidden.schedule(200);
+      closeEditProfile();
    }
 
    @UiHandler("edit_profile_close")
@@ -3664,8 +3658,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         
 
     }
-
-        
+    
+    @Override
+    public void closeEditProfile() {
+        edit_profile.getElement().getStyle().setOpacity(0);
+        Timer timerHidden = new Timer() {
+            public void run() {
+                edit_profile.getElement().getStyle().setDisplay(Style.Display.NONE);  
+            }     
+        };
+        timerHidden.schedule(200);
+    } 
 }
 
 

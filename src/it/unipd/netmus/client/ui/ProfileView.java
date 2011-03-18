@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
@@ -174,7 +173,12 @@ public interface ProfileView extends IsWidget {
     *
     */
    void playPrev();
-
+   
+   /**
+    * Chiude la finestra edit profile
+    *
+    */
+   void closeEditProfile();
 
    public interface Presenter
    {
@@ -293,7 +297,4 @@ public interface ProfileView extends IsWidget {
       void deleteProfile();
 
    }
-
-
-
 }
