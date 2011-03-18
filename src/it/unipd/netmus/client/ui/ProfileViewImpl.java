@@ -1876,8 +1876,14 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
  
    @Override
-   public void viewPlaylist(final String titolo) {
-      
+   public void viewPlaylist(String titolo) {
+       
+       if (titolo.lastIndexOf('(') > 0) {
+           titolo = titolo.substring(0, titolo.lastIndexOf('(')-1);
+           titolo = titolo.trim();
+       }
+       final String titolo_pulito = titolo;
+       
        flag_album = false;
        delete_playlist.setVisible(true);
        remove_song_from_playlist.setVisible(true);
@@ -1900,9 +1906,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                    
                   playlist_opened= true;
                    
-                  listener.setPlaylistSongs(titolo);
+                  listener.setPlaylistSongs(titolo_pulito);
                    
-                  playlist_title.setText(titolo);
+                  playlist_title.setText(titolo_pulito);
                   library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
                   playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
                   
@@ -1926,9 +1932,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            
           playlist_opened= true;
            
-          listener.setPlaylistSongs(titolo);
+          listener.setPlaylistSongs(titolo_pulito);
            
-          playlist_title.setText(titolo);
+          playlist_title.setText(titolo_pulito);
           library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
           playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
           
@@ -2409,7 +2415,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             public int compare(Song arg0, Song arg1) {
                 String artist_1 = arg0.autore;
                 String artist_2 = arg1.autore;
-                return artist_1.compareToIgnoreCase(artist_2);
+                String album_1 = arg0.album;
+                String album_2 = arg1.album;
+                int compare_artists = artist_1.compareToIgnoreCase(artist_2);
+                
+                if (compare_artists == 0) {
+                    return album_1.compareToIgnoreCase(album_2);
+                }
+                else {
+                    return compare_artists;
+                }
             }
         });
         
@@ -2426,7 +2441,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             public int compare(Song arg0, Song arg1) {
                 String artist_1 = arg0.autore;
                 String artist_2 = arg1.autore;
-                return artist_1.compareToIgnoreCase(artist_2);
+                String album_1 = arg0.album;
+                String album_2 = arg1.album;
+                int compare_artists = artist_1.compareToIgnoreCase(artist_2);
+                
+                if (compare_artists == 0) {
+                    return album_1.compareToIgnoreCase(album_2);
+                }
+                else {
+                    return compare_artists;
+                }
             }
         });
 
