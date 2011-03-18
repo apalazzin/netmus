@@ -1,6 +1,7 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.SongDTO;
+import it.unipd.netmus.shared.exception.NetmusException;
 
 import java.util.List;
 
@@ -33,6 +34,6 @@ public interface LibraryService extends RemoteService {
     
     public void storeStatistics(String user, String preferred_artist, String most_popular_song, String most_popular_song_for_this_user);
     
-    public String generatePDF(String user);
+    public String generateDoc(String user);
 
 }

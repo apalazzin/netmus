@@ -42,16 +42,6 @@
     <url-pattern>/netmus/usersService</url-pattern>
   </servlet-mapping>
   
-  <servlet>
-    <servlet-name>pdfLoaderServlet</servlet-name>
-    <servlet-class>it.unipd.netmus.server.servlet.PDFLoaderServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>pdfLoaderServlet</servlet-name>
-    <url-pattern>/netmus/pdf</url-pattern>
-  </servlet-mapping>
-  
   <!-- 
     <filter>
         <filter-name>appstats</filter-name>

@@ -1,19 +1,20 @@
 package it.unipd.netmus.server.utils;
 
+import it.unipd.netmus.shared.exception.NetmusException;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
-import net.sourceforge.htmlunit.corejs.javascript.ast.NewExpression;
-
+import com.google.gdata.client.DocumentQuery;
 import com.google.gdata.client.docs.DocsService;
 import com.google.gdata.data.MediaContent;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.docs.DocumentEntry;
 import com.google.gdata.data.docs.DocumentListEntry;
+import com.google.gdata.data.docs.DocumentListFeed;
 import com.google.gdata.data.media.MediaByteArraySource;
-import com.google.gdata.data.media.MediaSource;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
@@ -45,7 +46,7 @@ public class GdataManager {
     
     public DocsService client() throws AuthenticationException {
         if(client == null) {
-            DocsService newClient = new DocsService("Document List Demo");
+            DocsService newClient = new DocsService("NetMus Library Maker");
             newClient.setUserCredentials(USERNAME, PASSWORD);
             client = newClient;
             client.setConnectTimeout(0);
@@ -65,36 +66,40 @@ public class GdataManager {
         }
     }
     
-    public InputStream getPdfInputStream(DocumentListEntry document) throws ServiceException {
-        String exportUrl = ((MediaContent)document.getContent()).getUri() + "&exportFormat=pdf";
-        MediaContent mc = new MediaContent();
-        mc.setUri(exportUrl);
+    public DocumentListEntry getFolder() throws Exception {
         try {
-            MediaSource ms = client().getMedia(mc);
-            return ms.getInputStream();
+            URL feedUri = new URL("https://docs.google.com/feeds/default/private/full/-/folder");
+            DocumentQuery query = new DocumentQuery(feedUri);
+            query.setTitleQuery("netmus-libraries");
+            query.setTitleExact(true);
+            query.setMaxResults(1);
+            DocumentListFeed feed = client().getFeed(query, DocumentListFeed.class);
+            List<DocumentListEntry> entry = feed.getEntries();
+            return entry.get(0);
+        } catch (MalformedURLException e) {
+            throw new Exception("Incorrect resource ID");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error communicating with Google Docs servers");
         }
     }
     
-    public InputStream getPdfInputStream(String resourceId) throws Exception {
-        return getPdfInputStream(getDocument(resourceId));
-    }
-    
-    public DocumentListEntry createNewDocument(String title, String content) throws ServiceException {
+    public DocumentListEntry createNewDocument(String title, String content) throws ServiceException, NetmusException {
         try {
-             URL feedUrl = new URL("https://docs.google.com/feeds/default/private/full/");
-                DocumentListEntry newEntry = new DocumentEntry();
-                newEntry.setTitle(new PlainTextConstruct(title));
-                newEntry = client().insert(feedUrl, newEntry);
-                newEntry.setEtag("*");
-                newEntry.setMediaSource(new MediaByteArraySource(content.getBytes(), "text/html"));
-                newEntry.updateMedia(true);
-                return newEntry;
+            String destFolderUrl = ((MediaContent) getFolder().getContent()).getUri();
+            URL feedUrl = new URL(destFolderUrl);
+            DocumentListEntry newEntry = new DocumentEntry();
+            newEntry.setTitle(new PlainTextConstruct(title));
+            newEntry = client().insert(feedUrl, newEntry);
+            newEntry.setEtag("*");
+            newEntry.setMediaSource(new MediaByteArraySource(content.getBytes(), "text/html"));
+            newEntry.updateMedia(true);
+            return newEntry;
                 
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
