@@ -50,4 +50,31 @@ public interface MyConstants extends Constants {
 	String generatePDFError();
 	String deleteProfileError();
 	
+	String friendTitolo();
+	String info();
+	String titleSong();
+	String artistSong();
+	String albumSong();
+	String genreSong();
+	String yearSong();
+	String composerSong();
+	String trackSong();
+	String ratingSong();
+	String vote();
+	String export();
+	String statisticL();
+	String editProfileCheck();
+	String name();
+	String surname();
+	String nation();
+	String sex();
+	String editProfileLabelCpassword();
+	String aboutMe();
+	String statNetmus();
+	String statNum();
+	String statPref();
+	String statSongPref();
+	String statPrefNetmus();
+	String statClose();
+	
 	}

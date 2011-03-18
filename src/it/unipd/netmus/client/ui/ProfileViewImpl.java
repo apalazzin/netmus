@@ -133,6 +133,29 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label stat_preferred;
    @UiField Label stat_preferreds;
    @UiField Label stat_preferredn;
+   @UiField Label info_text;
+   @UiField Label title_song;
+   @UiField Label artist_song;
+   @UiField Label album_song;
+   @UiField Label genre_song;
+   @UiField Label year_song;
+   @UiField Label composer_song;
+   @UiField Label track_song;
+   @UiField Label rating_song;
+   @UiField Label vote;
+   @UiField Label export;
+   @UiField Label statisticL;
+   @UiField Label name_user;
+   @UiField Label surname;
+   @UiField Label nation;
+   @UiField Label sex;
+   @UiField Label about_me;
+   @UiField Label stat_netmus;
+   @UiField Label stat_num;
+   @UiField Label stat_pref;
+   @UiField Label stat_song_pref;
+   @UiField Label stat_pref_netmus;
+   @UiField Label friends_titolo_text;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -409,7 +432,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  last_selected=0;
              }
              play_youtube.setUrl("images/play.png");
-
+             System.out.println("TEST: " + selected_song.autore + " " +selected_song.titolo + " " +selected_song.album);
+             
              global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
              showStar(rating);
              
@@ -760,6 +784,32 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            main_panel.getElement().setId("main_panel");
            country = (SelectElement) SelectElement.as(country_container.getElement().getChild(0));
            
+           friends_titolo_text.setText(myConstants.friendTitolo());
+           info_text.setText(myConstants.info());
+           title_song.setText(myConstants.titleSong());
+           artist_song.setText(myConstants.artistSong());
+           album_song.setText(myConstants.albumSong());
+           genre_song.setText(myConstants.genreSong());
+           year_song.setText(myConstants.yearSong());
+           composer_song.setText(myConstants.composerSong());
+           track_song.setText(myConstants.trackSong());
+           rating_song.setText(myConstants.ratingSong());
+           vote.setText(myConstants.vote());
+           export.setText(myConstants.export());
+           statisticL.setText(myConstants.statisticL());
+           edit_profile_check.setText(myConstants.editProfileCheck());
+           name_user.setText(myConstants.name());
+           surname.setText(myConstants.surname());
+           nation.setText(myConstants.nation());
+           sex.setText(myConstants.sex());
+           edit_profile_labelCpassword.setText(myConstants.editProfileLabelCpassword());
+           about_me.setText(myConstants.aboutMe());
+           stat_netmus.setText(myConstants.statNetmus());
+           stat_num.setText(myConstants.statNum());
+           stat_pref.setText(myConstants.statPref());
+           stat_song_pref.setText(myConstants.statSongPref());
+           stat_pref_netmus.setText(myConstants.statPrefNetmus());
+           stat_close.setText(myConstants.statClose());
            
 
    }
@@ -1091,7 +1141,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
        
        final Label text = new Label();
-       text.setText(myConstants. confirmDelete() + "\n\"" + playlist_title.getText() + " \"?");
+       text.setText(myConstants.confirmDelete() + "\n\"" + playlist_title.getText() + " \"?");
        text.getElement().getStyle().setWidth(240, Style.Unit.PX);
        text.getElement().getStyle().setProperty("textAlign", "left");
 

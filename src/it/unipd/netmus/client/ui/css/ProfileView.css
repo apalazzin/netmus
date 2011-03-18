@@ -1193,10 +1193,17 @@ height: 30px;
 .starG {
 	
 	height: 14px;
-		
+	margin-right: 3px;
 	}
 
-
+.starsG {
+	
+	font-size: 12px;
+	font-family: Verdana;
+	margin-right: 15px;
+	
+	}
+	
 .statistics {
 	
 	
@@ -1274,6 +1281,7 @@ height: 30px;
 	font-weight: bold;
 	color: #FFFFFF;
 	
+	
 	}
 	
 .statistics_data {
@@ -1282,7 +1290,7 @@ height: 30px;
 	font-size: 12px;
 	font-weight: bold;
 	color: #37A6EB;
-	
+	margin-left: 10px;
 	}
 	
 

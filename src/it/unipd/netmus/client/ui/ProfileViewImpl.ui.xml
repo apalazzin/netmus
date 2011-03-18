@@ -33,7 +33,7 @@
 
 				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
 	
-				<g:HTMLPanel ui:field="friends_titolo" styleName="{style.title}"><span>UTENTI NETMUS</span></g:HTMLPanel>					
+				<g:HTMLPanel ui:field="friends_titolo" styleName="{style.title}"><span><g:Label ui:field="friends_titolo_text">UTENTI NETMUS</g:Label></span></g:HTMLPanel>					
 				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
 				</g:HTMLPanel>
 				
@@ -61,7 +61,7 @@
 				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
 				
 				
-				<g:HTMLPanel ui:field="info" styleName="{style.info}">Nessun brano in ascolto.</g:HTMLPanel>
+				<g:HTMLPanel ui:field="info" styleName="{style.info}"><g:Label ui:field="info_text">Nessun brano in ascolto</g:Label></g:HTMLPanel>
 				<g:Image ui:field="switch_list" url="images/switch_sx_on.png" styleName="{style.switch_list}"></g:Image>
 				<g:Image ui:field="switch_cover" url="images/switch_dx_off.png" styleName="{style.switch_cover}"></g:Image>
 				
@@ -107,21 +107,22 @@
 						
 						
 						<g:HTMLPanel ui:field="song_fields" styleName="{style.song_fields}">
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Titolo:&nbsp;</g:Label><g:Label ui:field="song_title"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Autore:&nbsp;</g:Label><g:Label ui:field="song_artist"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Album:&nbsp;</g:Label><g:Label ui:field="song_album"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Genere:&nbsp;</g:Label><g:Label ui:field="song_genre"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Anno:&nbsp;</g:Label><g:Label ui:field="song_year"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Compos.:&nbsp;</g:Label><g:Label ui:field="song_composer"></g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel><g:Label styleName="{style.song_label}">Traccia:&nbsp;</g:Label><g:Label ui:field="song_track"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="title_song" styleName="{style.song_label}">Titolo:</g:Label><g:Label ui:field="song_title"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="artist_song" styleName="{style.song_label}">Autore:</g:Label><g:Label ui:field="song_artist"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="album_song" styleName="{style.song_label}">Album:</g:Label><g:Label ui:field="song_album"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="genre_song" styleName="{style.song_label}">Genere:</g:Label><g:Label ui:field="song_genre"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="year_song" styleName="{style.song_label}">Anno:</g:Label><g:Label ui:field="song_year"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="composer_song" styleName="{style.song_label}">Compos.:</g:Label><g:Label ui:field="song_composer"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="track_song" styleName="{style.song_label}">Traccia:</g:Label><g:Label ui:field="song_track"></g:Label></g:HorizontalPanel>
 						<g:HTMLPanel ui:field="classificaG" styleName="{style.ranking_global}">
-							<span style="font-size: 12px; font-family: Verdana; margin-right: 15px;">Classifica:</span>
+							<g:HorizontalPanel> 
+							<g:HTMLPanel styleName="{style.starsG}"><g:Label ui:field="rating_song">Classifica:</g:Label></g:HTMLPanel>
 							<g:Image ui:field="starG1" styleName="{style.starG}" url="images/starbw.png"/>
 							<g:Image ui:field="starG2" styleName="{style.starG}" url="images/starbw.png"/>
 							<g:Image ui:field="starG3" styleName="{style.starG}" url="images/starbw.png"/>
 							<g:Image ui:field="starG4" styleName="{style.starG}" url="images/starbw.png"/>
 							<g:Image ui:field="starG5" styleName="{style.starG}" url="images/starbw.png"/>
-				
+							</g:HorizontalPanel>
 
 						</g:HTMLPanel>
 				
@@ -158,17 +159,17 @@
 				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
 				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
 				
-				<span style="position: absolute; top: -20px; left: 0px; font-size: 11px; font-family: Verdana; font-weight: bold; width: 150px;">Il tuo voto:</span>
+				<span style="position: absolute; top: -20px; left: 0px; font-size: 11px; font-family: Verdana; font-weight: bold; width: 150px;"><g:Label ui:field="vote">Il tuo voto:</g:Label></span>
 				<div style="position: absolute; bottom: -3px; left: 0px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
 				
 				</g:HTMLPanel>
 				
 
 				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
-				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;">Esporta Lista</span>
+				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="export">Esporta Lista</g:Label></span>
 				
 				<g:Image ui:field="statistics_open" styleName="{style.stats2}" url="images/statistiche.png"/>
-				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;">Statistiche</span>
+				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="statisticL">Statistiche</g:Label></span>
 				
 			
 			
@@ -197,10 +198,10 @@
 			   		<g:VerticalPanel ui:field="edit_profile_vl">
 						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Password:</g:Label></g:HorizontalPanel>
 						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nickname:</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nome:</g:Label></g:HorizontalPanel>
-				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Cognome:</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nazionalità:</g:Label></g:HorizontalPanel>
-						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Sesso:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="name_user" styleName="{style.edit_profile_label}">Nome:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="surname"  styleName="{style.edit_profile_label}">Cognome:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="nation" styleName="{style.edit_profile_label}">Nazionalità:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="sex" styleName="{style.edit_profile_label}">Sesso:</g:Label></g:HorizontalPanel>
 			   		</g:VerticalPanel>
 			   		</g:HTMLPanel>
 			   		
@@ -478,7 +479,7 @@
 			   		<g:HTMLPanel styleName="{style.edit_profile_conf}">
 			   		<g:VerticalPanel ui:field="edit_profile_vc">
 				   		<g:HorizontalPanel styleName="{style.edit_profile_row}">
-				   			<g:Label ui:field="edit_profile_labelCpassword" styleName="{style.edit_profile_label}"> Conferma:&nbsp;&nbsp;&nbsp;</g:Label>
+				   			<g:Label ui:field="edit_profile_labelCpassword" styleName="{style.edit_profile_label}"> Conferma:</g:Label>
 				   			<g:Label  ui:field="edit_profile_cpassword" styleName="{style.edit_profile_labelf}"></g:Label>
 				   		</g:HorizontalPanel>
 				   	</g:VerticalPanel>
@@ -487,7 +488,7 @@
 			   	
 					<g:HTMLPanel ui:field="edit_profile_about" styleName="{style.edit_profile_about}">
 			   			<g:VerticalPanel >
-			   			<g:Label styleName="{style.edit_profile_label}">Informazioni su di me:</g:Label>
+			   			<g:Label ui:field="about_me" styleName="{style.edit_profile_label}">Informazioni su di me:</g:Label>
 			   			<g:HTMLPanel  ui:field="edit_profile_aboutme" styleName="{style.edit_profile_aboutT}"></g:HTMLPanel>
 			   			</g:VerticalPanel>
 					</g:HTMLPanel>			   	
@@ -505,21 +506,21 @@
 						   	<g:HTMLPanel ui:field="statistics" styleName="{style.statistics}">
 						   	
 						   	<g:VerticalPanel>
-			   					<g:Label styleName="{style.statistics_title}">Statistiche Netmus</g:Label>
+			   					<g:Label ui:field="stat_netmus" styleName="{style.statistics_title}">Statistiche Netmus</g:Label>
 			   					<g:HorizontalPanel>
-			   						<g:Label styleName="{style.statistics_label}">Numero di brani:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_num" styleName="{style.statistics_label}">Numero di brani:</g:Label>
 			   						<g:Label ui:field="stat_tracks" styleName="{style.statistics_data}">100</g:Label>
 			   					</g:HorizontalPanel>
 			   					<g:HorizontalPanel>
-			   						<g:Label styleName="{style.statistics_label}">Artista preferito:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_pref" styleName="{style.statistics_label}">Artista preferito:</g:Label>
 			   						<g:Label ui:field="stat_preferred" styleName="{style.statistics_data}">Tokio Hotel</g:Label>
 			   					</g:HorizontalPanel>
 			   					<g:HorizontalPanel>
-			   						<g:Label styleName="{style.statistics_label}">Canzone preferita:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_song_pref" styleName="{style.statistics_label}">Canzone preferita:</g:Label>
 			   						<g:Label ui:field="stat_preferreds" styleName="{style.statistics_data}">Durch den Monzun</g:Label>
 			   					</g:HorizontalPanel>
 			   					<g:HorizontalPanel>
-			   						<g:Label styleName="{style.statistics_label}">Preferita in Netmus:&nbsp;&nbsp;</g:Label>
+			   						<g:Label ui:field="stat_pref_netmus"  styleName="{style.statistics_label}">Preferita in Netmus:</g:Label>
 			   						<g:Label ui:field="stat_preferredn" styleName="{style.statistics_data}">Rette Micht</g:Label>
 			   					</g:HorizontalPanel>
 			   					<g:Button ui:field="stat_close" styleName="{style.statistics_close}">chiudi</g:Button>
