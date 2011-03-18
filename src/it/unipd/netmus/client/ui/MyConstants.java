@@ -49,6 +49,9 @@ public interface MyConstants extends Constants {
 	String loadProfileError();
 	String generatePDFError();
 	String deleteProfileError();
+	String noVoteForThisUserError();
+	String noVoteError();
+	String voteNullSongError();
 	
 	String friendTitolo();
 	String info();
