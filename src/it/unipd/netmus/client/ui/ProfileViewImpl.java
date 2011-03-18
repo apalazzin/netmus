@@ -1335,6 +1335,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
        popup.setVisible(true);
        popup_yes.setVisible(true);
+       popup_no.setVisible(true);
        
    }
 
