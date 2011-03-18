@@ -29,6 +29,7 @@ public interface MyConstants extends Constants {
     String accountGoogleLogin();
 	String leavingProfilePage();
 	String confirmDelete();
+	String confirmDeleteProfile();
 	String yes();
 	String no();
 	String downloadPDF();

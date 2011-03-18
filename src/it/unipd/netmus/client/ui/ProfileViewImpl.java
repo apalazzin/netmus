@@ -191,6 +191,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image switch_list;
    @UiField Image loading;
    @UiField Image pdf;
+   @UiField Image edit_profile_clear;
    
    @UiField Button edit_profile_check;
    
@@ -1111,6 +1112,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             closePlaylist();
             popup.remove(popup_text);
             popup.setVisible(false); 
+            popup_yes.setVisible(false);
+            popup_no.setVisible(false);
+
         }});
        
        rm_popno = popup_no.addClickHandler(new ClickHandler() {
@@ -1118,7 +1122,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         @Override
         public void onClick(ClickEvent event) {
            popup.remove(popup_text);
-           popup.setVisible(false); 
+           popup.setVisible(false);
+           popup_yes.setVisible(false);
+           popup_no.setVisible(false);
+
         }});
        
        
@@ -1272,6 +1279,70 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    void handleMouseOverEditProfileChiudi(MouseOverEvent e) {
        edit_profile_close.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
+
+   
+   @UiHandler("edit_profile_clear")
+   void handleMouseEditProfileClear(ClickEvent e) {
+      
+       final HorizontalPanel popup_text = new HorizontalPanel();
+       popup_text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+       
+       final Label text = new Label();
+       text.setText(myConstants. confirmDeleteProfile());
+       text.getElement().getStyle().setWidth(240, Style.Unit.PX);
+       text.getElement().getStyle().setProperty("textAlign", "left");
+
+       popup_text.add(text);
+       popup_text.getElement().getStyle().setProperty("fontFamily", "Arial");
+       popup_text.getElement().getStyle().setFontSize(10, Style.Unit.PX);
+       popup_text.getElement().getStyle().setFontWeight(Style.FontWeight.BOLD);
+       popup_text.getElement().getStyle().setColor("#FF0000");
+       popup_text.getElement().getStyle().setProperty("textAlign", "left");
+       
+        
+       popup.add(popup_text);
+       
+       popup_yes.setText(myConstants.yes());
+       popup_no.setText(myConstants.no());
+       
+       if(rm_popyes!=null) rm_popyes.removeHandler();
+       if(rm_popno!=null) rm_popno.removeHandler();
+       
+       rm_popyes = popup_yes.addClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            
+            listener.deleteProfile();
+            popup.remove(popup_text);
+            popup.setVisible(false);
+            popup_yes.setVisible(false);
+            popup_no.setVisible(false);
+
+        }});
+       
+       rm_popno = popup_no.addClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+           popup.remove(popup_text);
+           popup.setVisible(false);
+           popup_yes.setVisible(false);
+           popup_no.setVisible(false);
+
+        }});
+       
+       
+       popup.setVisible(true);
+       popup_yes.setVisible(true);
+       
+   }
+
+   @UiHandler("edit_profile_clear")
+   void handleMouseOverEditProfileClear(MouseOverEvent e) {
+       edit_profile_clear.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    }
+
    
    
    @UiHandler("account_button")
@@ -1451,7 +1522,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         public void onClick(ClickEvent event) {
             listener.deleteSong(selected_song.autore, selected_song.titolo, selected_song.album);
             popup.remove(popup_text);
-            popup.setVisible(false); 
+            popup.setVisible(false);
+            popup_yes.setVisible(false);
+            popup_no.setVisible(false);
+
         }});
        
        rm_popno = popup_no.addClickHandler(new ClickHandler() {
@@ -1459,7 +1533,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         @Override
         public void onClick(ClickEvent event) {
            popup.remove(popup_text);
-           popup.setVisible(false); 
+           popup.setVisible(false);
+           popup_yes.setVisible(false);
+           popup_no.setVisible(false);
+
         }});
        
        
@@ -3522,6 +3599,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
          public void onClick(ClickEvent event) {
              popup.remove(popup_text);
              popup.setVisible(false); 
+             popup_yes.setVisible(false);
+             popup_no.setVisible(false);
+
          }});
                 
         popup.setVisible(true);
