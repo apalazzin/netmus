@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.util.List;
 
@@ -21,9 +20,6 @@ public interface LibraryServiceAsync {
 
     void addPlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
-
-    void getPlaylist(String user, String playlist_name,
-            AsyncCallback<List<SongSummaryDTO>> callback);
 
     void moveSongInPlaylist(String user, String playlist_name, int from,
             int to, AsyncCallback<Boolean> callback);
