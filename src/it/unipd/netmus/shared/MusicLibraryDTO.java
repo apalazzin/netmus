@@ -24,10 +24,50 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 public class MusicLibraryDTO implements Serializable {
+    
+    // ---------------------------------------------------//
+    // ----------Classe per gestire PLAILISTS-------------//
+    static public class PlaylistDTO implements Serializable {
+        
+        private String name;
+        
+        List<String> song_list;
+        
+        public PlaylistDTO() {
+            this.name = "";
+            this.song_list = new ArrayList<String>();
+        }
+        
+        public PlaylistDTO(String name) {
+            this.name = name;
+            this.song_list = new ArrayList<String>();
+        }
+        
+        public PlaylistDTO(String name, List<String> song_list) {
+            this.name = name;
+            this.song_list = song_list;
+        }
+
+        public List<String> getSongList() {
+            return song_list;
+        }
+
+        public void setSongList(List<String> song_list) {
+            this.song_list = song_list;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 
     private Map<String, SongSummaryDTO> songs;
 
-    private List<String> playlists;
+    private List<PlaylistDTO> playlists;
     
     private String preferred_artist;
 
@@ -37,14 +77,14 @@ public class MusicLibraryDTO implements Serializable {
 
     public MusicLibraryDTO() {
         this.songs = new HashMap<String, SongSummaryDTO>();
-        this.playlists = new ArrayList<String>();
+        this.playlists = new ArrayList<PlaylistDTO>();
         this.preferred_artist = "";
         this.most_popular_song = "";
         this.most_popular_song_for_this_user = "";
     }
 
     public MusicLibraryDTO(Map<String, SongSummaryDTO> m,
-            List<String> playlists) {
+            List<PlaylistDTO> playlists) {
         setSongs(m);
         setPlaylists(playlists);
         this.preferred_artist = "";
@@ -60,25 +100,46 @@ public class MusicLibraryDTO implements Serializable {
         this.songs = songs;
     }
     
-    public void addPlaylist(String playlist_name) {
-        playlists.add(playlist_name);
+    public void addPlaylist(PlaylistDTO playlist) {
+        playlists.add(playlist);
+    }
+    
+    public void addSongToPlaylist(String playlist_name, String song_id) {
+        for (PlaylistDTO tmp : playlists) {
+            if (tmp.getName().equals(playlist_name)) {
+                tmp.getSongList().add(song_id);
+                return;
+            }
+        }
+    }
+    
+    public void removeSongFromPlaylist(String playlist_name, String song_id) {
+        for (PlaylistDTO tmp : playlists) {
+            if (tmp.getName().equals(playlist_name)) {
+                tmp.getSongList().remove(song_id);
+                return;
+            }
+        }
     }
 
     public int getLibrarySize() {
         return songs.size();
     }
 
-    public List<String> getPlaylists() {
+    public List<PlaylistDTO> getPlaylists() {
         return playlists;
     }
     
     public void removePlaylist(String playlist_name) {
-        if (playlists.contains(playlist_name)) {
-            playlists.remove(playlist_name);
+        for (PlaylistDTO tmp : playlists) {
+            if (tmp.getName().equals(playlist_name)) {
+                playlists.remove(tmp);
+                return;
+            }
         }
     }
 
-    public void setPlaylists(List<String> playlists) {
+    public void setPlaylists(List<PlaylistDTO> playlists) {
         this.playlists = playlists;
     }
 

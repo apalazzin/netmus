@@ -4,6 +4,7 @@ import it.unipd.netmus.server.utils.cache.CacheSupport;
 import it.unipd.netmus.server.utils.cache.Cacheable;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.MusicLibraryDTO;
+import it.unipd.netmus.shared.MusicLibraryDTO.PlaylistDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.io.Serializable;
@@ -34,12 +35,16 @@ import com.google.code.twig.annotation.Parent;
  * 
  */
 
-@SuppressWarnings("serial")
+
 public class MusicLibrary implements Serializable, Cacheable {
+
+    private static final long serialVersionUID = 6833302154286903936L;
 
     // ---------------------------------------------------//
     // ----------Classe per gestire PLAILISTS-------------//
     static private class Playlist implements Serializable, Cacheable {
+
+        private static final long serialVersionUID = 8384098475154741660L;
 
         static void deletePlaylist(Playlist p) {
             ODF.get().storeOrUpdate(p);
@@ -247,7 +252,7 @@ public class MusicLibrary implements Serializable, Cacheable {
         return owner;
     }
 
-    public List<String> getPlaylists() {
+    public List<String> getPlaylistsNames() {
         List <String> list_names = new ArrayList<String>();
         
         for (String id : this.playlists) {
@@ -358,7 +363,7 @@ public class MusicLibrary implements Serializable, Cacheable {
 
             // remove song from playlists
             for (String tmp : this.playlists) {
-                Playlist playlist = getPlaylist(tmp); 
+                Playlist playlist = getPlaylistFromId(tmp); 
                 playlist.removeSong(song_id);
             }
             
@@ -401,7 +406,11 @@ public class MusicLibrary implements Serializable, Cacheable {
             
         }
 
-        List<String> playlists = this.getPlaylists();
+        List<PlaylistDTO> playlists = new ArrayList<PlaylistDTO>();
+        for (String tmp : this.playlists) {
+            Playlist p = getPlaylistFromId(tmp);
+            playlists.add(new PlaylistDTO(p.getName(),p.getSongs()));
+        }
         
         MusicLibraryDTO library = new MusicLibraryDTO(map, playlists);
         

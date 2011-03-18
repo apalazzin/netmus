@@ -18,6 +18,7 @@ import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
 import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.FieldVerifier;
+import it.unipd.netmus.shared.MusicLibraryDTO.PlaylistDTO;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 import it.unipd.netmus.shared.UserCompleteDTO;
@@ -25,7 +26,6 @@ import it.unipd.netmus.shared.exception.LoginException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -80,10 +80,12 @@ public class ProfileActivity extends AbstractActivity implements
      * gia' occupato, ed aggiorna la grafica se ha successo
      */
     @Override
-    public void addPlaylist(final String playlist_name) {
+    public void addPlaylist(String playlist_name) {
 
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
         client_factory.getProfileView().startLoading();
-        library_service_svc.addPlaylist(current_user.getUser(), playlist_name,
+        library_service_svc.addPlaylist(current_user.getUser(), cleared_playlist_name,
                 new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
@@ -96,26 +98,26 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Boolean result) {
                         if (result) {
                             current_user.getMusicLibrary().addPlaylist(
-                                    playlist_name);
-                            client_factory.getProfileView().paintPlaylist(
-                                    getPlaylistList());
+                                    new PlaylistDTO(cleared_playlist_name));
+                            setPlaylistList();
                         }
                         client_factory.getProfileView().stopLoading();
                     }
                 });
-        // clientFactory.getProfileView().addToPlaylists(title);
     }
 
     /**
      * Aggiunge song alla playlist e restituisce true in caso di successo
      */
     @Override
-    public void addToPLaylist(String playlist, final String artist,
+    public void addToPLaylist(String playlist_name, final String artist,
             final String title, final String album) {
 
         client_factory.getProfileView().startLoading();
 
-        library_service_svc.addSongToPlaylist(current_user.getUser(), playlist,
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
+        library_service_svc.addSongToPlaylist(current_user.getUser(), cleared_playlist_name,
                 title, artist, album, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
@@ -126,9 +128,12 @@ public class ProfileActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if (result)
+                        if (result) {
                             client_factory.getProfileView().addToPLaylist(
                                     artist, title, album);
+                            current_user.getMusicLibrary().addSongToPlaylist(cleared_playlist_name, FieldVerifier.generateSongId(title, artist, album));
+                            setPlaylistList();
+                        }
                         client_factory.getProfileView().stopLoading();
                     }
                 });
@@ -138,11 +143,14 @@ public class ProfileActivity extends AbstractActivity implements
      * Rimuove dal DB una playlist, e se ha successo, aggiorna la grafica.
      */
     @Override
-    public void deletePlaylist(final String playlist_name) {
+    public void deletePlaylist(String playlist_name) {
 
         client_factory.getProfileView().startLoading();
+        
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
         library_service_svc.removePlaylist(current_user.getUser(),
-                playlist_name, new AsyncCallback<Boolean>() {
+                cleared_playlist_name, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
@@ -154,25 +162,23 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Boolean result) {
                         if (result) {
                             current_user.getMusicLibrary().removePlaylist(
-                                    playlist_name);
-                            client_factory.getProfileView().paintPlaylist(
-                                    getPlaylistList());
+                                    cleared_playlist_name);
+                            setPlaylistList();
                         }
                         client_factory.getProfileView().stopLoading();
                     }
                 });
-        // clientFactory.getProfileView().addToPlaylists(title);
     }
 
     /**
      * Elimina la canzone
      */
     @Override
-    public void deleteSong(final String autore, final String titolo,
+    public void deleteSong(final String artist, final String title,
             final String album) {
 
         client_factory.getProfileView().startLoading();
-        song_service_svc.deleteSong(current_user.getUser(), autore, titolo,
+        song_service_svc.deleteSong(current_user.getUser(), artist, title,
                 album, new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
@@ -185,9 +191,16 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onSuccess(Boolean result) {
                         // una volta eliminata dal database la elimino anche
                         // sulla view
-                        if (result)
-                            client_factory.getProfileView().deleteSong(autore,
-                                    titolo, album);
+                        if (result) {
+                            client_factory.getProfileView().deleteSong(artist,
+                                    title, album);
+                            String id = FieldVerifier.generateSongId(title, artist, album);
+                            current_user.getMusicLibrary().getSongs().remove(id);
+                            for (PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+                                current_user.getMusicLibrary().removeSongFromPlaylist(tmp.getName(), id);
+                            }
+                            setPlaylistList();
+                        }
                         client_factory.getProfileView().stopLoading();
                     }
                 });
@@ -320,7 +333,19 @@ public class ProfileActivity extends AbstractActivity implements
      */
     public String[] getPlaylistList() {
 
-        List<String> playlists = current_user.getMusicLibrary().getPlaylists();
+        List<String> playlists = new ArrayList<String>();
+        for (PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+            int real_size = 0;
+            for (String tmp2 : tmp.getSongList()) {
+                SongSummaryDTO song = current_user.getMusicLibrary().getSongs().get(tmp2);
+                if (song != null) {
+                    if (!song.getTitle().equals("")) {
+                        real_size++;
+                    }
+                }
+            }
+            playlists.add(tmp.getName() + " (" + real_size + ")");
+        }
         String[] playlist_array = new String[playlists.size()];
         playlist_array = playlists.toArray(playlist_array);
 
@@ -328,44 +353,35 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Fa disegnare alla \co{ProfileView} la lista brani di una playlist tramite
-     * il metodo \emph{paintPlaylistSongs}.
+     * Fa disegnare alla ProfileView la lista brani di una playlist tramite
+     * il metodo paintPlaylistSongs.
      */
-    public List<String> getPlaylistSongs(String playlist_name) {
+    public void getPlaylistSongs(String playlist_name) {
 
         client_factory.getProfileView().startLoading();
-        library_service_svc.getPlaylist(current_user.getUser(), playlist_name,
-                new AsyncCallback<List<SongSummaryDTO>>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        client_factory.getProfileView()
-                        .showError(my_constants.getPlaylistError());
-                        client_factory.getProfileView().stopLoading();
-                    }
-
-                    @Override
-                    public void onSuccess(List<SongSummaryDTO> playlist_songs) {
-
-                        List<String> song_list = new ArrayList<String>();
-                        Iterator<SongSummaryDTO> it = playlist_songs.iterator();
-                        while (it.hasNext()) {
-                            SongSummaryDTO song = it.next();
+        
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
+        List<String> song_list = new ArrayList<String>();
+        
+        for (PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+            if (tmp.getName().equals(cleared_playlist_name)) {
+                for (String tmp2 : tmp.getSongList()){
+                    SongSummaryDTO song = current_user.getMusicLibrary().getSongs().get(tmp2);
+                    if (song != null) {
+                        if (!song.getTitle().equals("")) {
                             song_list.add(song.getArtist());
                             song_list.add(song.getTitle());
                             song_list.add(song.getAlbum());
                         }
-                        client_factory.getProfileView().paintPlaylistSongs(
-                                song_list);
-                        client_factory.getProfileView().stopLoading();
                     }
-                });
-
-        List<String> lista_canzoni = new ArrayList<String>();
-
-        // RIEMPIRE LA LISTA CON LA SEQUENZA: autore1, titolo1, album1, autore2,
-        // titolo2, album2, autoreN, titoloN, albumN,...
-        return lista_canzoni;
-
+                }  
+            }
+        }
+        
+        client_factory.getProfileView().paintPlaylistSongs(
+                song_list);
+        client_factory.getProfileView().stopLoading();
     }
 
     /**
@@ -626,13 +642,15 @@ public class ProfileActivity extends AbstractActivity implements
      * Rimuovi il brano dalla playlist.
      */
     @Override
-    public void removeFromPLaylist(String playlist, final String artist,
+    public void removeFromPLaylist(final String playlist_name, final String artist,
             final String title, final String album) {
 
         client_factory.getProfileView().startLoading();
         
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
         library_service_svc.removeSongFromPlaylist(current_user.getUser(),
-                playlist, title, artist, album , new AsyncCallback<Boolean>() {
+                cleared_playlist_name, title, artist, album , new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
@@ -642,9 +660,17 @@ public class ProfileActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if (result)
-                            client_factory.getProfileView().removeFromPlaylist(
-                                    artist, title, album);
+                        if (result) {
+                            client_factory.getProfileView().removeFromPlaylist(artist, title, album);
+                            
+                            for (PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+                                if (tmp.getName().equals(cleared_playlist_name)) {
+                                    tmp.getSongList().remove(FieldVerifier.generateSongId(title, artist, album));
+                                }
+                            }
+                            
+                            setPlaylistList();
+                        }
                         client_factory.getProfileView().stopLoading();
                     }
                 });
@@ -656,7 +682,6 @@ public class ProfileActivity extends AbstractActivity implements
      */
     @Override
     public void setPlaylistList() {
-
         client_factory.getProfileView().paintPlaylist(getPlaylistList());
     }
 
@@ -664,8 +689,11 @@ public class ProfileActivity extends AbstractActivity implements
      * Aggiorna la lista di canzoni della playlist
      */
     @Override
-    public void setPlaylistSongs(String titolo_playlist) {
-        getPlaylistSongs(titolo_playlist);
+    public void setPlaylistSongs(String playlist_name) {   
+        
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
+        getPlaylistSongs(cleared_playlist_name);
     }
 
     /**
@@ -712,7 +740,7 @@ public class ProfileActivity extends AbstractActivity implements
             
         String cover = "";
         
-        song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+        song_service_svc.getCoverImage(song, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
@@ -721,22 +749,15 @@ public class ProfileActivity extends AbstractActivity implements
             }
 
             @Override
-            public void onSuccess(SongDTO song_dto) {
+            public void onSuccess(String cover) {
                 
-              //salva le info caricate in modo che siano sempre disponibili nel client
-                
-                
-                String cover = "images/test_cover.jpg";
-                if (!song_dto.getAlbumCover().equals("")) {
-                    cover = song_dto.getAlbumCover();
+                //salva le info caricate in modo che siano sempre disponibili nel client
+                if (cover.equals("")) {
+                    cover = "images/test_cover.jpg";
                 }
-                
-                song_dto.setAlbumCover(cover);
                 
                 img.getElement().getStyle()
                         .setBackgroundImage("url('" + cover + "')");
-
-                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
 
                 client_factory.getProfileView().stopLoading();
                 return;
@@ -959,7 +980,7 @@ public class ProfileActivity extends AbstractActivity implements
                         client_factory.getProfileView().paintCatalogo(tmp);
                         client_factory.getProfileView().sortCatalogo();
                         
-                        profileView.paintPlaylist(getPlaylistList());
+                        setPlaylistList();
                         setFriendList();
                         profileView.setUser(user);
                         profileView.setInfo(getSongInfo());
@@ -1122,4 +1143,11 @@ public class ProfileActivity extends AbstractActivity implements
         });
     }
 	
+	private String clearPlaylistName(String name) {
+	    if (name.lastIndexOf('(') > 0) {
+	        name = name.substring(0, name.lastIndexOf('(')-1);
+	        name = name.trim();
+	    }
+	    return name;
+	}
 }

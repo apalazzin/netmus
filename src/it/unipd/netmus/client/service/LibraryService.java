@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.SongSummaryDTO;
 
 import java.util.List;
 
@@ -21,8 +20,6 @@ public interface LibraryService extends RemoteService {
 
     public boolean addSongToPlaylist(String user, String playlist_name,
             String title, String artist, String album);
-
-    public List<SongSummaryDTO> getPlaylist(String user, String playlist_name);
 
     public boolean moveSongInPlaylist(String user, String playlist_name,
             int from, int to);
