@@ -8,9 +8,11 @@ import it.unipd.netmus.server.utils.velocity.VelocityEngineManager;
 import it.unipd.netmus.shared.SongDTO;
 
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.velocity.Template;
@@ -151,7 +153,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public String generatePDF(String user) {
+    public String generateDoc(String user) {
         //generate the document
         VelocityEngineManager.init();
         VelocityContext context = new VelocityContext();
@@ -224,12 +226,12 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         //create the doc on google docs
         String newDocId = "<error>";
         try {
-            String title = "library of " + user;
+            String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date());
+            String title = "Library of " + user + " ("+ date+")";
             String body = writer.toString();
             newDocId = GdataManager.manager().createNewDocument(title, body).getDocId();
         } catch (Exception e) {
-            e.printStackTrace();
-            return "error interfacing with Google Docs";
+                throw (RuntimeException) e;
         }
 
         //return the id
