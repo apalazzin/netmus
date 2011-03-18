@@ -16,6 +16,7 @@ import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.MusicLibraryDTO.PlaylistDTO;
 import it.unipd.netmus.shared.SongDTO;
@@ -90,6 +91,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.addPlaylistError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -121,6 +123,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.addSongToPlaylistError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -152,6 +155,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.removePlaylistError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -180,6 +184,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.deleteSongError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -236,6 +241,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.editProfileError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -302,6 +308,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
                     .showError(my_constants.findRelatedUsersError());
+                client_factory.getProfileView().stopLoading();
             }
 
             @Override
@@ -419,6 +426,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
                     .showError(my_constants.getProfileViewError());
+                client_factory.getProfileView().stopLoading();
             }
 
             @Override
@@ -529,6 +537,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.getSongDTOError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -588,6 +597,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
                 .showError(my_constants.rateSongError());
+                client_factory.getProfileView().stopLoading();
             }
 
             @Override
@@ -618,6 +628,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.storeStatisticsError());
+                        client_factory.getProfileView().stopLoading();
                     }
                 });
                 
@@ -644,6 +655,7 @@ public class ProfileActivity extends AbstractActivity implements
                     public void onFailure(Throwable caught) {
                         client_factory.getProfileView()
                             .showError(my_constants.removeSongFromPlaylistError());
+                        client_factory.getProfileView().stopLoading();
                     }
 
                     @Override
@@ -733,6 +745,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
                     .showError(my_constants.getSongDTOError());
+                client_factory.getProfileView().stopLoading();
             }
 
             @Override
@@ -810,6 +823,7 @@ public class ProfileActivity extends AbstractActivity implements
                 public void onFailure(Throwable caught) {
                     client_factory.getProfileView()
                         .showError(my_constants.getSongDTOError());
+                    client_factory.getProfileView().stopLoading();
                 }
 
                 @Override
@@ -881,6 +895,7 @@ public class ProfileActivity extends AbstractActivity implements
                 } else {
                     client_factory.getProfileView()
                         .showError(my_constants.getSongDTOError());
+                    client_factory.getProfileView().stopLoading();
                 }
             }
 
@@ -933,6 +948,7 @@ public class ProfileActivity extends AbstractActivity implements
                                         public void onFailure(Throwable caught) {
                                             client_factory.getProfileView()
                                                 .showError(my_constants.storeStatisticsError());
+                                            
                                         }
                                     });
                                 }
@@ -1009,6 +1025,7 @@ public class ProfileActivity extends AbstractActivity implements
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
                     .showError(my_constants.generatePDFError());
+                client_factory.getProfileView().stopLoading();
             }
 
             @Override
@@ -1106,6 +1123,26 @@ public class ProfileActivity extends AbstractActivity implements
         
         return tmp;
 	}
+
+    @Override
+    public void deleteProfile() {
+        //DEVE ELIMINARE L'UTENTE
+        user_service_svc.deleteProfile(current_user.getUser(),
+                new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.deleteProfileError());
+                client_factory.getProfileView().stopLoading();
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                logout();
+                client_factory.getProfileView().closeEditProfile();
+                // refresh della view <- sempre con logout e onStop
+            }
+        });
+    }
 	
 	private String clearPlaylistName(String name) {
 	    if (name.lastIndexOf('(') > 0) {

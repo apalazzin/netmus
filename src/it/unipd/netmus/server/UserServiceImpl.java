@@ -27,8 +27,15 @@ public class UserServiceImpl extends RemoteServiceServlet implements
      */
     @Override
     public boolean deleteProfile(String user) {
-        // TODO Auto-generated method stub
-        return false;
+        try {
+            UserAccount current_user = UserAccount.load(user);
+            UserAccount.deleteUser(current_user);
+            
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     /**

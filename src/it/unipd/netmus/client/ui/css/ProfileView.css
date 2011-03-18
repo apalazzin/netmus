@@ -210,6 +210,7 @@
 
 .covers {
 	
+	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
    	-khtml-user-select: none;
@@ -228,6 +229,26 @@
 	
 	}
 
+.credits {
+	
+	position: relative;
+	left: -30px;
+	text-align: center;
+	width: 110%;
+	border: 0px solid #FF0000;
+	padding-top: 10px;
+	clear: both;
+	
+	}
+
+.credits_label {
+	
+	width: 100%;
+	font-family: Verdana;
+	font-size: 10px;
+	color: #45FF4E;
+	
+	}
 
 .editButton {
 	
@@ -293,9 +314,9 @@
 .edit_profile_about {
 	
 	text-align: left;
-	width: 80%px;
+	
 	border: 0px solid #FF0000;
-	padding-top: 15px;
+	padding-top: 5px;
 	clear: both;
 	
 	
@@ -343,14 +364,23 @@
 
 	
 .edit_profile_close {
-	
+
 	position: absolute;
 	
+	opacity: 0.5;
 	top: 15px;
 	left: 15px;
 	
 	
 	}
+	
+.edit_profile_clear {
+	
+	margin-left: 15px;
+	
+	
+	}
+	
 
 
 .edit_profile_check {
@@ -398,8 +428,8 @@
 	float: left;	
 	margin-top: 75px;
 	border: 0px solid #FF0000;
-	
-	
+	overflow: visible;
+	width: 140px;
 	}
 
 .edit_profile_conf {
@@ -408,6 +438,7 @@
 	float: left;	
 	margin-top: 75px;
 	border: 0px solid #FF0000;
+	
 	
 	
 	}

@@ -177,13 +177,14 @@
 	
 	
 			   	<g:HTMLPanel ui:field="edit_profile" styleName="{style.edit_profile}">
-				<g:Image ui:field="edit_profile_close" styleName="{style.edit_profile_close}" url="images/cross_red.png"/>
 				<g:Image ui:field="edit_profile_logo" styleName="{style.edit_profile_logo}" url="images/logo_netmus.png"/>
 			   	
+			   	<g:Image ui:field="edit_profile_close" styleName="{style.edit_profile_close}" url="images/close_silverT.png"/>
 			   	<g:HorizontalPanel styleName="{style.edit_profile_top}">
 			   		<g:HorizontalPanel styleName="{style.edit_profile_user}">
-			   			<g:Label ui:field="edit_profile_user" styleName="{style.edit_profile_labelu}"></g:Label>			   		
+			   			<g:Label ui:field="edit_profile_user" styleName="{style.edit_profile_labelu}"></g:Label>
 			   		</g:HorizontalPanel>
+			   		<g:Image ui:field="edit_profile_clear" styleName="{style.edit_profile_clear}" url="images/cross_red.png"/>
 			   	</g:HorizontalPanel>
 			   	
 				<g:HorizontalPanel styleName="{style.edit_profile_checkC}">
@@ -491,6 +492,10 @@
 			   			</g:VerticalPanel>
 					</g:HTMLPanel>			   	
 			   	
+			   	<g:HTMLPanel ui:field="credits" styleName="{style.credits}">
+			   			<g:Label styleName="{style.credits_label}">2011 &copy; Valter Texas Group &nbsp;-&nbsp;Netmus contact: valtertexasgroup@googlegroups.com</g:Label>
+			   			<g:Label styleName="{style.credits_label}">VT.G: Federico Baron, Cosimo Caputo, Simone Daminato, Daniele Lovato, Andrea Mandolo, Alberto Palazin, Giovanni Trezzi</g:Label>
+					</g:HTMLPanel>
 			   	
 				
 				</g:HTMLPanel>
