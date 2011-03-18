@@ -16,7 +16,6 @@ import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
-import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.MusicLibraryDTO.PlaylistDTO;
 import it.unipd.netmus.shared.SongDTO;
