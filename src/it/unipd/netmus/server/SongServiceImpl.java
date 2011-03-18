@@ -89,5 +89,15 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         
         return song_dto;
     }
+    
+    /**
+     * Restiruisce il link alla copertina dell'album della canzone data in input
+     */
+    @Override
+    public synchronized String getCoverImage(SongSummaryDTO song_summary_dto) {
+ 
+        return Album.getAlbumCoverLastFm(song_summary_dto.getAlbum(), song_summary_dto.getArtist());
+
+    }
 
 }
