@@ -492,6 +492,10 @@
 			   			</g:VerticalPanel>
 					</g:HTMLPanel>			   	
 			   	
+			   	<g:HTMLPanel ui:field="credits" styleName="{style.credits}">
+			   			<g:Label styleName="{style.credits_label}">2011 &copy; Valter Texas Group &nbsp;-&nbsp;Netmus contact: valtertexasgroup@googlegroups.com</g:Label>
+			   			<g:Label styleName="{style.credits_label}">VT.G: Federico Baron, Cosimo Caputo, Simone Daminato, Daniele Lovato, Andrea Mandolo, Alberto Palazin, Giovanni Trezzi</g:Label>
+					</g:HTMLPanel>
 			   	
 				
 				</g:HTMLPanel>
