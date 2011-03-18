@@ -129,6 +129,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label edit_profile_labelCpassword;   
    @UiField Label edit_profile_user;
    
+   @UiField Label stat_tracks;
+   @UiField Label stat_preferred;
+   @UiField Label stat_preferreds;
+   @UiField Label stat_preferredn;
+   
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
    @UiField HTMLPanel library_container;
@@ -155,6 +160,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel popup;
    @UiField HTMLPanel popup_fast;
    @UiField HTMLPanel country_container;
+   @UiField HTMLPanel statistics;
    
    @UiField Image play;
    @UiField Image play_youtube;
@@ -191,10 +197,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image switch_list;
    @UiField Image loading;
    @UiField Image pdf;
+   @UiField Image statistics_open;
    @UiField Image edit_profile_clear;
    
    @UiField Button edit_profile_check;
-   
+   @UiField Button stat_close;
    @UiField Button popup_yes;
    @UiField Button popup_no;
 
@@ -1601,6 +1608,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("pdf")
    void handleMouseOverPdf(MouseOverEvent e) {
        pdf.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   
+   @UiHandler("statistics_open")
+   void handleMouseClickStatisticsOpen(ClickEvent e) {
+       listener.setStats();
+   }
+   
+   @UiHandler("statistics_open")
+   void handleMouseOverStatisticsOpen(MouseOverEvent e) {
+       statistics_open.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
 
 ///////////////////////////////////////////////////////
@@ -3692,6 +3710,30 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             }     
         };
         timerHidden.schedule(200);
+    }
+
+
+
+    @Override
+    public void setStats(String num, String pref, String prefs, String prefn) {
+        
+        stat_tracks.setText(num);
+        stat_preferred.setText(pref);
+        stat_preferreds.setText(prefs);
+        stat_preferredn.setText(prefn);
+        
+        statistics.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        
+        stat_close.addClickHandler(new ClickHandler(){
+
+            @Override
+            public void onClick(ClickEvent event) {
+                
+                statistics.getElement().getStyle().setDisplay(Style.Display.NONE);
+                
+            }});
+        
+        
     } 
 }
 

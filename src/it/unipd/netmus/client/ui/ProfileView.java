@@ -172,13 +172,18 @@ public interface ProfileView extends IsWidget {
     * Ripeoduce la canzone precedente a catalogo
     *
     */
-   void playPrev();
-   
+   void playPrev();   
    /**
     * Chiude la finestra edit profile
     *
     */
    void closeEditProfile();
+   /**
+    * Imposta le statistiche dell'utente
+    *
+    */
+   void setStats(String string, String string2, String string3, String string4);
+
 
    public interface Presenter
    {
@@ -295,6 +300,11 @@ public interface ProfileView extends IsWidget {
      * @return 
        */
       void deleteProfile();
+      /**
+       *Imposta le statistiche nella view
+     * @return 
+       */
+      void setStats();
 
    }
 }

@@ -1149,4 +1149,20 @@ public class ProfileActivity extends AbstractActivity implements
 	    }
 	    return name;
 	}
+
+    @Override
+    public void setStats() {
+        // TODO Auto-generated method stub
+        // Deve restituire
+        // n um. di brani dell'utente  num
+        // artista preferito  pref
+        // canzone piu' votata dall'utente  prefs
+        // canzone che ha l'utente piu' votata in netmus  prefn
+        //
+        // TUTTE STRINGHE!
+        //
+        //client_factory.getprofileView().setStats(num, pref, prefs, prefn);
+        
+        client_factory.getProfileView().setStats("10", "Tokio Hotel", "Monsoon", "Rette Micht");
+    }
 }
