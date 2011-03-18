@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.sourceforge.htmlunit.corejs.javascript.ast.NewExpression;
+
 import com.google.gdata.client.docs.DocsService;
 import com.google.gdata.data.MediaContent;
 import com.google.gdata.data.PlainTextConstruct;
@@ -46,6 +48,8 @@ public class GdataManager {
             DocsService newClient = new DocsService("Document List Demo");
             newClient.setUserCredentials(USERNAME, PASSWORD);
             client = newClient;
+            client.setConnectTimeout(0);
+            client.setReadTimeout(0);
         }
         return client;
     }
@@ -87,6 +91,7 @@ public class GdataManager {
                 newEntry.setMediaSource(new MediaByteArraySource(content.getBytes(), "text/html"));
                 newEntry.updateMedia(true);
                 return newEntry;
+                
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

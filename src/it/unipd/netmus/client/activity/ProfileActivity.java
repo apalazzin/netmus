@@ -1012,9 +1012,8 @@ public class ProfileActivity extends AbstractActivity implements
                 client_factory.getProfileView().stopLoading();
                 pdf_created = true;
                 
-                Window.Location.assign(result);
-            } 
-            
+                Window.open(result, "_blank", "");
+            }
         });
 	}
 	
