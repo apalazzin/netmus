@@ -1025,11 +1025,11 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
 	@Override
-	public void exportPdf() {
+	public void exportDocLibrary() {
 	    
 	    client_factory.getProfileView().startLoading();
 	    
-        library_service_svc.generatePDF(current_user.getUser(), new AsyncCallback<String>() {
+        library_service_svc.generateDoc(current_user.getUser(), new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
