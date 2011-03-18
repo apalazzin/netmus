@@ -1181,35 +1181,35 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("social_button")
    void handleClickSocialButton(ClickEvent e) {
-      if(selected_song!=null || selected_album!=null)
-          closeSong();
-      
-      playlist_opened= true;
-      
-      //listener.setPlaylistSongs(canzone.album);
-      if(covers_container.isVisible() && selected_album!=null) {
+      if(selected_song!=null || selected_album!=null) {
+              closeSong();
           
-          fillAlbum(selected_album);
-          playlist_title.setText(selected_album);
-
-      } else {
-
-          fillAlbum(selected_song.album);
-          playlist_title.setText(selected_song.album);
-
-      }
-
-      library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
-      playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
-      
-      
-      Timer timerAlbum = new Timer() {
-          public void run() {
-              playlist_content.getElement().getStyle().setOpacity(1);      
+          playlist_opened= true;
+          
+          //listener.setPlaylistSongs(canzone.album);
+          if(covers_container.isVisible() && selected_album!=null) {
+              
+              fillAlbum(selected_album);
+              playlist_title.setText(selected_album);
+    
+          } else {
+    
+              fillAlbum(selected_song.album);
+              playlist_title.setText(selected_song.album);
+    
           }
-      };
-      timerAlbum.schedule(400);
-
+    
+          library_container.getElement().getStyle().setWidth(70, Style.Unit.PCT);
+          playlist_container.getElement().getStyle().setWidth(30, Style.Unit.PCT);
+          
+          
+          Timer timerAlbum = new Timer() {
+              public void run() {
+                  playlist_content.getElement().getStyle().setOpacity(1);      
+              }
+          };
+          timerAlbum.schedule(400);
+      }
    }
 
    
