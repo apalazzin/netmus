@@ -64,8 +64,10 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     @Override
     public boolean moveSongInPlaylist(String user, String playlist_name,
             int from, int to) {
-        // TODO Auto-generated method stub
-        return false;
+        
+        UserAccount user_account = UserAccount.load(user);
+        
+        return user_account.getMusicLibrary().moveSongInPlaylist(playlist_name, from, to);
     }
 
     /**
