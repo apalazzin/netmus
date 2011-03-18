@@ -48,5 +48,6 @@ public interface MyConstants extends Constants {
 	String removeSongFromPlaylistError();
 	String loadProfileError();
 	String generatePDFError();
+	String deleteProfileError();
 	
 	}

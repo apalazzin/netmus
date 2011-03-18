@@ -16,6 +16,7 @@ import it.unipd.netmus.client.service.UserService;
 import it.unipd.netmus.client.service.UserServiceAsync;
 import it.unipd.netmus.client.ui.MyConstants;
 import it.unipd.netmus.client.ui.ProfileView;
+import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
@@ -1104,9 +1105,22 @@ public class ProfileActivity extends AbstractActivity implements
 
     @Override
     public void deleteProfile() {
-        // TODO Auto-generated method stub
         //DEVE ELIMINARE L'UTENTE
-        //logout();
+        user_service_svc.deleteProfile(current_user.getUser(),
+                new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                client_factory.getProfileView()
+                    .showError(my_constants.deleteProfileError());
+                client_factory.getProfileView().stopLoading();
+            }
+            @Override
+            public void onSuccess(Boolean result) {
+                logout();
+                client_factory.getProfileView().closeEditProfile();
+                // refresh della view <- sempre con logout e onStop
+            }
+        });
     }
 	
 }
