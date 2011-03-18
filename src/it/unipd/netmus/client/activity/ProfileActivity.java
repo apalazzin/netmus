@@ -728,7 +728,7 @@ public class ProfileActivity extends AbstractActivity implements
             
         String cover = "";
         
-        song_service_svc.getSongDTO(song, new AsyncCallback<SongDTO>() {
+        song_service_svc.getCoverImage(song, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
@@ -736,22 +736,15 @@ public class ProfileActivity extends AbstractActivity implements
             }
 
             @Override
-            public void onSuccess(SongDTO song_dto) {
+            public void onSuccess(String cover) {
                 
-              //salva le info caricate in modo che siano sempre disponibili nel client
-                
-                
-                String cover = "images/test_cover.jpg";
-                if (!song_dto.getAlbumCover().equals("")) {
-                    cover = song_dto.getAlbumCover();
+                //salva le info caricate in modo che siano sempre disponibili nel client
+                if (cover.equals("")) {
+                    cover = "images/test_cover.jpg";
                 }
-                
-                song_dto.setAlbumCover(cover);
                 
                 img.getElement().getStyle()
                         .setBackgroundImage("url('" + cover + "')");
-
-                info_alredy_loaded.put(FieldVerifier.generateSongId(title, artist, album), song_dto);
 
                 client_factory.getProfileView().stopLoading();
                 return;
