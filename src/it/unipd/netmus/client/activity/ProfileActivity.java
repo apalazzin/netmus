@@ -54,8 +54,6 @@ public class ProfileActivity extends AbstractActivity implements
 
     @SuppressWarnings("unused")
     private boolean is_owner; // not used yet
-    
-    private boolean pdf_created = false;
 
     private LoginServiceAsync login_service_svc = GWT
             .create(LoginService.class);
@@ -450,13 +448,7 @@ public class ProfileActivity extends AbstractActivity implements
      */
     @Override
     public String mayStop() {
-        if (pdf_created) {
-            pdf_created = false;
-            return my_constants.downloadPDF();
-        }
-        else {
-            return my_constants.leavingProfilePage();
-        }
+        return my_constants.leavingProfilePage();
     }
 
     /**
@@ -497,7 +489,6 @@ public class ProfileActivity extends AbstractActivity implements
                                 getPlaylistSongs(cleared_playlist_name);
                             }
                             
-                            //Visualizza la nuova lista canzoni della playlist
                             client_factory.getProfileView().stopLoading();
                         }});
                 }
@@ -1118,7 +1109,6 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(String result) {
                 client_factory.getProfileView().stopLoading();
-                pdf_created = true;
                 
                 Window.open(result, "_blank", "");
             }
