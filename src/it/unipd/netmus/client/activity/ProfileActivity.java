@@ -1029,6 +1029,10 @@ public class ProfileActivity extends AbstractActivity implements
                                             
                                         }
                                     });
+                                    
+                                    //Aggiornamento della lista degli utenti affini
+                                    setFriendList();
+                                    
                                 }
                             }
                             

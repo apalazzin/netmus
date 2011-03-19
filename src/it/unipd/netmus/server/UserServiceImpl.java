@@ -5,7 +5,6 @@ import it.unipd.netmus.server.persistent.UserAccount;
 import it.unipd.netmus.server.utils.BCrypt;
 import it.unipd.netmus.shared.UserCompleteDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -73,13 +72,14 @@ public class UserServiceImpl extends RemoteServiceServlet implements
     /**
      * Cerca nel Datastore i nomi degli utenti il cui catalogo ha proprietà
      * simili a quello dato in input. I criteri di somiglianza sono dati
-     * dall’artista più ricorrente ed il genere più ascoltato.
+     * dall’artista più ricorrente.
      */
     @Override
     public List<String> findRelatedUsers(String user) {
-        //UserAccount user_account = UserAccount.load(user);
-        return new ArrayList<String>();
-        //return user_account.findRelatedUsers();
+        
+        UserAccount user_account = UserAccount.load(user);
+
+        return user_account.findRelatedUsers();
     }
 
     /**
