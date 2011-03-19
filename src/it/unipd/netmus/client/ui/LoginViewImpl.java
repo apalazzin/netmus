@@ -46,6 +46,12 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiField Label register;
    @UiField Label error;
    
+   @UiField Label wlcmT;
+   @UiField Label wlcm1;
+   @UiField Label wlcm2;
+   @UiField Label wlcm3;
+   @UiField Label wlcm4;
+   
    @UiField HTMLPanel container;
    
    @UiField TextBox user;
@@ -62,6 +68,13 @@ public class LoginViewImpl extends Composite implements LoginView {
       login.setText(myConstants.loginLabel());
       register.setText(myConstants.registerSwitchLabel());
       account.setText(myConstants.accountNetmus());
+      
+      wlcmT.setText(myConstants.wlcmT());
+      wlcm1.setText(myConstants.wlcm1());
+      wlcm2.setText(myConstants.wlcm2());
+      wlcm3.setText(myConstants.wlcm3());
+      wlcm4.setText(myConstants.wlcm4());
+      
       check_netmus.setValue(true);
       
       Timer timerMain = new Timer() {
