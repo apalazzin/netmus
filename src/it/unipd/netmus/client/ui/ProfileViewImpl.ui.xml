@@ -17,7 +17,7 @@
 
 
 				<g:HTMLPanel styleName="{style.stats}">				
-				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600;">Numero di Brani:</span>
+				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600; float: left; margin-right: 5px;"><g:Label ui:field="num_songs">Numero di Brani:</g:Label></span>
 				<g:Label ui:field="n_songs" styleName="{style.n_songs}"></g:Label>
 				</g:HTMLPanel>
 
@@ -99,6 +99,10 @@
 					</div>
 					<g:Image ui:field="add_song_to_playlist" styleName="{style.addtrack_playlist}" url="images/plus_green.png"></g:Image>
 					<g:Image ui:field="remove_song_from_playlist" styleName="{style.deletetrack_playlist}" url="images/less_red.png"></g:Image>
+					
+					<g:Image ui:field="up" styleName="{style.playlist_up}" url="images/up.png"></g:Image>
+					<g:Image ui:field="down" styleName="{style.playlist_down}" url="images/down.png"></g:Image>
+					
 					<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
 				</g:HTMLPanel>
 				
