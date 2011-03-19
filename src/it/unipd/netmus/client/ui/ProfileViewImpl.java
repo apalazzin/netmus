@@ -32,6 +32,7 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -90,7 +91,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    private double global_rating;
    private String password;
    private String cpassword;
-   
+      
    private CellTable<Song> song_list;
    private CellTable<Song> album_list;
    
@@ -222,6 +223,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image pdf;
    @UiField Image statistics_open;
    @UiField Image edit_profile_clear;
+   @UiField Image flag_ita;
+   @UiField Image flag_eng;
    
    @UiField Button edit_profile_check;
    @UiField Button stat_close;
@@ -364,7 +367,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        //la rende ordinabile
        autoreColumn.setSortable(true);
        // la aggiunge al catalogo
-       library.addColumn(autoreColumn, "Autore");
+       library.addColumn(autoreColumn, myConstants.artist());
 
        //crea la colonna titolo
        TextColumn<Song> titoloColumn = new TextColumn<Song>() {
@@ -376,7 +379,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        //la rende ordinabile
        titoloColumn.setSortable(true);
        // la aggiunge al catalogo
-       library.addColumn(titoloColumn, "Titolo");
+       library.addColumn(titoloColumn, myConstants.title());
 
        
        //crea la colonna Album
@@ -559,7 +562,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            //la rende ordinabile
            titoloColumn2.setSortable(true);
            // la aggiunge al catalogo
-           song_list.addColumn(titoloColumn2, "Titolo");
+           song_list.addColumn(titoloColumn2, myConstants.title());
            song_list.setColumnWidth(titoloColumn2,"60%");
 
            
@@ -671,7 +674,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            //la rende ordinabile
            titoloColumn3.setSortable(true);
            // la aggiunge al catalogo
-           album_list.addColumn(titoloColumn3, "Titolo");
+           album_list.addColumn(titoloColumn3, myConstants.title());
            album_list.setColumnWidth(titoloColumn3,"60%");
 
            
@@ -685,7 +688,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            //la rende ordinabile
            autoreColumn2.setSortable(true);
            // la aggiunge al catalogo
-           album_list.addColumn(autoreColumn2, "Autore");
+           album_list.addColumn(autoreColumn2, myConstants.artist());
            album_list.setColumnWidth(autoreColumn2,"60%");
            
            // Imposta l'oggetto Song selected_inplaylist in base alla selezione sulla tabella
@@ -810,6 +813,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_song_pref.setText(myConstants.statSongPref());
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
+           
+           
+           
            
 
    }
@@ -1667,9 +1673,36 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    }
    
    @UiHandler("statistics_open")
-   void handleMouseOverStatisticsOpen(MouseOverEvent e) {
+   void handleMouseOverStatisticsOver(MouseOverEvent e) {
        statistics_open.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
+   
+   @UiHandler("flag_ita")
+   void handleMouseClickFlagItaOpen(ClickEvent e) {
+       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=en", "") + "&locale=it");
+       
+   }
+   
+   @UiHandler("flag_ita")
+   void handleMouseOverFlagItaOver(MouseOverEvent e) {
+       flag_ita.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+
+   @UiHandler("flag_eng")
+   void handleMouseClickFlagEngOpen(ClickEvent e) {
+       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=it", "") + "&locale=en");
+   }
+   
+   @UiHandler("flag_eng")
+   void handleMouseOverFlagEngOver(MouseOverEvent e) {
+       flag_eng.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+   }
+   
+   /**
+    * This method is used to remove the locale parameter from the url
+    * (used to get the URL by stripping off the parameters.......)
+    */
+
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -2251,7 +2284,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
        if (link.equals("")) {
            
-           System.out.println("link mancante");
            playNext();
            
            
@@ -2429,7 +2461,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                
                youtube.getElementById("player").setId("");
                //youtube.getWidget(6).removeFromParent();
-               setInfo("Nessun brano in ascolto.");
+               setInfo(myConstants.info());
                forward.setVisible(false);
                rewind.setVisible(false);
            }
@@ -2830,10 +2862,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         Song brano = new Song(autore, titolo, album);
 
             if(canzoni_playlist.contains(brano)) {
-                
-                // LANCIA UN ECCEZIONE com.google.gwt.event.shared.UmbrellaExceptio- PROBABILE BUG GWT - NESSUN ERRORE IN COMPILAZIONE
-                //((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).setSelected(((SingleSelectionModel<Song>)lista_canzoni.getSelectionModel()).getSelectedObject(), false);
-                // LANCIA UN ECCEZIONE com.google.gwt.event.shared.UmbrellaExceptio- PROBABILE BUG GWT - NESSUN ERRORE IN COMPILAZIONE
                 
                 List<Song> test = dataProvider_playlist.getList();
                 

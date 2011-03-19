@@ -391,8 +391,7 @@ public class ProfileActivity extends AbstractActivity implements
      * riproduzione.
      */
     public String getSongInfo() {
-        // TODO Auto-generated method stub
-        return "Nessun brano in ascolto.";
+        return my_constants.info();
     }
 
     /**
@@ -506,7 +505,7 @@ public class ProfileActivity extends AbstractActivity implements
                     if (song_dto.getYoutubeCode().equals("")) {
                         //client_factory.getProfileView().closeYouTube();
                         client_factory.getProfileView().playYouTube("00000000000");
-                        client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                        client_factory.getProfileView().showErrorFast(my_constants.notYoutube() + title + "\"");
                         client_factory.getProfileView().playNext(); }
                     else {
                         //client_factory.getProfileView().closeYouTube();
@@ -562,7 +561,7 @@ public class ProfileActivity extends AbstractActivity implements
                         if (song_dto.getYoutubeCode().equals("")) {
                             //client_factory.getProfileView().closeYouTube();
                             client_factory.getProfileView().playYouTube("00000000000");
-                            client_factory.getProfileView().showErrorFast("Non e' disponibile il video Youtube di: \"" + title + "\"");
+                            client_factory.getProfileView().showErrorFast(my_constants.notYoutube() + title + "\"");
                             client_factory.getProfileView().playNext(); }
                         else {
                             //client_factory.getProfileView().closeYouTube();

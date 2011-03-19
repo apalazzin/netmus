@@ -79,5 +79,8 @@ public interface MyConstants extends Constants {
 	String statSongPref();
 	String statPrefNetmus();
 	String statClose();
+	String artist();
+	String title();
+	String notYoutube();
 	
 	}

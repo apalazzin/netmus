@@ -58,6 +58,8 @@
 
 				<g:Image ui:field="edit_button" url="images/edit_button.png" styleName="{style.editButton}"></g:Image>
 
+				<g:Image ui:field="flag_ita" url="images/ita.png" styleName="{style.flag_ita}"></g:Image>
+				<g:Image ui:field="flag_eng" url="images/eng.png" styleName="{style.flag_eng}"></g:Image>
 				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
 				
 				
