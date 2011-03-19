@@ -158,6 +158,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label stat_pref_netmus;
    @UiField Label friends_titolo_text;
    @UiField Label num_songs;
+   @UiField Label help;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -180,7 +181,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField HTMLPanel youtube_appendix;
    @UiField HTMLPanel edit_profile;
    @UiField HTMLPanel edit_profile_aboutme;
-
+   @UiField HTMLPanel help_container;
+   
    @UiField HTMLPanel covers_container;
    @UiField HTMLPanel popup;
    @UiField HTMLPanel popup_fast;
@@ -816,6 +818,10 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
            num_songs.setText(myConstants.statNum());
+           
+           
+           help_container.setVisible(false);
+           
            
 
    }
@@ -1701,21 +1707,39 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("up")
    void handleMouseClickUp(ClickEvent e) {
-       listener.moveUpInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+       listener.moveUpInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
    }
    
    @UiHandler("down")
    void handleMouseClickDown(ClickEvent e) {
-       listener.moveDownInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+       listener.moveDownInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);
    }
 
 
+   @UiHandler("help")
+   void handleMouseClickHelp(ClickEvent e) {
+       showHelp();
+   }
+
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
    
    
-   @Override
+   private void showHelp() {
+    
+       help_container.setVisible(true);
+       DOM.getElementById("s1").getStyle().setDisplay(Style.Display.BLOCK);
+       DOM.getElementById("s2").getStyle().setDisplay(Style.Display.BLOCK);
+       DOM.getElementById("s3").getStyle().setDisplay(Style.Display.BLOCK);
+       DOM.getElementById("s4").getStyle().setDisplay(Style.Display.BLOCK);
+       DOM.getElementById("s5").getStyle().setDisplay(Style.Display.BLOCK);
+    
+}
+
+
+
+@Override
    public void setName(String profileName) {
       this.name = profileName;
    }

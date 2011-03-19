@@ -84,6 +84,7 @@ public interface MyConstants extends Constants {
 	String title();
 	String notYoutube();
 	String unknownAlbum();
+	String help();
 	
 	String wlcmT();
 	String wlcm1();
