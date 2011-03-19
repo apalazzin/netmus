@@ -463,23 +463,89 @@ public class ProfileActivity extends AbstractActivity implements
      * Sposta in basso la canzone della playlist selezionata
      */
     @Override
-    public void moveDownInPLaylist(String playlist, String autore,
-            String titolo, String album) {
+    public void moveDownInPLaylist(String playlist_name, String artist,
+            String title, String album) {
 
-        // scambia la canzone sleezionata con quella successiva e aggiorna la
-        // vista
+        client_factory.getProfileView().startLoading();
+        
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
+        //Cerca la playlist tra tutte quelle dell'utente corrente
+        for (final PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+            if (tmp.getName().equals(cleared_playlist_name)) {
+                
+                //Cerca la posizione della canzone nella playlist
+                final int from = tmp.getSongList().indexOf(FieldVerifier.generateSongId(title, artist, album));
+                
+                //Sposta la canzone indietro nella playlist
+                library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from-1, new AsyncCallback<Boolean>() {
 
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        client_factory.getProfileView().showError(my_constants.moveSongError());
+                        client_factory.getProfileView().stopLoading();
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        
+                        //Aggiorna i dati mantenuti lato client
+                        if (result) {
+                            String rm = tmp.getSongList().remove(from);
+                            tmp.getSongList().add(from-1, rm);
+                            getPlaylistSongs(cleared_playlist_name);
+                        }
+                        
+                        //Visualizza la nuova lista canzoni della playlist
+                        client_factory.getProfileView().stopLoading();
+                    }});
+            }
+        }
     }
 
     /**
      * Sposta in alto la canzone della playlist selezionata
      */
     @Override
-    public void moveUpInPLaylist(String playlist, String autore, String titolo,
+    public void moveUpInPLaylist(String playlist_name, String artist, String title,
             String album) {
 
-        // scambia la canzone sleezionata con quella precedente e aggiorna la
-        // vista
+
+        client_factory.getProfileView().startLoading();
+        
+        final String cleared_playlist_name = clearPlaylistName(playlist_name);
+        
+        //Cerca la playlist tra tutte quelle dell'utente corrente
+        for (final PlaylistDTO tmp : current_user.getMusicLibrary().getPlaylists()) {
+            if (tmp.getName().equals(cleared_playlist_name)) {
+                
+                //Cerca la posizione della canzone nella playlist
+                final int from = tmp.getSongList().indexOf(FieldVerifier.generateSongId(title, artist, album));
+                
+                //Sposta la canzone avanti nella playlist
+                library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from+1, new AsyncCallback<Boolean>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        client_factory.getProfileView().showError(my_constants.moveSongError());
+                        client_factory.getProfileView().stopLoading();
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        
+                        //Aggiorna i dati mantenuti lato client
+                        if (result) {
+                            String rm = tmp.getSongList().remove(from);
+                            tmp.getSongList().add(from-1, rm);
+                            getPlaylistSongs(cleared_playlist_name);
+                        }
+                        
+                        //Visualizza la nuova lista canzoni della playlist
+                        client_factory.getProfileView().stopLoading();
+                    }});
+            }
+        }
 
     }
 
