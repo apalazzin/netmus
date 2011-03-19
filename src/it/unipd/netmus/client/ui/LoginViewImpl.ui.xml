@@ -46,12 +46,12 @@
    		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
    		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}"></g:Label></div>
    	<div id="welcome" class ="{style.welcome}">
-   	          <b>Benvenuto nella pagina iniziale di NetMüs.</b>
+   	          <b><g:Label ui:field="wlcmT">Benvenuto nella pagina iniziale di NetMüs.</g:Label></b>
    	          <ul type="none">
-   	        <li><img src="images/star.png" style ="width: 17px;"/>  NetMüs è il sito che ti permette di salvare online le informazioni sulle tue canzoni e di visualizzarle e ascoltarle ovunque ti trovi.</li>
-   	        <li><img src="images/star.png" style ="width: 17px;"/>  Avrai subito la possibilità di caricare la tua musica preferita semplicemente inserendo una chiavetta usb o un lettore mp3.</li>
-  			<li><img src="images/star.png" style ="width: 17px;"/>  Una volta inseriti nel tuo profilo i brani saranno organizzati e le informazioni completate laddove fosse necessario.</li>
-			<li><img src="images/star.png" style ="width: 17px;"/>  Ora sei pronto per ascoltare e guardare i tuoi video musicali preferiti!</li>
+   	        <li><img src="images/star.png" style ="width: 17px; float:left;"/><g:Label ui:field="wlcm1"> NetMus ti permette di salvare online le informazioni sulle tue canzoni e di visualizzarle e ascoltarle ovunque ti trovi.</g:Label></li>
+   	        <li><img src="images/star.png" style ="width: 17px; float:left;"/><g:Label ui:field="wlcm2"> Avrai subito la possibilità di caricare la tua musica preferita semplicemente inserendo una chiavetta usb o un lettore mp3.</g:Label></li>
+  			<li><img src="images/star.png" style ="width: 17px; float:left;"/><g:Label ui:field="wlcm3"> Una volta inseriti nel tuo profilo i brani saranno organizzati e le informazioni completate laddove fosse necessario.</g:Label></li>
+			<li><img src="images/star.png" style ="width: 17px; float:left;"/><g:Label ui:field="wlcm4"> Ora sei pronto per ascoltare e guardare i tuoi video musicali preferiti!</g:Label></li>
 			</ul>
     <i><q>NetMüs, sounds simple, as music</q></i>
    	</div>

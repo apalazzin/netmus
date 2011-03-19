@@ -85,4 +85,10 @@ public interface MyConstants extends Constants {
 	String notYoutube();
 	String unknownAlbum();
 	
+	String wlcmT();
+	String wlcm1();
+	String wlcm2();
+	String wlcm3();
+	String wlcm4();
+	
 	}
