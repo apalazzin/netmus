@@ -1306,8 +1306,8 @@ public class ProfileActivity extends AbstractActivity implements
                 Window.Location.assign(actual.replace(param, ""));
             }
         }
-        txt += Window.Location.getHref();
         
-        client_factory.getProfileView().showError(txt);
+        
+        
     }
 }

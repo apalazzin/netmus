@@ -16,6 +16,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -51,6 +52,9 @@ public class LoginViewImpl extends Composite implements LoginView {
    @UiField Label wlcm2;
    @UiField Label wlcm3;
    @UiField Label wlcm4;
+   
+   @UiField Image flag_ita;
+   @UiField Image flag_eng;
    
    @UiField HTMLPanel container;
    
@@ -278,6 +282,18 @@ public class LoginViewImpl extends Composite implements LoginView {
 		   
 	   }
      
+   }
+   
+   @UiHandler("flag_ita")
+   void handleClickFlagIta(ClickEvent e) {
+       
+       listener.changeLanguage("it");
+   }
+
+   @UiHandler("flag_eng")
+   void handleClickFlagEng(ClickEvent e) {
+       
+       listener.changeLanguage("en");
    }
 
     @Override
