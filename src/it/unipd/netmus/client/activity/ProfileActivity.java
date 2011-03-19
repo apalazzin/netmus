@@ -987,7 +987,8 @@ public class ProfileActivity extends AbstractActivity implements
 
             @Override
             public void onSuccess(final String user) {
-
+                
+                client_factory.getProfileView().resetView();
                 client_factory.getProfileView().setUser(user);
                 final ProfileView profileView = client_factory.getProfileView();
                 
