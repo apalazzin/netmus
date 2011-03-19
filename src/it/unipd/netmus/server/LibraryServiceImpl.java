@@ -159,7 +159,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         //generate the document
         VelocityEngineManager.init();
         VelocityContext context = new VelocityContext();
-        context.put("name", user);
+        context.put("name", "My music library");
         // create the music list        
         
         // catalog statistics
@@ -172,7 +172,7 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         UserAccount useraccount = UserAccount.load(user);
         String content;
         String content_tmp = "<table width=\"100%\">\n"
-        	+"  <tr>\n"
+        	+"  <tr style=\"background-color: #993366;\">\n"
         	+"    <td><b>Title</b></td>\n"
         	+"    <td><b>Artist</b></td>\n"
         	+"    <td><b>Album</b></td>\n"
@@ -197,11 +197,31 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
             }
         });
         
+        String prec_artist = "prec_artist";
+        String artist = "artist";
         for(Song tmp : tmp_list){
+            
+            artist = tmp.getArtist();
+            if (!artist.equalsIgnoreCase(prec_artist)) {
+                
+                prec_artist = artist;
+                
+                if (artist.equalsIgnoreCase("")) {
+                    artist = "Unknown artist";
+                }
+                
+                content_tmp +="  <tr style=\"background-color: #996666;\">\n"
+                    +"    <td height=20><b>"+tmp.getArtist()+"</b></td>\n"
+                    +"    <td height=20></td>\n"
+                    +"    <td height=20></td>\n"
+                    +"  </tr>\n";
+                
+            }
+            
         	content_tmp +="  <tr>\n"
-        	+"    <td height=50>"+tmp.getTitle()+"</td>\n"
-        	+"    <td height=50>"+tmp.getArtist()+"</td>\n"
-        	+"    <td height=50>"+tmp.getAlbum()+"</td>\n"
+        	+"    <td height=30>"+tmp.getTitle()+"</td>\n"
+        	+"    <td height=30>"+artist+"</td>\n"
+        	+"    <td height=30>"+tmp.getAlbum()+"</td>\n"
         	+"  </tr>\n";
         	songs++;
         	artists+=check_list(curr_artist, tmp.getArtist());
@@ -209,9 +229,9 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         }
         
         content = "<table width=\"30%\">"
-        	+"  <tr><td><b>Songs</b></td><td>"+songs+"</td></tr>"
-        	+"  <tr><td><b>Artists</b></td><td>"+artists+"</td></tr>"        	
-        	+"  <tr><td><b>Albums</b></td><td>"+albums+"</td></tr>" 
+        	+"  <tr><td style=\"background-color: #993366;\"><b>Songs</b></td><td>"+songs+"</td></tr>"
+        	+"  <tr><td style=\"background-color: #993366;\"><b>Artists</b></td><td>"+artists+"</td></tr>"        	
+        	+"  <tr><td style=\"background-color: #993366;\"><b>Albums</b></td><td>"+albums+"</td></tr>" 
         	+"</table>\n"
         	+content_tmp;
 
