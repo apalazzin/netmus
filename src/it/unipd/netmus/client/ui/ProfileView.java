@@ -302,9 +302,14 @@ public interface ProfileView extends IsWidget {
       void deleteProfile();
       /**
        *Imposta le statistiche nella view
-     * @return 
+       * @return 
        */
       void setStats();
+      /**
+       * Imposta la lingua dell'interfaccia su richiesta dell'utente
+       * @param locale
+       */
+      void changeLanguage(String locale);
 
    }
 }

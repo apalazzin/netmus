@@ -1678,8 +1678,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("flag_ita")
    void handleMouseClickFlagItaOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=en", "") + "&locale=it");
-       
+       listener.changeLanguage("it");
    }
    
    @UiHandler("flag_ita")
@@ -1689,7 +1688,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("flag_eng")
    void handleMouseClickFlagEngOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=it", "") + "&locale=en");
+       listener.changeLanguage("en");
    }
    
    @UiHandler("flag_eng")
