@@ -157,6 +157,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label stat_song_pref;
    @UiField Label stat_pref_netmus;
    @UiField Label friends_titolo_text;
+   @UiField Label num_songs;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -813,6 +814,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_song_pref.setText(myConstants.statSongPref());
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
+           num_songs.setText(myConstants.statNum());
            
 
    }
