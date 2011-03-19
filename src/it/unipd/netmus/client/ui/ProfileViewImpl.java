@@ -3845,6 +3845,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         user.setText("");
         num_songs.setText("");
         friends.clear();
+        playlists.clear();
         
     }
     
