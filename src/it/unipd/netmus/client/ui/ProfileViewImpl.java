@@ -226,6 +226,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image edit_profile_clear;
    @UiField Image flag_ita;
    @UiField Image flag_eng;
+   @UiField Image up;
+   @UiField Image down;
    
    @UiField Button edit_profile_check;
    @UiField Button stat_close;
@@ -1212,6 +1214,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
               remove_song.setVisible(true);
               insert_song.setVisible(true);
               delete_playlist.setVisible(true);
+              up.setVisible(true);
+              down.setVisible(true);
               
               playlist_songs.clear();
               playlist_songs.add(song_list);
@@ -1696,10 +1700,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        flag_eng.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
    
-   /**
-    * This method is used to remove the locale parameter from the url
-    * (used to get the URL by stripping off the parameters.......)
-    */
+   @UiHandler("up")
+   void handleMouseClickUp(ClickEvent e) {
+       listener.moveUpInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+   
+   @UiHandler("down")
+   void handleMouseClickDown(ClickEvent e) {
+       listener.moveDownInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+
 
 
 ///////////////////////////////////////////////////////
@@ -1991,6 +2001,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        remove_song.setVisible(true);
        insert_song.setVisible(true);
        delete_playlist.setVisible(true);
+       up.setVisible(true);
+       down.setVisible(true);
        
        playlist_songs.clear();
        playlist_songs.add(song_list);
@@ -2771,6 +2783,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         remove_song.setVisible(false);
         insert_song.setVisible(false);
         delete_playlist.setVisible(false);
+        up.setVisible(false);
+        down.setVisible(false);
         
         playlist_songs.clear();
         playlist_songs.add(album_list);
