@@ -1,0 +1,8 @@
+<html>
+  <body>
+    <h3>$name</h3>
+    <h4>Il mio catalogo brani</h4>
+      $content
+    </table>
+  </body>
+</html>
