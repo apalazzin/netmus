@@ -41,7 +41,6 @@ public interface MyConstants extends Constants {
 	String editProfileError();
 	String findRelatedUsersError();
 	String getPlaylistError();
-	String getProfileViewError();
 	String getSongDTOError();
 	String rateSongError();
 	String storeStatisticsError();

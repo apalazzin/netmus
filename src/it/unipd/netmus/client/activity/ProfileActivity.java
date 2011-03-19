@@ -426,7 +426,7 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onFailure(Throwable caught) {
                 client_factory.getProfileView()
-                    .showError(my_constants.getProfileViewError());
+                    .showError(my_constants.loadProfileError());
                 client_factory.getProfileView().stopLoading();
             }
 
