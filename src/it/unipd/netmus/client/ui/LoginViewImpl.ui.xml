@@ -5,6 +5,7 @@
    <ui:style src="css/LoginView.css" />
    
    <g:HTMLPanel ui:field="container" styleName="{style.container}">
+   <div class="{style.all}">
    	<div class="{style.main}">
 
    		<div style="position: relative; width: 100%; height: 100%">
@@ -44,6 +45,17 @@
    		<img src="images/netmus.png" style="position: absolute; bottom: 10px; left: 20px; width: 300px;"/>
    		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
    		<div style="position: absolute; top: 5px; right: 15px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}"></g:Label></div>
+   	<div id="welcome" class ="{style.welcome}">
+   	          <b>Benvenuto nella pagina iniziale di NetMüs.</b>
+   	          <ul type="none">
+   	        <li><img src="images/star.png" style ="width: 17px;"/>  NetMüs è il sito che ti permette di salvare online le informazioni sulle tue canzoni e di visualizzarle e ascoltarle ovunque ti trovi.</li>
+   	        <li><img src="images/star.png" style ="width: 17px;"/>  Avrai subito la possibilità di caricare la tua musica preferita semplicemente inserendo una chiavetta usb o un lettore mp3.</li>
+  			<li><img src="images/star.png" style ="width: 17px;"/>  Una volta inseriti nel tuo profilo i brani saranno organizzati e le informazioni completate laddove fosse necessario.</li>
+			<li><img src="images/star.png" style ="width: 17px;"/>  Ora sei pronto per ascoltare e guardare i tuoi video musicali preferiti!</li>
+			</ul>
+    <i><q>NetMüs, sounds simple, as music</q></i>
+   	</div>
+   	</div>
    	</div>
    </g:HTMLPanel>
    
