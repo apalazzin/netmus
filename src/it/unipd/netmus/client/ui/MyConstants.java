@@ -83,5 +83,6 @@ public interface MyConstants extends Constants {
 	String artist();
 	String title();
 	String notYoutube();
+	String unknownAlbum();
 	
 	}
