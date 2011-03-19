@@ -477,28 +477,34 @@ public class ProfileActivity extends AbstractActivity implements
                 //Cerca la posizione della canzone nella playlist
                 final int from = tmp.getSongList().indexOf(FieldVerifier.generateSongId(title, artist, album));
                 
-                //Sposta la canzone indietro nella playlist
-                library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from-1, new AsyncCallback<Boolean>() {
+                if (from < tmp.getSongList().size()-1) {
+                    //Sposta la canzone indietro nella playlist
+                    library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from+1, new AsyncCallback<Boolean>() {
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        client_factory.getProfileView().showError(my_constants.moveSongError());
-                        client_factory.getProfileView().stopLoading();
-                    }
-
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        
-                        //Aggiorna i dati mantenuti lato client
-                        if (result) {
-                            String rm = tmp.getSongList().remove(from);
-                            tmp.getSongList().add(from-1, rm);
-                            getPlaylistSongs(cleared_playlist_name);
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            client_factory.getProfileView().showError(my_constants.moveSongError());
+                            client_factory.getProfileView().stopLoading();
                         }
-                        
-                        //Visualizza la nuova lista canzoni della playlist
-                        client_factory.getProfileView().stopLoading();
-                    }});
+
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            
+                            //Aggiorna i dati mantenuti lato client
+                            if (result) {
+                                String rm = tmp.getSongList().remove(from);
+                                tmp.getSongList().add(from+1, rm);
+                                getPlaylistSongs(cleared_playlist_name);
+                            }
+                            
+                            //Visualizza la nuova lista canzoni della playlist
+                            client_factory.getProfileView().stopLoading();
+                        }});
+                }
+                else {;
+                    client_factory.getProfileView().stopLoading();
+                }
+                return;
             }
         }
     }
@@ -522,28 +528,33 @@ public class ProfileActivity extends AbstractActivity implements
                 //Cerca la posizione della canzone nella playlist
                 final int from = tmp.getSongList().indexOf(FieldVerifier.generateSongId(title, artist, album));
                 
-                //Sposta la canzone avanti nella playlist
-                library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from+1, new AsyncCallback<Boolean>() {
+                if (from > 0) {
+                    //Sposta la canzone avanti nella playlist
+                    library_service_svc.moveSongInPlaylist(current_user.getUser(), cleared_playlist_name, from, from-1, new AsyncCallback<Boolean>() {
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        client_factory.getProfileView().showError(my_constants.moveSongError());
-                        client_factory.getProfileView().stopLoading();
-                    }
-
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        
-                        //Aggiorna i dati mantenuti lato client
-                        if (result) {
-                            String rm = tmp.getSongList().remove(from);
-                            tmp.getSongList().add(from-1, rm);
-                            getPlaylistSongs(cleared_playlist_name);
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            client_factory.getProfileView().showError(my_constants.moveSongError());
+                            client_factory.getProfileView().stopLoading();
                         }
-                        
-                        //Visualizza la nuova lista canzoni della playlist
-                        client_factory.getProfileView().stopLoading();
-                    }});
+
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            //Aggiorna i dati mantenuti lato client
+                            if (result) {
+                                String rm = tmp.getSongList().remove(from);
+                                tmp.getSongList().add(from-1, rm);
+                                getPlaylistSongs(cleared_playlist_name);
+                            }
+                            
+                            //Visualizza la nuova lista canzoni della playlist
+                            client_factory.getProfileView().stopLoading();
+                        }});
+                }
+                else {
+                    client_factory.getProfileView().stopLoading();
+                }
+                return;
             }
         }
 
@@ -1306,8 +1317,5 @@ public class ProfileActivity extends AbstractActivity implements
                 Window.Location.assign(actual.replace(param, ""));
             }
         }
-        
-        
-        
     }
 }
