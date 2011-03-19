@@ -157,6 +157,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label stat_song_pref;
    @UiField Label stat_pref_netmus;
    @UiField Label friends_titolo_text;
+   @UiField Label num_songs;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -225,6 +226,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image edit_profile_clear;
    @UiField Image flag_ita;
    @UiField Image flag_eng;
+   @UiField Image up;
+   @UiField Image down;
    
    @UiField Button edit_profile_check;
    @UiField Button stat_close;
@@ -813,6 +816,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_song_pref.setText(myConstants.statSongPref());
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
+           num_songs.setText(myConstants.statNum());
            
 
    }
@@ -1676,8 +1680,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("flag_ita")
    void handleMouseClickFlagItaOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=en", "") + "&locale=it");
-       
+       listener.changeLanguage("it");
    }
    
    @UiHandler("flag_ita")
@@ -1687,7 +1690,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("flag_eng")
    void handleMouseClickFlagEngOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=it", "") + "&locale=en");
+       listener.changeLanguage("en");
    }
    
    @UiHandler("flag_eng")
@@ -1695,10 +1698,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        flag_eng.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
    
-   /**
-    * This method is used to remove the locale parameter from the url
-    * (used to get the URL by stripping off the parameters.......)
-    */
+   @UiHandler("up")
+   void handleMouseClickUp(ClickEvent e) {
+       listener.moveUpInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+   
+   @UiHandler("down")
+   void handleMouseClickDown(ClickEvent e) {
+       listener.moveDownInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+
 
 
 ///////////////////////////////////////////////////////
