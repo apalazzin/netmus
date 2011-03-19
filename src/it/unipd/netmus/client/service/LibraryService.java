@@ -1,7 +1,6 @@
 package it.unipd.netmus.client.service;
 
 import it.unipd.netmus.shared.SongDTO;
-import it.unipd.netmus.shared.exception.NetmusException;
 
 import java.util.List;
 
