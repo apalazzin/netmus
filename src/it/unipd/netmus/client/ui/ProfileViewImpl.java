@@ -1214,6 +1214,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
               remove_song.setVisible(true);
               insert_song.setVisible(true);
               delete_playlist.setVisible(true);
+              up.setVisible(true);
+              down.setVisible(true);
               
               playlist_songs.clear();
               playlist_songs.add(song_list);
@@ -1999,6 +2001,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        remove_song.setVisible(true);
        insert_song.setVisible(true);
        delete_playlist.setVisible(true);
+       up.setVisible(true);
+       down.setVisible(true);
        
        playlist_songs.clear();
        playlist_songs.add(song_list);
@@ -2779,6 +2783,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         remove_song.setVisible(false);
         insert_song.setVisible(false);
         delete_playlist.setVisible(false);
+        up.setVisible(false);
+        down.setVisible(false);
         
         playlist_songs.clear();
         playlist_songs.add(album_list);
