@@ -814,9 +814,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
            
-           
-           
-           
 
    }
  
@@ -3236,7 +3233,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                     this.cover.setUrl("images/test_cover.jpg");
         }
         
-        showGlobalStar(global_rating);
+        if (global_rating > 0) {
+            showGlobalStar(global_rating);
+        }
 
     }
 
