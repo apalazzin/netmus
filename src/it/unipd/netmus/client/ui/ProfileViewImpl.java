@@ -438,7 +438,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                  last_selected=0;
              }
              play_youtube.setUrl("images/play.png");
-             System.out.println("TEST: " + selected_song.autore + " " +selected_song.titolo + " " +selected_song.album);
              
              global_rating = listener.setRating(selected_song.autore,selected_song.titolo,selected_song.album);
              showStar(rating);
@@ -3833,7 +3832,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             }});
         
         
-    } 
+    }
+
+
+
+    @Override
+    public void resetView() {
+
+        dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
+        dataProvider_album.getList().removeAll(dataProvider_album.getList());
+        dataProvider_playlist.getList().removeAll(dataProvider_playlist.getList());
+        user.setText("");
+        num_songs.setText("");
+        friends.clear();
+        
+    }
+    
+    
 }
 
 

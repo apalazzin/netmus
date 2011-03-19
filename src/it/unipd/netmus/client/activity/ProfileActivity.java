@@ -1269,22 +1269,28 @@ public class ProfileActivity extends AbstractActivity implements
     public void changeLanguage(String locale) {
         
         String actual = Window.Location.getHref();
+        String txt = actual + "\n";
         
         if (locale.equals("it")) {
             if (!actual.contains("locale=it")) {
                 String param = "locale=it";
-                if (actual.contains(".html?") || actual.contains("/?")) {
+                if (actual.contains("?")) {
                     param = "&"+param;
-                    actual = actual.replaceAll("#", param+"#");
+                    if (actual.contains("#"))
+                        actual = actual.replace("#", param+"#");
+                    else
+                        actual = actual+param;
                 }
                 else {
                     param = "?"+param;
-                    if (actual.contains(".html?"))
-                        actual = actual.replaceAll(".html", ".html"+param);
-                    else if (actual.contains("/?"))
-                        actual = actual.replaceAll("/", "/"+param);
+                    if (actual.contains(".html"))
+                        actual = actual.replace(".html", ".html"+param);
+                    else if (actual.contains("/")) {
+                        int i = actual.lastIndexOf("/");
+                        actual = actual.substring(0,i+1) + param + actual.substring(i+1);
+                    }
                 }
-                Window.Location.replace(actual);
+                Window.Location.assign(actual);
             }
         } else {
             if (actual.contains("locale=it")) {
@@ -1297,8 +1303,11 @@ public class ProfileActivity extends AbstractActivity implements
                     else if (actual.contains("?locale=it"))
                         param = "?locale=it";
                 }
-                Window.Location.replace(actual.replace(param, ""));
+                Window.Location.assign(actual.replace(param, ""));
             }
         }
+        txt += Window.Location.getHref();
+        
+        client_factory.getProfileView().showError(txt);
     }
 }

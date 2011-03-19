@@ -183,6 +183,11 @@ public interface ProfileView extends IsWidget {
     *
     */
    void setStats(String string, String string2, String string3, String string4);
+   /**
+    * Resetta l'intera view e i suoi contenuti
+    *
+    */
+   void resetView();
 
 
    public interface Presenter
