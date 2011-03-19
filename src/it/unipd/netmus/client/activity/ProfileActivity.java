@@ -1273,13 +1273,16 @@ public class ProfileActivity extends AbstractActivity implements
         if (locale.equals("it")) {
             if (!actual.contains("locale=it")) {
                 String param = "locale=it";
-                if (actual.contains(".html?")) {
+                if (actual.contains(".html?") || actual.contains("/?")) {
                     param = "&"+param;
                     actual = actual.replaceAll("#", param+"#");
                 }
                 else {
                     param = "?"+param;
-                    actual = actual.replaceAll(".html", ".html"+param);
+                    if (actual.contains(".html?"))
+                        actual = actual.replaceAll(".html", ".html"+param);
+                    else if (actual.contains("/?"))
+                        actual = actual.replaceAll("/", "/"+param);
                 }
                 Window.Location.replace(actual);
             }
@@ -1290,7 +1293,7 @@ public class ProfileActivity extends AbstractActivity implements
                     param = "&locale=it";
                 else {
                     if (actual.contains("?locale=it&"))
-                        param = "locale=it";
+                        param = "locale=it&";
                     else if (actual.contains("?locale=it"))
                         param = "?locale=it";
                 }
