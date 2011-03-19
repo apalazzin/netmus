@@ -52,6 +52,7 @@ public interface MyConstants extends Constants {
 	String noVoteForThisUserError();
 	String noVoteError();
 	String voteNullSongError();
+	String moveSongError();
 	
 	String friendTitolo();
 	String info();
