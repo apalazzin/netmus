@@ -191,4 +191,51 @@ public class LoginActivity extends AbstractActivity implements
             }
         });
     }
+
+    @Override
+    public void changeLanguage(String locale) {
+        
+        String actual = Window.Location.getHref();
+        String txt = actual + "\n";
+        
+        if (locale.equals("it")) {
+            if (!actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains("?")) {
+                    param = "&"+param;
+                    if (actual.contains("#"))
+                        actual = actual.replace("#", param+"#");
+                    else
+                        actual = actual+param;
+                }
+                else {
+                    param = "?"+param;
+                    if (actual.contains(".html"))
+                        actual = actual.replace(".html", ".html"+param);
+                    else if (actual.contains("/")) {
+                        int i = actual.lastIndexOf("/");
+                        actual = actual.substring(0,i+1) + param + actual.substring(i+1);
+                    }
+                }
+                Window.Location.assign(actual);
+            }
+        } else {
+            if (actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains("&locale=it"))
+                    param = "&locale=it";
+                else {
+                    if (actual.contains("?locale=it&"))
+                        param = "locale=it&";
+                    else if (actual.contains("?locale=it"))
+                        param = "?locale=it";
+                }
+                Window.Location.assign(actual.replace(param, ""));
+            }
+        }
+        
+        
+        
+        
+    }
 }

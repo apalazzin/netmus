@@ -125,6 +125,25 @@
 	
 }
 
+.flag_eng {
+	
+	position: absolute;
+	top: -10px;
+	right: 35px;
+	cursor: pointer;
+	
+	}
+	
+	
+.flag_ita {
+	
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;	
+	
+	}
+
 .login:hover {
 	
 	color: green;
@@ -184,4 +203,5 @@
 	
 .wlcm{
 	float: right;
+	padding-left: 5px;
 }
