@@ -2150,7 +2150,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    public void playNext() {
        
-       if(playing==0) {
+       if(playing==0 && dataProvider_catalogo.getList().indexOf((Song)played_song)!=dataProvider_catalogo.getList().size()-1) {
            
            Song to_play = dataProvider_catalogo.getList().get(dataProvider_catalogo.getList().indexOf((Song)played_song)+1);
                       
@@ -2161,7 +2161,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            listener.playYouTube(to_play.autore, to_play.titolo, to_play.album);
            setFwRw();
            
-       } else {
+       } else if(player_playlist.indexOf((Song)played_song)!=player_playlist.size()-1) {
            
            Song to_play = player_playlist.get(player_playlist.indexOf((Song)played_song)+1);
            
