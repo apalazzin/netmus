@@ -157,6 +157,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label stat_song_pref;
    @UiField Label stat_pref_netmus;
    @UiField Label friends_titolo_text;
+   @UiField Label num_songs;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -225,6 +226,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image edit_profile_clear;
    @UiField Image flag_ita;
    @UiField Image flag_eng;
+   @UiField Image up;
+   @UiField Image down;
    
    @UiField Button edit_profile_check;
    @UiField Button stat_close;
@@ -813,6 +816,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_song_pref.setText(myConstants.statSongPref());
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
+           num_songs.setText(myConstants.statNum());
            
 
    }
@@ -1210,6 +1214,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
               remove_song.setVisible(true);
               insert_song.setVisible(true);
               delete_playlist.setVisible(true);
+              up.setVisible(true);
+              down.setVisible(true);
               
               playlist_songs.clear();
               playlist_songs.add(song_list);
@@ -1676,8 +1682,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("flag_ita")
    void handleMouseClickFlagItaOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=en", "") + "&locale=it");
-       
+       listener.changeLanguage("it");
    }
    
    @UiHandler("flag_ita")
@@ -1687,7 +1692,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
    @UiHandler("flag_eng")
    void handleMouseClickFlagEngOpen(ClickEvent e) {
-       Window.Location.replace(Window.Location.getQueryString().replaceAll("&locale=it", "") + "&locale=en");
+       listener.changeLanguage("en");
    }
    
    @UiHandler("flag_eng")
@@ -1695,10 +1700,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        flag_eng.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
    
-   /**
-    * This method is used to remove the locale parameter from the url
-    * (used to get the URL by stripping off the parameters.......)
-    */
+   @UiHandler("up")
+   void handleMouseClickUp(ClickEvent e) {
+       listener.moveUpInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+   
+   @UiHandler("down")
+   void handleMouseClickDown(ClickEvent e) {
+       listener.moveDownInPLaylist(playlist_title.getText(), selected_song_playlist.autore, selected_song_playlist.titolo, selected_song_playlist.album);;
+   }
+
 
 
 ///////////////////////////////////////////////////////
@@ -1990,6 +2001,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        remove_song.setVisible(true);
        insert_song.setVisible(true);
        delete_playlist.setVisible(true);
+       up.setVisible(true);
+       down.setVisible(true);
        
        playlist_songs.clear();
        playlist_songs.add(song_list);
@@ -2721,16 +2734,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
             }, DoubleClickEvent.getType());
             
-            
+            //Inizializzazione etichette
             Label titolo = new Label();
             titolo.setText(canzone.album);
+            Label autore = new Label();
+            autore.setText(canzone.autore);
+            
+            //Ridefinizione etichette per album mancante
+            if (titolo.getText().equals("")) {
+                titolo.setText(myConstants.unknownAlbum());
+                autore.setText("");
+            }
+            
+            //Definizione stili etichette
             titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
             titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
             titolo.getElement().getStyle().setProperty("maxHeight", "29px");
             titolo.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
-
-            Label autore = new Label();
-            autore.setText(canzone.autore);
             autore.getElement().getStyle().setProperty("fontFamily", "Verdana");
             autore.getElement().getStyle().setFontSize(10, Style.Unit.PX);
             autore.getElement().getStyle().setColor("#999999");
@@ -2763,6 +2783,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         remove_song.setVisible(false);
         insert_song.setVisible(false);
         delete_playlist.setVisible(false);
+        up.setVisible(false);
+        down.setVisible(false);
         
         playlist_songs.clear();
         playlist_songs.add(album_list);

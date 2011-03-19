@@ -1259,4 +1259,46 @@ public class ProfileActivity extends AbstractActivity implements
         //Visualizzazione del pop-up delle statistiche
         client_factory.getProfileView().setStats(num_songs, preferred_artist, most_popular_song_for_this_user, most_popular_song);
     }
+    
+    /**
+     * Modifica l'URL del browser per cambiare lingua,
+     * utilizzando la gestione automatica dell'intenazionalizzazione
+     * offerta da GWT,
+     */
+    @Override
+    public void changeLanguage(String locale) {
+        
+        String actual = Window.Location.getHref();
+        
+        if (locale.equals("it")) {
+            if (!actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains(".html?") || actual.contains("/?")) {
+                    param = "&"+param;
+                    actual = actual.replaceAll("#", param+"#");
+                }
+                else {
+                    param = "?"+param;
+                    if (actual.contains(".html?"))
+                        actual = actual.replaceAll(".html", ".html"+param);
+                    else if (actual.contains("/?"))
+                        actual = actual.replaceAll("/", "/"+param);
+                }
+                Window.Location.replace(actual);
+            }
+        } else {
+            if (actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains("&locale=it"))
+                    param = "&locale=it";
+                else {
+                    if (actual.contains("?locale=it&"))
+                        param = "locale=it&";
+                    else if (actual.contains("?locale=it"))
+                        param = "?locale=it";
+                }
+                Window.Location.replace(actual.replace(param, ""));
+            }
+        }
+    }
 }
