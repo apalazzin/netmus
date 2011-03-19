@@ -2721,16 +2721,23 @@ public class ProfileViewImpl extends Composite implements ProfileView {
                 
             }, DoubleClickEvent.getType());
             
-            
+            //Inizializzazione etichette
             Label titolo = new Label();
             titolo.setText(canzone.album);
+            Label autore = new Label();
+            autore.setText(canzone.autore);
+            
+            //Ridefinizione etichette per album mancante
+            if (titolo.getText().equals("")) {
+                titolo.setText(myConstants.unknownAlbum());
+                autore.setText("");
+            }
+            
+            //Definizione stili etichette
             titolo.getElement().getStyle().setProperty("fontFamily", "Verdana");
             titolo.getElement().getStyle().setFontSize(11, Style.Unit.PX);
             titolo.getElement().getStyle().setProperty("maxHeight", "29px");
             titolo.getElement().getStyle().setOverflow(Style.Overflow.HIDDEN);
-
-            Label autore = new Label();
-            autore.setText(canzone.autore);
             autore.getElement().getStyle().setProperty("fontFamily", "Verdana");
             autore.getElement().getStyle().setFontSize(10, Style.Unit.PX);
             autore.getElement().getStyle().setColor("#999999");
