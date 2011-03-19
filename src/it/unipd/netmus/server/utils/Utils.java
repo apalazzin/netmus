@@ -3,11 +3,8 @@ package it.unipd.netmus.server.utils;
 import it.unipd.netmus.server.youtube.YouTubeManager;
 import it.unipd.netmus.shared.SongDTO;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
-
-import com.google.gdata.util.ServiceException;
 
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
