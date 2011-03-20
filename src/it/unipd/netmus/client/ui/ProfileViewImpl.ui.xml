@@ -1,0 +1,588 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+          xmlns:g="urn:import:com.google.gwt.user.client.ui"
+          xmlns:c='urn:import:com.google.gwt.user.cellview.client'>
+ 
+   <ui:style src="css/ProfileView.css" />
+   
+	<g:HTMLPanel ui:field="container" styleName="{style.container}">
+	<div id="s1" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 230px; right: 5px;  z-index: 19;  display: none;
+ text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">1</div>
+	
+
+			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
+			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
+			
+			<div id="s3" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 70px; right: 30px;  z-index: 19;  display: none;
+ text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">3</div>
+
+
+			
+				<div style="height: 55px; width: 100%; border: 0px solid #000000;"></div>
+				<g:Label ui:field="user" styleName="{style.user}"></g:Label>
+
+
+				<g:HTMLPanel styleName="{style.stats}">				
+				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600; float: left; margin-right: 5px;"><g:Label ui:field="num_songs">Numero di Brani:</g:Label></span>
+				<g:Label ui:field="n_songs" styleName="{style.n_songs}"></g:Label>
+				</g:HTMLPanel>
+
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
+
+
+				<g:HTMLPanel styleName="{style.title}"><span>PLAYLIST</span>
+				<g:Image ui:field="add_playlist" styleName="{style.add_playlist}" url="images/plus_silver.png"></g:Image></g:HTMLPanel>
+				
+				
+				<g:HTMLPanel ui:field="playlists" styleName="{style.playlist}">
+				</g:HTMLPanel>
+
+				<div style="width: 178px; height: 0px; border: 1px solid #EEEEEE;"/>
+	
+				<g:HTMLPanel ui:field="friends_titolo" styleName="{style.title}"><span><g:Label ui:field="friends_titolo_text">UTENTI NETMUS</g:Label></span></g:HTMLPanel>					
+				<g:HTMLPanel ui:field="friends" styleName="{style.social}">				
+				</g:HTMLPanel>
+				
+				<g:Image ui:field="cover" url="images/test_cover.jpg" styleName="{style.cover}"></g:Image>
+				
+				<img src="images/netmus_scritta.png" style="position: absolute; top: 0px; left: 5px; width: 170px; margin-top: 5px;" />
+			
+			</div>
+			</g:HTMLPanel>
+
+			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
+			
+			<div id="s2" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 0px; right: 140px;  z-index: 19;  display: none;
+ text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">2</div>
+
+<div id="s4" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 70px; right: 50px;  z-index: 19;  display: none;
+ text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">4</div>
+
+<div id="s5" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 40px; left: 5px;  z-index: 19;  display: none;
+ text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF;">5</div>
+	
+				<g:Image ui:field="play" url="images/playoff.png" styleName="{style.play}"> </g:Image>
+				<g:Image ui:field="forwardF" url="images/fwoff.png" styleName="{style.fwF}"> </g:Image>
+				<g:Image ui:field="rewindF" url="images/rwoff.png" styleName="{style.rwF}"> </g:Image>
+				<g:Image ui:field="forward" url="images/fwoff.png" styleName="{style.fw}"> </g:Image>
+				<g:Image ui:field="rewind" url="images/rwoff.png" styleName="{style.rw}"> </g:Image>
+	
+				<g:Image ui:field="social_button" url="images/social_button.png" styleName="{style.socialButton}"></g:Image>
+
+				<g:Image ui:field="account_button" url="images/account_button.png" styleName="{style.accountButton}"></g:Image>
+
+				<g:Image ui:field="edit_button" url="images/edit_button.png" styleName="{style.editButton}"></g:Image>
+
+				<g:Image ui:field="flag_ita" url="images/ita.png" styleName="{style.flag_ita}"></g:Image>
+				<g:Image ui:field="flag_eng" url="images/eng.png" styleName="{style.flag_eng}"></g:Image>
+				<g:Anchor ui:field="logout" styleName="{style.logout}">Logout</g:Anchor>
+				<g:Label ui:field="help" styleName="{style.help_button}">Help</g:Label>
+				
+				<g:HTMLPanel ui:field="info" styleName="{style.info}"><g:Label ui:field="info_text">Nessun brano in ascolto</g:Label></g:HTMLPanel>
+				<g:Image ui:field="switch_list" url="images/switch_sx_on.png" styleName="{style.switch_list}"></g:Image>
+				<g:Image ui:field="switch_cover" url="images/switch_dx_off.png" styleName="{style.switch_cover}"></g:Image>
+				
+			
+				<g:HTMLPanel ui:field="search" styleName="{style.search}">
+				<g:TextBox ui:field="search_box" styleName="{style.search_box}"></g:TextBox>
+				<img src="images/magnifier.jpg" style="float: right; height: 20px; margin-left: 0px;" />
+				</g:HTMLPanel>
+				
+
+				<g:HTMLPanel ui:field="library_container" styleName="{style.catalogue_container}">
+				<c:CellTable ui:field="library" styleName="{style.catalogue}"></c:CellTable>
+				
+				<g:HTMLPanel ui:field="covers_container" styleName="{style.covers}"></g:HTMLPanel>
+				
+				
+				</g:HTMLPanel>
+				
+
+				
+				<g:HTMLPanel ui:field="playlist_container" styleName="{style.playlist_container}">
+					<g:HTMLPanel ui:field="playlist_content" styleName="{style.playlist_inside}">
+						<g:HTMLPanel ui:field="playlist_songs"></g:HTMLPanel>						
+					</g:HTMLPanel>
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"> </div>
+					<g:Label ui:field="playlist_title" styleName="{style.title_playlist}"></g:Label>
+					<g:Image ui:field="delete_playlist" styleName="{style.remove_playlist}" url="images/cross_red.png"></g:Image>
+					<g:Image ui:field="close_playlist" styleName="{style.close_playlist}" url="images/close_silver.jpg"></g:Image>			
+					<div style="background-color: #EEEEEE; bottom:0px; left: 0px; width: 100%; position: absolute; height: 22px; border-top: 1px solid #999999;">
+					<g:HorizontalPanel>
+						<g:Label ui:field="insert_song" styleName="{style.song_add}"></g:Label>
+						<g:Label ui:field="remove_song" styleName="{style.track_remove}"></g:Label>
+					</g:HorizontalPanel>
+					</div>
+					<g:Image ui:field="add_song_to_playlist" styleName="{style.addtrack_playlist}" url="images/plus_green.png"></g:Image>
+					<g:Image ui:field="remove_song_from_playlist" styleName="{style.deletetrack_playlist}" url="images/less_red.png"></g:Image>
+					
+					<g:Image ui:field="up" styleName="{style.playlist_up}" url="images/up.png"></g:Image>
+					<g:Image ui:field="down" styleName="{style.playlist_down}" url="images/down.png"></g:Image>
+					
+					<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>
+				</g:HTMLPanel>
+				
+				
+				<g:HTMLPanel ui:field="song_container" styleName="{style.song_container}">
+									
+					<g:HTMLPanel ui:field="song_contenuto" styleName="{style.song_inside}">
+						
+						
+						<g:HTMLPanel ui:field="song_fields" styleName="{style.song_fields}">
+						<g:HorizontalPanel><g:Label ui:field="title_song" styleName="{style.song_label}">Titolo:</g:Label><g:Label ui:field="song_title"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="artist_song" styleName="{style.song_label}">Autore:</g:Label><g:Label ui:field="song_artist"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="album_song" styleName="{style.song_label}">Album:</g:Label><g:Label ui:field="song_album"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="genre_song" styleName="{style.song_label}">Genere:</g:Label><g:Label ui:field="song_genre"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="year_song" styleName="{style.song_label}">Anno:</g:Label><g:Label ui:field="song_year"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="composer_song" styleName="{style.song_label}">Compos.:</g:Label><g:Label ui:field="song_composer"></g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel><g:Label ui:field="track_song" styleName="{style.song_label}">Traccia:</g:Label><g:Label ui:field="song_track"></g:Label></g:HorizontalPanel>
+						<g:HTMLPanel ui:field="classificaG" styleName="{style.ranking_global}">
+							<g:HorizontalPanel> 
+							<g:HTMLPanel styleName="{style.starsG}"><g:Label ui:field="rating_song">Classifica:</g:Label></g:HTMLPanel>
+							<g:Image ui:field="starG1" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG2" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG3" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG4" styleName="{style.starG}" url="images/starbw.png"/>
+							<g:Image ui:field="starG5" styleName="{style.starG}" url="images/starbw.png"/>
+							</g:HorizontalPanel>
+
+						</g:HTMLPanel>
+				
+						<g:Image ui:field="song_cover" styleName="{style.song_cover}"></g:Image>
+						
+						</g:HTMLPanel>
+						
+					
+				</g:HTMLPanel>
+					
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="track_title" styleName="{style.title_song}"></g:Label></div>
+					<g:Image ui:field="delete_song" styleName="{style.delete_song}" url="images/cross_red.png"></g:Image>
+					<g:Image ui:field="close_song" styleName="{style.close_playlist}" url="images/close_silver.jpg"></g:Image>					
+					
+				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>	
+				</g:HTMLPanel>
+				
+				<g:Image ui:field="loading" url="images/loading.png" styleName="{style.loading}"></g:Image>
+				
+				<g:HTMLPanel ui:field="youtube" styleName="{style.youtube}">
+					<g:Image ui:field="play_youtube" url="images/playoff.png" styleName="{style.playYoutube}" />
+					<g:Image ui:field="logo_youtube" url="images/youtube.png" styleName="{style.logo_youtube}" />
+					<g:HTMLPanel ui:field="info_youtube" styleName="{style.info_youtube}"></g:HTMLPanel>
+					<g:Label ui:field="info_youtube_link" styleName="{style.info_youtube_link}"></g:Label>	
+					
+					<g:HTMLPanel ui:field="youtube_appendix" styleName="{style.youtube_appendix}"></g:HTMLPanel>
+					<g:Image ui:field="close_youtube" styleName="{style.close_youtube}" url="images/close_silver.jpg"/>
+				</g:HTMLPanel>
+			
+				<g:HTMLPanel ui:field="ranking" styleName="{style.ranking}">
+				<g:Image ui:field="star1" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star2" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star3" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star4" styleName="{style.star}" url="images/starbw.png"/>
+				<g:Image ui:field="star5" styleName="{style.star}" url="images/starbw.png"/>
+				
+				<span style="position: absolute; top: -20px; left: 0px; font-size: 11px; font-family: Verdana; font-weight: bold; width: 150px;"><g:Label ui:field="vote">Il tuo voto:</g:Label></span>
+				<div style="position: absolute; bottom: -3px; left: 0px; height: 1px; border-bottom: 2px solid #DDDDDD; width: 150px;"></div>
+				
+				</g:HTMLPanel>
+				
+
+				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/pdf.png"/>				
+				<span style="position: absolute; bottom: 12px; right: 12px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="export">Esporta Lista</g:Label></span>
+				
+				<g:Image ui:field="statistics_open" styleName="{style.stats2}" url="images/statistiche.png"/>
+				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="statisticL">Statistiche</g:Label></span>
+				
+			
+			
+			</g:HTMLPanel>
+	
+	
+	
+			   	<g:HTMLPanel ui:field="edit_profile" styleName="{style.edit_profile}">
+				<g:Image ui:field="edit_profile_logo" styleName="{style.edit_profile_logo}" url="images/logo_netmus.png"/>
+			   	
+			   	<g:Image ui:field="edit_profile_close" styleName="{style.edit_profile_close}" url="images/close_silverT.png"/>
+			   	<g:HorizontalPanel styleName="{style.edit_profile_top}">
+			   		<g:HorizontalPanel styleName="{style.edit_profile_user}">
+			   			<g:Label ui:field="edit_profile_user" styleName="{style.edit_profile_labelu}"></g:Label>
+			   		</g:HorizontalPanel>
+			   		<g:Image ui:field="edit_profile_clear" styleName="{style.edit_profile_clear}" url="images/cross_red.png"/>
+			   	</g:HorizontalPanel>
+			   	
+				<g:HorizontalPanel styleName="{style.edit_profile_checkC}">
+			   		<g:Image ui:field="edit_profile_check_img" styleName="{style.edit_profile_check}" url="images/check_green.png"/>
+			   		<g:Button ui:field="edit_profile_check" styleName="{style.edit_profile_checkT}">Salva le modifiche.</g:Button>
+			   	</g:HorizontalPanel>
+			   		
+			   		
+			   		<g:HTMLPanel styleName="{style.edit_profile_left}">
+			   		<g:VerticalPanel ui:field="edit_profile_vl">
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Password:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label styleName="{style.edit_profile_label}">Nickname:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="name_user" styleName="{style.edit_profile_label}">Nome:</g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="surname"  styleName="{style.edit_profile_label}">Cognome:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="nation" styleName="{style.edit_profile_label}">Nazionalità:</g:Label></g:HorizontalPanel>
+						<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="sex" styleName="{style.edit_profile_label}">Sesso:</g:Label></g:HorizontalPanel>
+			   		</g:VerticalPanel>
+			   		</g:HTMLPanel>
+			   		
+			   		<g:HTMLPanel styleName="{style.edit_profile_right}">
+			   		<g:VerticalPanel ui:field="edit_profile_vr">
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_password" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_nickname" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_name" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:Label ui:field="edit_profile_surname" styleName="{style.edit_profile_labelf}"></g:Label></g:HorizontalPanel>
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}"><g:HTMLPanel ui:field="country_container"> 
+				   		
+	<select id="country">
+	<optgroup label="">
+		<option value="" selected="selected">Select Country</option> 
+	</optgroup>
+	<optgroup label="common choices">
+		<option value="United Kingdom">United Kingdom</option> 
+		<option value="United States">United States</option> 
+		<option value="France">France</option> 
+		<option value="Germany">Germany</option> 
+		<option value="Spain">Spain</option> 
+		<option value="Italy">Italy</option> 
+		<option value="Canada">Canada</option> 
+	</optgroup>
+	<optgroup label="other countries">
+		<option value="Afghanistan">Afghanistan</option> 
+		<option value="Albania">Albania</option> 
+		<option value="Algeria">Algeria</option> 
+		<option value="American Samoa">American Samoa</option> 
+		<option value="Andorra">Andorra</option> 
+		<option value="Angola">Angola</option> 
+		<option value="Anguilla">Anguilla</option> 
+		<option value="Antarctica">Antarctica</option> 
+		<option value="Antigua and Barbuda">Antigua and Barbuda</option> 
+		<option value="Argentina">Argentina</option> 
+		<option value="Armenia">Armenia</option> 
+		<option value="Aruba">Aruba</option> 
+		<option value="Australia">Australia</option> 
+		<option value="Austria">Austria</option> 
+		<option value="Azerbaijan">Azerbaijan</option> 
+		<option value="Bahamas">Bahamas</option> 
+		<option value="Bahrain">Bahrain</option> 
+		<option value="Bangladesh">Bangladesh</option> 
+		<option value="Barbados">Barbados</option> 
+		<option value="Belarus">Belarus</option> 
+		<option value="Belgium">Belgium</option> 
+		<option value="Belize">Belize</option> 
+		<option value="Benin">Benin</option> 
+		<option value="Bermuda">Bermuda</option> 
+		<option value="Bhutan">Bhutan</option> 
+		<option value="Bolivia">Bolivia</option> 
+		<option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option> 
+		<option value="Botswana">Botswana</option> 
+		<option value="Bouvet Island">Bouvet Island</option> 
+		<option value="Brazil">Brazil</option> 
+		<option value="British Indian Ocean Territory">British Indian Ocean Territory</option> 
+		<option value="Brunei Darussalam">Brunei Darussalam</option> 
+		<option value="Bulgaria">Bulgaria</option> 
+		<option value="Burkina Faso">Burkina Faso</option> 
+		<option value="Burundi">Burundi</option> 
+		<option value="Cambodia">Cambodia</option> 
+		<option value="Cameroon">Cameroon</option> 
+		<option value="Canada">Canada</option> 
+		<option value="Cape Verde">Cape Verde</option> 
+		<option value="Cayman Islands">Cayman Islands</option> 
+		<option value="Central African Republic">Central African Republic</option> 
+		<option value="Chad">Chad</option> 
+		<option value="Chile">Chile</option> 
+		<option value="China">China</option> 
+		<option value="Christmas Island">Christmas Island</option> 
+		<option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option> 
+		<option value="Colombia">Colombia</option> 
+		<option value="Comoros">Comoros</option> 
+		<option value="Congo">Congo</option> 
+		<option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option> 
+		<option value="Cook Islands">Cook Islands</option> 
+		<option value="Costa Rica">Costa Rica</option> 
+		<option value="Cote D'ivoire">Cote D'ivoire</option> 
+		<option value="Croatia">Croatia</option> 
+		<option value="Cuba">Cuba</option> 
+		<option value="Cyprus">Cyprus</option> 
+		<option value="Czech Republic">Czech Republic</option> 
+		<option value="Denmark">Denmark</option> 
+		<option value="Djibouti">Djibouti</option> 
+		<option value="Dominica">Dominica</option> 
+		<option value="Dominican Republic">Dominican Republic</option> 
+		<option value="Ecuador">Ecuador</option> 
+		<option value="Egypt">Egypt</option> 
+		<option value="El Salvador">El Salvador</option> 
+		<option value="Equatorial Guinea">Equatorial Guinea</option> 
+		<option value="Eritrea">Eritrea</option> 
+		<option value="Estonia">Estonia</option> 
+		<option value="Ethiopia">Ethiopia</option> 
+		<option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option> 
+		<option value="Faroe Islands">Faroe Islands</option> 
+		<option value="Fiji">Fiji</option> 
+		<option value="Finland">Finland</option> 
+		<option value="France">France</option> 
+		<option value="French Guiana">French Guiana</option> 
+		<option value="French Polynesia">French Polynesia</option> 
+		<option value="French Southern Territories">French Southern Territories</option> 
+		<option value="Gabon">Gabon</option> 
+		<option value="Gambia">Gambia</option> 
+		<option value="Georgia">Georgia</option> 
+		<option value="Germany">Germany</option> 
+		<option value="Ghana">Ghana</option> 
+		<option value="Gibraltar">Gibraltar</option> 
+		<option value="Greece">Greece</option> 
+		<option value="Greenland">Greenland</option> 
+		<option value="Grenada">Grenada</option> 
+		<option value="Guadeloupe">Guadeloupe</option> 
+		<option value="Guam">Guam</option> 
+		<option value="Guatemala">Guatemala</option> 
+		<option value="Guinea">Guinea</option> 
+		<option value="Guinea-bissau">Guinea-bissau</option> 
+		<option value="Guyana">Guyana</option> 
+		<option value="Haiti">Haiti</option> 
+		<option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option> 
+		<option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option> 
+		<option value="Honduras">Honduras</option> 
+		<option value="Hong Kong">Hong Kong</option> 
+		<option value="Hungary">Hungary</option> 
+		<option value="Iceland">Iceland</option> 
+		<option value="India">India</option> 
+		<option value="Indonesia">Indonesia</option> 
+		<option value="Iran, Islamic Republic of">Iran, Islamic Republic of</option> 
+		<option value="Iraq">Iraq</option> 
+		<option value="Ireland">Ireland</option> 
+		<option value="Israel">Israel</option> 
+		<option value="Italy">Italy</option> 
+		<option value="Jamaica">Jamaica</option> 
+		<option value="Japan">Japan</option> 
+		<option value="Jordan">Jordan</option> 
+		<option value="Kazakhstan">Kazakhstan</option> 
+		<option value="Kenya">Kenya</option> 
+		<option value="Kiribati">Kiribati</option> 
+		<option value="Korea, Democratic People's Republic of">Korea, Democratic People's Republic of</option> 
+		<option value="Korea, Republic of">Korea, Republic of</option> 
+		<option value="Kuwait">Kuwait</option> 
+		<option value="Kyrgyzstan">Kyrgyzstan</option> 
+		<option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option> 
+		<option value="Latvia">Latvia</option> 
+		<option value="Lebanon">Lebanon</option> 
+		<option value="Lesotho">Lesotho</option> 
+		<option value="Liberia">Liberia</option> 
+		<option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option> 
+		<option value="Liechtenstein">Liechtenstein</option> 
+		<option value="Lithuania">Lithuania</option> 
+		<option value="Luxembourg">Luxembourg</option> 
+		<option value="Macao">Macao</option> 
+		<option value="Macedonia, The Former Yugoslav Republic of">Macedonia, The Former Yugoslav Republic of</option> 
+		<option value="Madagascar">Madagascar</option> 
+		<option value="Malawi">Malawi</option> 
+		<option value="Malaysia">Malaysia</option> 
+		<option value="Maldives">Maldives</option> 
+		<option value="Mali">Mali</option> 
+		<option value="Malta">Malta</option> 
+		<option value="Marshall Islands">Marshall Islands</option> 
+		<option value="Martinique">Martinique</option> 
+		<option value="Mauritania">Mauritania</option> 
+		<option value="Mauritius">Mauritius</option> 
+		<option value="Mayotte">Mayotte</option> 
+		<option value="Mexico">Mexico</option> 
+		<option value="Micronesia, Federated States of">Micronesia, Federated States of</option> 
+		<option value="Moldova, Republic of">Moldova, Republic of</option> 
+		<option value="Monaco">Monaco</option> 
+		<option value="Mongolia">Mongolia</option> 
+		<option value="Montserrat">Montserrat</option> 
+		<option value="Morocco">Morocco</option> 
+		<option value="Mozambique">Mozambique</option> 
+		<option value="Myanmar">Myanmar</option> 
+		<option value="Namibia">Namibia</option> 
+		<option value="Nauru">Nauru</option> 
+		<option value="Nepal">Nepal</option> 
+		<option value="Netherlands">Netherlands</option> 
+		<option value="Netherlands Antilles">Netherlands Antilles</option> 
+		<option value="New Caledonia">New Caledonia</option> 
+		<option value="New Zealand">New Zealand</option> 
+		<option value="Nicaragua">Nicaragua</option> 
+		<option value="Niger">Niger</option> 
+		<option value="Nigeria">Nigeria</option> 
+		<option value="Niue">Niue</option> 
+		<option value="Norfolk Island">Norfolk Island</option> 
+		<option value="Northern Mariana Islands">Northern Mariana Islands</option> 
+		<option value="Norway">Norway</option> 
+		<option value="Oman">Oman</option> 
+		<option value="Pakistan">Pakistan</option> 
+		<option value="Palau">Palau</option> 
+		<option value="Palestinian Territory, Occupied">Palestinian Territory, Occupied</option> 
+		<option value="Panama">Panama</option> 
+		<option value="Papua New Guinea">Papua New Guinea</option> 
+		<option value="Paraguay">Paraguay</option> 
+		<option value="Peru">Peru</option> 
+		<option value="Philippines">Philippines</option> 
+		<option value="Pitcairn">Pitcairn</option> 
+		<option value="Poland">Poland</option> 
+		<option value="Portugal">Portugal</option> 
+		<option value="Puerto Rico">Puerto Rico</option> 
+		<option value="Qatar">Qatar</option> 
+		<option value="Reunion">Reunion</option> 
+		<option value="Romania">Romania</option> 
+		<option value="Russian Federation">Russian Federation</option> 
+		<option value="Rwanda">Rwanda</option> 
+		<option value="Saint Helena">Saint Helena</option> 
+		<option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option> 
+		<option value="Saint Lucia">Saint Lucia</option> 
+		<option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option> 
+		<option value="Saint Vincent and The Grenadines">Saint Vincent and The Grenadines</option> 
+		<option value="Samoa">Samoa</option> 
+		<option value="San Marino">San Marino</option> 
+		<option value="Sao Tome and Principe">Sao Tome and Principe</option> 
+		<option value="Saudi Arabia">Saudi Arabia</option> 
+		<option value="Senegal">Senegal</option> 
+		<option value="Serbia and Montenegro">Serbia and Montenegro</option> 
+		<option value="Seychelles">Seychelles</option> 
+		<option value="Sierra Leone">Sierra Leone</option> 
+		<option value="Singapore">Singapore</option> 
+		<option value="Slovakia">Slovakia</option> 
+		<option value="Slovenia">Slovenia</option> 
+		<option value="Solomon Islands">Solomon Islands</option> 
+		<option value="Somalia">Somalia</option> 
+		<option value="South Africa">South Africa</option> 
+		<option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option> 
+		<option value="Spain">Spain</option> 
+		<option value="Sri Lanka">Sri Lanka</option> 
+		<option value="Sudan">Sudan</option> 
+		<option value="Suriname">Suriname</option> 
+		<option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option> 
+		<option value="Swaziland">Swaziland</option> 
+		<option value="Sweden">Sweden</option> 
+		<option value="Switzerland">Switzerland</option> 
+		<option value="Syrian Arab Republic">Syrian Arab Republic</option> 
+		<option value="Taiwan, Province of China">Taiwan, Province of China</option> 
+		<option value="Tajikistan">Tajikistan</option> 
+		<option value="Tanzania, United Republic of">Tanzania, United Republic of</option> 
+		<option value="Thailand">Thailand</option> 
+		<option value="Timor-leste">Timor-leste</option> 
+		<option value="Togo">Togo</option> 
+		<option value="Tokelau">Tokelau</option> 
+		<option value="Tonga">Tonga</option> 
+		<option value="Trinidad and Tobago">Trinidad and Tobago</option> 
+		<option value="Tunisia">Tunisia</option> 
+		<option value="Turkey">Turkey</option> 
+		<option value="Turkmenistan">Turkmenistan</option> 
+		<option value="Turks and Caicos Islands">Turks and Caicos Islands</option> 
+		<option value="Tuvalu">Tuvalu</option> 
+		<option value="Uganda">Uganda</option> 
+		<option value="Ukraine">Ukraine</option> 
+		<option value="United Arab Emirates">United Arab Emirates</option> 
+		<option value="United Kingdom">United Kingdom</option> 
+		<option value="United States">United States</option> 
+		<option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option> 
+		<option value="Uruguay">Uruguay</option> 
+		<option value="Uzbekistan">Uzbekistan</option> 
+		<option value="Vanuatu">Vanuatu</option> 
+		<option value="Venezuela">Venezuela</option> 
+		<option value="Viet Nam">Viet Nam</option> 
+		<option value="Virgin Islands, British">Virgin Islands, British</option> 
+		<option value="Virgin Islands, U.S.">Virgin Islands, U.S.</option> 
+		<option value="Wallis and Futuna">Wallis and Futuna</option> 
+		<option value="Western Sahara">Western Sahara</option> 
+		<option value="Yemen">Yemen</option> 
+		<option value="Zambia">Zambia</option> 
+		<option value="Zimbabwe">Zimbabwe</option>
+	</optgroup>
+	</select>
+				   		</g:HTMLPanel>
+				   		
+				   		</g:HorizontalPanel>
+				   		<g:HorizontalPanel><g:HTMLPanel>M:</g:HTMLPanel><g:RadioButton ui:field="male" name="gender"></g:RadioButton><g:HTMLPanel>&nbsp;&nbsp;&nbsp;&nbsp;F:</g:HTMLPanel><g:RadioButton ui:field="female" name="gender"></g:RadioButton></g:HorizontalPanel>
+			   		</g:VerticalPanel>
+			   		</g:HTMLPanel>
+
+
+			   		<g:HTMLPanel styleName="{style.edit_profile_conf}">
+			   		<g:VerticalPanel ui:field="edit_profile_vc">
+				   		<g:HorizontalPanel styleName="{style.edit_profile_row}">
+				   			<g:Label ui:field="edit_profile_labelCpassword" styleName="{style.edit_profile_label}"> Conferma:</g:Label>
+				   			<g:Label  ui:field="edit_profile_cpassword" styleName="{style.edit_profile_labelf}"></g:Label>
+				   		</g:HorizontalPanel>
+				   	</g:VerticalPanel>
+			   		</g:HTMLPanel>
+
+			   	
+					<g:HTMLPanel ui:field="edit_profile_about" styleName="{style.edit_profile_about}">
+			   			<g:VerticalPanel >
+			   			<g:Label ui:field="about_me" styleName="{style.edit_profile_label}">Informazioni su di me:</g:Label>
+			   			<g:HTMLPanel  ui:field="edit_profile_aboutme" styleName="{style.edit_profile_aboutT}"></g:HTMLPanel>
+			   			</g:VerticalPanel>
+					</g:HTMLPanel>			   	
+			   	
+			   	<g:HTMLPanel ui:field="credits" styleName="{style.credits}">
+			   			<g:Label styleName="{style.credits_label}">2011 &copy; Valter Texas Group &nbsp;-&nbsp;Netmus contact: valtertexasgroup@googlegroups.com</g:Label>
+			   			<g:Label styleName="{style.credits_label}">VT.G: Federico Baron, Cosimo Caputo, Simone Daminato, Daniele Lovato, Andrea Mandolo, Alberto Palazin, Giovanni Trezzi</g:Label>
+					</g:HTMLPanel>
+			   	
+				
+				</g:HTMLPanel>
+				
+				
+				
+						   	<g:HTMLPanel ui:field="statistics" styleName="{style.statistics}">
+						   	
+						   	<g:VerticalPanel>
+			   					<g:Label ui:field="stat_netmus" styleName="{style.statistics_title}">Statistiche Netmus</g:Label>
+			   					<g:HorizontalPanel>
+			   						<g:Label ui:field="stat_num" styleName="{style.statistics_label}">Numero di brani:</g:Label>
+			   						<g:Label ui:field="stat_tracks" styleName="{style.statistics_data}">100</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label ui:field="stat_pref" styleName="{style.statistics_label}">Artista preferito:</g:Label>
+			   						<g:Label ui:field="stat_preferred" styleName="{style.statistics_data}">Tokio Hotel</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label ui:field="stat_song_pref" styleName="{style.statistics_label}">Canzone preferita:</g:Label>
+			   						<g:Label ui:field="stat_preferreds" styleName="{style.statistics_data}">Durch den Monzun</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:HorizontalPanel>
+			   						<g:Label ui:field="stat_pref_netmus"  styleName="{style.statistics_label}">Preferita in Netmus:</g:Label>
+			   						<g:Label ui:field="stat_preferredn" styleName="{style.statistics_data}">Rette Micht</g:Label>
+			   					</g:HorizontalPanel>
+			   					<g:Button ui:field="stat_close" styleName="{style.statistics_close}">chiudi</g:Button>
+			   				
+						   	</g:VerticalPanel>
+						   	</g:HTMLPanel>
+						   	
+				
+				<g:HTMLPanel ui:field="popup" styleName="{style.popup}">
+				
+				<g:Button ui:field="popup_yes" styleName="{style.popup_yes}"></g:Button>
+				<g:Button ui:field="popup_no" styleName="{style.popup_no}"></g:Button>
+				
+				</g:HTMLPanel>
+
+				<g:HTMLPanel ui:field="popup_fast" styleName="{style.popup_fast}"></g:HTMLPanel>
+				
+				<g:HTMLPanel ui:field="help_container" styleName="{style.help}">
+				  <div id="help_body" class="{style.help_body}">
+				    <h2 style="color: rgb(60,130,30); text-align: center;"><g:Label ui:field="hlpT">Tutto quello che vuoi sapere su NetMus</g:Label></h2>
+   	                <ol type="1">
+   	                  <li><b>SONG SCANNER</b><g:Label ui:field="hlp1"> Salva la musica dal tuo computer o da un dispositivo usb una volta collegato.</g:Label></li>
+   	                  <li><b>SETTINGS</b><g:Label ui:field="hlp2"> Visualizzano e permettono di gestire le informazionie i contenuti del tuo catalogo e del tuo profilo.</g:Label></li>
+  			          <li><b>PLAYLIST MAKER</b><g:Label ui:field="hlp3">Organizza il catalogo creando le playlist.</g:Label></li>
+			          <li><b>INFO BUTTONS</b><g:Label ui:field="hlp4">Per creare un documento con la lista delle canzoni e visualizzare le statistiche del catalogo.</g:Label></li>
+			          <li><b>MUSIC PLAYER</b><g:Label ui:field="hlp5"> Interfacciandosi con Youtube ti permette di ascoltare la tua musica, brano dopo brano, senza interruzioni!</g:Label></li>
+			        </ol>
+			        <img src="images/deco.png" style="width: 300px; float: left;" />
+				  </div>
+				</g:HTMLPanel>
+
+   	
+	</g:HTMLPanel>
+
+				
+
+   
+</ui:UiBinder>
