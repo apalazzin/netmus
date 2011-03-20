@@ -34,7 +34,7 @@
 }
 
 .accountButton:hover {
-	border: 1px solid black;  
+	border: 0px solid black;  
 	border-radius: 3px;
 	-moz-border-radius: 3px;  
 }
@@ -262,9 +262,9 @@
 	}
 
 .editButton:hover {
-	border: 1px solid black;  
+	border: 0px solid #999999;  
 	border-radius: 3px;
-	-moz-border-radius: 3px;  
+	-moz-border-radius: 3px;
 }
 
 .editButton {
@@ -394,17 +394,21 @@
 .edit_profile_clear {
 	
 	margin-left: 15px;
+	margin-top: 4px;
 	font-weight: bold;
-	color: rgb(250,140,140);
 	
-	padding: 4px;
 	
-	background-color: rgb(50,50,50);
-
-	border: 1.5px solid red;
+	padding: 2px;
+		
+    padding-left: 4px;
+	padding-right: 4px;
+	border: 0px solid #000000;
 	border-radius: 15px;
 	-moz-border-radius: 15px;
-	
+	font-size: 12px;
+	color: #FF0000;
+	text-decoration: underline;
+	font-family: Verdana;
 	
 	}
 	
@@ -414,7 +418,7 @@
 	margin-left: 20px;	
 	opacity: 0;
 	
-	border: 1.5px solid black;
+	border: 0px solid black;
 
 }
 
@@ -608,18 +612,17 @@ height: 30px;
 .delete_song {
 	
 	position: absolute;
-	top: 2px;
-	right: 5px;
+	top: 1px;
+	right: 1px;
 		
-	background-color: rgb(50,50,50);
+	background-color: #EEEEEE;
     padding-left: 4px;
 	padding-right: 4px;
-	border: 1.5px solid red;
+	border: 2px solid #CCCCCC;
 	border-radius: 15px;
 	-moz-border-radius: 15px;
+	font-size: 10px;
 	
-	font-weight: bold;
-	color: rgb(250,140,140);
 	 
 	}
 	
@@ -773,12 +776,7 @@ width: 97%;
 
 
 .help_button:hover {
-	background-color: rgb(255,255,255);    	
-    padding-left: 4px;
-	padding-right: 4px;
-	border: 1.5px solid #37A6EB;
-	border-radius: 15px;
-	-moz-border-radius: 15px;	
+color: green;
 }
 
 .help_button {
@@ -900,21 +898,7 @@ width: 97%;
 	
 .logout:hover {
 	
-	position: absolute;
-	top: -20px;
-	right: 20px;
-	font-size: 12px;
-	font-family: Verdana;
-	font-weight: bold;
-	color: #37A6EB;
-	cursor: pointer;
-	
-	background-color: rgb(255,255,255);	
-	padding-left: 4px;
-	padding-right: 4px;
-	border: 1.5px solid #37A6EB;
-	border-radius: 15px;
-	-moz-border-radius: 15px;
+	color: green;
 	
 
 	
@@ -946,7 +930,7 @@ width: 97%;
 	}
 	
 .pdf:hover {
-	border: 1px solid black;  
+	border: 0px solid black;  
 	border-radius: 3px;
 	-moz-border-radius: 3px;  
 }
@@ -1291,7 +1275,7 @@ width: 97%;
 
 
 .socialButton:hover {
-	border: 1px solid black;  
+	border: 0px solid black;  
 	border-radius: 3px;
 	-moz-border-radius: 3px;  
 }
@@ -1422,7 +1406,7 @@ width: 97%;
 	
 	
 	
-	width: 400px;
+	width: 500px;
 	height: 170px;
 	
 	
@@ -1520,7 +1504,7 @@ width: 97%;
 	}
 
 .stats2:hover {
-	border: 1px solid black;  
+	border: 0px solid black;  
 	border-radius: 3px;
 	-moz-border-radius: 3px;  
 }

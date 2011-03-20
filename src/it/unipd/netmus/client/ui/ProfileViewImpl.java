@@ -1262,12 +1262,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("edit_button")
    void handleMouseOverEditButton(MouseOverEvent e) {
-       if(selected_song!=null && !covers_container.isVisible())
+       if(selected_song!=null && !covers_container.isVisible()) {
            edit_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+           edit_button.setUrl("images/edit_button_o.png");}
        else
            edit_button.getElement().getStyle().setCursor(Style.Cursor.AUTO);
    }
 
+   @UiHandler("edit_button")
+   void handleMouseOutEditButton(MouseOutEvent e) {
+       edit_button.setUrl("images/edit_button.png");
+    }
 
    @UiHandler("social_button")
    void handleClickSocialButton(ClickEvent e) {
@@ -1305,9 +1310,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("social_button")
    void handleMouseOverSocialButton(MouseOverEvent e) {
-       if(selected_song!=null || selected_album!=null)
+       if(selected_song!=null || selected_album!=null) {
            social_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+           social_button.setUrl("images/social_button_o.png");}
    }
+
+   @UiHandler("social_button")
+   void handleMouseOutSocialButton(MouseOutEvent e) {
+       social_button.setUrl("images/social_button.png");
+    }
 
    
    @UiHandler("close_song")
@@ -1439,9 +1450,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiHandler("account_button")
    void handleMouseOverAccountButton(MouseOverEvent e) {
        account_button.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       account_button.setUrl("images/account_button_o.png");
     }
 
- 
+
+   @UiHandler("account_button")
+   void handleMouseOutAccountButton(MouseOutEvent e) {
+       account_button.setUrl("images/account_button.png");
+    }
+
 
    @UiHandler("edit_profile_nickname")
    void handleMouseOverEditProfileNickname(MouseOverEvent e) {
@@ -3900,11 +3917,12 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void resetView() {
-
+        
+        canzoni_catalogo.removeAll(canzoni_catalogo);
         dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
         dataProvider_album.getList().removeAll(dataProvider_album.getList());
         dataProvider_playlist.getList().removeAll(dataProvider_playlist.getList());
-        canzoni_catalogo.removeAll(canzoni_catalogo);
+        
         user.setText("");
         friends.clear();
         playlists.clear();
