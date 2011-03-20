@@ -964,7 +964,8 @@ public class ProfileActivity extends AbstractActivity implements
     @Override
     public void start(final AcceptsOneWidget container_widget,
             EventBus event_bus) {
-
+        
+        client_factory.getProfileView().resetView();
         login_service_svc.getLoggedInUser( new AsyncCallback<String>() {
 
             @Override
@@ -981,7 +982,7 @@ public class ProfileActivity extends AbstractActivity implements
             @Override
             public void onSuccess(final String user) {
                 
-                client_factory.getProfileView().resetView();
+                
                 client_factory.getProfileView().setUser(user);
                 final ProfileView profileView = client_factory.getProfileView();
                 

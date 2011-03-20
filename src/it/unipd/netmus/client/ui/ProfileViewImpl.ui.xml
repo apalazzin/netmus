@@ -172,10 +172,10 @@
 				
 
 				<g:Image ui:field="pdf" styleName="{style.pdf}" url="images/ex_pdf.png"/>				
-				<span style="position: absolute; bottom: 12px; right: 25px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="export">Esporta Lista</g:Label></span>
+				<span style="position: absolute; bottom: 12px; right: 19px; font-size: 10px; font-family: Verdana; text-align: center; border: 0px solid #FF0000; width: 70px;"><g:Label ui:field="export">Esporta Lista</g:Label></span>
 				
 				<g:Image ui:field="statistics_open" styleName="{style.stats2}" url="images/statistics.png"/>
-				<span style="position: absolute; bottom: 12px; right: 107px; font-size: 10px; font-family: Verdana;"><g:Label ui:field="statisticL">Statistiche</g:Label></span>
+				<span style="position: absolute; bottom: 12px; right: 92px; font-size: 10px; font-family: Verdana; text-align: center;  border: 0px solid #FF0000; width: 70px;"><g:Label ui:field="statisticL">Statistiche</g:Label></span>
 				
 			
 			
