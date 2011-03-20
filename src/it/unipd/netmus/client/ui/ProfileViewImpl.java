@@ -836,7 +836,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            hlp2.setText(myConstants.hlp2());
            hlp3.setText(myConstants.hlp3());
            hlp4.setText(myConstants.hlp4());
-           hlp5.setText(myConstants.hlp4());
+           hlp5.setText(myConstants.hlp5());
            
            
            help_container.setVisible(false);
