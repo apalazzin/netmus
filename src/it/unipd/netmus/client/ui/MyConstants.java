@@ -98,5 +98,6 @@ public interface MyConstants extends Constants {
 	String hlp3();
 	String hlp4();
 	String hlp5();
+	String hlpE();
 	
 	}
