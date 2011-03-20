@@ -122,6 +122,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label song_year;
    @UiField Label song_composer;
    @UiField Label song_track;
+   @UiField Label delete_song;   
    @UiField Label edit_profile_password;
    @UiField Label edit_profile_cpassword;
    @UiField Label edit_profile_nickname;
@@ -160,6 +161,15 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label num_songs;
    @UiField Label help;
    @UiField Label help_exit;
+   @UiField Label hlpT;
+   @UiField Label hlp1;
+   @UiField Label hlp2;
+   @UiField Label hlp3;
+   @UiField Label hlp4;
+   @UiField Label hlp5;
+   
+   @UiField Label edit_profile_del;
+   
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -217,7 +227,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image add_playlist;
    @UiField Image song_cover;
    @UiField Image delete_playlist;
-   @UiField Image delete_song;
    @UiField Image edit_profile_close;
    @UiField Image edit_profile_check_img;
    
@@ -226,7 +235,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Image loading;
    @UiField Image pdf;
    @UiField Image statistics_open;
-   @UiField Image edit_profile_clear;
    @UiField Image flag_ita;
    @UiField Image flag_eng;
    @UiField Image up;
@@ -802,10 +810,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            composer_song.setText(myConstants.composerSong());
            track_song.setText(myConstants.trackSong());
            rating_song.setText(myConstants.ratingSong());
+           delete_song.setText(myConstants.delete_song());
            vote.setText(myConstants.vote());
            export.setText(myConstants.export());
            statisticL.setText(myConstants.statisticL());
            edit_profile_check.setText(myConstants.editProfileCheck());
+           edit_profile_del.setText(myConstants.edit_profile_del());
+           help_exit.setText(myConstants.help_exit());
            name_user.setText(myConstants.name());
            surname.setText(myConstants.surname());
            nation.setText(myConstants.nation());
@@ -819,6 +830,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
            stat_pref_netmus.setText(myConstants.statPrefNetmus());
            stat_close.setText(myConstants.statClose());
            num_songs.setText(myConstants.statNum());
+           
+           hlpT.setText(myConstants.hlpT());
+           hlp1.setText(myConstants.hlp1());
+           hlp2.setText(myConstants.hlp2());
+           hlp3.setText(myConstants.hlp3());
+           hlp4.setText(myConstants.hlp4());
+           hlp5.setText(myConstants.hlp4());
            
            
            help_container.setVisible(false);
@@ -1347,7 +1365,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     }
 
    
-   @UiHandler("edit_profile_clear")
+   @UiHandler("edit_profile_del")
    void handleMouseEditProfileClear(ClickEvent e) {
       
        final HorizontalPanel popup_text = new HorizontalPanel();
@@ -1405,9 +1423,9 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        
    }
 
-   @UiHandler("edit_profile_clear")
+   @UiHandler("edit_profile_del")
    void handleMouseOverEditProfileClear(MouseOverEvent e) {
-       edit_profile_clear.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       edit_profile_del.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
 
    
@@ -1553,6 +1571,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
           
 
    }
+   
+   @UiHandler("delete_song")
+   void handleMouseOverDeleteSong(MouseOverEvent e) {
+       edit_profile_del.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    }
    
    
    @UiHandler("delete_song")
