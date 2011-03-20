@@ -64,6 +64,7 @@ public interface MyConstants extends Constants {
 	String composerSong();
 	String trackSong();
 	String ratingSong();
+	String delete_song();
 	String vote();
 	String export();
 	String statisticL();
@@ -85,6 +86,8 @@ public interface MyConstants extends Constants {
 	String notYoutube();
 	String unknownAlbum();
 	String help();
+	String help_exit();
+	String edit_profile_del();
 	
 	String wlcmT();
 	String wlcm1();

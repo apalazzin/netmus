@@ -6,19 +6,10 @@
    <ui:style src="css/ProfileView.css" />
    
 	<g:HTMLPanel ui:field="container" styleName="{style.container}">
-	<div id="s1" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 230px; right: 5px;  z-index: 19;  display: none;
- text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">1</div>
 	
 
 			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
 			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
-			
-			<div id="s3" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 70px; right: 30px;  z-index: 19;  display: none;
- text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">3</div>
-
-
 			
 				<div style="height: 55px; width: 100%; border: 0px solid #000000;"></div>
 				<g:Label ui:field="user" styleName="{style.user}"></g:Label>
@@ -53,19 +44,6 @@
 			</g:HTMLPanel>
 
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
-			
-			<div id="s2" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 0px; right: 140px;  z-index: 19;  display: none;
- text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">2</div>
-
-<div id="s4" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 70px; right: 50px;  z-index: 19;  display: none;
- text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">4</div>
-
-<div id="s5" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 40px; left: 5px;  z-index: 19;  display: none;
- text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF;">5</div>
-	
 				<g:Image ui:field="play" url="images/playoff.png" styleName="{style.play}"> </g:Image>
 				<g:Image ui:field="forwardF" url="images/fwoff.png" styleName="{style.fwF}"> </g:Image>
 				<g:Image ui:field="rewindF" url="images/rwoff.png" styleName="{style.rwF}"> </g:Image>
@@ -160,10 +138,11 @@
 					
 				</g:HTMLPanel>
 					
-					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;"><g:Label ui:field="track_title" styleName="{style.title_song}"></g:Label></div>
-					<g:Image ui:field="delete_song" styleName="{style.delete_song}" url="images/cross_red.png"></g:Image>
+					<div style="background-color: #EEEEEE; top:0px; left: 0px; width: 100%; position: absolute; height: 22px;">
+					  <g:Label ui:field="track_title" styleName="{style.title_song}"></g:Label>
+					</div>
+  				    <g:Label ui:field="delete_song" styleName="{style.delete_song}">Elimina Brano</g:Label>	
 					<g:Image ui:field="close_song" styleName="{style.close_playlist}" url="images/close_silver.jpg"></g:Image>					
-					
 				<div style="border-left: 1px solid #DDDDDD; top:0px; left: 0px; width: 1px; position: absolute; height: 100%;"> </div>	
 				</g:HTMLPanel>
 				
@@ -212,7 +191,7 @@
 			   		<g:HorizontalPanel styleName="{style.edit_profile_user}">
 			   			<g:Label ui:field="edit_profile_user" styleName="{style.edit_profile_labelu}"></g:Label>
 			   		</g:HorizontalPanel>
-			   		<g:Image ui:field="edit_profile_clear" styleName="{style.edit_profile_clear}" url="images/cross_red.png"/>
+			   		<g:Label ui:field="edit_profile_del" styleName="{style.edit_profile_clear}">Cancella Account</g:Label>
 			   	</g:HorizontalPanel>
 			   	
 				<g:HorizontalPanel styleName="{style.edit_profile_checkC}">
@@ -578,6 +557,26 @@
 			        <img src="images/deco.png" style="width: 300px; float: left;" />
        				<g:Label ui:field="help_exit" styleName="{style.help_exit_button}">Chiudi tutorial</g:Label>
 				  </div>
+				         				
+				    <div id="s1" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 260px; right: 65px;  z-index: 19;  display: none;
+					 text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+					-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">1</div>
+				         				
+       				<div id="s2" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 70px; right: 240px;  z-index: 19;  display: none;
+					 text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+					-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">2</div>
+
+					<div id="s3" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 70px; left: 130px;  z-index: 19;  display: none;
+					 text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+					-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">3</div>
+
+					<div id="s4" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 90px; right: 150px;  z-index: 19;  display: none;
+					 text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+					-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">4</div>
+
+					<div id="s5" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 100px; left: 220px;  z-index: 19;  display: none;
+					 text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
+					-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF;">5</div>
 				</g:HTMLPanel>
 
    	
