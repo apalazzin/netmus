@@ -33,6 +33,12 @@
 	
 }
 
+.accountButton:hover {
+	border: 1px solid black;  
+	border-radius: 3px;
+	-moz-border-radius: 3px;  
+}
+
 .accountButton {
 	
 	position: absolute;
@@ -255,6 +261,12 @@
 	
 	}
 
+.editButton:hover {
+	border: 1px solid black;  
+	border-radius: 3px;
+	-moz-border-radius: 3px;  
+}
+
 .editButton {
 	
 	position: absolute;
@@ -396,6 +408,15 @@
 	
 	}
 	
+
+.edit_profile_check:hover {
+	
+	margin-left: 20px;	
+	opacity: 0;
+	
+	border: 1.5px solid black;
+
+}
 
 
 .edit_profile_check {
@@ -589,12 +610,10 @@ height: 30px;
 	position: absolute;
 	top: 2px;
 	right: 5px;
-	
-	padding-left: 4px;
-	padding-right: 4px;
-	
+		
 	background-color: rgb(50,50,50);
-
+    padding-left: 4px;
+	padding-right: 4px;
 	border: 1.5px solid red;
 	border-radius: 15px;
 	-moz-border-radius: 15px;
@@ -603,6 +622,10 @@ height: 30px;
 	color: rgb(250,140,140);
 	 
 	}
+	
+.delete_song:hover{
+	background-color: rgb(255,255,255);	
+}
 
 	
 .left {
@@ -749,6 +772,15 @@ width: 97%;
 }
 
 
+.help_button:hover {
+	background-color: rgb(255,255,255);    	
+    padding-left: 4px;
+	padding-right: 4px;
+	border: 1.5px solid #37A6EB;
+	border-radius: 15px;
+	-moz-border-radius: 15px;	
+}
+
 .help_button {
 	position: absolute;
 	top: -20px;
@@ -758,8 +790,7 @@ width: 97%;
 	font-weight: bold;
 	color: #37A6EB;
 	cursor: pointer;
-	
-	}
+}
 	
 .help_exit_button{
 	position: absolute;
@@ -854,18 +885,16 @@ width: 97%;
    	user-select: none;
 	
 	}
-	
-	
 
-.logout {
-	
+.logout {	       
 	position: absolute;
 	top: -20px;
 	right: 20px;
 	font-size: 12px;
 	font-family: Verdana;
 	font-weight: bold;
-	color: #37A6EB
+	color: #37A6EB;
+	cursor: pointer;
 		
 	}
 	
@@ -879,7 +908,15 @@ width: 97%;
 	font-weight: bold;
 	color: #37A6EB;
 	cursor: pointer;
-	text-decoration: underline; 
+	
+	background-color: rgb(255,255,255);	
+	padding-left: 4px;
+	padding-right: 4px;
+	border: 1.5px solid #37A6EB;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	
+
 	
 	}
 
@@ -908,17 +945,22 @@ width: 97%;
 	
 	}
 	
+.pdf:hover {
+	border: 1px solid black;  
+	border-radius: 3px;
+	-moz-border-radius: 3px;  
+}
 
 .pdf {
 	
 	position: absolute;
 	bottom: 28px;
 	right: 25px;
-	height: 50px;
+	height: 60px;
 	
 	}
-	
-	
+
+
 .play {
 	
 	position: absolute;
@@ -1248,6 +1290,12 @@ width: 97%;
 	}
 
 
+.socialButton:hover {
+	border: 1px solid black;  
+	border-radius: 3px;
+	-moz-border-radius: 3px;  
+}
+
 .socialButton {
 	
 	position: absolute;
@@ -1471,13 +1519,18 @@ width: 97%;
 	
 	}
 
+.stats2:hover {
+	border: 1px solid black;  
+	border-radius: 3px;
+	-moz-border-radius: 3px;  
+}
 
 .stats2 {
 	
 	position: absolute;
 	bottom: 28px;
 	right: 100px;
-	height: 60px;
+	height: 55px;
 	
 	}
 	
