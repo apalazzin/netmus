@@ -64,49 +64,25 @@ public class UserAccount implements Serializable, Cacheable {
                 .addFilter("lastSessionId", FilterOperator.EQUAL, session_id)
                 .returnUnique().now();
     }
-    
-    /**
-     * Ritorna la lista (con un massimo di 20 utenti) degli utenti che hanno lo stesso
-     * artista preferito dell'utente.
-     */
-    public List<String> findRelatedUsers() {
-        
-        String preferred_artist = this.getMusicLibrary().getPreferredArtist();
-        
-        //inizializzazione liste necessarie all'algoritmo
-        List<String> related_users = new ArrayList<String>();
-        List<MusicLibrary> library = new ArrayList<MusicLibrary>();
-        
-        //query nel datastore per cercare gli utenti con lo stesso preferred_artist
-        library = ODF.get().find().type(MusicLibrary.class).addFilter("preferred_artist", FilterOperator.EQUAL, preferred_artist).fetchFirst(20).returnAll().now();
-        for (MusicLibrary tmp : library) {
-            String tmp2 = tmp.getOwner().getUser();
-            if (!tmp2.equals(this.getUser())) {
-                related_users.add(tmp.getOwner().getUser());
-            }
-        }
-        
-        return related_users;
-    }
-    
+
     public static UserAccount load(String user) {
-        
+
         UserAccount user_account = (UserAccount) CacheSupport.cacheGet(user);
-        
+
         if (user_account == null) {
-            user_account = ODF.get().load().type(UserAccount.class).id(user).now();
+            user_account = ODF.get().load().type(UserAccount.class).id(user)
+                    .now();
             if (user_account != null) {
                 user_account.addToCache();
             }
+        } else {
+            user_account.music_library = (MusicLibrary) CacheSupport
+                    .cacheGet(user + "-library");
         }
-        else {
-            user_account.music_library = (MusicLibrary) CacheSupport.cacheGet(user+"-library");
-        }
-        
-        return user_account;
-        
-    }
 
+        return user_account;
+
+    }
 
     @Id
     private String user;
@@ -153,7 +129,7 @@ public class UserAccount implements Serializable, Cacheable {
         this.allowed_users = new ArrayList<String>();
         this.music_library = new MusicLibrary(this);
     }
-    
+
     public UserAccount(String user, String password_hash) {
         this.user = user;
         this.password_hash = password_hash;
@@ -169,6 +145,42 @@ public class UserAccount implements Serializable, Cacheable {
         this.allowed_users = new ArrayList<String>();
         this.music_library = new MusicLibrary(this);
         this.store();
+    }
+
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.user, this);
+        CacheSupport.cachePut(this.user + "-library", this.music_library);
+    }
+
+    /**
+     * Ritorna la lista (con un massimo di 20 utenti) degli utenti che hanno lo
+     * stesso artista preferito dell'utente.
+     */
+    public List<String> findRelatedUsers() {
+
+        String preferred_artist = this.getMusicLibrary().getPreferredArtist();
+
+        // inizializzazione liste necessarie all'algoritmo
+        List<String> related_users = new ArrayList<String>();
+        List<MusicLibrary> library = new ArrayList<MusicLibrary>();
+
+        // query nel datastore per cercare gli utenti con lo stesso
+        // preferred_artist
+        library = ODF
+                .get()
+                .find()
+                .type(MusicLibrary.class)
+                .addFilter("preferred_artist", FilterOperator.EQUAL,
+                        preferred_artist).fetchFirst(20).returnAll().now();
+        for (MusicLibrary tmp : library) {
+            String tmp2 = tmp.getOwner().getUser();
+            if (!tmp2.equals(this.getUser())) {
+                related_users.add(tmp.getOwner().getUser());
+            }
+        }
+
+        return related_users;
     }
 
     public String getAboutMe() {
@@ -221,6 +233,11 @@ public class UserAccount implements Serializable, Cacheable {
 
     public boolean isPublicProfile() {
         return is_public_profile;
+    }
+
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.user);
     }
 
     public void setAboutMe(String about_me) {
@@ -312,17 +329,6 @@ public class UserAccount implements Serializable, Cacheable {
     public void update() {
         ODF.get().storeOrUpdate(this);
         this.addToCache();
-    }
-
-    @Override
-    public void addToCache() {
-        CacheSupport.cachePut(this.user, this);
-        CacheSupport.cachePut(this.user+"-library", this.music_library);
-    }
-
-    @Override
-    public void removeFromCache() {
-        CacheSupport.cacheRemove(this.user);
     }
 
 }

@@ -21,6 +21,8 @@ public interface LibraryService extends RemoteService {
     public boolean addSongToPlaylist(String user, String playlist_name,
             String title, String artist, String album);
 
+    public String generateDoc(String user);
+
     public boolean moveSongInPlaylist(String user, String playlist_name,
             int from, int to);
 
@@ -30,9 +32,8 @@ public interface LibraryService extends RemoteService {
             String title, String artist, String album);
 
     public void sendUserNewMusic(String user, List<SongDTO> new_songs);
-    
-    public void storeStatistics(String user, String preferred_artist, String most_popular_song, String most_popular_song_for_this_user);
-    
-    public String generateDoc(String user);
+
+    public void storeStatistics(String user, String preferred_artist,
+            String most_popular_song, String most_popular_song_for_this_user);
 
 }

@@ -35,10 +35,7 @@ import com.google.code.twig.annotation.Parent;
  * 
  */
 
-
 public class MusicLibrary implements Serializable, Cacheable {
-
-    private static final long serialVersionUID = 6833302154286903936L;
 
     // ---------------------------------------------------//
     // ----------Classe per gestire PLAILISTS-------------//
@@ -46,28 +43,28 @@ public class MusicLibrary implements Serializable, Cacheable {
 
         private static final long serialVersionUID = 8384098475154741660L;
 
-        static void deletePlaylist(Playlist p) {
-            ODF.get().storeOrUpdate(p);
-            p.removeFromCache();
-            ODF.get().delete(p);
-        }
-        
         static public Playlist load(String id) {
             Playlist playlist = (Playlist) CacheSupport.cacheGet(id);
-            
+
             if (playlist == null) {
                 playlist = ODF.get().load().type(Playlist.class).id(id).now();
                 if (playlist != null) {
                     playlist.addToCache();
                 }
             }
-            
+
             return playlist;
+        }
+
+        static void deletePlaylist(Playlist p) {
+            ODF.get().storeOrUpdate(p);
+            p.removeFromCache();
+            ODF.get().delete(p);
         }
 
         @Id
         private String id;
-        
+
         private String name;
 
         private List<String> songs_list;
@@ -85,6 +82,16 @@ public class MusicLibrary implements Serializable, Cacheable {
             this.update();
         }
 
+        @Override
+        public void addToCache() {
+            CacheSupport.cachePut(this.id, this);
+        }
+
+        @Override
+        public void removeFromCache() {
+            CacheSupport.cacheRemove(this.id);
+        }
+
         boolean addSong(String song_id) {
             if (songs_list.add(song_id)) {
                 this.update();
@@ -92,7 +99,7 @@ public class MusicLibrary implements Serializable, Cacheable {
             } else
                 return false;
         }
-        
+
         String getId() {
             return id;
         }
@@ -127,17 +134,9 @@ public class MusicLibrary implements Serializable, Cacheable {
             this.addToCache();
         }
 
-        @Override
-        public void addToCache() {
-            CacheSupport.cachePut(this.id, this);
-        }
-
-        @Override
-        public void removeFromCache() {
-            CacheSupport.cacheRemove(this.id);
-        }
-
     }
+
+    private static final long serialVersionUID = 6833302154286903936L;
 
     static void deleteMusicLibrary(MusicLibrary ml) {
         for (String tmp : ml.playlists) {
@@ -150,10 +149,10 @@ public class MusicLibrary implements Serializable, Cacheable {
 
     @Id
     private String id;
-    
+
     @Parent
     private UserAccount owner;
-    
+
     private Map<String, String> song_list;
 
     @Index
@@ -161,10 +160,10 @@ public class MusicLibrary implements Serializable, Cacheable {
 
     @Index
     private String most_popular_song;
-    
+
     @Index
     private String most_popular_song_for_this_user;
-    
+
     private List<String> playlists;
 
     public MusicLibrary() {
@@ -183,7 +182,7 @@ public class MusicLibrary implements Serializable, Cacheable {
         this.preferred_artist = "";
         this.most_popular_song = "";
         this.most_popular_song_for_this_user = "";
-        this.id = owner.getUser()+"-library";
+        this.id = owner.getUser() + "-library";
     }
 
     public boolean addPlaylist(String playlist_name) {
@@ -203,27 +202,28 @@ public class MusicLibrary implements Serializable, Cacheable {
      * 
      */
     public boolean addSong(Song song) {
-        
+
         // find sond in the library
         if (!song_list.containsKey(song.getId())) {
-            
+
             // add songId to the list
             this.song_list.put(song.getId(), "-1");
 
             // update song's attributes
             song.newOwner();
-            
+
             return true;
-            
+
         } else {
             return false;
         }
     }
 
-    public boolean addSongToPlaylist(String playlist_name, String title, String artist, String album) {
+    public boolean addSongToPlaylist(String playlist_name, String title,
+            String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
         String song_id = FieldVerifier.generateSongId(title, artist, album);
-        
+
         if (tmp != null) {
             if (song_list.containsKey(song_id)) {
                 return tmp.addSong(song_id);
@@ -233,19 +233,32 @@ public class MusicLibrary implements Serializable, Cacheable {
             return false;
     }
 
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.id, this);
+    }
+
     public List<Song> getAllSongs() {
-    
+
         ArrayList<Song> lista = new ArrayList<Song>();
-        
+
         for (String tmp : song_list.keySet()) {
             Song song = ODF.get().load().type(Song.class).id(tmp).now();
             if (song != null) {
                 lista.add(song);
             }
-            
+
         }
-        
+
         return lista;
+    }
+
+    public String getMostPopularSong() {
+        return most_popular_song;
+    }
+
+    public String getMostPopularSongForThisUser() {
+        return most_popular_song_for_this_user;
     }
 
     public UserAccount getOwner() {
@@ -253,15 +266,15 @@ public class MusicLibrary implements Serializable, Cacheable {
     }
 
     public List<String> getPlaylistsNames() {
-        List <String> list_names = new ArrayList<String>();
-        
+        List<String> list_names = new ArrayList<String>();
+
         for (String id : this.playlists) {
             Playlist playlist = getPlaylistFromId(id);
             if (playlist != null) {
                 list_names.add(playlist.getName());
             }
         }
-        
+
         return list_names;
     }
 
@@ -273,8 +286,7 @@ public class MusicLibrary implements Serializable, Cacheable {
                 songs.add(Song.load(tmp2));
             }
             return songs;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -284,11 +296,10 @@ public class MusicLibrary implements Serializable, Cacheable {
     }
 
     public int getSongRateForThisUser(Song song) {
-        
+
         if (song_list.containsKey(song.getId())) {
             return Integer.parseInt(song_list.get(song.getId()));
-        }
-        else  {
+        } else {
             return -1;
         }
     }
@@ -327,6 +338,11 @@ public class MusicLibrary implements Serializable, Cacheable {
         }
     }
 
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.id);
+    }
+
     public boolean removePlaylist(String playlist_name) {
         Playlist playlist = this.getPlaylist(playlist_name);
         if (playlist != null) {
@@ -344,16 +360,15 @@ public class MusicLibrary implements Serializable, Cacheable {
      * rimane in database anche se non posseduta da alcun utente. Ritorna true
      * se la rimozione ha avuto successo, false altriementi.
      */
-    public boolean removeSong(String artist, String title,
-            String album) {
+    public boolean removeSong(String artist, String title, String album) {
 
         String song_id = FieldVerifier.generateSongId(title, artist, album);
-        
+
         if (song_list.containsKey(song_id)) {
-            
+
             // remove songId to the list
             this.song_list.remove(song_id);
-            
+
             // remove song from Cache
             CacheSupport.cacheRemove(song_id);
 
@@ -363,61 +378,78 @@ public class MusicLibrary implements Serializable, Cacheable {
 
             // remove song from playlists
             for (String tmp : this.playlists) {
-                Playlist playlist = getPlaylistFromId(tmp); 
+                Playlist playlist = getPlaylistFromId(tmp);
                 playlist.removeSong(song_id);
             }
-            
+
             // save changes to library
             this.update();
-            
+
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
 
-    public boolean removeSongFromPlaylist(String playlist_name, String title, String artist, String album) {
+    public boolean removeSongFromPlaylist(String playlist_name, String title,
+            String artist, String album) {
         Playlist tmp = this.getPlaylist(playlist_name);
-        
+
         String song_id = FieldVerifier.generateSongId(title, artist, album);
-        
+
         if (tmp != null) {
             return tmp.removeSong(song_id);
         } else
             return false;
     }
 
+    public void setMostPopularSong(String most_popular_song) {
+        this.most_popular_song = most_popular_song;
+        this.update();
+    }
+
+    public void setMostPopularSongForThisUser(
+            String most_popular_song_for_this_user) {
+        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
+        this.update();
+    }
+
+    public void setPreferredArtist(String preferred_artist) {
+        this.preferred_artist = preferred_artist;
+        this.update();
+    }
+
     public MusicLibraryDTO toMusicLibrarySummaryDTO() {
         Map<String, SongSummaryDTO> map = new HashMap<String, SongSummaryDTO>();
 
         for (String tmp : song_list.keySet()) {
-            
+
             if (tmp != null && !tmp.equals("")) {
                 Song song = ODF.get().load().type(Song.class).id(tmp).now();
-                
+
                 if (song != null) {
                     SongSummaryDTO song_dto = song.toSongSummaryDTO();
-                    song_dto.setRatingForThisUser(Integer.parseInt(song_list.get(tmp)));
+                    song_dto.setRatingForThisUser(Integer.parseInt(song_list
+                            .get(tmp)));
                     map.put(tmp, song_dto);
-           
+
                 }
             }
-            
+
         }
 
         List<PlaylistDTO> playlists = new ArrayList<PlaylistDTO>();
         for (String tmp : this.playlists) {
             Playlist p = getPlaylistFromId(tmp);
-            playlists.add(new PlaylistDTO(p.getName(),p.getSongs()));
+            playlists.add(new PlaylistDTO(p.getName(), p.getSongs()));
         }
-        
+
         MusicLibraryDTO library = new MusicLibraryDTO(map, playlists);
-        
+
         library.setPreferred_artist(getPreferredArtist());
         library.setMostPopularSong(this.most_popular_song);
         library.setMostPopularSongForThisUser(this.most_popular_song_for_this_user);
-        
+
         return library;
     }
 
@@ -427,45 +459,12 @@ public class MusicLibrary implements Serializable, Cacheable {
     }
 
     private Playlist getPlaylist(String playlist_name) {
-        return Playlist.load(FieldVerifier.generatePlaylistId(playlist_name, this.owner.getUser()));
+        return Playlist.load(FieldVerifier.generatePlaylistId(playlist_name,
+                this.owner.getUser()));
     }
-    
+
     private Playlist getPlaylistFromId(String playlist_id) {
         return Playlist.load(playlist_id);
-    }
-
-    public void setPreferredArtist(String preferred_artist) {
-        this.preferred_artist = preferred_artist;
-        this.update();
-    }
-
-    @Override
-    public void addToCache() {
-        CacheSupport.cachePut(this.id, this);
-    }
-
-    @Override
-    public void removeFromCache() {
-        CacheSupport.cacheRemove(this.id);
-    }
-
-    public void setMostPopularSong(String most_popular_song) {
-        this.most_popular_song = most_popular_song;
-        this.update();
-    }
-
-    public String getMostPopularSong() {
-        return most_popular_song;
-    }
-
-    public void setMostPopularSongForThisUser(
-            String most_popular_song_for_this_user) {
-        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
-        this.update();
-    }
-
-    public String getMostPopularSongForThisUser() {
-        return most_popular_song_for_this_user;
     }
 
 }

@@ -13,7 +13,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * Autore: VT.G 
  * Licenza: GNU GPL v3 
  * Data Creazione: 17 Febbraio 2011
- * 
  */
 
 @SuppressWarnings("serial")

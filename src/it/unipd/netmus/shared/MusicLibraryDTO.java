@@ -24,55 +24,55 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 public class MusicLibraryDTO implements Serializable {
-    
+
     // ---------------------------------------------------//
     // ----------Classe per gestire PLAILISTS-------------//
     static public class PlaylistDTO implements Serializable {
-        
+
         private String name;
-        
+
         List<String> song_list;
-        
+
         public PlaylistDTO() {
             this.name = "";
             this.song_list = new ArrayList<String>();
         }
-        
+
         public PlaylistDTO(String name) {
             this.name = name;
             this.song_list = new ArrayList<String>();
         }
-        
+
         public PlaylistDTO(String name, List<String> song_list) {
             this.name = name;
             this.song_list = song_list;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public List<String> getSongList() {
             return song_list;
         }
 
-        public void setSongList(List<String> song_list) {
-            this.song_list = song_list;
-        }
-
         public void setName(String name) {
             this.name = name;
         }
 
-        public String getName() {
-            return name;
+        public void setSongList(List<String> song_list) {
+            this.song_list = song_list;
         }
     }
 
     private Map<String, SongSummaryDTO> songs;
 
     private List<PlaylistDTO> playlists;
-    
+
     private String preferred_artist;
 
     private String most_popular_song;
-    
+
     private String most_popular_song_for_this_user;
 
     public MusicLibraryDTO() {
@@ -91,32 +91,15 @@ public class MusicLibraryDTO implements Serializable {
         this.most_popular_song = "";
         this.most_popular_song_for_this_user = "";
     }
-    
-    public Map<String, SongSummaryDTO> getSongs() {
-        return songs;
-    }
 
-    private void setSongs(Map<String, SongSummaryDTO> songs) {
-        this.songs = songs;
-    }
-    
     public void addPlaylist(PlaylistDTO playlist) {
         playlists.add(playlist);
     }
-    
+
     public void addSongToPlaylist(String playlist_name, String song_id) {
         for (PlaylistDTO tmp : playlists) {
             if (tmp.getName().equals(playlist_name)) {
                 tmp.getSongList().add(song_id);
-                return;
-            }
-        }
-    }
-    
-    public void removeSongFromPlaylist(String playlist_name, String song_id) {
-        for (PlaylistDTO tmp : playlists) {
-            if (tmp.getName().equals(playlist_name)) {
-                tmp.getSongList().remove(song_id);
                 return;
             }
         }
@@ -126,10 +109,26 @@ public class MusicLibraryDTO implements Serializable {
         return songs.size();
     }
 
+    public String getMostPopularSong() {
+        return most_popular_song;
+    }
+
+    public String getMostPopularSongForThisUser() {
+        return most_popular_song_for_this_user;
+    }
+
     public List<PlaylistDTO> getPlaylists() {
         return playlists;
     }
-    
+
+    public String getPreferred_artist() {
+        return preferred_artist;
+    }
+
+    public Map<String, SongSummaryDTO> getSongs() {
+        return songs;
+    }
+
     public void removePlaylist(String playlist_name) {
         for (PlaylistDTO tmp : playlists) {
             if (tmp.getName().equals(playlist_name)) {
@@ -137,6 +136,24 @@ public class MusicLibraryDTO implements Serializable {
                 return;
             }
         }
+    }
+
+    public void removeSongFromPlaylist(String playlist_name, String song_id) {
+        for (PlaylistDTO tmp : playlists) {
+            if (tmp.getName().equals(playlist_name)) {
+                tmp.getSongList().remove(song_id);
+                return;
+            }
+        }
+    }
+
+    public void setMostPopularSong(String most_popular_song) {
+        this.most_popular_song = most_popular_song;
+    }
+
+    public void setMostPopularSongForThisUser(
+            String most_popular_song_for_this_user) {
+        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
     }
 
     public void setPlaylists(List<PlaylistDTO> playlists) {
@@ -147,24 +164,7 @@ public class MusicLibraryDTO implements Serializable {
         this.preferred_artist = preferred_artist;
     }
 
-    public String getPreferred_artist() {
-        return preferred_artist;
-    }
-
-    public void setMostPopularSong(String most_popular_song) {
-        this.most_popular_song = most_popular_song;
-    }
-
-    public String getMostPopularSong() {
-        return most_popular_song;
-    }
-
-    public void setMostPopularSongForThisUser(
-            String most_popular_song_for_this_user) {
-        this.most_popular_song_for_this_user = most_popular_song_for_this_user;
-    }
-
-    public String getMostPopularSongForThisUser() {
-        return most_popular_song_for_this_user;
+    private void setSongs(Map<String, SongSummaryDTO> songs) {
+        this.songs = songs;
     }
 }

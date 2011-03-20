@@ -21,14 +21,16 @@ public interface LibraryServiceAsync {
     void addPlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
 
+    void addSongToPlaylist(String user, String playlist_name, String title,
+            String artist, String album, AsyncCallback<Boolean> callback);
+
+    void generateDoc(String user, AsyncCallback<String> callback);
+
     void moveSongInPlaylist(String user, String playlist_name, int from,
             int to, AsyncCallback<Boolean> callback);
 
     void removePlaylist(String user, String playlist_name,
             AsyncCallback<Boolean> callback);
-
-    void addSongToPlaylist(String user, String playlist_name, String title,
-            String artist, String album, AsyncCallback<Boolean> callback);
 
     void removeSongFromPlaylist(String user, String playlist_name,
             String title, String artist, String album,
@@ -37,7 +39,5 @@ public interface LibraryServiceAsync {
     void storeStatistics(String user, String preferred_artist,
             String most_popular_song, String most_popular_song_for_this_user,
             AsyncCallback<Void> callback);
-
-    void generateDoc(String user, AsyncCallback<String> callback);
 
 }
