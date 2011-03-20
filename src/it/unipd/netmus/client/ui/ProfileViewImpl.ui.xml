@@ -25,7 +25,7 @@
 
 
 				<g:HTMLPanel styleName="{style.stats}">				
-				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: 600; float: left; margin-right: 5px;"><g:Label ui:field="num_songs">Numero di Brani:</g:Label></span>
+				<span style="color: #999999; font-family: Verdana; font-size: 11px; font-weight: bold; float: left; margin-right: 5px;"><g:Label ui:field="num_songs">Numero di Brani:</g:Label></span>
 				<g:Label ui:field="n_songs" styleName="{style.n_songs}"></g:Label>
 				</g:HTMLPanel>
 

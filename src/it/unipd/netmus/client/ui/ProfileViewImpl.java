@@ -3867,7 +3867,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
         dataProvider_album.getList().removeAll(dataProvider_album.getList());
         dataProvider_playlist.getList().removeAll(dataProvider_playlist.getList());
         user.setText("");
-        num_songs.setText("");
         friends.clear();
         playlists.clear();
         
