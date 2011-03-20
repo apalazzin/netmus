@@ -1,0 +1,105 @@
+package it.unipd.netmus.client.ui;
+
+import com.google.gwt.i18n.client.Constants;
+
+/**
+ * Nome: MyConstants.java
+ * Autore:  VT.G
+ * Licenza: GNU GPL v3
+ * Data Creazione: 19 Febbraio 2011
+*/
+public interface MyConstants extends Constants {
+	  
+	String loginLabel();
+	String registerLabel();
+	String registerSwitchLabel();
+	String loginSwitchLabel();
+	String accountGoogle();  
+	String accountNetmus();  
+	String passwordCheck();
+	String errorPassword();
+	String errorCPassword();
+	String errorEmail();
+	String infoUserInsertDb();
+	String infoUserUsato();
+	String infoUserAlreadyDb();
+	String infoCorrectLogin();
+	String infoLoginIncorrect();
+	String databaseErrorGeneric();
+    String accountGoogleLogin();
+	String leavingProfilePage();
+	String confirmDelete();
+	String confirmDeleteProfile();
+	String yes();
+	String no();
+	String downloadPDF();
+	
+	String addPlaylistError();
+	String addSongToPlaylistError();
+	String removePlaylistError();
+	String deleteSongError();
+	String editProfileError();
+	String findRelatedUsersError();
+	String getPlaylistError();
+	String getSongDTOError();
+	String rateSongError();
+	String storeStatisticsError();
+	String removeSongFromPlaylistError();
+	String loadProfileError();
+	String generatePDFError();
+	String deleteProfileError();
+	String noVoteForThisUserError();
+	String noVoteError();
+	String voteNullSongError();
+	String moveSongError();
+	
+	String friendTitolo();
+	String info();
+	String titleSong();
+	String artistSong();
+	String albumSong();
+	String genreSong();
+	String yearSong();
+	String composerSong();
+	String trackSong();
+	String ratingSong();
+	String delete_song();
+	String vote();
+	String export();
+	String statisticL();
+	String editProfileCheck();
+	String name();
+	String surname();
+	String nation();
+	String sex();
+	String editProfileLabelCpassword();
+	String aboutMe();
+	String statNetmus();
+	String statNum();
+	String statPref();
+	String statSongPref();
+	String statPrefNetmus();
+	String statClose();
+	String artist();
+	String title();
+	String notYoutube();
+	String unknownAlbum();
+	String help();
+	String help_exit();
+	String edit_profile_del();
+	
+	String wlcmT();
+	String wlcm1();
+	String wlcm2();
+	String wlcm3();
+	String wlcm4();
+	
+	String hlpT();
+	String hlp1();
+	String hlp2();
+	String hlp3();
+	String hlp4();
+	String hlp5();
+	String hlpE();
+	
+	}
