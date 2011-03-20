@@ -1701,11 +1701,13 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("statistics_open")
    void handleMouseClickStatisticsOpen(ClickEvent e) {
+       if(!n_songs.getText().equals("0"))
        listener.setStats();
    }
    
    @UiHandler("statistics_open")
    void handleMouseOverStatisticsOver(MouseOverEvent e) {
+       if(!n_songs.getText().equals("0"))
        statistics_open.getElement().getStyle().setCursor(Style.Cursor.POINTER);
    }
    
@@ -2580,7 +2582,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             test.add(song);
             canzoni_catalogo.add(song);
         }
-        
+
         setNumeroBrani(canzoni_catalogo.size());
         
         Collections.sort(test, new Comparator<Song>() {
@@ -3902,14 +3904,16 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void resetView() {
-
+        
+        
         dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
         dataProvider_album.getList().removeAll(dataProvider_album.getList());
         dataProvider_playlist.getList().removeAll(dataProvider_playlist.getList());
+        canzoni_catalogo.removeAll(canzoni_catalogo);
         user.setText("");
         friends.clear();
         playlists.clear();
-        
+     
     }
     
     
