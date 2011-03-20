@@ -1,0 +1,207 @@
+.main {
+
+	position: relative;
+	top: 20px;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+
+	padding-top: 20px;
+	margin: auto;      	
+	
+	width: 500px;
+	height: 300px;      	
+	
+	border: 2px solid #AAAAAA;
+	
+	background-color: #FFFFFF;
+
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #222222;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
+	
+	text-align: center;
+	
+}
+
+.welcome{
+	position: relative;
+	top: 10px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	width: 500px;
+	height: 300px;      	
+	
+	
+	padding-top: 20px;
+	margin: auto; 
+	
+	color: rgb(220,220,220);
+	
+	text-align:left;
+}
+
+.all{
+	
+	top:10px;
+	
+	position: relative;
+	height: 600px;
+	width:550px;
+	min-width:550px;
+	border: 0px solid #AAAAAA;
+	
+	margin:auto;
+
+		background: rgba(30, 30, 30, 0.93);
+	
+	text-align: center;
+	
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-box-shadow: 4px 4px 10px #888888;
+	-moz-box-shadow: 4px 4px 10px #888888;
+}
+
+.container {
+
+	position:absolute;
+	height: 100%;
+	width:100%;
+	overflow:auto;
+	
+	opacity: 0;
+	
+	-webkit-transition: opacity 1.0s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: opacity 1.0s ease, height 1s ease-in-out;
+	-o-transition: opacity 1.0s ease-in-out, height 1s ease-in-out;
+	transition: opacity 1.0s ease-in-out, height 1s ease-in-out;
+}
+
+.account {
+	
+	color: #999999;
+	font-family: Verdana;
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+
+.error {
+
+	color: red;
+	font-family: Verdana;
+	font-size: 10px;
+	text-align: left;
+	border: 0px solid #FF0000;
+	
+}
+
+
+.login {
+
+	position: absolute;
+	top: 42px;
+	right: 30px;
+	color: #37A6EB;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	width: 80px;
+	margin-left: 5px;
+	
+	
+	-webkit-transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
+	-moz-transition: opacity 0.2s ease, width 0.5s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
+	transition: opacity 0.2s ease-in-out, width 0.5s ease-in-out;
+	
+	
+}
+
+.flag_eng {
+	
+	position: absolute;
+	top: -10px;
+	right: 35px;
+	cursor: pointer;
+	
+	}
+	
+	
+.flag_ita {
+	
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;	
+	
+	}
+
+.login:hover {
+	
+	color: green;
+	cursor: pointer;
+	
+}
+
+
+.pass {
+	
+	width: 150px;
+	margin-left: 10px;
+	}
+	
+
+.register {
+
+	color: green;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+	border: 0px solid #FF0000;
+	
+	-webkit-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	-moz-transition: opacity 0.2s ease, height 1s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	transition: opacity 0.2s ease-in-out, height 1s ease-in-out;
+	
+	
+}
+
+.register:hover {
+	
+	color: #37A6EB;
+	cursor: pointer;
+	
+}
+
+.registration {
+
+	overflow: hidden;	
+	height: 0px;
+	opacity: 0;
+	-webkit-transition: opacity 0.7s ease-in-out, height 0.3s ease-in-out;
+	-moz-transition: opacity 0.7s ease, height 1s ease-in-out;
+	-o-transition: opacity 0.7s ease-in-out, height 1s ease-in-out;
+	transition: opacity 0.7s ease-in-out, height 1s ease-in-out;
+	
+	}
+
+.user {
+	
+	width: 150px;
+	
+	}
+	
+.wlcm{
+	float: right;
+	padding-left: 5px;
+}
