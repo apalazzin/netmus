@@ -18,7 +18,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class UserServiceImpl extends RemoteServiceServlet implements
         UserService {
-    
+
     /**
      * Cancella irreversibilmente l’utente e tutte le sue informazioni dal
      * Datastore e conseguentemente lo reindirizza alla pagina iniziale di
@@ -29,10 +29,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements
         try {
             UserAccount current_user = UserAccount.load(user);
             UserAccount.deleteUser(current_user);
-            
+
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -76,7 +75,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements
      */
     @Override
     public List<String> findRelatedUsers(String user) {
-        
+
         UserAccount user_account = UserAccount.load(user);
 
         return user_account.findRelatedUsers();
@@ -89,16 +88,15 @@ public class UserServiceImpl extends RemoteServiceServlet implements
      */
     @Override
     public UserCompleteDTO loadProfile(String user) {
-        
+
         UserAccount user_account = UserAccount.load(user);
-        
+
         if (user_account != null) {
             return user_account.toUserCompleteDTO();
-        }
-        else {
+        } else {
             return null;
         }
-        
+
     }
 
 }

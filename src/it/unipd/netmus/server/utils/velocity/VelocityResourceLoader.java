@@ -15,12 +15,11 @@ import org.apache.velocity.runtime.resource.loader.ResourceLoader;
  * Autore: VT.G 
  * Licenza: GNU GPL v3 
  * Data Creazione: 14 Marzo 2011
- * 
  */
 
 public class VelocityResourceLoader extends ResourceLoader {
     private Vector<String> paths = null;
-    
+
     @Override
     public long getLastModified(Resource arg0) {
         return arg0.getLastModified();
@@ -29,13 +28,13 @@ public class VelocityResourceLoader extends ResourceLoader {
     @Override
     public InputStream getResourceStream(String arg0)
             throws ResourceNotFoundException {
-        for(String path : paths) {
+        for (String path : paths) {
             InputStream is = null;
             try {
                 is = new FileInputStream(path + "/" + arg0);
                 return is;
             } catch (FileNotFoundException e) {
-                //skip
+                // skip
             }
         }
         throw new ResourceNotFoundException(arg0);
@@ -53,4 +52,3 @@ public class VelocityResourceLoader extends ResourceLoader {
     }
 
 }
-

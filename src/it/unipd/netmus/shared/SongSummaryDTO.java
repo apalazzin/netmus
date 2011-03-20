@@ -22,13 +22,13 @@ import java.io.Serializable;
 public class SongSummaryDTO implements Serializable {
 
     private String artist;
-    
+
     private String title;
-    
+
     private String album;
-    
+
     private double rating;
-    
+
     private int rating_for_this_user;
 
     public SongSummaryDTO() {
@@ -54,7 +54,7 @@ public class SongSummaryDTO implements Serializable {
     public String getArtist() {
         return artist;
     }
-    
+
     public double getRating() {
         return rating;
     }
@@ -74,7 +74,7 @@ public class SongSummaryDTO implements Serializable {
     public void setArtist(String artist) {
         this.artist = artist;
     }
-    
+
     public void setRating(double rating) {
         this.rating = rating;
     }
@@ -86,5 +86,5 @@ public class SongSummaryDTO implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
 }

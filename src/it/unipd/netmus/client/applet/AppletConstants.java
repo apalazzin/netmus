@@ -19,6 +19,10 @@ public interface AppletConstants extends Constants {
 
     String chooser();
 
+    String completion();
+
+    String completionFinish();
+
     String deviceRemoved();
 
     String noNewFiles();
@@ -29,17 +33,13 @@ public interface AppletConstants extends Constants {
 
     String sendingError();
 
-    String completion();
-    
-    String completionFinish();
+    String sendingMessageError();
 
     String title();
+
+    String updatingStatistics();
 
     String xmlParsing();
 
     String xmlParsingError();
-    
-    String updatingStatistics();
-    
-    String sendingMessageError();
 }

@@ -19,10 +19,10 @@ public interface SongService extends RemoteService {
 
     boolean editSong(String user, String artist, String title, String album);
 
-    double rateSong(String user, SongSummaryDTO song, int rating);
+    String getCoverImage(SongSummaryDTO song_summary_dto);
 
     SongDTO getSongDTO(SongSummaryDTO song_summary_dto);
-    
-    String getCoverImage(SongSummaryDTO song_summary_dto);
+
+    double rateSong(String user, SongSummaryDTO song, int rating);
 
 }

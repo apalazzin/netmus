@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 
 /**
- * Nome: ClientFactoryImpl.java 
+ * Nome: ClientFactoryImpl.java
  * Autore: VT.G 
  * Licenza: GNU GPL v3 Data 
  * Creazione: 15 Febbraio 2011

@@ -13,8 +13,8 @@ import com.google.gwt.xml.client.impl.DOMParseException;
 /**
  * Nome: TranslateDTOXML.java 
  * Autore: VT.G 
- * Licenza: GNU GPL v3 Data Creazione:
- * 19 Febbraio 2011
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 19 Febbraio 2011
  */
 public class TranslateDTOXML {
 
@@ -95,6 +95,14 @@ public class TranslateDTOXML {
         return document.toString();
     }
 
+    public int getParsed() {
+        return parsed;
+    }
+
+    public boolean otherChild() {
+        return root.hasChildNodes();
+    }
+
     /**
      * @deprecated
      */
@@ -130,21 +138,14 @@ public class TranslateDTOXML {
                 list.add(generateDTO((Element) root.getFirstChild()));
                 root.removeChild(root.getFirstChild());
                 parsed++;
-                
-                if (list.size() == 30) return list;
+
+                if (list.size() == 30)
+                    return list;
             }
 
         } catch (DOMParseException e) {
         }
         return list;
-    }
-    
-    public int getParsed() {
-        return parsed;
-    }
-    
-    public boolean otherChild() {
-        return root.hasChildNodes();
     }
 
     /**
