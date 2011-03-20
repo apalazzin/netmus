@@ -91,7 +91,8 @@ public class SongServiceImpl extends RemoteServiceServlet implements
     }
     
     /**
-     * Restiruisce il link alla copertina dell'album della canzone data in input
+     * Carica dal Datastore o da Last.fm la copertina relativa al brano in input. Per fare ciò utilizza 
+     * la classe di persistenza Album.
      */
     @Override
     public synchronized String getCoverImage(SongSummaryDTO song_summary_dto) {
