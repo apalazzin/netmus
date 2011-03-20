@@ -92,4 +92,11 @@ public interface MyConstants extends Constants {
 	String wlcm3();
 	String wlcm4();
 	
+	String hlpT();
+	String hlp1();
+	String hlp2();
+	String hlp3();
+	String hlp4();
+	String hlp5();
+	
 	}
