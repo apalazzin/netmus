@@ -6,17 +6,17 @@
    <ui:style src="css/ProfileView.css" />
    
 	<g:HTMLPanel ui:field="container" styleName="{style.container}">
-	<div id="s1" style="width: 50px; height: 35px; border: 2px solid #37A6EB; background: rgba(0, 0, 0, 0.50); position: absolute; top: 230px; right: 5px;  z-index: 19;  display: none;
+	<div id="s1" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 230px; right: 5px;  z-index: 19;  display: none;
  text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #37A6EB">1</div>
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">1</div>
 	
 
 			<g:HTMLPanel ui:field="left_panel" styleName="{style.left}">
 			<div style="height: 100%; width: 100%; border: 0px solid #FF0000;">
 			
-			<div id="s3" style="width: 50px; height: 35px; border: 2px solid #37A6EB; background: rgba(0, 0, 0, 0.50); position: absolute; top: 70px; right: 30px;  z-index: 19;  display: none;
+			<div id="s3" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 70px; right: 30px;  z-index: 19;  display: none;
  text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #37A6EB">3</div>
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">3</div>
 
 
 			
@@ -54,17 +54,17 @@
 
 			<g:HTMLPanel ui:field="main_panel" styleName="{style.main}">
 			
-			<div id="s2" style="width: 50px; height: 35px; border: 2px solid #37A6EB; background: rgba(0, 0, 0, 0.50); position: absolute; top: 25px; right: 180px;  z-index: 19;  display: none;
+			<div id="s2" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; top: 0px; right: 140px;  z-index: 19;  display: none;
  text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #37A6EB">2</div>
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">2</div>
 
-<div id="s4" style="width: 50px; height: 35px; border: 2px solid #37A6EB; background: rgba(0, 0, 0, 0.50); position: absolute; bottom: 70px; right: 50px;  z-index: 19;  display: none;
+<div id="s4" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 70px; right: 50px;  z-index: 19;  display: none;
  text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #37A6EB">4</div>
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF">4</div>
 
-<div id="s5" style="width: 50px; height: 35px; border: 2px solid #37A6EB; background: rgba(0, 0, 0, 0.50); position: absolute; bottom: 80px; left: 50px;  z-index: 19;  display: none;
+<div id="s5" style="width: 50px; height: 35px; border: 2px solid #FFFFFF; background: rgba(255, 0, 0, 0.85); position: absolute; bottom: 40px; left: 5px;  z-index: 19;  display: none;
  text-align: center; -webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; user-select: none; border-radius: 28px; -moz-border-radius: 28px;
--webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #37A6EB;">5</div>
+-webkit-box-shadow: 0px 0px 15px #999999; -moz-box-shadow: 0px 0px 15px #999999; font-family: Verdana; font-weight: bold; font-size: 16px; padding-top: 15px; color: #FFFFFF;">5</div>
 	
 				<g:Image ui:field="play" url="images/playoff.png" styleName="{style.play}"> </g:Image>
 				<g:Image ui:field="forwardF" url="images/fwoff.png" styleName="{style.fwF}"> </g:Image>
@@ -565,7 +565,19 @@
 
 				<g:HTMLPanel ui:field="popup_fast" styleName="{style.popup_fast}"></g:HTMLPanel>
 				
-				<g:HTMLPanel ui:field="help_container" styleName="{style.help}"></g:HTMLPanel>
+				<g:HTMLPanel ui:field="help_container" styleName="{style.help}">
+				  <div id="help_body" class="{style.help_body}">
+				    <h2 style="color: rgb(60,130,30); text-align: center;"><g:Label ui:field="hlpT">Tutto quello che vuoi sapere su NetMus</g:Label></h2>
+   	                <ol type="1">
+   	                  <li><b>SONG SCANNER</b><g:Label ui:field="hlp1"> Salva la musica dal tuo computer o da un dispositivo usb una volta collegato.</g:Label></li>
+   	                  <li><b>SETTINGS</b><g:Label ui:field="hlp2"> Visualizzano e permettono di gestire le informazionie i contenuti del tuo catalogo e del tuo profilo.</g:Label></li>
+  			          <li><b>PLAYLIST MAKER</b><g:Label ui:field="hlp3">Organizza il catalogo creando le playlist.</g:Label></li>
+			          <li><b>INFO BUTTONS</b><g:Label ui:field="hlp4">Per creare un documento con la lista delle canzoni e visualizzare le statistiche del catalogo.</g:Label></li>
+			          <li><b>MUSIC PLAYER</b><g:Label ui:field="hlp5"> Interfacciandosi con Youtube ti permette di ascoltare la tua musica, brano dopo brano, senza interruzioni!</g:Label></li>
+			        </ol>
+			        <img src="images/deco.png" style="width: 300px; float: left;" />
+				  </div>
+				</g:HTMLPanel>
 
    	
 	</g:HTMLPanel>
