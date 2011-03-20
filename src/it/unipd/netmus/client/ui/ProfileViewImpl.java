@@ -159,6 +159,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    @UiField Label friends_titolo_text;
    @UiField Label num_songs;
    @UiField Label help;
+   @UiField Label help_exit;
    
    @UiField(provided=true) CellTable<Song> library; 
    @UiField HTMLPanel container;
@@ -1721,6 +1722,11 @@ public class ProfileViewImpl extends Composite implements ProfileView {
        showHelp();
    }
 
+   
+   @UiHandler("help_exit")
+   void handleMouseClickHelpExit(ClickEvent e) {
+       hideHelp();
+   }
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
@@ -1737,6 +1743,17 @@ public class ProfileViewImpl extends Composite implements ProfileView {
     
 }
 
+   
+   private void hideHelp() {
+	    
+       help_container.setVisible(false);
+       DOM.getElementById("s1").getStyle().setDisplay(Style.Display.NONE);
+       DOM.getElementById("s2").getStyle().setDisplay(Style.Display.NONE);
+       DOM.getElementById("s3").getStyle().setDisplay(Style.Display.NONE);
+       DOM.getElementById("s4").getStyle().setDisplay(Style.Display.NONE);
+       DOM.getElementById("s5").getStyle().setDisplay(Style.Display.NONE);
+    
+}
 
 
 @Override
