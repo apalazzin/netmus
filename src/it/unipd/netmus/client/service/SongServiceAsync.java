@@ -19,13 +19,13 @@ public interface SongServiceAsync {
     void editSong(String user, String artist, String title, String album,
             AsyncCallback<Boolean> callback);
 
-    void rateSong(String user, SongSummaryDTO song, int rating,
-            AsyncCallback<Double> callback);
+    void getCoverImage(SongSummaryDTO song_summary_dto,
+            AsyncCallback<String> callback);
 
     void getSongDTO(SongSummaryDTO song_summary_dto,
             AsyncCallback<SongDTO> callback);
 
-    void getCoverImage(SongSummaryDTO song_summary_dto,
-            AsyncCallback<String> callback);
+    void rateSong(String user, SongSummaryDTO song, int rating,
+            AsyncCallback<Double> callback);
 
 }

@@ -36,9 +36,8 @@ public class AppletBar {
      */
     public static AppletBar get(String user) {
         if (APPLET_BAR == null) {
-                APPLET_BAR = new AppletBar(user);
-        }
-        else  {
+            APPLET_BAR = new AppletBar(user);
+        } else {
             APPLET_BAR.setUser(user);
         }
         return APPLET_BAR;
@@ -123,46 +122,52 @@ public class AppletBar {
         AppletBarView.showStatus(constants.pleaseWait());
         sendMusic(result);
     }
-    
+
     private void sendMusic(String xml) {
-        
+
         client_factory.getProfileView().startLoading();
-        
+
         final List<SongDTO> new_songs = translator.XMLToDTO(xml);
-        
+
         if (new_songs == null) {
             AppletBarView.showStatus(constants.xmlParsingError());
             return;
         }
-        
-        library_service.sendUserNewMusic(user, new_songs, new AsyncCallback<Void>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                client_factory.getProfileView().showError(constants.sendingMessageError());
-                AppletBarView.showStatus(constants.sendingError());
-                System.err.println(caught.toString());
-            }
 
-            @Override
-            public void onSuccess(Void incomplete) {
-                
-                client_factory.getProfileView().stopLoading();
-                
-                if (translator.otherChild()) {
-                    AppletBarView.showStatus(String.valueOf((translator.getParsed())));
-                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs));
-                    sendMusic("");
-                }
-                    
-                else {
-                    AppletBarView.showStatus(constants.completionFinish());
-                    
-                    client_factory.getEventBus().fireEvent(new DeviceScannedEvent(new_songs,true));
-                }
-                
-            }
-        });
-        
+        library_service.sendUserNewMusic(user, new_songs,
+                new AsyncCallback<Void>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        client_factory.getProfileView().showError(
+                                constants.sendingMessageError());
+                        AppletBarView.showStatus(constants.sendingError());
+                        System.err.println(caught.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(Void incomplete) {
+
+                        client_factory.getProfileView().stopLoading();
+
+                        if (translator.otherChild()) {
+                            AppletBarView.showStatus(String.valueOf((translator
+                                    .getParsed())));
+                            client_factory.getEventBus().fireEvent(
+                                    new DeviceScannedEvent(new_songs));
+                            sendMusic("");
+                        }
+
+                        else {
+                            AppletBarView.showStatus(constants
+                                    .completionFinish());
+
+                            client_factory.getEventBus().fireEvent(
+                                    new DeviceScannedEvent(new_songs, true));
+                        }
+
+                    }
+                });
+
     }
 
     /**

@@ -51,6 +51,49 @@ public class LoginActivity extends AbstractActivity implements
         this.client_factory = clientFactory;
     }
 
+    @Override
+    public void changeLanguage(String locale) {
+
+        String actual = Window.Location.getHref();
+
+        if (locale.equals("it")) {
+            if (!actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains("?")) {
+                    param = "&" + param;
+                    if (actual.contains("#"))
+                        actual = actual.replace("#", param + "#");
+                    else
+                        actual = actual + param;
+                } else {
+                    param = "?" + param;
+                    if (actual.contains(".html"))
+                        actual = actual.replace(".html", ".html" + param);
+                    else if (actual.contains("/")) {
+                        int i = actual.lastIndexOf("/");
+                        actual = actual.substring(0, i + 1) + param
+                                + actual.substring(i + 1);
+                    }
+                }
+                Window.Location.assign(actual);
+            }
+        } else {
+            if (actual.contains("locale=it")) {
+                String param = "locale=it";
+                if (actual.contains("&locale=it"))
+                    param = "&locale=it";
+                else {
+                    if (actual.contains("?locale=it&"))
+                        param = "locale=it&";
+                    else if (actual.contains("?locale=it"))
+                        param = "?locale=it";
+                }
+                Window.Location.assign(actual.replace(param, ""));
+            }
+        }
+
+    }
+
     /**
      * Permette di spostarsi in un place differente anche relativo ad un'altra
      * view.Ad esempio per aprire la pagina di ProfileView una volta verificato
@@ -88,13 +131,11 @@ public class LoginActivity extends AbstractActivity implements
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof LoginException) {
-                    goTo(new LoginPlace(username, pass,
-                            my_constants.infoLoginIncorrect(),
-                            LoginType.NETMUSLOGIN));
+                    goTo(new LoginPlace(username, pass, my_constants
+                            .infoLoginIncorrect(), LoginType.NETMUSLOGIN));
                 } else {
-                    goTo(new LoginPlace(username, pass,
-                            my_constants.databaseErrorGeneric(),
-                            LoginType.NETMUSLOGIN));
+                    goTo(new LoginPlace(username, pass, my_constants
+                            .databaseErrorGeneric(), LoginType.NETMUSLOGIN));
                 }
             }
 
@@ -135,29 +176,31 @@ public class LoginActivity extends AbstractActivity implements
         else {
 
             // Make the call to send login info.
-            login_service_svc.insertRegistration(login, new AsyncCallback<LoginDTO>() {
+            login_service_svc.insertRegistration(login,
+                    new AsyncCallback<LoginDTO>() {
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    goTo(new LoginPlace(username, pass,
-                            my_constants.infoUserUsato(),
-                            LoginType.NETMUSREGISTRATION));
-                }
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            goTo(new LoginPlace(username, pass, my_constants
+                                    .infoUserUsato(),
+                                    LoginType.NETMUSREGISTRATION));
+                        }
 
-                @Override
-                public void onSuccess(LoginDTO result) {
+                        @Override
+                        public void onSuccess(LoginDTO result) {
 
-                    // Reimposta la login
-                    LoginView loginView = client_factory.getLoginView();
-                    loginView.setLayout();
+                            // Reimposta la login
+                            LoginView loginView = client_factory.getLoginView();
+                            loginView.setLayout();
 
-                    try {
-                        sendLogin(result.getUser(), result.getPassword());
-                    } catch (LoginException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+                            try {
+                                sendLogin(result.getUser(),
+                                        result.getPassword());
+                            } catch (LoginException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
         }
     }
 
@@ -190,52 +233,5 @@ public class LoginActivity extends AbstractActivity implements
                 goTo(new ProfilePlace(result));
             }
         });
-    }
-
-    @Override
-    public void changeLanguage(String locale) {
-        
-        String actual = Window.Location.getHref();
-        String txt = actual + "\n";
-        
-        if (locale.equals("it")) {
-            if (!actual.contains("locale=it")) {
-                String param = "locale=it";
-                if (actual.contains("?")) {
-                    param = "&"+param;
-                    if (actual.contains("#"))
-                        actual = actual.replace("#", param+"#");
-                    else
-                        actual = actual+param;
-                }
-                else {
-                    param = "?"+param;
-                    if (actual.contains(".html"))
-                        actual = actual.replace(".html", ".html"+param);
-                    else if (actual.contains("/")) {
-                        int i = actual.lastIndexOf("/");
-                        actual = actual.substring(0,i+1) + param + actual.substring(i+1);
-                    }
-                }
-                Window.Location.assign(actual);
-            }
-        } else {
-            if (actual.contains("locale=it")) {
-                String param = "locale=it";
-                if (actual.contains("&locale=it"))
-                    param = "&locale=it";
-                else {
-                    if (actual.contains("?locale=it&"))
-                        param = "locale=it&";
-                    else if (actual.contains("?locale=it"))
-                        param = "?locale=it";
-                }
-                Window.Location.assign(actual.replace(param, ""));
-            }
-        }
-        
-        
-        
-        
     }
 }

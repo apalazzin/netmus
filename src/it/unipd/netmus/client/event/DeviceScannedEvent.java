@@ -9,26 +9,26 @@ import com.google.gwt.event.shared.GwtEvent;
 /**
  * Nome: DeviceScannedEvent.java 
  * Autore: VT.G 
- * Licenza: GNU GPL v3 Data
- * Creazione: 19 Febbraio 2011
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 19 Febbraio 2011
  */
 public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
     public static Type<DeviceScannedEventHandler> TYPE = new Type<DeviceScannedEventHandler>();
 
     private List<SongDTO> new_songs;
-    
+
     private boolean last_songs = false;
-    
+
     public DeviceScannedEvent(List<SongDTO> new_songs) {
         this.new_songs = new_songs;
         this.last_songs = false;
     }
-    
+
     public DeviceScannedEvent(List<SongDTO> new_songs, boolean last_songs) {
         this.new_songs = new_songs;
         this.last_songs = last_songs;
     }
-    
+
     /**
      * Restituisce il Type associato all'evento.
      */
@@ -37,20 +37,20 @@ public class DeviceScannedEvent extends GwtEvent<DeviceScannedEventHandler> {
         return TYPE;
     }
 
-    /**
-     * Metodo interno per gestire l'evento.
-     */
-    @Override
-    protected void dispatch(DeviceScannedEventHandler handler) {
-        handler.onScanDevice(this);
-    }
-
     public List<SongDTO> getNewSongs() {
         return new_songs;
     }
 
     public boolean isLastSongs() {
         return last_songs;
+    }
+
+    /**
+     * Metodo interno per gestire l'evento.
+     */
+    @Override
+    protected void dispatch(DeviceScannedEventHandler handler) {
+        handler.onScanDevice(this);
     }
 
 }

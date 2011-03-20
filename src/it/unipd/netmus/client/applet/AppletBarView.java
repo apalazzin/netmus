@@ -13,7 +13,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -29,7 +28,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Data Creazione: 18 Febbraio 2011
  */
 class AppletBarView {
-    
+
     private static boolean flag = true;
 
     private static AppletConstants constants = GWT
@@ -43,7 +42,7 @@ class AppletBarView {
     private static TextBox status = new TextBox();
     private static HTML applet = new HTML();
     private static HTMLPanel main = new HTMLPanel("");
-    
+
     private static HandlerRegistration locker_r;
 
     /**
@@ -99,90 +98,98 @@ class AppletBarView {
 
                     button_container.getElement().getStyle().setOpacity(1);
                     title.getElement().getStyle().setOpacity(1);
-                } else if(DOM.getElementById("applet-bar").getClientWidth()<80) {
+                } else if (DOM.getElementById("applet-bar").getClientWidth() < 80) {
 
                     DOM.getElementById("applet-bar").getStyle()
                             .setBackgroundColor("#fabebe");
                 }
             }
         }, MouseOverEvent.getType());
-        
-        
-        locker_r = RootPanel.get("applet-bar").addDomHandler(new MouseOutHandler() {
 
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                DOM.getElementById("applet-bar").getStyle()
-                        .setBackgroundColor("#FFFFFF");
-                DOM.getElementById("main_panel").getStyle()
-                        .setMarginRight(50, Style.Unit.PX);
-                DOM.getElementById("applet-bar").getStyle()
-                        .setWidth(33, Style.Unit.PX);
-                status.getElement().getStyle()
-                        .setProperty("MozTransform", "rotate(90deg)");
-                status.getElement().getStyle()
-                        .setProperty("WebkitTransform", "rotate(90deg)");
-                status.getElement().getStyle()
-                        .setProperty("Transform", "rotate(90deg)");
-                status.getElement().getStyle()
-                        .setMarginLeft(-86, Style.Unit.PX);
-                status.getElement().getStyle().setMarginTop(60, Style.Unit.PX);
-                status.getElement().getStyle().setWidth(200, Style.Unit.PX);
-                button_container.getElement().getStyle().setOpacity(0);
-                title.getElement().getStyle().setOpacity(0);
-            }
-        }, MouseOutEvent.getType());
+        locker_r = RootPanel.get("applet-bar").addDomHandler(
+                new MouseOutHandler() {
 
-         
-        
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        DOM.getElementById("applet-bar").getStyle()
+                                .setBackgroundColor("#FFFFFF");
+                        DOM.getElementById("main_panel").getStyle()
+                                .setMarginRight(50, Style.Unit.PX);
+                        DOM.getElementById("applet-bar").getStyle()
+                                .setWidth(33, Style.Unit.PX);
+                        status.getElement().getStyle()
+                                .setProperty("MozTransform", "rotate(90deg)");
+                        status.getElement()
+                                .getStyle()
+                                .setProperty("WebkitTransform", "rotate(90deg)");
+                        status.getElement().getStyle()
+                                .setProperty("Transform", "rotate(90deg)");
+                        status.getElement().getStyle()
+                                .setMarginLeft(-86, Style.Unit.PX);
+                        status.getElement().getStyle()
+                                .setMarginTop(60, Style.Unit.PX);
+                        status.getElement().getStyle()
+                                .setWidth(200, Style.Unit.PX);
+                        button_container.getElement().getStyle().setOpacity(0);
+                        title.getElement().getStyle().setOpacity(0);
+                    }
+                }, MouseOutEvent.getType());
+
         final Element lock = DOM.getElementById("lock");
 
-        DOM.setEventListener(lock, new EventListener(){
+        DOM.setEventListener(lock, new EventListener() {
 
-         @Override
-         public void onBrowserEvent(Event event) {
-             
-             if(flag) {
-                 lock.setAttribute("src", "images/lock.png");
-                 locker_r.removeHandler();
-                 flag = false;
-             } else {
-                 lock.setAttribute("src", "images/unlock.png");
-                 flag = true;
-                 locker_r = RootPanel.get("applet-bar").addDomHandler(new MouseOutHandler() {
+            @Override
+            public void onBrowserEvent(Event event) {
 
-                     @Override
-                     public void onMouseOut(MouseOutEvent event) {
-                         DOM.getElementById("applet-bar").getStyle()
-                                 .setBackgroundColor("#FFFFFF");
-                         DOM.getElementById("main_panel").getStyle()
-                                 .setMarginRight(50, Style.Unit.PX);
-                         DOM.getElementById("applet-bar").getStyle()
-                                 .setWidth(33, Style.Unit.PX);
-                         status.getElement().getStyle()
-                                 .setProperty("MozTransform", "rotate(90deg)");
-                         status.getElement().getStyle()
-                                 .setProperty("WebkitTransform", "rotate(90deg)");
-                         status.getElement().getStyle()
-                                 .setProperty("Transform", "rotate(90deg)");
-                         status.getElement().getStyle()
-                                 .setMarginLeft(-86, Style.Unit.PX);
-                         status.getElement().getStyle().setMarginTop(60, Style.Unit.PX);
-                         status.getElement().getStyle().setWidth(200, Style.Unit.PX);
-                         button_container.getElement().getStyle().setOpacity(0);
-                         title.getElement().getStyle().setOpacity(0);
-                     }
-                 }, MouseOutEvent.getType());
-             }
-                 
-         }});
-        
+                if (flag) {
+                    lock.setAttribute("src", "images/lock.png");
+                    locker_r.removeHandler();
+                    flag = false;
+                } else {
+                    lock.setAttribute("src", "images/unlock.png");
+                    flag = true;
+                    locker_r = RootPanel.get("applet-bar").addDomHandler(
+                            new MouseOutHandler() {
+
+                                @Override
+                                public void onMouseOut(MouseOutEvent event) {
+                                    DOM.getElementById("applet-bar").getStyle()
+                                            .setBackgroundColor("#FFFFFF");
+                                    DOM.getElementById("main_panel").getStyle()
+                                            .setMarginRight(50, Style.Unit.PX);
+                                    DOM.getElementById("applet-bar").getStyle()
+                                            .setWidth(33, Style.Unit.PX);
+                                    status.getElement()
+                                            .getStyle()
+                                            .setProperty("MozTransform",
+                                                    "rotate(90deg)");
+                                    status.getElement()
+                                            .getStyle()
+                                            .setProperty("WebkitTransform",
+                                                    "rotate(90deg)");
+                                    status.getElement()
+                                            .getStyle()
+                                            .setProperty("Transform",
+                                                    "rotate(90deg)");
+                                    status.getElement().getStyle()
+                                            .setMarginLeft(-86, Style.Unit.PX);
+                                    status.getElement().getStyle()
+                                            .setMarginTop(60, Style.Unit.PX);
+                                    status.getElement().getStyle()
+                                            .setWidth(200, Style.Unit.PX);
+                                    button_container.getElement().getStyle()
+                                            .setOpacity(0);
+                                    title.getElement().getStyle().setOpacity(0);
+                                }
+                            }, MouseOutEvent.getType());
+                }
+
+            }
+        });
+
         DOM.sinkEvents(lock, Event.ONCLICK);
-                  
 
-        
-        
-        
         VerticalPanel tmp = new VerticalPanel();
 
         tmp.add(rescan);
