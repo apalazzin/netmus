@@ -1574,7 +1574,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
    
    @UiHandler("delete_song")
    void handleMouseOverDeleteSong(MouseOverEvent e) {
-       edit_profile_del.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+       delete_song.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
    
    
