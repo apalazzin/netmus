@@ -99,9 +99,25 @@ public final class Utils {
      */
     public static String getYouTubeCode(String keywords, String ip) {
         
-        return getYouTubeCode(keywords, ip, 3);
+        return getYouTubeCode(keywords, ip, 5);
     }
     
+    /**
+     * Grazie a YouTubeManager restituisce la prima occorrenza di una ricerca su
+     * YouTube per pertinenza alla keyword in ingresso (autore titolo). Se la
+     * ricerca non produce risultati restituisce stringa vuota.
+     * Viene fornito l'indirizzo IP dell'utente per poter raffinare la ricerca,
+     * escludendo video non riproducibili nella nazione dove risiede il client,
+     * o permessi di visione bloccati.
+     * 
+     *Il parametro retries, specifica quante volte ritentare la ricerca
+     *prima di ritornare una stringa vuota, in caso la ricerca non abbia prodotto risultati.
+     * 
+     * @param keywords
+     * @param ip
+     * @param retries
+     * @return Codice youtube relativo al video piu' rilevante trovato
+     */
     private static String getYouTubeCode(String keywords, String ip, int retries) {
         
         if (retries > 0) {

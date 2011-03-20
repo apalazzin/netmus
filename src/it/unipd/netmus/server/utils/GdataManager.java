@@ -103,10 +103,4 @@ public class GdataManager {
             throw new RuntimeException(e);
         }
     }
-    
-    public void deleteDocument(String resource_id) throws ServiceException {
-        // TODO Auto-generated method stub
-        
-    }
-
 }

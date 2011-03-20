@@ -1,7 +1,6 @@
 package it.unipd.netmus.server.youtube;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;

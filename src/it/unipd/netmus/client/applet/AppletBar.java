@@ -135,8 +135,6 @@ public class AppletBar {
             return;
         }
         
-        
-        
         library_service.sendUserNewMusic(user, new_songs, new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable caught) {
