@@ -245,8 +245,8 @@
 	position: relative;
 	left: -30px;
 	text-align: center;
-	width: 110%;
-	border: 0px solid #FF0000;
+	width: 710px;
+	border: 0px 5olid #FF0000;
 	padding-top: 10px;
 	clear: both;
 	
@@ -286,7 +286,7 @@
 	
 	
 	
-	width: 600px;
+	width: 660px;
 	height: 400px;
 	
 	min-height: 400px;      	
