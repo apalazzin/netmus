@@ -657,13 +657,10 @@ height: 30px;
 
 .help {
 	
-width: 440px;
-	height: 300px;
-	
-	
-	border: 2px solid #37A6EB;
-	
-	background: rgba(255, 255, 255, 0.95);
+width: 100%;
+	height: 100%;
+		
+	background: rgba(20, 20, 20, 0.40);
 	
 	position: absolute;
 	
@@ -677,11 +674,9 @@ width: 440px;
 	z-index: 19;  
 	
 	padding: 40px;
+
 	
-	display: block;
-	
-	
-	text-align: center;
+	text-align: left;
 		
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -692,12 +687,35 @@ width: 440px;
 	-moz-transition: opacity 0.3s ease-in-out;
 	-o-transition: opacity 0.3s ease-in-out;
 	transition: opacity 0.3s ease-in-out;
-   	
+}
+
+.help_body{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	padding: 20px;
+	margin: auto;      	
+	
+	width: 500px;
+	height: 400px;      	
+
+		
+	display: block;	
+	
+	border: 2px solid #AAAAAA;
+	
+	background-color: rgba(255,255,255,0.80);
 
 	border-radius: 15px;
 	-moz-border-radius: 15px;
-	-webkit-box-shadow: 0px 0px 15px #999999;
-	-moz-box-shadow: 0px 0px 15px #999999;
+	-webkit-box-shadow: 4px 4px 10px #222222;
+	-moz-box-shadow: 4px 4px 10px #888888;
+	
+	
+	text-align: left;
 	
 	
 }
