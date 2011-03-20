@@ -3319,10 +3319,6 @@ public class ProfileViewImpl extends Composite implements ProfileView {
             if(youtube_status!=1&&youtube_status!=2)
                     this.cover.setUrl("images/test_cover.jpg");
         }
-        
-        if (global_rating > 0) {
-            showGlobalStar(global_rating);
-        }
 
     }
 
@@ -3904,8 +3900,7 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     @Override
     public void resetView() {
-        
-        
+
         dataProvider_catalogo.getList().removeAll(dataProvider_catalogo.getList());
         dataProvider_album.getList().removeAll(dataProvider_album.getList());
         dataProvider_playlist.getList().removeAll(dataProvider_playlist.getList());

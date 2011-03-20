@@ -99,8 +99,6 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      * Salva o aggiorna nel Datastore tutte le canzoni passate in input e se
      * possiedono sufficienti informazioni le inserisce nella libreria
      * dell’utente.
-     * 
-     * @return
      */
     @Override
     public void sendUserNewMusic(String user,
@@ -120,6 +118,9 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
         useraccount.getMusicLibrary().update();
     }
 
+    /**
+     * Salva nel MusicLibrary persitente le statistiche relative al catalogo calcolate nel client.
+     */
     public void storeStatistics(String user, String preferred_artist,
             String most_popular_song, String most_popular_song_for_this_user) {
         UserAccount user_account = UserAccount.load(user);
@@ -138,7 +139,10 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
      
     }
     
-    // check the presence of test in the list tested
+    /**
+     *  Funzione che aggiunge una stringa ad una lista verificandone l'unicità e ritorna 1 se ha succeso, 
+     *  viene utilizzata all'interno di GenerateDoc.
+     */
     private int check_list(List<String> tested, String test){
     	int counter = 0;
     	boolean cond=false;
@@ -154,6 +158,15 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements
     	return counter;
     }
 
+    
+    /**
+     * Questo metodo si occupa dell'intera generazione del Google Doc dell'utente dato in input. 
+     * La creazione consiste nel creare il modello HTML del documento generandone
+     * al momento i contenuti tramite le libreria velocity e inserendoli poi in
+     * un modello standard in template.mv. Successivamente viene invocato il
+     * metodo createNewDocument di GdataManager per la generazione del Doc
+     * dal modello HTML. Ritorna l'indirizzo al documento.
+     */
     @Override
     public String generateDoc(String user) {
         //generate the document
