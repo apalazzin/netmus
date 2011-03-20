@@ -1,9 +1,3 @@
-/**
- * Il package contiene le classi di tipo Place.
- * I Place sono indispensabili per far si che la corrispondente
- * Activity sia accessibile via URL.
- */
-
 package it.unipd.netmus.client.place;
 
 import it.unipd.netmus.client.ui.LoginView.Presenter.LoginType;
@@ -16,6 +10,12 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * Autore: VT.G 
  * Licenza: GNU GPL v3 
  * Data Creazione: 15 Febbraio 2011
+ */
+
+/**
+ * Il package contiene le classi di tipo Place.
+ * I Place sono indispensabili per far si che la corrispondente
+ * Activity sia accessibile via URL.
  */
 public class LoginPlace extends Place {
 
@@ -33,6 +33,7 @@ public class LoginPlace extends Place {
             return place.getLoginName();
         }
     }
+
     private String user;
     private String passwordHash;
     private String error;

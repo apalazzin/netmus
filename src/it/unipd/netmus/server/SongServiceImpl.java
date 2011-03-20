@@ -13,9 +13,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * Nome: SongServiceImpl.java 
- * Autore: VT.G Licenza: GNU GPL v3 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
  * Data Creazione: 13 Febbraio 2011
- * 
  */
 
 @SuppressWarnings("serial")
@@ -33,7 +33,7 @@ public class SongServiceImpl extends RemoteServiceServlet implements
 
         UserAccount useraccount = UserAccount.load(user);
         return useraccount.getMusicLibrary().removeSong(artist, title, album);
-        
+
     }
 
     /**
@@ -51,6 +51,47 @@ public class SongServiceImpl extends RemoteServiceServlet implements
     }
 
     /**
+     * Carica dal Datastore o da Last.fm la copertina relativa al brano in
+     * input. Per fare ciò utilizza la classe di persistenza Album.
+     */
+    @Override
+    public synchronized String getCoverImage(SongSummaryDTO song_summary_dto) {
+
+        return Album.getAlbumCoverLastFm(song_summary_dto.getAlbum(),
+                song_summary_dto.getArtist());
+
+    }
+
+    /**
+     * Metodo chiamato quando si vogliono avere tutte le info di una certa
+     * canzone. Cerco il video su youtube e lo metto nel DTO... ogni volta
+     * faccio una ricerca su youtube (per Copyright legati al Country)
+     */
+    @Override
+    public synchronized SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
+
+        Song song = Song.loadFromDTO(song_summary_dto);
+
+        SongDTO song_dto = null;
+        if (song != null) {
+            song_dto = song.toSongDTO();
+        } else {
+            return new SongDTO();
+        }
+
+        String ip = getThreadLocalRequest().getRemoteAddr();
+        if (ip.equals("127.0.0.1"))
+            ip = "";
+
+        song_dto.setAlbumCover(Album.getAlbumCoverLastFm(song_dto.getAlbum(),
+                song_dto.getArtist()));
+        song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " "
+                + song.getArtist(), ip));
+
+        return song_dto;
+    }
+
+    /**
      * Assegna la votazione compresa tra 1 e 5 alla canzone specificata dal
      * SongSummaryDTO. Dopo aver aggiornato i campi relativi di Song nel
      * Datastore ritorna il valore double che rappresenta la nuova media tra
@@ -62,43 +103,6 @@ public class SongServiceImpl extends RemoteServiceServlet implements
         MusicLibrary library = userAccount.getMusicLibrary();
         library.rateSong(Song.loadFromDTO(song), rating);
         return Song.loadFromDTO(song).getRatingDouble();
-    }
-    
-    /**
-     * Metodo chiamato quando si vogliono avere tutte le info di una certa canzone.
-     * Cerco il video su youtube e lo metto nel DTO... ogni volta faccio una ricerca su youtube (per Copyright legati al Country)
-     */
-    @Override
-    public synchronized SongDTO getSongDTO(SongSummaryDTO song_summary_dto) {
-        
-        Song song = Song.loadFromDTO(song_summary_dto);
-        
-        SongDTO song_dto = null;
-        if (song != null) {
-            song_dto = song.toSongDTO();
-        }
-        else {
-            return new SongDTO();
-        }
-
-        String ip = getThreadLocalRequest().getRemoteAddr();
-        if (ip.equals("127.0.0.1")) ip="";
-        
-        song_dto.setAlbumCover(Album.getAlbumCoverLastFm(song_dto.getAlbum(), song_dto.getArtist()));
-        song_dto.setYoutubeCode(Utils.getYouTubeCode(song.getTitle() + " " + song.getArtist(),ip));
-        
-        return song_dto;
-    }
-    
-    /**
-     * Carica dal Datastore o da Last.fm la copertina relativa al brano in input. Per fare ciò utilizza 
-     * la classe di persistenza Album.
-     */
-    @Override
-    public synchronized String getCoverImage(SongSummaryDTO song_summary_dto) {
- 
-        return Album.getAlbumCoverLastFm(song_summary_dto.getAlbum(), song_summary_dto.getArtist());
-
     }
 
 }

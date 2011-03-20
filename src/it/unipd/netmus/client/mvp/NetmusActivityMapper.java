@@ -13,8 +13,8 @@ import com.google.gwt.place.shared.Place;
 /**
  * Nome: NetmusActivityMapper.java 
  * Autore: VT.G 
- * Licenza: GNU GPL v3 Data
- * Creazione: 15 Febbraio 2011
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 15 Febbraio 2011
  */
 public class NetmusActivityMapper implements ActivityMapper {
 

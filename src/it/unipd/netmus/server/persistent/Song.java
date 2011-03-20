@@ -1,7 +1,5 @@
 package it.unipd.netmus.server.persistent;
 
-import java.io.Serializable;
-
 import it.unipd.netmus.server.utils.Utils;
 import it.unipd.netmus.server.utils.cache.CacheSupport;
 import it.unipd.netmus.server.utils.cache.Cacheable;
@@ -9,11 +7,15 @@ import it.unipd.netmus.shared.FieldVerifier;
 import it.unipd.netmus.shared.SongDTO;
 import it.unipd.netmus.shared.SongSummaryDTO;
 
+import java.io.Serializable;
+
 import com.google.code.twig.annotation.Id;
 
 /**
- * Nome: Song.java Autore: VT.G Licenza: GNU GPL v3 Data Creazione: 15 Febbraio
- * 2011
+ * Nome: Song.java 
+ * Autore: VT.G 
+ * Licenza: GNU GPL v3 
+ * Data Creazione: 15 Febbraio 2011
  * 
  * 
  * Tipo, obiettivo e funzione del componente:
@@ -37,32 +39,33 @@ public class Song implements Serializable, Cacheable {
     private static final long serialVersionUID = -6562913769428174789L;
 
     public static Song load(String id) {
-        
+
         Song song = (Song) CacheSupport.cacheGet(id);
-        
+
         if (song == null) {
             song = ODF.get().load().type(Song.class).id(id).now();
             if (song != null) {
                 song.addToCache();
             }
         }
-        
+
         return song;
     }
 
     public static Song loadFromDTO(SongSummaryDTO dto) {
-        
-        String id = FieldVerifier.generateSongId(dto.getTitle(), dto.getArtist(), dto.getAlbum());
-        
+
+        String id = FieldVerifier.generateSongId(dto.getTitle(),
+                dto.getArtist(), dto.getAlbum());
+
         Song song = (Song) CacheSupport.cacheGet(id);
-        
+
         if (song == null) {
             song = ODF.get().load().type(Song.class).id(id).now();
             if (song != null) {
                 song.addToCache();
             }
         }
-        
+
         return song;
     }
 
@@ -77,22 +80,24 @@ public class Song implements Serializable, Cacheable {
         if (song.getTitle().equals(""))
             return null;
 
-        Song s = load(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+        Song s = load(FieldVerifier.generateSongId(song.getTitle(),
+                song.getArtist(), song.getAlbum()));
 
         if (s == null) {
             // La canzone non è presente nel Datastore
             s = new Song();
             s.setAlbum(song.getAlbum());
-            
+
             Album.storeNewAlbum(song.getAlbum(), song.getArtist());
-            
+
             s.setTitle(song.getTitle());
             s.setArtist(song.getArtist());
             s.setComposer(song.getComposer());
             s.setGenre(song.getGenre());
             s.setTrackNumber(song.getTrackNumber());
             s.setYear(song.getYear());
-            s.setId(FieldVerifier.generateSongId(song.getTitle(), song.getArtist(), song.getAlbum()));
+            s.setId(FieldVerifier.generateSongId(song.getTitle(),
+                    song.getArtist(), song.getAlbum()));
             return s;
         }
 
@@ -112,34 +117,39 @@ public class Song implements Serializable, Cacheable {
             return s;
         }
     }
-    
-    /*
-     * Cerca di recuperare informazioni sui brani incompleti, per poi vedere se è il caso di ignorarli
-     */
-    @SuppressWarnings("unused")
-    static private SongDTO incompleteSong(SongDTO s){
-    	//guardo se posso ricavare informazioni dai meta tag.
-    	if (!s.getArtist().isEmpty() && !s.getTitle().isEmpty())
-    		return Utils.getSongFromIncompleteInfo(s.getArtist() + " " 
-    				+ s.getTitle() );
-    	
-    	//altrimenti, proviamo dal nome del file: se ho artista o titolo nei metatag, cerco di utilizzare
-    	//pure quelli se non sono già presenti nel nome del file (eventuali ripetizioni sarebbero dannose).
-    	String extraTags = new String();
-    	if (!s.getArtist().isEmpty() && 
-    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getArtist())))
-    		extraTags = s.getArtist();
-    	else if (!s.getTitle().isEmpty() && 
-    			!FieldVerifier.cleanString(s.getFile()).contains(FieldVerifier.cleanString(s.getTitle())))
-    		extraTags = s.getTitle();
-    	
-    	return Utils.getSongFromFileName(s.getFile() + extraTags);
-    }
 
     static void deleteSong(Song s) {
         ODF.get().storeOrUpdate(s);
         s.removeFromCache();
         ODF.get().delete(s);
+    }
+
+    /*
+     * Cerca di recuperare informazioni sui brani incompleti, per poi vedere se
+     * è il caso di ignorarli
+     */
+    @SuppressWarnings("unused")
+    static private SongDTO incompleteSong(SongDTO s) {
+        // guardo se posso ricavare informazioni dai meta tag.
+        if (!s.getArtist().isEmpty() && !s.getTitle().isEmpty())
+            return Utils.getSongFromIncompleteInfo(s.getArtist() + " "
+                    + s.getTitle());
+
+        // altrimenti, proviamo dal nome del file: se ho artista o titolo nei
+        // metatag, cerco di utilizzare
+        // pure quelli se non sono già presenti nel nome del file (eventuali
+        // ripetizioni sarebbero dannose).
+        String extraTags = new String();
+        if (!s.getArtist().isEmpty()
+                && !FieldVerifier.cleanString(s.getFile()).contains(
+                        FieldVerifier.cleanString(s.getArtist())))
+            extraTags = s.getArtist();
+        else if (!s.getTitle().isEmpty()
+                && !FieldVerifier.cleanString(s.getFile()).contains(
+                        FieldVerifier.cleanString(s.getTitle())))
+            extraTags = s.getTitle();
+
+        return Utils.getSongFromFileName(s.getFile() + extraTags);
     }
 
     @Id
@@ -166,7 +176,7 @@ public class Song implements Serializable, Cacheable {
     private int num_ratings;
 
     public Song() {
-        this.id = FieldVerifier.generateSongId("","","");
+        this.id = FieldVerifier.generateSongId("", "", "");
         this.num_owners = 0;
         this.album = "";
         this.artist = "";
@@ -194,6 +204,11 @@ public class Song implements Serializable, Cacheable {
         return this.rating;
     }
 
+    @Override
+    public void addToCache() {
+        CacheSupport.cachePut(this.id, this);
+    }
+
     public Song changeAlbum(String album) {
 
         // Se la canzone precedente alla modifica non ha altri utenti che la
@@ -212,10 +227,12 @@ public class Song implements Serializable, Cacheable {
         else
             this.album = "";
 
-        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title,
+                this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist,
+                    this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -242,11 +259,13 @@ public class Song implements Serializable, Cacheable {
         else
             this.artist = "";
 
-        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title,
+                this.artist, this.album));
 
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist,
+                    this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -289,10 +308,12 @@ public class Song implements Serializable, Cacheable {
         else
             this.title = "";
 
-        Song tmp = Song.load(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+        Song tmp = Song.load(FieldVerifier.generateSongId(this.title,
+                this.artist, this.album));
         if (tmp == null) {
             // La canzone non è presente nel Datastore.
-            this.setId(FieldVerifier.generateSongId(this.title, this.artist, this.album));
+            this.setId(FieldVerifier.generateSongId(this.title, this.artist,
+                    this.album));
             return this;
         } else {
             // La canzone è presente nel Datastore.
@@ -349,6 +370,11 @@ public class Song implements Serializable, Cacheable {
         return year;
     }
 
+    @Override
+    public void removeFromCache() {
+        CacheSupport.cacheRemove(this.id);
+    }
+
     public void setComposer(String composer) {
         this.composer = composer;
     }
@@ -381,7 +407,8 @@ public class Song implements Serializable, Cacheable {
     }
 
     public SongSummaryDTO toSongSummaryDTO() {
-        SongSummaryDTO tmp = new SongSummaryDTO(this.artist, this.title, this.album);
+        SongSummaryDTO tmp = new SongSummaryDTO(this.artist, this.title,
+                this.album);
         tmp.setRating(this.rating);
         return tmp;
     }
@@ -416,16 +443,6 @@ public class Song implements Serializable, Cacheable {
 
     private void setTitle(String title) {
         this.title = title;
-    }
-
-    @Override
-    public void addToCache() {
-        CacheSupport.cachePut(this.id, this);
-    }
-
-    @Override
-    public void removeFromCache() {
-        CacheSupport.cacheRemove(this.id);
     }
 
 }
