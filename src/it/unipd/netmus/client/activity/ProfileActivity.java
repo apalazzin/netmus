@@ -299,7 +299,8 @@ public class ProfileActivity extends AbstractActivity implements
     }
 
     /**
-     * Restituisce la lista degli utenti affini su Netmus
+     * Restituisce, dopo aver richiesto le informazioni al server, la lista degli utenti 
+     * che hanno una libreria simile a quella dell'utente.
      */
     public void setFriendList() {
         
@@ -778,6 +779,7 @@ public class ProfileActivity extends AbstractActivity implements
         if (song != null) {
             client_factory.getProfileView().setRating(song.getRatingForThisUser());
             client_factory.getProfileView().showStar(song.getRatingForThisUser());
+            client_factory.getProfileView().showGlobalStar(song.getRating());
             return song.getRating();
         }
         else {
@@ -1096,6 +1098,10 @@ public class ProfileActivity extends AbstractActivity implements
         goTo(new ProfilePlace(user));
     }
 
+    /**
+     * Richiede al server l'esportazione in Google Doc del catalogo dell'utente e, una volta generato, 
+     * lo mostra in una nuova finestra del browser.
+     */
 	@Override
 	public void exportDocLibrary() {
 	    
@@ -1119,7 +1125,7 @@ public class ProfileActivity extends AbstractActivity implements
         });
 	}
 	
-	/*
+	/**
 	 * Ricerca all'interno della libreria data in input l'artista più ricorrente tra
 	 * tutte le canzoni.
 	 */
@@ -1161,7 +1167,7 @@ public class ProfileActivity extends AbstractActivity implements
 	}
 	
 	
-	/*
+	/**
      * Ricerca all'interno della libreria data in input la canzone che è stata valutata meglio 
      * da tutti gli utenti che la condividono e quella preferita dall'utente che possiede la libreria.
      * Ne ritorna gli id in una lista.
@@ -1204,6 +1210,9 @@ public class ProfileActivity extends AbstractActivity implements
         return tmp;
 	}
 
+	/**
+	 * Cancella l'utente definitivamente dal sistema e lo fa uscire dalla pagina.
+	 */
     @Override
     public void deleteProfile() {
         //DEVE ELIMINARE L'UTENTE
@@ -1224,6 +1233,10 @@ public class ProfileActivity extends AbstractActivity implements
         });
     }
 	
+    /**
+     *Pulisce i nomi delle playlist in entrata dalla view poiche questi contengono anche il numero di
+     *brani al loro interno.
+     */
 	private String clearPlaylistName(String name) {
 	    if (name.lastIndexOf('(') > 0) {
 	        name = name.substring(0, name.lastIndexOf('(')-1);
@@ -1232,6 +1245,10 @@ public class ProfileActivity extends AbstractActivity implements
 	    return name;
 	}
 
+	/**
+	 * Comunica alla view, tramite il metodo della view setStats, i
+     * dati rigurdanti la pagina delle statistiche.
+	 */
     @Override
     public void setStats() {
         MusicLibraryDTO library = current_user.getMusicLibrary();
@@ -1269,7 +1286,7 @@ public class ProfileActivity extends AbstractActivity implements
     /**
      * Modifica l'URL del browser per cambiare lingua,
      * utilizzando la gestione automatica dell'intenazionalizzazione
-     * offerta da GWT,
+     * offerta da GWT.
      */
     @Override
     public void changeLanguage(String locale) {
