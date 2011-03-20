@@ -330,7 +330,7 @@ public class MusicLibrary implements Serializable, Cacheable {
     public boolean removePlaylist(String playlist_name) {
         Playlist playlist = this.getPlaylist(playlist_name);
         if (playlist != null) {
-            this.playlists.remove(playlist);
+            this.playlists.remove(playlist.getId());
             Playlist.deletePlaylist(playlist);
             this.update();
             return true;
