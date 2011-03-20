@@ -60,7 +60,7 @@ public final class Utils {
         return getSongFromIncompleteInfo(filename);
     }
     
-    /*
+    /**
      * Richiama last.fm per vedere se si riesce a trovare una canzone con le poche informazioni a disposizione.
      */
     public static SongDTO getSongFromIncompleteInfo(String info){
