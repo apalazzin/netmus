@@ -1,0 +1,11 @@
+<html>
+  <body style="width:100%; background-color: #D0FF71;">
+
+    <!--<img src="http://www.padovacarpteam.it/scambio/logovtg.png" width="150px" height="53px" align="right" />-->
+
+    <td style="text-align: center;"><img src="http://www.padovacarpteam.it/scambio/logonetmus.png" width="150px" height="67px" align="right" /></td>
+    <td style="text-align: center;"><h1 style="text-align: center; color: #005700; padding: 25px;">$name</h1></td>
+    
+    $content
+  </body>
+</html>
