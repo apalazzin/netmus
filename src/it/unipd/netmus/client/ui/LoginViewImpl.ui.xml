@@ -8,7 +8,7 @@
    <div class="{style.all}">
    	<div class="{style.main}">
 
-   		<div style="position: relative; width: 100%; height: 100%">
+   		<div style="position: relative;  height: 230px; border: 0px solid #FF0000;">
    		
    			<div style="margin-left: 50px; text-align: left; width: 420px; height: 200px; border: 0px solid #FF0000;">
    				<g:Image ui:field="flag_ita" url="images/ita.png" styleName="{style.flag_ita}"></g:Image>
@@ -49,6 +49,7 @@
    		<div style="position: absolute; bottom: 22px; right: 27px;"><g:Label ui:field="register" styleName="{style.register}">Registrati su Netmus</g:Label></div>
    		<div style="position: absolute; top: 5px; left: 10px; text-align: right;"><g:Label ui:field="error" styleName="{style.error}"></g:Label></div>
    	<div id="welcome" class ="{style.welcome}">
+   				<div style="height: 70px;"></div>
    	          <b><g:Label ui:field="wlcmT">Benvenuto nella pagina iniziale di NetMüs.</g:Label></b>
    	          <ul type="none">
    	        <li><img src="images/star.png" style ="width: 17px; float:left; margin-right: 5px;"/><g:Label ui:field="wlcm1"> NetMus ti permette di salvare online le informazioni sulle tue canzoni e di visualizzarle e ascoltarle ovunque ti trovi.</g:Label></li>
