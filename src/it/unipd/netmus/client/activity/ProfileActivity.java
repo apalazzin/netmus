@@ -1332,6 +1332,11 @@ public class ProfileActivity extends AbstractActivity implements
                                 container_widget.setWidget(profileView
                                         .asWidget());
                                 profileView.setLayout();
+                                
+                                if (tmp.size() == 0) {
+                                    // mostra help
+                                    client_factory.getProfileView().showHelp();
+                                }
 
                             }
                         });
