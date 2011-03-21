@@ -789,7 +789,11 @@ color: green;
 	color: #37A6EB;
 	cursor: pointer;
 }
-	
+
+.help_exit_button:hover{
+	color: rgb(180,180,255);
+}
+
 .help_exit_button{
 	position: absolute;
 	bottom: 20px;
