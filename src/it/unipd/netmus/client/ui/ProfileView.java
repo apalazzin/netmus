@@ -398,4 +398,9 @@ public interface ProfileView extends IsWidget {
      * Visualizza la scheda della canzone
      */
     void viewSong(Song song);
+
+    /**
+     * Visualizza il tutorial
+     */
+    void showHelp();
 }

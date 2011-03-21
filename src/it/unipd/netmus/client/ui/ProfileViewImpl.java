@@ -4244,7 +4244,8 @@ public class ProfileViewImpl extends Composite implements ProfileView {
 
     }
 
-    private void showHelp() {
+    @Override
+    public void showHelp() {
 
         help_container.setVisible(true);
         DOM.getElementById("s1").getStyle().setDisplay(Style.Display.BLOCK);
